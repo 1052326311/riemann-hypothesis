@@ -9,8 +9,8 @@ name: Label PR
 #
 # pull_request_target lets the token label PRs from forks. Nothing from the PR is checked out
 # or run: the job fetches commits and trees without file contents and lists the changed paths
-# with git. (The PR-files API, which actions/labeler uses, stops at 3,000 files; PRs here have
-# changed over 10,000.) The labels must already exist.
+# with git. (The PR-files API, which actions/labeler uses, stops at 3,000 files, and a PR can
+# change more.) The labels must already exist.
 #
 # When a PR stops changing a label's paths, the label is removed only if this workflow added it
 # (its latest "labeled" event is by github-actions[bot]); labels people add are left alone.
@@ -49,30 +49,34 @@ jobs:
 
           lake='' challenge='' solution='' ci='' docs=''
           while IFS= read -r -d '' path; do
+            # The log shows the paths. A line break in a file name would start a new line of the
+            # log, which GitHub reads as a workflow command if it starts with `::`.
+            shown=${path//$'\n'/\\n}
+            shown=${shown//$'\r'/\\r}
             case "$path" in
               lakefile.toml | lakefile.lean | lake-manifest.json | lean-toolchain)
-                lake+="  $path"$'\n' ;;
+                lake+="  $shown"$'\n' ;;
             esac
             # Challenge.lean imports src/Statements.lean, which defines the propositions that
             # four of the five theorems state, so that file is part of the challenge.
             case "$path" in
               Challenge.lean | comparator.json | src/Statements.lean)
-                challenge+="  $path"$'\n' ;;
+                challenge+="  $shown"$'\n' ;;
             esac
             case "$path" in
               src/Main.lean)
-                solution+="  $path"$'\n' ;;
+                solution+="  $shown"$'\n' ;;
             esac
             case "$path" in
               .github/* | scripts/*)
-                ci+="  $path"$'\n' ;;
+                ci+="  $shown"$'\n' ;;
             esac
             # The Markdown files at the top level: README.md, GUIDE.md, CONTENTS.md, INDEX.md,
             # REFERENCES.md and the others.
             case "$path" in
               */*) ;;
               *.md)
-                docs+="  $path"$'\n' ;;
+                docs+="  $shown"$'\n' ;;
             esac
           done < changed
 
@@ -127,6 +131,15 @@ jobs:
           if grep -qxF -- "$size_label" <<< "$present"; then wrong_size=(); fi
 
           if (( ${#add[@]} > 0 )); then
+            # Adding a label that does not exist creates it, so a label renamed on GitHub would
+            # come back under its old name. Stop instead.
+            known=$(gh api --paginate "repos/$GITHUB_REPOSITORY/labels" --jq '.[].name')
+            for label in "${add[@]}"; do
+              if ! grep -qxF -- "$label" <<< "$known"; then
+                echo "::error::There is no '$label' label in $GITHUB_REPOSITORY. Was it renamed?"
+                exit 1
+              fi
+            done
             args=()
             for label in "${add[@]}"; do args+=(-f "labels[]=$label"); done
             gh api --method POST "$api/labels" "${args[@]}" --silent
