@@ -341,7 +341,6 @@ lemma weylNormSq_firstFactor_le (i : ChoiceIndex j) (h : Gf D.E (FirstFactorInde
 
 /-! ### The gluing map and the slices of lifts -/
 
-set_option backward.isDefEq.respectTransparency false in
 /-- The gluing map `glue_ϑ`. For `ζ` in the copy `i` of the forms on `V°` it is `M ^ l₁` times the
 sum, over the classes `h` of level `J_Λ` and `h°` of level `J (ϖ²)`, of the forms supported on the
 class of `(h, h°) 𝗀` formed from the product vector `φ″ (h) · ζ (h°)` (`productForm`). Here `𝗀`
@@ -352,13 +351,39 @@ is the matrix of `glueLattice j ϑ i`, `M = D.M`, and `l₁` is
     ChoiceIndex j × D.SecondFactorClasses,
     stdClassSum (gluingLevel j ϑ b.1.1) fun h : Gf D.E (FirstFactorIndex j) ↦
       (splittingV j ϑ).productForm (glueLattice j ϑ b.1) (h, b.2.out) (firstFactor j ϑ b.1 h) (ζ b)
-  map_add' := by
-    simp [↓classAut_gluingLevel_eq_bot, classSum, ↓finsum_eq_sum_of_fintype, sum_add_distrib]
-  map_smul' a := by
-    simp [↓classAut_gluingLevel_eq_bot, smul_comm a, ← smul_sum, classSum,
-      ↓finsum_eq_sum_of_fintype]
+  map_add' x y := by
+    have h_sum_add {K : Subgroup (Gf D.E (FirstFactorIndex j))} [IsLevel K]
+        (f g : Gf D.E (FirstFactorIndex j) → (D.descentPair ϑ j).FormV) :
+        stdClassSum K (fun h ↦ f h + g h) = stdClassSum K f + stdClassSum K g := by
+      simp only [classSum, finsum_eq_sum_of_fintype, smul_add, sum_add_distrib]
+    rw [← smul_add, ← sum_add_distrib]
+    refine congrArg _ (sum_congr rfl fun b _ ↦ ?_)
+    have h_pt (h : Gf D.E (FirstFactorIndex j)) :
+        (splittingV j ϑ).productForm (glueLattice j ϑ b.1) (h, b.2.out) (firstFactor j ϑ b.1 h)
+            ((x + y) b) =
+          (splittingV j ϑ).productForm (glueLattice j ϑ b.1) (h, b.2.out) (firstFactor j ϑ b.1 h)
+            (x b) +
+          (splittingV j ϑ).productForm (glueLattice j ϑ b.1) (h, b.2.out) (firstFactor j ϑ b.1 h)
+            (y b) :=
+      map_add _ (x b : WeylIndex _ (D.descentPair ϑ j).colsMinus → ℂ) (y b)
+    exact (congrArg (stdClassSum _) (funext h_pt)).trans (h_sum_add _ _)
+  map_smul' a x := by
+    have h_sum_smul {K : Subgroup (Gf D.E (FirstFactorIndex j))} [IsLevel K]
+        (f : Gf D.E (FirstFactorIndex j) → (D.descentPair ϑ j).FormV) :
+        stdClassSum K (fun h ↦ a • f h) = a • stdClassSum K f := by
+      simp only [classSum, finsum_eq_sum_of_fintype, smul_comm a, smul_sum]
+    rw [RingHom.id_apply, smul_comm a]
+    congr 1
+    rw [smul_sum]
+    refine sum_congr rfl fun b _ ↦ ?_
+    have h_pt (h : Gf D.E (FirstFactorIndex j)) :
+        (splittingV j ϑ).productForm (glueLattice j ϑ b.1) (h, b.2.out) (firstFactor j ϑ b.1 h)
+            ((a • x) b) =
+          a • (splittingV j ϑ).productForm (glueLattice j ϑ b.1) (h, b.2.out)
+            (firstFactor j ϑ b.1 h) (x b) :=
+      map_smul _ a (x b : WeylIndex _ (D.descentPair ϑ j).colsMinus → ℂ)
+    exact (congrArg (stdClassSum _) (funext h_pt)).trans (h_sum_smul _)
 
-set_option backward.isDefEq.respectTransparency false in
 /-- The period is a sum of slices. Let `φ` be a form on `V_j = V″ ⊕ V°` and `ζ` a tuple of forms on
 `V°`. The inner product of `ζ` with the adjoint of the gluing map `glue j ϑ` at `φ` is `M ^ l₁`
 (`M = D.M`, `l₁ = denominatorExponent`) times the sum, over the choices `i` with matrix `Λ = i.1`,
@@ -373,13 +398,18 @@ lemma inner_adjoint_glue (φ : (D.descentPair ϑ j).FormV) (ζ : FormTuples j) :
         stdClassSum (gluingLevel j ϑ i.1) fun h : Gf D.E (FirstFactorIndex j) ↦
           gramForm (cartanProduct (splittingV j ϑ).ε 1 (firstFactor j ϑ i h) (ζ (i, c)))
             (φ (U.block (splittingV j ϑ).ε (h, c.out) * (glueLattice j ϑ i).point)) := by
+  have h_sum {K : Subgroup (Gf D.E (FirstFactorIndex j))} [IsLevel K]
+      (f : Gf D.E (FirstFactorIndex j) → (D.descentPair ϑ j).FormV)
+      (g : Gf D.E (FirstFactorIndex j) → ℂ) (hfg : ∀ h, inner ℂ (f h) φ = g h) :
+      inner ℂ (stdClassSum K f) φ = stdClassSum K g := by
+    simp only [classSum, finsum_eq_sum_of_fintype, sum_inner]
+    refine sum_congr rfl fun x _ ↦ ?_
+    rw [← Rat.cast_smul_eq_qsmul ℂ, ← Rat.cast_smul_eq_qsmul ℂ, inner_smul_left,
+      map_ratCast, hfg, smul_eq_mul]
   rw [adjoint_inner_right, glue_apply, inner_smul_left, map_pow, map_natCast, sum_inner,
     sum_prod_type]
-  refine congrArg _ (sum_congr rfl fun i _ ↦ sum_congr rfl fun c _ ↦ ?_)
-  simp [↓classAut_gluingLevel_eq_bot, sum_inner, DividedSplitting.productForm, inner_classForm,
-    classSum, ↓ finsum_eq_sum_of_fintype, apply_eq_evalForm]
-  -- the two sides differ only in the implicit level of the forms on `V_j`
-  rfl
+  refine congrArg _ (sum_congr rfl fun i _ ↦ sum_congr rfl fun c _ ↦ h_sum _ _ fun h ↦ ?_)
+  exact inner_classForm _ _ _
 
 /-- The character of the lift to `V_j = V″ ⊕ V°`: the product of `ν″ = firstFactorChar` and
 `ν° = ν_η ^ (m / 2 - j)` is the character `charV` of `descentPair ϑ j`. All are characters of
@@ -945,7 +975,6 @@ lemma sum_slice_eq_zero_of_mem_falseLiftsAt {w : FinPlace D.E} {hw : star w ≠ 
   simpa [↓h_small, classSum, ↓ finsum_eq_sum_of_fintype, DividedSplitting.productForm,
     inner_classForm] using! h_period
 
-set_option backward.isDefEq.respectTransparency false in
 /-- Let `Ξ` be a false lift on `V_j` at a split place `w` off the level of `descentPair ϑ j`: a form
 in the image of `D.e₀` that is killed by the Hecke polynomial operator at `w` and is orthogonal to
 the lifts of good forms. The adjoint of the gluing map `glue j ϑ` takes `Ξ` to a tuple of forms on
@@ -972,6 +1001,7 @@ lemma thetaKernelPairing_adjoint_glue_eq_zero {w : FinPlace D.E} {hw : star w �
     · simp only [η, ite_eq_left hi]
       exact sum_slice_eq_zero_of_mem_falseLiftsAt j ϑ hΞ (glueLattice j ϑ i') h _ _ _ g
     · simp [η, hi]
+      exact Finset.sum_eq_zero fun _ _ ↦ rfl
   refine star_eq_zero.1 ?_
   calc star (thetaKernelPairing j (fun c ↦ (glue j ϑ).adjoint Ξ (i, c)) g)
       = ∑ c, inner ℂ (θ c) ((glue j ϑ).adjoint Ξ (i, c)) := by
