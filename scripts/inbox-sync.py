@@ -6,7 +6,8 @@ reopened, marked ready, turned back into a draft, commented on, reviewed, relabe
 and for every open pull request every fifteen minutes. Nothing from a pull request is checked out or run.
 Everything is read from GitHub's API, and the only thing written is the label.
 
-A pull request can be in the inbox when it is open, is not a draft, is not a batch, and carries
+A pull request can be in the inbox when it is open, is based on `main`, is not a draft, is not a
+batch, and carries
 none of `batch queue`, `building` and `awaiting-author` (named in `batch-labels.py`). A batch is a
 pull request from a branch of this repository named `batch/...`. One from a `batch/...` branch of a
 fork is not a batch, and can be in the inbox like any other pull request (see `holds_batch` in
@@ -46,6 +47,9 @@ _REST_SPEC.loader.exec_module(_rest)
 _labels = _rest.load("batch-labels.py")
 
 INBOX = "inbox"
+# The branch the pull requests in the inbox are based on. The open pull requests that were based on
+# the earlier `main` were moved to `alpoge` when `main` was replaced; they stay out of the inbox.
+TRUNK = "main"
 # Handed back to the author. Taking it off hands the pull request back to the maintainers.
 WAITING = _labels.WAITING
 # Labels that mean a maintainer has already decided what happens next.
@@ -64,7 +68,7 @@ GRACE = datetime.timedelta(minutes=10)
 # The latest 50 comments and reviews and 100 timeline events are enough for any pull request here.
 ACTOR = "{ __typename login }"
 FIELDS = f"""
-  number state isDraft headRefName createdAt
+  number state isDraft baseRefName headRefName createdAt
   headRepository {{ nameWithOwner }}
   author {{ login }}
   labels(first: 100) {{ nodes {{ name }} }}
@@ -210,6 +214,7 @@ def pull(node, repo):
     responses.sort(key=lambda response: response["at"])
     return {
         "number": node["number"], "open": node["state"] == "OPEN", "draft": node["isDraft"],
+        "base": node["baseRefName"],
         "batch": _labels.holds_batch(repo, (node.get("headRepository") or {}).get("nameWithOwner"),
                                      node["headRefName"]),
         "ref": node["headRefName"], "author": (node.get("author") or {}).get("login"),
@@ -221,6 +226,8 @@ def pull(node, repo):
 
 def unavailable(pr):
     """Why the pull request cannot be in the inbox at all, or None if it can."""
+    if pr["base"] != TRUNK:
+        return f"it is based on `{pr['base']}`, not `{TRUNK}`"
     if pr["draft"]:
         return "it is a draft"
     if pr["batch"]:

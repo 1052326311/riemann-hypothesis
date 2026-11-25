@@ -38,7 +38,7 @@ def actor(who):
 
 
 def node(number, *, author="alice", draft=False, ref=None, home="o/r", labels=(), created=0, comments=(),
-         reviews=(), events=(), state="OPEN"):
+         reviews=(), events=(), state="OPEN", base="main"):
     """A pull request as GraphQL describes it. `home` is the repository its branch is in.
 
     `comments` and `reviews` hold (login, minutes). `events` holds ("on" or "off", label,
@@ -55,7 +55,8 @@ def node(number, *, author="alice", draft=False, ref=None, home="o/r", labels=()
             timeline.append({"__typename": "LabeledEvent" if kind == "on" else "UnlabeledEvent",
                              "createdAt": at(minutes), "label": {"name": name}, "actor": actor(who)})
     return {
-        "number": number, "state": state, "isDraft": draft, "headRefName": ref or f"topic-{number}",
+        "number": number, "state": state, "isDraft": draft, "baseRefName": base,
+        "headRefName": ref or f"topic-{number}",
         "createdAt": at(created), "headRepository": {"nameWithOwner": home}, "author": {"login": author},
         "labels": {"nodes": [{"name": name} for name in labels]},
         "comments": {"nodes": [{"createdAt": at(minutes), "author": actor(who)}
@@ -186,6 +187,18 @@ class Sweep(unittest.TestCase):
         # A branch whose fork was deleted is not this repository's either.
         inbox.sync(gh, 3)
         self.assertEqual(gh.writes, [("add", 1), ("add", 3)])
+
+    def test_pull_requests_on_other_branches_stay_out(self):
+        gh = Fake([node(1, base="alpoge"), node(2)])
+        sweep(gh)
+        self.assertEqual(gh.writes, [("add", 2)])
+
+    def test_pull_requests_on_other_branches_come_out(self):
+        gh = Fake([waiting(1, base="alpoge")])
+        sweep(gh)
+        self.assertEqual(gh.writes, [("remove", 1)])
+        self.assertEqual(inbox.sync(Fake([waiting(1, base="alpoge")]), 1),
+                         ["#1: taken out of the inbox, because it is based on `alpoge`, not `main`"])
 
     def test_drafts_batches_and_decided_pull_requests_come_out(self):
         gh = Fake([waiting(1, draft=True), waiting(2, ref="batch/x"),
