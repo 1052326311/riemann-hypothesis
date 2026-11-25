@@ -11,8 +11,8 @@ name: review commands
 # that pull request, so it goes back in the inbox within a minute or so. Without the label there
 # is nothing to take off, and `ready` does nothing.
 #
-# Only a comment whose whole text is `aa` or `ready` counts, letter case and surrounding blank
-# space aside. `aa` needs triage access to this repository or more, and so does `ready`, except
+# Only a comment whose whole text is `aa` or `ready` counts, letter case and blank space after the
+# word aside. A comment that starts with blank space is ignored. `aa` needs triage access to this repository or more, and so does `ready`, except
 # from the pull request's author. Reviewers are the people given the Triage role: it lets them hand
 # pull requests back without write access. Every other comment is ignored.
 #
