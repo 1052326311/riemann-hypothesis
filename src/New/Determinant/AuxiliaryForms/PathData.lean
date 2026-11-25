@@ -96,7 +96,6 @@ abbrev triangleModulus (z : Bool) (ϑ : D.MFoldTwist) : Modulus D.E :=
 
 lemma triangleModulus_false : triangleModulus false ϑ = D.twistModulus ϑ 1 := rfl
 
-lemma triangleModulus_true : triangleModulus true ϑ = D.gridModulus 1 := rfl
 
 /-- Let `ϑ` be an `m`-fold twist, `Q` the product of its places, `ϖ = D.piM` the generator of the
 product of the chosen places, and `b = D.natB ≥ 1`. The triangle modulus of grid `z`, which is
