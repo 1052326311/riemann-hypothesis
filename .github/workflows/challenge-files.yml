@@ -3,11 +3,13 @@ name: challenge files
 # The Comparator challenge files say what the proof is judged against, so a pull request may not
 # change them. `Challenge.lean` imports `src/Statements.lean`, which defines the propositions that
 # four of the five theorems state, and `src/Main.lean` imports it as well. Comparator would accept
-# a change there, since both sides would see it, so it is a challenge file too. This runs the base branch's copy of the workflow and nothing from the pull
-# request: it fetches commits and trees, without file contents, and reads the file hashes with
-# git. A pull request cannot switch it off, and it needs no approval to run on a pull request
-# from a fork. (GitHub's compare API, which this used to ask for the merge base, timed out on a
-# pull request that changes 148,106 files.)
+# a change there, since both sides would see it, so it is a challenge file too.
+#
+# This runs the base branch's copy of the workflow and nothing from the pull request: it fetches
+# commits and trees, without file contents, and reads the file hashes with git. A pull request
+# cannot switch it off, and it needs no approval to run on a pull request from a fork. (It does
+# not ask GitHub's compare API for the merge base, which times out on a pull request that changes
+# very many files.)
 
 on:
   pull_request_target:
@@ -77,6 +79,6 @@ jobs:
           done
           if [ "$status" != 0 ]; then
             echo "These files say what the proof is judged against, and pull requests may not change them."
-            echo "A maintainer who means to change one has to say so in the pull request."
+            echo "If one of them has to change, ask a maintainer in the pull request."
           fi
           exit "$status"
