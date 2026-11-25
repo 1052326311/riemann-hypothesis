@@ -50,7 +50,8 @@ if `lake build` fails, if the build log contains "declaration uses 'sorry'", or 
 Records are published by hand, so the baseline falls behind `main` as pull requests are merged,
 and builds get slower: each one also compiles everything that changed on `main` since the
 newest published record. A change to a module that most of `src` imports (`Lib.Base`, for
-example) compiles most of the 803 modules and can reach the 6-hour limit of a GitHub-hosted job.
+example) compiles all 803 modules, about 4 hours of module build time: one to two hours on the 4
+cores of `ubuntu-latest`.
 The proposed follow-up is a separate job that, on pushes to `main` only, builds `main` and
 publishes its record, map, module manifest and artifacts with credentials that pull requests
 never see. After a publish by hand, `python3 scripts/ci-cache-get.py --print-identity`, run on the

@@ -17,10 +17,10 @@ name: build
 # and the modules that import them. Nothing here publishes a record for main, so until someone
 # publishes one by hand, the baseline falls behind main and builds get slower as main moves.
 #
-# A change to a module that most of src imports (Lib.Base, Lib.Speed, ...) rebuilds most of the
-# 803 modules. That takes several hours on the 4 cores of ubuntu-latest and can reach the
-# 6-hour limit of a GitHub-hosted job. A change to lean-toolchain or lake-manifest.json gets no
-# baseline at all.
+# A change to a module that most of src imports (Lib.Base, Lib.Speed, ...) rebuilds all 803
+# modules: about 4 hours of module build time, so one to two hours on the 4 cores of
+# ubuntu-latest, and single modules peak at about 9 GB of its 16 GB. A change to lean-toolchain
+# or lake-manifest.json gets no baseline, and Mathlib's cache must also match.
 
 on:
   pull_request:
