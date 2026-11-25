@@ -1,5 +1,5 @@
-# Added for the shared build cache (see CACHE.md). The rest of this file, up to the
-# next such comment, is unchanged from grh/ of lsernau/grh-lean commit 72fead1.
+# Added for the shared build cache (see ../CACHE.md). The rest of this file, up to the
+# next such comment, is unchanged from grh-lean commit 72fead1.
 platformIndependent = true
 
 name = "GRH"
