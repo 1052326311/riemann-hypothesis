@@ -1,3 +1,15 @@
+> **About this repository.** The `main` branch of this repository is a copy of the readable
+> edition (`grh/`) of https://github.com/lsernau/grh-lean at commit
+> 72fead102f663d5c7a407964a13dc0cf9d977207, moved to the repository root, with build cache
+> configuration added (see `CACHE.md`). The text below is the authors' README for that edition;
+> its link to `../grh-compact` refers to the compact edition, which is on branch `grh-lean` of this
+> repository. The earlier work in this repository, based on Levent Alpöge's proof, is on branch
+> `alpoge`.
+>
+> To use the shared build cache, run `lake exe cache get`, then `lake build`; the second command
+> should build nothing. The cached files come from a build of this third-party proof, which has
+> not been verified; the cache only provides build outputs and checks nothing about the proof.
+
 # The Generalized Riemann Hypothesis for Dirichlet L-functions, in Lean 4
 
 Research artifact. Not maintained and not accepting contributions.
