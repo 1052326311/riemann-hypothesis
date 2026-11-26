@@ -50,8 +50,8 @@ a GitHub-hosted runner (or on the runner named by the repository variable `PR_RU
 `runs-on` value such as `["self-hosted","rh-pr"]`; without it, `ubuntu-latest`), and every pull
 request from a branch of this repository, merge queue group (`merge_group`), push to `main` and
 manual run on the self-hosted runner described below, with the exact record if there is one and
-the baseline otherwise. It fails if `lake build` fails, if the build log contains "declaration uses
-'sorry'", or if `scripts/PrintAxioms.lean` reports any axiom other than `propext`,
+the baseline otherwise. It fails if `lake build` fails, if the build log contains `` declaration uses
+`sorry` ``, or if `scripts/PrintAxioms.lean` reports any axiom other than `propext`,
 `Classical.choice` and `Quot.sound` for the five theorems. It never publishes anything.
 
 On the self-hosted runner, except for pull requests, which upload nothing, the job builds with
@@ -117,8 +117,9 @@ repository (a pull request from such a branch, or a manual run). Its setup is in
 
 ## Tau Ceti
 
-The project depends on [Tau Ceti](https://github.com/TauCetiProject/TauCeti), pinned at a
-toolchain tag in `lakefile.toml`. Tau Ceti publishes its oleans in its own public cache, the
+The project depends on [Tau Ceti](https://github.com/TauCetiProject/TauCeti), pinned in `lakefile.toml`
+at a toolchain tag or at a commit of its main branch for which Tau Ceti has published a cache
+(check `https://cache.taucetiproject.org/revisions/TauCetiProject/TauCeti/tc/<toolchain>/<rev>.jsonl`). Tau Ceti publishes its oleans in its own public cache, the
 service `tauceti-public` in `lakefile.toml`, which neither Mathlib's cache nor this project's
 covers. `scripts/tauceti-cache-get.py`, which `lake exe cache get` (and CI) runs after Mathlib's
 cache:
@@ -133,7 +134,7 @@ cache:
 
 After adding an import of a new Tau Ceti module, rerun `lake exe cache get`; otherwise Lake
 compiles that module and its Tau Ceti dependencies from source. The Tau Ceti and Mathlib pins move
-together: pick the Tau Ceti tag for the new Lean release, and check that its manifest pins the
+together: pick the Tau Ceti tag (or cached main commit) for the new Lean release, and check that its manifest pins the
 Mathlib commit chosen here. A change of either pin changes the build inputs of every module that
 imports Tau Ceti, directly or not.
 

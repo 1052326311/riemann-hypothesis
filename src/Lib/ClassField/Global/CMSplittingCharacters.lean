@@ -1,5 +1,7 @@
-import Lib.ClassField.Global.NormTheorems
-import Lib.GaloisRep.Main.SelmerModules
+module
+
+public import Lib.ClassField.Global.NormTheorems
+public import Lib.GaloisRep.Main.SelmerModules
 
 /-!
 # CM fields: complex conjugation, invariant ideles and splitting characters
@@ -47,6 +49,8 @@ exposition A. Raghuram, Notes on the arithmetic of Hecke L-functions, arXiv:2207
 
 See also `Lib.ClassField.Global.AlbertBrauerHasseNoether` and `Lib.ClassField.Places.LocalFields`.
 -/
+
+@[expose] public section
 
 /-!
 ## Invariant ideles and splitting characters at inert places

@@ -1,4 +1,6 @@
-import Lib.Cohomology.Etale.Basic
+module
+
+public import Lib.Cohomology.Etale.Basic
 
 /-!
 # Long exact sequences, four and five lemmas, and Ext with disjoint unions and products
@@ -31,6 +33,8 @@ Notions from other files:
   Ext^n(N,F) → Ext^n(N',F) is bijective for every n; `New.Variety.AllBijective f` says that every
   map f n is bijective.
 -/
+
+@[expose] public section
 
 /-!
 ## Long exact sequences, their morphisms and their rotation

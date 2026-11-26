@@ -1,5 +1,7 @@
-import New.OneLift.ComparisonOperator.DeterminantProducts
-import New.OneLift.ComparisonOperator.GluedLattices
+module
+
+public import New.OneLift.ComparisonOperator.DeterminantProducts
+public import New.OneLift.ComparisonOperator.GluedLattices
 
 /-!
 # The polynomial map ζ, the datum Ψ^add and the series Υ; norm, degree and denominator of ζ
@@ -42,6 +44,8 @@ Notions from other files:
 
 See `New.OneLift.ComparisonOperator.FirstFactors` for related work.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -648,16 +652,10 @@ lemma aeval_smul_X_stackedDetProdCoords (j : D.LiftIndex) (i : D.RowChoice)
   have h_subst : c ^ (∑ τ, ∑ h ∈ range N, h * κ τ h) •
       aeval (fun x ↦ c • MvPolynomial.X x) (stackedDetProdCoords j i Y l) =
       c ^ (∑ τ, ∑ h ∈ range N, N * κ τ h) • stackedDetProdCoords j i Y l := by
-    have h0 := twoSidedSubst_firstColsCoord (c • 1) 1
+    simpa [twoSidedSubst, h_schur, ↓ card_detIndex_eq_sum, -card_sum, prod_pow_eq_pow_sum, mul_sum,
+      ← pow_mul, Matrix.one_apply, N, κ] using
+      twoSidedSubst_firstColsCoord (c • 1) 1
         (twoSidedSubst_stackedDetProd (posEquiv j) (constantRows j i Y) ..) κ l
-    simp [h_schur, ↓ card_detIndex_eq_sum, -card_sum, prod_pow_eq_pow_sum, mul_sum, ← pow_mul,
-      Matrix.one_apply, N, κ] at h0
-    have h_sub : twoSidedSubst (c • 1) 1 =
-        aeval (fun x : D.Φ × FirstFactorIndex j × AddedIndex j ↦ c • MvPolynomial.X x) := by
-      refine MvPolynomial.algHom_ext fun ⟨τ, a, b⟩ ↦ ?_
-      simp [Matrix.one_apply]
-    rw [h_sub] at h0
-    exact h0
   have h_exp : ∑ τ, ∑ h ∈ range N, N * κ τ h =
       (∑ τ, ∑ h ∈ range N, h * κ τ h) + ∑ τ, ∑ h ∈ range N, (N - h) * κ τ h := by
     simp_rw [← sum_add_distrib, ← add_mul]
