@@ -10,8 +10,9 @@ name: technical debt
 # src/, so that the comment is corrected when a later push drops the pull request's src/ changes.
 #
 # pull_request_target lets the token comment on pull requests from forks. Nothing from the pull
-# request is checked out or run: the script comes from the base branch, and the pull request's
-# files are only read as git objects.
+# request is checked out or run: GitHub runs the default branch's copy of this workflow and the
+# script, whatever branch the pull request is based on, and the pull request's files are only read
+# as git objects.
 
 on:
   pull_request_target:
