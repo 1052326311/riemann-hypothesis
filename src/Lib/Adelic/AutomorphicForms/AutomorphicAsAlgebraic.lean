@@ -267,7 +267,7 @@ algebraic form, as a function on G_f, does. (`HasHeckePolynomial`: fixed by the 
 and an eigenvector of the Hecke operators there, as prescribed by p; `WeilData E`: the auxiliary
 element, idele and splitting character fixed on E.) -/
 lemma _root_.New.hasHeckePolynomial_toAlgForm_iff [V.IsStd] (h : IsHCParam (n := n) κ e l)
-    [WeilData E] {y : V.Form (typeKernel l s)} {w : FinPlace E} {p : ℂ → ℂ} {hw : star w ≠ w} :
+    {y : V.Form (typeKernel l s)} {w : FinPlace E} {p : ℂ → ℂ} {hw : star w ≠ w} :
     HasHeckePolynomial (rightRegular ℂ (Gf E n) (WeylIndex n κ → ℂ)) hw p (V.toAlgForm h y).val ↔
       HasHeckePolynomial (V.formRep (typeKernel l s)) hw p y := by
   -- `L` sends a form to its algebraic form, as a function; it is injective and equivariant.
