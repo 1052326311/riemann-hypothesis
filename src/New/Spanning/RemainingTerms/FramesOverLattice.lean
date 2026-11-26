@@ -127,6 +127,7 @@ lemma IsFrameSet.mono {c : S.Classes} {B : Set (S.Classes × S.G E)} (hB : S.IsF
 
 variable [S.IsAdmissible] {c : S.Classes} {B : Set (S.Classes × S.G E)}
 
+omit [S.IsAdmissible] in
 /-- The matrix of products of the standard frame with the frame of a term of a frame set has
 integral entries. -/
 lemma IsFrameSet.isIntegral_frameProducts (hB : S.IsFrameSet c B) {p : S.Classes × S.G E}
