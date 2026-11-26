@@ -1060,13 +1060,12 @@ lemma TorsionCoeff.pullbackAlong_oneLocConst_surjective :
     fun y ↦ ⟨pullbackAlong (g.whiskerLeft (I.toZerosCoeff _)) y, ?_⟩
   -- each side is one pull-back, and the two composite maps are the same by definition of
   -- `IdealFamily.constToZeros`
-  erw [pullbackAlong_pullbackAlong]
-  change _ =
-    pullbackAlong (relFreeAb.π (I.whisker g).topLocus)
-      (pullbackAlong (abCoker.π (ℓ • 𝟙 (relFreeAb (I.whisker g).topLocus)))
-        (pullbackAlong (g.whiskerLeft I.constToZeros) y))
-  erw [pullbackAlong_pullbackAlong, pullbackAlong_pullbackAlong]
-  rfl
+  let q := relFreeAb.π (I.whisker g).topLocus
+  let r := abCoker.π (ℓ • 𝟙 (relFreeAb (I.whisker g).topLocus))
+  let s := g.whiskerLeft I.constToZeros
+  refine (pullbackAlong_pullbackAlong (f := oneLocConst) (g.whiskerLeft (I.toZerosCoeff _)) y).trans ?_
+  exact ((pullbackAlong_pullbackAlong (f := q) r (pullbackAlong s y)).trans
+    (pullbackAlong_pullbackAlong (f := q ≫ r) s y)).symm
 
 end Theories
 
