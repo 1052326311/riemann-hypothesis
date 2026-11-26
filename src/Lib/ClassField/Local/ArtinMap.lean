@@ -745,7 +745,7 @@ lemma artinAt_eq_of_localArtin_eq {x : (IsDedekindDomain.HeightOneSpectrum.adicC
   -- The chosen place above `w` is a conjugate of `A`: `ht : t • A = placeOver w`.
   obtain ⟨t, ht⟩ := h.exists_smul Γ w.isPlaceOver_placeOver
   -- `rw!` because the place occurs in the type of the decomposition group.
-  rw! [New.artinAt, ← ht, smul_eq_comap]
+  rw! [New.artinAt, ← ht, ValuationSubring.pointwise_smul_eq_comap]
   -- The local norm from `K_w` to itself is the identity, as the idele norm of `K / K` is.
   have h_at_w : adeleNorm K K (finAdeleIncl K K (locIdele w x).val) w =
       ((locIdele w x).val ^ finrank K K) w :=

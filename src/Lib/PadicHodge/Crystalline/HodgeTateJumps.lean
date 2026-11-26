@@ -1,5 +1,6 @@
 module
 
+public import Lib.General.Measure.HaarModulus
 public import Lib.PadicHodge.Crystalline.HodgeTateForms
 
 /-!
