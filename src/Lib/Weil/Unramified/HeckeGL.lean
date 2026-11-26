@@ -346,9 +346,9 @@ lemma exists_residueKer_eq_and_inv_mul_mem_localIntGL (hg : g ∈ basicDoubleCos
     U.eq_of_le_of_finrank_eq
       (fun x hx ↦ by simpa [← he ⟨x, hx⟩] using (f ⟨x, hx⟩).2)
       (by rw [← h_finrank, (e.ofSubmodule' _).finrank_eq])
-  refine ⟨g * l, by simpa using mul_mul_mem_basicDoubleCoset hg (one_mem _) l.2, ?_, by simp⟩
+  refine ⟨g * l, by simpa using mul_mul_mem_basicDoubleCoset hg (one_mem _) l.property, ?_, by simp⟩
   -- Reduction is multiplicative, so `residueKer (g * l)` is that same preimage.
-  rw [residueKer, Units.val_mul, map_residueOrZero_mul hg.1 l.2.isIntMatrix, mulVecLin_mul,
+  rw [residueKer, Units.val_mul, map_residueOrZero_mul hg.1 l.property.isIntMatrix, mulVecLin_mul,
     h_red, h_comap, LinearMap.ker_comp]
 
 omit [DecidableEq n] in
