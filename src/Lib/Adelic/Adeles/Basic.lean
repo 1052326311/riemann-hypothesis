@@ -607,7 +607,8 @@ deriving instance T0Space, LocallyCompactSpace for 𝔸f E
 variable (E) in
 /-- `New.Ô E` has the same elements as Tau Ceti's integral finite adeles. -/
 lemma coe_Ô_eq_integralAdeles : (Ô E : Set (𝔸f E)) = FiniteAdeleRing.integralAdeles (𝓞 E) E :=
-  ext fun _ ↦ mem_Ô
+  ext fun _ ↦ by
+    simp [mem_Ô, FiniteAdeleRing.mem_integralAdeles, HeightOneSpectrum.mem_adicCompletionIntegers]
 
 lemma isCompact_Ô : IsCompact (Ô E : Set (𝔸f E)) := by
   rw [coe_Ô_eq_integralAdeles]
