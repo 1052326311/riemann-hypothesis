@@ -252,7 +252,7 @@ lemma IsScalingAtM.idem_mul [Fact N.Prime] (hκ : IsScalingAtM N β δ κ)
 
 /-- If the places above `N` are `P` and its conjugate, the scaling adele `δ`, which is `1` above
 `N`, is `1` at the places conjugate to `P`. -/
-lemma IsScalingAtM.star_idem_mul [Fact N.Prime] (hκ : IsScalingAtM N β δ κ)
+lemma IsScalingAtM.star_idem_mul (hκ : IsScalingAtM N β δ κ)
     (hP : IsSplitLevel P N) : star (idem P) * δ = star (idem P) := by
   rw [star_idem]
   ext w
