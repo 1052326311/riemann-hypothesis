@@ -549,12 +549,12 @@ lemma HodgeTatePair.cup_comp_tensorContractionCocycle_π_true {a : ℕ}
       contractionCocycle.extension.X₃.obj c ⟶ contractionCocycle.extension.X₂.obj c :=
     ofHom (.inr _ (formCoeff c))
   simp_rw [TotalH.cup, TotalH.map_comp, comp_assoc]
-  -- `erw`: `cohomClass` is the class of the extension only after unfolding its definition.
-  erw [map_extClass contractionCocycle.shortExact_extension]
   refine congrArg (_ ∘ _) <| .trans (tensorContractionCocycle.cohomClass_comp_eq_extClass
     (S := ⟨_, _, _⟩) _ (𝟙 _) (piAbFunctor.π _ true)
       (fun c ↦ by exact abTensorMap (σ c) (𝟙 _)) ?_ ?_)
-    pullbackAlong_id
+    (pullbackAlong_id.trans
+      (TotalH.map_extClass (Φ := abTensor.flip.obj formCoeff)
+        contractionCocycle.shortExact_extension).symm)
   · -- `σ ⊗ 𝟙` lifts the identity
     exact fun c ↦ addCommGrp_tensor_hom_ext fun a b ↦ by
       change TensorProduct.map _ _ (TensorProduct.map _ _ (a ⊗ₜ[ℤ] b)) = a ⊗ₜ[ℤ] b
@@ -587,9 +587,14 @@ lemma HodgeTatePair.cup_comp_tensorContractionCocycle_π_false {a : ℕ}
       contractionCocycle.extension.X₃.obj c ⟶ contractionCocycle.extension.X₂.obj c :=
     ofHom (.inr _ (formCoeff c))
   simp_rw [TotalH.cup, TotalH.map_comp, comp_assoc]
-  -- `erw`: `cohomClass` is the class of the extension only after unfolding its definition.
-  erw [← map_zsmul, map_extClass contractionCocycle.shortExact_extension,
-    ← extClass_sign_comm (abTensor_shortExact contractionCocycle.shortExact_extension)]
+  rw [← map_zsmul]
+  refine Eq.trans ?_ (congrArg
+    (fun e ↦ comp (map (abTensor.obj M) y)
+      ((-1 : ℤ) ^ a • comp e (map (abTensor.flip.obj formCoeff) x.toTotalH)))
+    (TotalH.map_extClass (Φ := abTensor.obj M)
+      contractionCocycle.shortExact_extension).symm)
+  refine Eq.trans ?_ (congrArg _
+    (extClass_sign_comm (abTensor_shortExact contractionCocycle.shortExact_extension) x))
   refine congrArg (_ ∘ _) <| .trans (tensorContractionCocycle.cohomClass_comp_eq_extClass
     (S := ⟨_, _, _⟩) _ (𝟙 _) (piAbFunctor.π _ false)
       (fun c ↦ by exact abTensorMap (𝟙 _) (σ c)) ?_ ?_)
