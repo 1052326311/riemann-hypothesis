@@ -14,15 +14,16 @@ name: build
 # on GitHub-hosted runners, or on a separate self-hosted runner named by PR_RUNS_ON. A pull
 # request whose head branch is in this repository (a batch branch, or a branch of someone who can
 # already push here) is trusted like a manual run and builds on the rh-big runner. Its
-# job-started hook (scripts/runner/job-started.sh) must admit such pull requests and keep
-# refusing those from forks. publish-ci-cache.yml never takes a pull request run's artifact:
-# scripts/ci-github.py accepts only merge_group, push to main and workflow_dispatch runs whose job
-# ran on the rh-big runner, and pull request runs upload nothing. No job here publishes anything:
-# the cache is only read, over public HTTPS, and every artifact is checked against the SHA-256 in
-# the record it was selected from. On the self-hosted runner, except for pull requests, the job
-# uploads the new cache outputs (scripts/ci-cache-stage.py) as the artifact cache-<commit>; after
-# the merge queue has moved main to that commit, .github/workflows/publish-ci-cache.yml verifies
-# them with main's code and publishes them.
+# job-started hook (scripts/runner/job-started.sh) admits such pull requests, checking the head
+# repository in the event payload, and refuses those from forks. publish-ci-cache.yml never
+# takes a pull request run's artifact: scripts/ci-github.py accepts only merge_group, push to main
+# and workflow_dispatch runs whose job ran on the rh-big runner, and pull request runs upload
+# nothing. No job here publishes anything: the cache is only read, over public HTTPS, and every
+# artifact is checked against the SHA-256 in the record it was selected from. On the self-hosted
+# runner, except for pull requests, the job uploads the new cache outputs
+# (scripts/ci-cache-stage.py) as the artifact cache-<commit>; after the merge queue has moved main
+# to that commit, .github/workflows/publish-ci-cache.yml verifies them with main's code and
+# publishes them.
 #
 # The cache restore uses the record for the exact build inputs when there is one. A pull request
 # that changes src never has one, so scripts/ci-cache-get.py --baseline falls back to the newest
