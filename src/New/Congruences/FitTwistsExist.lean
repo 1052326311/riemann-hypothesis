@@ -386,10 +386,10 @@ lemma New.Selmer.exists_mFoldTwist_selmerLengthLe_inv_ratio_le {P : Parameters} 
     ∃ τ : D.MFoldTwist, ∀ j : D.LiftIndex,
       let ϑ : D.Twist := τ.powTwist j
       IsAuxTwist (badPlaces D ℓ) ϑ.Q ϑ.invAvatar (twistError ℓ D) ∧
-      (∀ a : A, ∃ (γ : AbsGal D) (ζ : intQpBar ℓ),
-        HasDivisibleSelmerLengthLe ϑ.invAvatar (R a) ϑ.Q γ ζ (twistError ℓ D)) ∧
-      (∀ b : B, ∃ (γ : AbsGal D) (ζ : intQpBar ℓ),
-        HasDivisibleSelmerLengthLe ϑ.invAvatar (R₁ b) ϑ.Q γ ζ (twistError ℓ D)) ∧
+      (∀ a : A, ∃ γ : AbsGal D,
+        HasDivisibleSelmerLengthLe ϑ.invAvatar (R a) ϑ.Q γ (twistError ℓ D)) ∧
+      (∀ b : B, ∃ γ : AbsGal D,
+        HasDivisibleSelmerLengthLe ϑ.invAvatar (R₁ b) ϑ.Q γ (twistError ℓ D)) ∧
       ∀ (p : D.CriticalPair) (s : ℤˣ), p.IsRamified →
         ‖ι.ιℓ (p.ratio ϑ s)⁻¹‖ ≤ exp (twistError ℓ D * log ℓ) := by
   -- join the families over `A ⊕ B`; `SummandCoordIndex` is the index type `D.RowIndex` on the left
@@ -423,8 +423,8 @@ lemma New.Selmer.denominatorLe_range_goodLift {P : Parameters} {D : Data P} {ℓ
       D.goodForms (D.spaceW D.m) ⊓ D.eigenPart (D.spaceW D.m) q ≠ ⊥ →
       ∃ R : GalRep ℓ D.E D.RowIndex,
         IsMainSummand (D.descentPair TameChar.one j) (fun (w : FinPlace D.E) (i : ℕ) ↦ q (w, i)) R ∧
-        ∃ (γ : AbsGal D) (ζ : intQpBar ℓ),
-          HasDivisibleSelmerLengthLe ϑ.invAvatar R ϑ.Q γ ζ (twistError ℓ D)) :
+        ∃ γ : AbsGal D,
+          HasDivisibleSelmerLengthLe ϑ.invAvatar R ϑ.Q γ (twistError ℓ D)) :
     DenominatorLe ι.ιℓ (D.descentPair ϑ j) D.e₀ (D.goodLift ϑ j).range
       (clearingBound D ℓ * log ℓ) := by
   have h_char : (D.descentPair ϑ j).u1Char = (D.descentPair TameChar.one j).u1Char *
@@ -449,8 +449,8 @@ lemma New.Selmer.denominatorLe_span_trivialLift {P : Parameters} {D : Data P} {�
     (ι : PadicIso ℓ) {ϑ : D.Twist} {p : D.CriticalPair} {j : ℕ} (hp : p.IsMainPair j)
     (h_aux : IsAuxTwist (badPlaces D ℓ) ϑ.Q ϑ.invAvatar (twistError ℓ D)) {R : GalRep ℓ D.E Unit}
     (hR : IsMainSummand (p.lValueData hp.hasLiftRank (1 : D.Twist)).descentPair 1 R)
-    (h_selmer : ∃ (γ : AbsGal D) (ζ : intQpBar ℓ),
-      HasDivisibleSelmerLengthLe ϑ.invAvatar R ϑ.Q γ ζ (twistError ℓ D)) :
+    (h_selmer : ∃ γ : AbsGal D,
+      HasDivisibleSelmerLengthLe ϑ.invAvatar R ϑ.Q γ (twistError ℓ D)) :
     open scoped Classical in
     DenominatorLe ι.ιℓ (p.lValueData hp.hasLiftRank ϑ).descentPair
       (tupleIdem Unit fun _ : (p.lValueData hp.hasLiftRank ϑ).descentPair.ChosenIndex ↦
