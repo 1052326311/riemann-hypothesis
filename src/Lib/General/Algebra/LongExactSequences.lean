@@ -471,7 +471,7 @@ lemma New.Variety.H.sigma_bijective {C : Type 1} [Category C] {ι : Type 1} (X :
     -- Under `e`, pull-back along `sigma.ι X i` is composition with it.
     refine (bijective_iff_of_comm_sq (fun f ↦ funext fun i ↦ ?_) (e _).bijective
       (.piMap fun _ ↦ (e _).bijective)).1 h_bij
-    show map F (freeAb.map (sigma.ι X i)) 0 (e (sigma X) f) = e (X i) (sigma.ι X i ≫ f)
+    change map F (freeAb.map (sigma.ι X i)) 0 (e (sigma X) f) = e (X i) (sigma.ι X i ≫ f)
     simp +instances [e, Adjunction.homEquiv, map, freeAb]
   | succ n ih =>
     -- Embed `F` in the injective `Injective.under F` and compare the long exact sequences of
@@ -575,7 +575,7 @@ lemma H.pi_bijective (n : ℕ) :
     refine (bijective_iff_of_comm_sq (fun x ↦ funext fun i ↦ ?_)
       (mk₀_bijective N (piAbFunctor F)) (.piMap fun i ↦ mk₀_bijective N (F i))).1 h_hom
     -- pushing forward a class of degree 0 is composition with the projection
-    show pull (⟨𝟭 C, π F i⟩ : Comparison (piAbFunctor F) (F i)) (𝟙 N) 0 (mk₀ x) = mk₀ (x ≫ π F i)
+    change pull (⟨𝟭 C, π F i⟩ : Comparison (piAbFunctor F) (F i)) (𝟙 N) 0 (mk₀ x) = mk₀ (x ≫ π F i)
     simp [pull_apply, mapExactFunctor_mk₀, show (𝟭 C).whiskerLeft x = x from rfl]
   | succ n ih =>
     -- for 0 → K → ℤ[⊔ h_c] → N → 0 with onto connecting maps, degree n + 1 for N follows from

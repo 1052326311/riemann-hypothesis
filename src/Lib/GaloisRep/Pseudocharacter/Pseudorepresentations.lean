@@ -141,7 +141,7 @@ lemma New.Selmer.IsLatticeIn.span_range_eq_top_of_map_pow_eq_map_conj {G n : Typ
     (toLinAlgEquiv'.toRingHom.comp (residue _).mapMatrix).toMonoidHom.comp u
   obtain ⟨v, hv⟩ : ∃ v : n → ResidueField O, HasEigenvector (τ γ) (residue O ζ) v := by
     refine ((hasEigenvalue_iff_isRoot_charpoly (τ γ) _).2 ?_).exists_hasEigenvector
-    show (toLin' ((u γ).map (residue O))).charpoly.IsRoot (residue O ζ)
+    change (toLin' ((u γ).map (residue O))).charpoly.IsRoot (residue O ζ)
     rw [charpoly_toLin', charpoly_map]
     exact .map (residue O) (.of_map hζ_u O.val.subtype_injective)
   -- Iterating `h_tame`: conjugation by `φ ^ k` raises `R γ` to the power `q ^ k`.

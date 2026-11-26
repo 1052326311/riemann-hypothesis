@@ -167,13 +167,8 @@ lemma sum_basisTableau_mul_alternant {ι : Type} [Fintype ι] [DecidableEq ι] {
         alternant (x ∘ e) 0 =
       alternant (x ∘ e) fun i : ℕ ↦ ∑ h ∈ Finset.Ioo i M, k h := by
   -- Read the sum over the subtype as a sum over the chosen set of fillings.
-  have h_sum :
-      ∑ T : BasisTableau ι M k, ∏ h : Fin M, ∏ j : Fin (k h), ∏ s : Fin h, x (T.val h j s) =
-        ∑ T ∈ Classical.epsilon IsTableauBasis,
-          ∏ h : Fin M, ∏ j : Fin (k h), ∏ s : Fin h, x (T h j s) :=
-    sum_coe_sort _ fun T : Tableau ι M k ↦ ∏ h : Fin M, ∏ j : Fin (k h), ∏ s : Fin h, x (T h j s)
-  rw [h_sum]
-  exact isTableauBasis_epsilon.weyl_character_formula a e x
+  exact (congrArg (· * _) (sum_coe_sort _ _)).trans
+    (isTableauBasis_epsilon.weyl_character_formula a e x)
 
 /-- Over any commutative ring `R`, the polynomials `nablaBasis R n κ` are linearly independent. For
 a family `i` of chosen standard fillings, `nablaBasis R n κ i` is the product over places `τ` of the
@@ -250,7 +245,7 @@ lemma GL.rowSubst_minor (z : ∀ τ : Φ, Matrix (n' τ) (n τ) R) (τ : Φ)
   simp [rowSubst, reindex_equiv (rowEquivFin n τ).symm, ← C_mul', minor, AlgHom.map_det, Matrix.map,
     RingHom.map_det, ← det_mul]
   -- Both sides are the determinant of the same matrix: once entrywise, once as a product.
-  show (of fun (a b : Fin (Fintype.card (n τ))) ↦ ∑ c : Fin (Fintype.card (n τ)),
+  change (of fun (a b : Fin (Fintype.card (n τ))) ↦ ∑ c : Fin (Fintype.card (n τ)),
         C (z τ (I a) ((rowEquivFin n τ).symm c)) *
           X ((⟨τ, (rowEquivFin n τ).symm c⟩ : Σ σ : Φ, n σ), (b : ℕ))).det =
       ((of fun (a c : Fin (Fintype.card (n τ))) ↦ C (z τ (I a) ((rowEquivFin n τ).symm c))) *

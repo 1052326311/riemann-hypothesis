@@ -275,7 +275,7 @@ lemma HeckeChar.isHeckeOfType_finPart {n : NumberField.InfinitePlace E → ℤ} 
       χ.val.comp
         ⟨Units.map (.inr (NumberField.InfinitePlace E → ℂ) (𝔸f E)), .units_map _ (.prodMk_right _)⟩
     refine (char_eventually_eq_one _ χf.continuous_toFun).mono fun y hy ↦ Units.ext ?_
-    show (χf y : ℂ) = 1
+    change (χf y : ℂ) = 1
     exact congrArg Subtype.val hy
   · -- `χ` is trivial on the principal idele of `x`, the product of its finite and infinite parts.
     let a : (𝔸 E)ˣ := .map (.inr (NumberField.InfinitePlace E → ℂ) (𝔸f E)) (principalIdele x) *

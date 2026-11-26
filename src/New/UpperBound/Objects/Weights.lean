@@ -466,7 +466,6 @@ lemma sortedParamY_sub_paramX (τ : D.Φ) (p : ℕ) :
       targetParameter_k_sub_one_add, Nat.mod_eq_zero_of_dvd h_dvd, twiceBlockEntry, reducedHalfGap]
     omega
   · -- `λ'_p` lies in a block `-κ_i + [t]`.
-    have h_mod : (p + 1 - D.k) % (D.t + 1) ≠ 0 := mt Nat.dvd_of_mod_eq_zero h_dvd
     simp only [ite_eq_right h_head, h_dvd, and_false, ite_false, twiceBlockEntry]
     omega
 
