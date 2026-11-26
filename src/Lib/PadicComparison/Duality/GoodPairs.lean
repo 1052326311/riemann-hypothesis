@@ -11,7 +11,7 @@ of `A`-algebras satisfying `IsTest`). A pair `(Y, U)` is the functor
 `New.Variety.relFreeAb U = ℤ[Y] / ℤ[U]`. The pair is good,
 `New.Variety.ComparedTheory.IsFiniteLerayHirsch D`, if its cohomology with locally constant
 `ℤ/ℓ`-coefficients is finite and compares bijectively with the theory `D`. Here
-`New.Variety.offClosedFibre Y` is the part of `Y` on tests where the maximal ideal of `A` generates
+`New.Variety.offClosedFiber Y` is the part of `Y` on tests where the maximal ideal of `A` generates
 the unit ideal.
 
 * `New.Variety.ComparedTheory.isFiniteLerayHirsch_iff_of_locally_bijective`: excision along a map
@@ -214,7 +214,7 @@ variable [InvertsPrime A ℓ] (D : ComparedTheory g)
 
 /-- The part of `Y` on the tests in which the maximal ideal of `A` generates the unit ideal, that
 is the part away from the special fibre. -/
-abbrev offClosedFibre (Y : TestOver A ⥤ Type 1) : Subfunctor Y :=
+abbrev offClosedFiber (Y : TestOver A ⥤ Type 1) : Subfunctor Y :=
   (IdealFamily.ofMaximalIdeal (A := A)).topLocus.preimage (toUnit Y)
 
 /-- The pairs of points of `E` with the same image under `u` that have the same class in
@@ -459,11 +459,11 @@ private lemma rootPairsToProdLine_app_injective (c : TestOver A) :
 
 /-- For a standard étale pair `P = (f, g)` over `R`, locally every point `(y, q)` of `Y × ℙ¹`,
 `Y = Spec (R[X] / f)[1 / g]`, is the image `(y, (x - y : 1))` of a pair of `rootPairs P`, or lies in
-`offClosedFibre Y × ℙ¹` or in `Y × (ℙ¹ ∖ (0 : 1))`. -/
+`offClosedFiber Y × ℙ¹` or in `Y × (ℙ¹ ∖ (0 : 1))`. -/
 private lemma isZariskiLocallyTop_range_rootPairsToProdLine_sup :
     IsZariskiLocallyTop (ringOf (𝟭 (TestOver A)))
       (.range (rootPairsToProdLine P) ⊔
-        ((offClosedFibre (testUnitLocus (A := A) (AdjoinRoot.mk P.f P.g)).toFunctor).preimage
+        ((offClosedFiber (testUnitLocus (A := A) (AdjoinRoot.mk P.f P.g)).toFunctor).preimage
             (fst ..) ⊔
           (affineChart.whisker (ringOf (𝟭 (TestOver A)))).preimage (snd ..))) := by
   rintro c ⟨w, q : projLine (.of c.obj)⟩ m hm
@@ -508,7 +508,7 @@ of the special fibre]. -/
 lemma isFiniteLerayHirsch_principal_open
     (L : D.IsFiniteLerayHirsch (relFreeAb (IdealFamily.ofMaximalIdeal (A := A)).topLocus)) (a : T) :
     D.IsFiniteLerayHirsch (relFreeAb (Subfunctor.range ((testUnitLocus a).ι ≫ affineToLines e) ⊔
-      offClosedFibre (ringOf (𝟭 (TestOver A)) ⋙ projLinePow (Fin d)))) := by
+      offClosedFiber (ringOf (𝟭 (TestOver A)) ⋙ projLinePow (Fin d)))) := by
   classical
   -- Up to Zariski descent the open set `U` of the statement is `W.topPoints`, the complement in
   -- `(ℙ¹)^d` of the zeros of the generator of `multihomogeneousIdeal` that lie in the special
@@ -584,7 +584,7 @@ lemma isFiniteLerayHirsch_principal_open
     isLerayHirschBasis_iff_allBijective_truncMap.2
       (IsAffinelyCovered.devissage_bijective lerayHirsch.devissage
       (fun c ↦ isLerayHirschBasis_iff_allBijective_truncMap.1 (lh_rep c)) hY)
-  let U : Subfunctor X := .range ((testUnitLocus a).ι ≫ affineToLines e) ⊔ offClosedFibre X
+  let U : Subfunctor X := .range ((testUnitLocus a).ι ≫ affineToLines e) ⊔ offClosedFiber X
   have h_le : U ≤ W.topPoints := by
     rintro c q (hq | hq)
     · exact eq_top_mono (sup_le_sup_left (map_mono bot_le) _)
@@ -632,28 +632,28 @@ seal CategoryTheory.Abelian.Ext in
 /-- Assume `L`: the pair of the point and its part away from the special fibre is good for `D`.
 Let `e` present `R[X]` as the polynomial ring in `d` variables over `A`, and let `P = (f, g)` be
 a standard étale pair over `R`. In `Spec R[X][1 / g]`, let `U` be the union of the part where `f`
-is a unit and the part `offClosedFibre` away from the special fibre. Then the pair of
+is a unit and the part `offClosedFiber` away from the special fibre. Then the pair of
 `Spec R[X][1 / g]` and `U` is good for `D`. -/
-lemma isFiniteLerayHirsch_offClosedFibre_sup_testUnitLocus_preimage
+lemma isFiniteLerayHirsch_offClosedFiber_sup_testUnitLocus_preimage
     (L : D.IsFiniteLerayHirsch (relFreeAb (IdealFamily.ofMaximalIdeal (A := A)).topLocus))
     (P : StandardEtalePair R) (e : MvPolynomial (Fin d) A ≃ₐ[A] R[X]) :
-    D.IsFiniteLerayHirsch (relFreeAb ((offClosedFibre (testSpec A R[X]) ⊔ testUnitLocus
+    D.IsFiniteLerayHirsch (relFreeAb ((offClosedFiber (testSpec A R[X]) ⊔ testUnitLocus
       P.f).preimage (testUnitLocus (A := A) P.g).ι)) := by
   -- Embed everything in the product of lines. With `W x` the union of `testUnitLocus x` and
-  -- `offClosedFibre`, the pairs given by `W (g * f)` and `W g` are good by
+  -- `offClosedFiber`, the pairs given by `W (g * f)` and `W g` are good by
   -- `isFiniteLerayHirsch_principal_open`, hence so is the first term of the short exact sequence
   -- `relFreeAb.shortExact_triple`, which is the pair of the statement.
   let j (x : R[X]) : (testUnitLocus (A := A) x).toFunctor ⟶
       ringOf (𝟭 (TestOver A)) ⋙ projLinePow (Fin d) := (testUnitLocus x).ι ≫ affineToLines e
   let W (x : R[X]) : Subfunctor (ringOf (𝟭 (TestOver A)) ⋙ projLinePow (Fin d)) :=
-    Subfunctor.range (j x) ⊔ offClosedFibre (ringOf (𝟭 _) ⋙ projLinePow (Fin d))
+    Subfunctor.range (j x) ⊔ offClosedFiber (ringOf (𝟭 _) ⋙ projLinePow (Fin d))
   have h_sup : Subfunctor.range (j P.g) ⊔ W (P.g * P.f) = W P.g := by
     ext c q
     simp [W, j, range_comp, testUnitLocus]
     exact ⟨fun h ↦ h.elim .inl fun h ↦ h.elim (fun ⟨ψ, ⟨hg, _⟩, hq⟩ ↦ .inl ⟨ψ, hg, hq⟩) .inr,
       fun h ↦ h.elim .inl (.inr ∘ .inr)⟩
   have h_pre : (W (P.g * P.f)).preimage (j P.g) =
-      (offClosedFibre (testSpec A R[X]) ⊔ testUnitLocus P.f).preimage
+      (offClosedFiber (testSpec A R[X]) ⊔ testUnitLocus P.f).preimage
         (testUnitLocus (A := A) P.g).ι := by
     ext c ⟨ψ, hψg⟩
     simp [W, j, range_comp, testUnitLocus]
@@ -674,24 +674,24 @@ lemma isFiniteLerayHirsch_offClosedFibre_sup_testUnitLocus_preimage
 `D.IsFiniteLerayHirsch` holds for `ℤ[Y]/ℤ[U]`: in particular
 `w ↦ ∑ i, (w i restricted along g) · D.comparison i` is bijective on total Ext. Let `e` present
 `R[X]` as the polynomial ring in `d` variables over `A`, and let `P = (f, g)` be a standard étale
-pair over `R`. Assume `L`: the pair of the point and its part `offClosedFibre` away from the special
-fibre is good for `D`. Then the pair of `Y = Spec (R[X] / f)[1 / g]` and `offClosedFibre Y` is
+pair over `R`. Assume `L`: the pair of the point and its part `offClosedFiber` away from the special
+fibre is good for `D`. Then the pair of `Y = Spec (R[X] / f)[1 / g]` and `offClosedFiber Y` is
 good. -/
 lemma isFiniteLerayHirsch_standard_etale
     (L : D.IsFiniteLerayHirsch (relFreeAb (IdealFamily.ofMaximalIdeal (A := A)).topLocus))
     (P : StandardEtalePair R) (e : MvPolynomial (Fin d) A ≃ₐ[A] R[X]) :
-    D.IsFiniteLerayHirsch (relFreeAb (offClosedFibre
+    D.IsFiniteLerayHirsch (relFreeAb (offClosedFiber
       (testUnitLocus (AdjoinRoot.mk P.f P.g)).toFunctor)) := by
   -- The pairs `(y, x)` of `rootPairs P` map by `u` to the points `x` of `Spec R[X][1/g]` and by `v`
   -- to the points `(y, x - y)` of `Y × ℙ¹`. Both maps satisfy excision
   -- (`isFiniteLerayHirsch_iff_of_locally_bijective`), for subfunctors `U`, `V` with the same
-  -- preimage; `U` is handled by `isFiniteLerayHirsch_offClosedFibre_sup_testUnitLocus_preimage`,
+  -- preimage; `U` is handled by `isFiniteLerayHirsch_offClosedFiber_sup_testUnitLocus_preimage`,
   -- and `isFiniteLerayHirsch_of_prod_projLine` descends from `V` to `Y`.
   let Y : TestOver A ⥤ Type 1 := (testUnitLocus (A := A) (AdjoinRoot.mk P.f P.g)).toFunctor
   let G : Subfunctor (testSpec A R[X]) := testUnitLocus P.g
-  let U : Subfunctor G.toFunctor := (offClosedFibre _ ⊔ testUnitLocus P.f).preimage G.ι
+  let U : Subfunctor G.toFunctor := (offClosedFiber _ ⊔ testUnitLocus P.f).preimage G.ι
   let V : Subfunctor (Y ⊗ projLineAlong (𝟭 _)) :=
-    (offClosedFibre Y).preimage (fst ..) ⊔ (affineChart.whisker (ringOf (𝟭 _))).preimage (snd ..)
+    (offClosedFiber Y).preimage (fst ..) ⊔ (affineChart.whisker (ringOf (𝟭 _))).preimage (snd ..)
   let u : (rootPairs P).toFunctor ⟶ G.toFunctor := (rootPairs P).ι ≫ snd ..
   let v : (rootPairs P).toFunctor ⟶ Y ⊗ projLineAlong (𝟭 _) := rootPairsToProdLine P
   have u_surj : IsZariskiLocallyTop (ringOf (𝟭 _)) (.range u ⊔ U) := by
@@ -753,7 +753,7 @@ lemma isFiniteLerayHirsch_standard_etale
       (isZariskiLocallyTop_sameClassLocus_of_injective v V (rootPairsToProdLine_app_injective P))
   refine D.isFiniteLerayHirsch_of_prod_projLine (excision_v.mp ?_)
   rw [h_preimage, excision_u]
-  exact D.isFiniteLerayHirsch_offClosedFibre_sup_testUnitLocus_preimage L P e
+  exact D.isFiniteLerayHirsch_offClosedFiber_sup_testUnitLocus_preimage L P e
 
 end ComparedTheory
 
