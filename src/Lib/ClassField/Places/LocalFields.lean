@@ -248,7 +248,7 @@ lemma isUniformiser_iff_irreducible [IsDiscreteValuationRing (valRingBelow k A)]
   simp [irreducible_iff_uniformizer, Ideal.ext_iff, ↓mem_maximalIdeal_iff, mem_span_singleton,
     dvd_iff_valuationVia_le, ← comap_apply, IsUniformiser]
   set v : Valuation k A.ValueGroup := A.valuation.comap (algebraMap k Ω)
-  show (∀ x : k, v x < 1 ↔ v x ≤ v π) ↔ v π ≤ 1 ∧ ∀ a : k, v a ≤ 1 → (v a < 1 ↔ v a ≤ v π)
+  change (∀ x : k, v x < 1 ↔ v x ≤ v π) ↔ v π ≤ 1 ∧ ∀ a : k, v a ≤ 1 → (v a < 1 ↔ v a ≤ v π)
   refine ⟨fun h_unif ↦ ⟨((h_unif π).mpr le_rfl).le, fun a _ ↦ h_unif a⟩,
     fun ⟨hπ_le, h_unif⟩ x ↦ ?_⟩
   -- for `v x > 1 ≥ v π` both sides are false
@@ -352,7 +352,7 @@ lemma IsUniformiser.exists_addMonoidHom_valuation_pow_eq_iff (L : IsLocalGalois 
       linear_combination h_int_ℚ
     -- both sides give the valuation of `(x y) ^ (m (x + y) * m x * m y)`
     apply h_inj
-    show valuationVia k A π ^ (b (x + y) * m x * m y) =
+    change valuationVia k A π ^ (b (x + y) * m x * m y) =
       valuationVia k A π ^ (m (x + y) * (m y * b x + m x * b y) : ℤ)
     simp [zpow_add₀ hπ_pos.ne', zpow_mul, ← hb, mul_comm, pow_right_comm, ← mul_pow]
   let f : DiscreteUnits Ω →+ ℚ := .mk' (fun x ↦ b x / m x) h_add
@@ -465,7 +465,7 @@ private lemma ordRat_eq_nsmul_ordRat_of_valuationVia_eq_zpow {V : Subgroup Γ} {
     exact (hπ.valuation_pow_eq_zpow_iff_mul_ordRat_eq G r.den r.num).mpr (den_mul_eq_num r)
   have h_mul : (r.den : ℚ) * ordRat k' A x = ((e : ℤ) * r.num : ℤ) :=
     (hπ'.valuation_pow_eq_zpow_iff_mul_ordRat_eq L r.den _).mp h_k'
-  show ordRat k' A x = e • r
+  change ordRat k' A x = e • r
   refine mul_left_cancel₀ (a := (r.den : ℚ)) (by positivity) ?_
   rw [h_mul, nsmul_eq_mul, Int.cast_mul, Int.cast_natCast, ← den_mul_eq_num r]
   ring
@@ -541,7 +541,7 @@ lemma IsLocalGalois.isLocalExtension (V : OpenSubgroup Γ) (k' : Type*) [Field k
     hπ'.exists_valuationVia_eq_zpow L _ (by simp)
   -- `v(π') ^ e = v(π) ≤ 1` and `v(π') < 1`.
   have he_nonneg : 0 ≤ e := by
-    simpa [zero_lt_iff, hπ'.valuationVia_lt_one, valuationVia, he,
+    simpa [pos_iff_ne_zero, hπ'.valuationVia_lt_one, valuationVia, he,
       IsScalarTower.algebraMap_apply k k' Ω]
       using hπ.valuationVia_lt_one.le
   lift e to ℕ using he_nonneg

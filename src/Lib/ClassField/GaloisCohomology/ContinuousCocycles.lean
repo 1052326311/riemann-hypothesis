@@ -233,7 +233,7 @@ lemma carry_smul_mem_Z2 (χ : QZChar G) (w : ρ.invariants) :
   have hχ_cont : Continuous (χ : G → QZ) := χ.prop.left
   refine ⟨by fun_prop, fun g h k ↦ ?_⟩
   set f : G → QZ := (χ : G → QZ)
-  show (f (g * h)).carry (f k) • (w : M) =
+  change (f (g * h)).carry (f k) • (w : M) =
     (f g).carry (f (h * k)) • (w : M) - (f g).carry (f h) • (w : M) +
       ρ g ((f h).carry (f k) • (w : M))
   -- `w` is invariant, so this is the cocycle identity of the carry, times `w`
@@ -256,7 +256,7 @@ def cyclicClass : QZChar G →+ ρ.invariants →+ H2 ρ :=
       refine AddMonoidHom.ext fun w ↦ (Submodule.Quotient.eq _).mpr
         ⟨fun g ↦ (χ g).carry (ψ g) • -w, by fun_prop, fun g h ↦ ?_⟩
       have hw_inv : ρ g (w : M) = w := w.prop g
-      show (χ g + ψ g).carry (χ h + ψ h) • (w : M) -
+      change (χ g + ψ g).carry (χ h + ψ h) • (w : M) -
           ((χ g).carry (χ h) • (w : M) + (ψ g).carry (ψ h) • (w : M)) =
         ρ g ((χ h).carry (ψ h) • -(w : M)) - (χ (g * h)).carry (ψ (g * h)) • -(w : M) +
           (χ g).carry (ψ g) • -(w : M)
@@ -335,7 +335,7 @@ def QZChar.abelianLift [IsTopologicalGroup Γ] (χ : QZChar Γ) :
     TopologicalAbelianization Γ →* Multiplicative QZ :=
   -- the kernel is closed and contains the commutators
   QuotientGroup.lift (commutator Γ).topologicalClosure (toHom χ)
-    (closure_minimal (Abelianization.commutator_subset_ker (toHom χ)) (QZChar.isClosed_ker χ))
+    (closure_minimal (Group.Abelianization.commutator_le_ker (toHom χ)) (QZChar.isClosed_ker χ))
 
 variable (Γ)
 
