@@ -292,7 +292,7 @@ crystalline with jumps in `U'`, and at each letter let the jump sets of `U` and 
 `[-η, η]` and in far windows `[b i, b i + W]` of opposite signs. If `L` has at most `m` jumps in
 `[-η, η]` at each embedding, then the defect `dualDefect`, the length of the crystalline cocycles of
 `L` modulo those orthogonal to the crystalline lattices with jumps in `U`, is at most
-`11 f (m (a + 1) + rank L · (W + 1))` times the length of `O / p`, where `f = k.f`. -/
+`f (m (8a + 1) + 3 rank L · (W + 1))` times the length of `O / p`, where `f = k.f`. -/
 lemma KummerChart.dualDefect_le_of_few_low_weights [TopologicalSpace Γ] (k : KummerChart Γ)
     (ζ : k.LetterRoot O) (ho : IsOpenEmbedding Γ.overGp.toGp) (hk : k.IsUnramified) (hp : 5 ≤ p)
     {a η W m : ℕ} {b : k.Letter → ℕ} {ε : k.Letter → ℤˣ}
@@ -303,7 +303,7 @@ lemma KummerChart.dualDefect_le_of_few_low_weights [TopologicalSpace Γ] (k : Ku
     (hU' : ∀ i : k.Letter, FitsWindows η (ε i) (b i) W (k.letterJumps ζ U' i))
     (hm : ∀ g : O →ₐ[ℤ_[p]] ℂ_[p], ∑ u ∈ Icc (-η : ℤ) η, jump L.ρ g u ≤ m) :
     dualDefect (InClass ⊤ ⊥ U) L ≤
-      (11 * (k.f * (m * (a + 1) + finrank O L * (W + 1))) : ℕ) *
+      (k.f * (m * (8 * a + 1) + finrank O L * (3 * (W + 1))) : ℕ) *
         length O (O ⧸ Ideal.span {(p : O)}) := by
   classical
   -- `exists_relLength_le_and_isScaledCupCoboundary` gives a `ℤ_[p]`-submodule `V` of
@@ -321,14 +321,10 @@ lemma KummerChart.dualDefect_le_of_few_low_weights [TopologicalSpace Γ] (k : Ku
   have sum_le {J : Finset ℤ} {n : ℕ} (hn : ∀ g : O →ₐ[ℤ_[p]] ℂ_[p], ∑ u ∈ J, jump L.ρ g u ≤ n)
       (i : k.Letter) : ∑ u ∈ J, k.f * S.jumpMultiplicity i u ≤ k.f * (d i * n) := by
     grw [← mul_sum, k.sum_jumpMultiplicity_le ζ le_top hL hn i]
-  obtain ⟨V, V_length, V_cup⟩ : ∃ V : Submodule ℤ_[p] S.paramLattice,
-      relLength ⊤ V ≤ (11 * ∑ i : k.Letter,
-        (k.f * (d i * m) * (a + 1) + k.f * (d i * finrank O L) * (W + 1)) : ℕ) ∧
-      ∀ (S' : k.PairingSide ⟨O, ζ⟩) (P : S'.SidePairing S) (c : S'.paramLattice),
-        (∀ i : k.Letter, FitsWindows η (-ε i) (b i) W (S'.jumpSet i)) →
-        ∀ x ∈ V, P.IsScaledCupCoboundary 0 c x :=
-    S.exists_relLength_le_and_isScaledCupCoboundary hk hp h_height h_far h_gap hU' (sum_le hm)
-      (fun i ↦ sum_le (hL.sum_jump_le_finrank _) i) hη
+  obtain ⟨V, V_length, V_cup⟩ :=
+    S.exists_relLength_le_and_isScaledCupCoboundary hk hp h_height h_far h_gap hU'
+      (n := fun i ↦ k.f * (d i * m)) (r := fun i ↦ k.f * (d i * finrank O L))
+      (sum_le hm) (fun i ↦ sum_le (hL.sum_jump_le_finrank _) i) hη
   let T : Submodule ℤ_[p] (crysCocycles L.ρ) :=
     ((cupOrthogonal (InClass ⊤ ⊥ U) L).submoduleOf (crysCocycles L.ρ)).restrictScalars ℤ_[p]
   have V_le : V ≤ T := fun (x : crysCocycles L.ρ) hx ↦
@@ -338,12 +334,11 @@ lemma KummerChart.dualDefect_le_of_few_low_weights [TopologicalSpace Γ] (k : Ku
   calc length ℤ_[p] (crysCocycles L.ρ ⧸ T) = relLength ⊤ T := by
         rw [relLength_eq_length_map_mkQ, Submodule.map_top, Submodule.range_mkQ, length_top]
     _ ≤ relLength ⊤ V := relLength_mono le_rfl V_le
-    _ ≤ (11 * (k.f * (m * (a + 1) + finrank O L * (W + 1)) * ∑ i : k.Letter, d i) : ℕ) := by
+    _ ≤ (k.f * (m * (8 * a + 1) + finrank O L * (3 * (W + 1))) * ∑ i : k.Letter, d i : ℕ) := by
         refine V_length.trans_eq (congrArg _ ?_)
         simp only [mul_sum]
         exact sum_congr rfl fun i _ ↦ by ring
-    _ ≤ (11 * (k.f * (m * (a + 1) + finrank O L * (W + 1))) : ℕ) * finrank ℤ_[p] O := by
-        rw [← mul_assoc]
+    _ ≤ (k.f * (m * (8 * a + 1) + finrank O L * (3 * (W + 1))) : ℕ) * finrank ℤ_[p] O := by
         exact_mod_cast Nat.mul_le_mul_left _ (k.sum_card_algHom_le_finrank ζ)
 
 /-- The defect at generic primes. Let `Γ → Gp p` be an open embedding, and let the root `ζ` assign
@@ -356,7 +351,7 @@ where `U` and `U'` lie at each letter in `[-η, η]` and in the opposite far win
 The defect `dualDefect` is the length of the crystalline cocycles of `L` modulo those orthogonal to
 the crystalline lattices with jumps in `U`. It vanishes if `U` and `U'` avoid `[-a, 0)` or `U'` lies
 in `[-η, 0]`. If `L` has at most `m` jumps in `[-η, η]` at each embedding, it is at most
-`11 f (m (a + 1) + rank L · (W + 1))` times the length of `O / p`, where `f = k.f`. -/
+`f (m (8a + 1) + 3 rank L · (W + 1))` times the length of `O / p`, where `f = k.f`. -/
 lemma KummerChart.dualDefect_eq_zero_and_dualDefect_le [TopologicalSpace Γ] (k : KummerChart Γ)
     (ζ : k.LetterRoot O) (ho : IsOpenEmbedding Γ.overGp.toGp) (hk : k.IsUnramified) (hp : 5 ≤ p)
     {a η W : ℕ} {b : k.Letter → ℕ} {ε : k.Letter → ℤˣ}
@@ -372,7 +367,7 @@ lemma KummerChart.dualDefect_eq_zero_and_dualDefect_le [TopologicalSpace Γ] (k 
     -- (b) a bound for the defect, if at most `m` jumps lie in `[-η, η]`
     ∀ m : ℕ, (∀ g : O →ₐ[ℤ_[p]] ℂ_[p], ∑ u ∈ Icc (-η : ℤ) η, jump L.ρ g u ≤ m) →
       dualDefect (InClass ⊤ ⊥ U) L ≤
-        (11 * (k.f * (m * (a + 1) + finrank O L * (W + 1))) : ℕ) *
+        (k.f * (m * (8 * a + 1) + finrank O L * (3 * (W + 1))) : ℕ) *
           length O (O ⧸ Ideal.span {(p : O)}) :=
   ⟨fun h_small ↦ dualDefect_eq_zero_iff.2 (k.crysCocycles_le_cupOrthogonal_of_no_small_neg_jump
       ζ ho hk hp h_height h_gap (by omega) hL hU hU' h_small),
