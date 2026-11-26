@@ -1,6 +1,8 @@
-import New.Determinant.AuxiliaryForms.PathData
-import New.Determinant.Chain.Moduli
-import New.Determinant.Exchange.OneSquare
+module
+
+public import New.Determinant.AuxiliaryForms.PathData
+public import New.Determinant.Chain.Moduli
+public import New.Determinant.Exchange.OneSquare
 
 /-!
 # Turning path data, and turns off the diagonal
@@ -41,6 +43,8 @@ Notions from other files:
 * `New.Exchange.SquareLaw` with constant `C`, for functions `L` and `L'` on matrices over a finite
   ring: `∑ Ψ L' = C ∑ Φ L` for all matched `Φ`, `Ψ`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

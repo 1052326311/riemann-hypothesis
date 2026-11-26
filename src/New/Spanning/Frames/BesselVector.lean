@@ -1,5 +1,7 @@
-import New.Spanning.Frames.Densities
-import New.Spanning.Frames.StandardLevel
+module
+
+public import New.Spanning.Frames.Densities
+public import New.Spanning.Frames.StandardLevel
 
 /-!
 # The Bessel vector at the finite places
@@ -38,6 +40,8 @@ Notions from other files:
 
 See `New.Spanning.MainTerm.EnergyEstimate` for related work.
 -/
+
+@[expose] public section
 
 noncomputable section
 

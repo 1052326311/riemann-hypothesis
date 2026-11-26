@@ -1,5 +1,7 @@
-import Lib.General.Geometry.LineBundles
-import Lib.General.Groups.CongruenceSubgroups
+module
+
+public import Lib.General.Geometry.LineBundles
+public import Lib.General.Groups.CongruenceSubgroups
 
 /-!
 # Abelian schemes: base change, finite kernels and constant functions
@@ -30,6 +32,8 @@ Notions from other files:
 
 Known; see `Lib.Shimura.AbelianScheme.IsogenyFlatness` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

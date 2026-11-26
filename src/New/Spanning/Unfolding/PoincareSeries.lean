@@ -1,6 +1,8 @@
-import New.Spanning.Bessel.LargeFunction
-import New.Spanning.Unfolding.AmplitudeSums
-import New.UpperBound.Objects.Rows
+module
+
+public import New.Spanning.Bessel.LargeFunction
+public import New.Spanning.Unfolding.AmplitudeSums
+public import New.UpperBound.Objects.Rows
 
 /-!
 # Poincaré series of fitting spaces, unfolding, Petersson products and source form coordinates
@@ -49,6 +51,8 @@ Notions from other files:
 The file also contains known results stated on this proof's data: Poincaré series along a Bessel
 subgroup and their unfolding. See `Lib.DiscreteSeries.Bruhat.FloorGroups`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

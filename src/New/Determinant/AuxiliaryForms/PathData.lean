@@ -1,8 +1,10 @@
-import Lib.Weil.DualPair.Flip
-import New.Determinant.AuxiliaryForms.GridPaths
-import New.Determinant.Chain.SquareLaw
-import New.Determinant.Twist.FitTwists
-import New.OneLift.ComparisonOperator.ExchangeData
+module
+
+public import Lib.Weil.DualPair.Flip
+public import New.Determinant.AuxiliaryForms.GridPaths
+public import New.Determinant.Chain.SquareLaw
+public import New.Determinant.Twist.FitTwists
+public import New.OneLift.ComparisonOperator.ExchangeData
 
 /-!
 # Moduli, spaces, moves, path data and periods on the two grids
@@ -36,6 +38,8 @@ Notions from other files:
 * `New.Exchange.IsEdgeFamily`: a family of characters over two pairs of conjugate cuspidal types
   which, with a polynomial, form an edge for the real Weil representation.
 -/
+
+@[expose] public section
 
 noncomputable section
 

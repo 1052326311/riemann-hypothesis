@@ -1,5 +1,7 @@
-import New.Congruences.FirstOrder.FittingBlock
-import New.Congruences.FirstOrder.TiedTraces
+module
+
+public import New.Congruences.FirstOrder.FittingBlock
+public import New.Congruences.FirstOrder.TiedTraces
 
 /-!
 # The family of operators at the auxiliary places
@@ -59,6 +61,8 @@ Related work: Tadić, Spherical unitary dual of GL(n), 1986; Casselman, Unramifi
 of p-adic groups I, 1980; Clozel–Harris–Taylor, Automorphy for some l-adic lifts (Lemma 3.1.3,
 §3.4), 2008.
 -/
+
+@[expose] public section
 
 open Pi Fintype Polynomial Nat Group Submodule ComplexOrder
 

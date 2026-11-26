@@ -1,4 +1,6 @@
-import Lib.ClassField.Places.DecompositionCyclotomic
+module
+
+public import Lib.ClassField.Places.DecompositionCyclotomic
 
 /-!
 # Coker/ker indices and Tate's index formula for cyclic actions of prime order
@@ -29,6 +31,8 @@ tools for this index and for equivariant maps into finite projective `𝔽_l[Δ]
 Known; see `Lib.ClassField.GreenbergWiles.CocycleCounts` and
 `Lib.ClassField.GaloisCohomology.KummerCyclicClasses` for sources.
 -/
+
+@[expose] public section
 
 /-! ## The coker/ker index and equivariant maps from lattices to projective modules -/
 
