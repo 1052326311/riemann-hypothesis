@@ -769,9 +769,6 @@ lemma exists_modEq_one_forall_isUnit_pow_sub_one (hl : N < l) :
     .of_map PadicInt.toZMod _ (by simpa [sub_eq_zero] using hb.pow_ne_one_of_pos_of_lt hk.ne' hkl)
   simpa using h_unit.map (algebraMap ℤ_[l] O)
 
-private lemma isUnit_two_of_two_lt (hl : 2 < l) : IsUnit (2 : O) := by
-  exact_mod_cast isUnit_natCast_of_not_dvd (O := O) (not_dvd_of_pos_of_lt two_pos hl)
-
 /-- For `e ≠ 0` and `l > N + e + 3`, the numbers `a ^ e - 1` and `a ^ (e + 1) - 1` are units of `O`
 for some `a ≡ 1 mod N` prime to `l`. -/
 lemma exists_modEq_one_coprime_isUnit_pow_sub_one (he_ne_zero : e ≠ 0) (hl : N + e + 3 < l) :
@@ -1106,7 +1103,8 @@ lemma exists_detecting_points_component (h_bound : IsStickelbergerBound N e X)
   -- `l ^ m ∣ X` in `O`.
   by_contra! h_blind
   set m : ℕ := X.factorization l + 1
-  have h_two : IsUnit (2 : O) := isUnit_two_of_two_lt (by lia)
+  have h_two : IsUnit (2 : O) := by
+    exact_mod_cast isUnit_natCast_of_not_dvd (O := O) (not_dvd_of_pos_of_lt two_pos (by lia : 2 < l))
   have h_totient : IsUnit (φ (N * l) : O) := isUnit_totient_mul (by lia)
   obtain ⟨a, ha, hla, h_pow, h_pow_succ⟩ :=
     exists_modEq_one_coprime_isUnit_pow_sub_one (O := O) he_ne_zero hl
