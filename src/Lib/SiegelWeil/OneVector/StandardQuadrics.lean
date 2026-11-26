@@ -184,7 +184,7 @@ theorem quadricMeasure_coordinateBox_le {μ : ℕ} (hμ : idealZeta P.integers �
       volume_eq_prod, lintegral_prod_symm' (fun a : (σ → A) × (ν ⊕ σ → A) ↦ g (t, a.1 ⊕ᵥ a.2))
         (hg_t.comp measurable_sumElim_pair)]
   have h_chart : Measurable fun z : (A × (σ ⊕ ν ⊕ σ → A)) × skewAdjoint A ↦ flatChart H b z :=
-    measurable_flatChart.comp (measurable_const.prodMk measurable_id)
+    ((measurable_flatChart (T := H)).comp measurable_prodMk_left :)
   have h_left : P.quadricMeasure H b S = ∫⁻ p, F b p := by
     rw [← lintegral_indicator_one hS, quadricMeasure, lintegral_map h_ind h_chart,
       lintegral_prod (fun z ↦ ind (flatChart H b z)) (h_ind.comp h_chart).aemeasurable]
@@ -209,7 +209,7 @@ theorem quadricMeasure_coordinateBox_le {μ : ℕ} (hμ : idealZeta P.integers �
   rw [h_left]
   refine le_trans ?_ (h_mid.le.trans h_final)
   have hFb : Measurable fun p : A × (σ ⊕ ν ⊕ σ → A) ↦ F b p :=
-    hF.comp (measurable_const.prodMk measurable_id)
+    (hF.comp measurable_prodMk_left :)
   rw [h_split hFb, h_split hM]
   refine lintegral_le_of_ae_imp P.ae_isUnit fun t' ht ↦ ?_
   obtain ⟨t, rfl⟩ := ht
