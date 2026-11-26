@@ -206,11 +206,6 @@ def discTwist : ULift.{1} Bool → (monoidAlg ℚ≥0 ⟶ monoidAlg ℚ≥0)
 lemma discTwist_comp_evalZero : discTwist χ a ≫ evalZero b = evalZero b := by
   rcases a with ⟨_ | _⟩ <;> simp only [discTwist, charTwist_comp_evalZero]
 
-private lemma oneSub_ofTorus (A : PadicTest) (t : monoidAlg ℚ ⟶ tilt A) :
-    (oneSub (pointOrTorusTwist χ)).app A (ofTorus (ψ := 𝟭 _) t) =
-      ofTorus (ψ := 𝟭 _) t - ofTorus (ψ := 𝟭 _) (charTwist χ (AddMonoidHom.id ℚ) ≫ t) :=
-  freeAb.desc_of (Y := tiltPointsSum pointOrTorus) _ _ A ⟨⟨true⟩, ⟨t⟩⟩
-
 private lemma oneSub_ofPoint (A : PadicTest) (t : CommAlgCat.of OFlat OFlat ⟶ tilt A) :
     (oneSub (pointOrTorusTwist χ)).app A (ofPoint (ψ := 𝟭 _) t) =
       ofPoint (ψ := 𝟭 _) t - ofPoint (ψ := 𝟭 _) t :=
@@ -239,7 +234,10 @@ lemma oneSub_comp_gluing :
     let t' : monoidAlg ℚ ⟶ tilt A := t
     change gluing.app A ((oneSub (pointOrTorusTwist χ)).app A (ofTorus (ψ := 𝟭 _) t')) =
       (oneSub (discTwist χ)).app A (gluing.app A (ofTorus (ψ := 𝟭 _) t'))
-    simp [gluing_ofTorus, oneSub_ofTorus, oneSub_ofDisc, discTwist,
+    have h_torus : (oneSub (pointOrTorusTwist χ)).app A (ofTorus (ψ := 𝟭 _) t') =
+        ofTorus (ψ := 𝟭 _) t' - ofTorus (ψ := 𝟭 _) (charTwist χ (AddMonoidHom.id ℚ) ≫ t') :=
+      freeAb.desc_of (Y := tiltPointsSum pointOrTorus) _ _ A ⟨⟨true⟩, ⟨t'⟩⟩
+    simp [gluing_ofTorus, h_torus, oneSub_ofDisc, discTwist,
       charTwist_comp_discToTorus_assoc]
     exact sub_sub_sub_comm ..
 
