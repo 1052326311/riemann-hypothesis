@@ -288,7 +288,7 @@ private lemma decompRep_scalarRep_cyclotomicCharIn_pow_mul
 
 /-- In a chart at `A` above `ℓ`, the scalar representation of `μ` is the Tate twist by `-d` of its
 twist by the `d`-th power of the cyclotomic character. -/
-private lemma decompRep_scalarRep_eq_cyclotomicCharIn_pow_mul [PadicIso ℓ]
+private lemma decompRep_scalarRep_eq_cyclotomicCharIn_pow_mul
     (μ : Gal(Ω/E) →* (PadicAlgCl ℓ)ˣ) (A : ClosurePlace) (d : ℕ) [L : PadicPlaceEmbedding E A ℓ]
     (g : decompGroup Gal(Ω/E) A) (x : Fin 1 → PadicAlgCl ℓ) :
     decompRep (scalarRep μ) A g x =
