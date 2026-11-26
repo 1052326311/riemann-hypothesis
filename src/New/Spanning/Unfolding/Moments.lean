@@ -317,7 +317,7 @@ lemma HasAmplitudeBlocks.adjoint_comp_rep_mul_right [HasPrimitiveRoot5040 E]
       rw [← Complex.star_def, ← amplitudeSum_besselS_inv, amplitudeSum_besselS_apply hδ hδ_over hN]
     by_cases h : d' = e
     · simp [besselTranslate, h_block, h, S.unipotentCovolume_pos.ne', Pi.single_apply,
-        Matrix.of_apply, Function.swap]
+        Function.swap]
     · simp [besselTranslate, h_block, h, Ne.symm h]
   -- The blocks of all terms transform in the same way, as the set of all terms is stable.
   have h_move : S.amplitudeSum .full .univ c (s * t) d (i, j) =
@@ -549,7 +549,6 @@ lemma HasAmplitudeBlocks.hilbertSchmidtNorm_adjoint_comp_sq_le [HasPrimitiveRoot
       gcongr
       norm_num
     exact (abs_le_of_sq_le_sq' h_sq (div_nonneg (hilbertSchmidtNorm_nonneg _) zero_le_three)).2
-  have h_le : hilbertSchmidtNorm (P.adjoint ∘ₗ P) ≤ 4 / 3 * hilbertSchmidtNorm one := by linarith
   rw [← hilbertSchmidtNorm_one_sq_eq_sourceDim]
   nlinarith [hilbertSchmidtNorm_nonneg (P.adjoint ∘ₗ P), hilbertSchmidtNorm_nonneg one]
 

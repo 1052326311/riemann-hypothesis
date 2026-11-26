@@ -70,7 +70,7 @@ variable {S} {γ : S.G E}
 products of the frame with its image under `γ`, and `n = ϱ + 1`. -/
 lemma norm_map_termDisc_le (v : NumberField.InfinitePlace E) :
     ‖Φ v (S.termDisc γ)‖ ≤ ‖Φ v (leadingMinor (S.frameProducts γ) ⊤)‖ ^ 2 := by
-  show _ ≤ ‖Φ v (S.frameProducts γ).det‖ ^ 2
+  change _ ≤ ‖Φ v (S.frameProducts γ).det‖ ^ 2
   have h_eq : ‖Φ v (S.termDisc γ)‖ = ‖Φ v (S.frameProducts γ).det‖ ^ 2 -
       (S.N * ‖Φ v (leadingMinor (S.frameProducts γ) 𝔰.top.castSucc)‖) ^ 2 := by
     rw [← Complex.ofReal_inj, ← map_termDisc_eq_norm]

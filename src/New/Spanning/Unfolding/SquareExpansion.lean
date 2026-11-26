@@ -1,6 +1,7 @@
 module
 
 public import New.Spanning.RemainingTerms.Sum
+public import TauCeti.Analysis.Real.Sqrt
 
 /-!
 # The expansion of the squares and the second moment near the Bessel subgroup
@@ -70,10 +71,6 @@ lemma leadingMinor_frameGram_eq_zero {R : Type} [CommRing R] {𝔰 : Shape} (T :
       Fintype.sum_eq_single (𝔰.besselFrame 0)
       fun j hj ↦ by rw [hg j hj, mul_zero], h_orth, zero_mul]
   exact det_eq_zero_of_column_eq_zero ⟨0, hl⟩ fun a ↦ h_col (Fin.castLE l.is_le a)
-
-lemma sqrt_add_le_sqrt_add_sqrt {x y : ℝ} (hx : 0 ≤ x) (hy : 0 ≤ y) : √(x + y) ≤ √x + √y := by
-  rw [Real.sqrt_le_left (by positivity), add_sq, Real.sq_sqrt hx, Real.sq_sqrt hy]
-  linarith [mul_nonneg x.sqrt_nonneg y.sqrt_nonneg]
 
 /-- A real function `β` of positive type on a group, that is, with `β (a⁻¹ b) = ⟪u a, u b⟫` for
 vectors `u a` of an inner product space, is largest at `1`. -/
@@ -592,7 +589,7 @@ theorem sqrt_secondMoment_compl_besselS_le [HasPrimitiveRoot5040 E] [S.IsAdmissi
         grw [h_blocks, ← sqrt_secondMoment_add_le, sub_add_cancel]
     -- Passing to the cut function costs `b⁻²⁰ 𝒟_id^(1/2)`.
     _ ≤ (S.b ^ 20)⁻¹ * √S.identitySecondMoment + (√C + (S.b ^ 20)⁻¹ * √S.identitySecondMoment) := by
-      grw [secondMoment_sub_cut_le, h_pairs, sqrt_add_le_sqrt_add_sqrt hC (by positivity), h_sqrt]
+      grw [secondMoment_sub_cut_le, h_pairs, Real.sqrt_add_le_add_sqrt, h_sqrt]
     _ = √C + 2 * (S.b ^ 5)⁻¹ * ((S.b ^ 15)⁻¹ * √S.identitySecondMoment) := by ring
     _ ≤ √C + (S.b ^ 15)⁻¹ * √S.identitySecondMoment := by grw [h_small, one_mul]
 

@@ -356,13 +356,13 @@ def rootPairs :
       ((testUnitLocus (A := A) (AdjoinRoot.mk P.f P.g)).toFunctor ⊗
         (testUnitLocus P.g).toFunctor) where
   obj _ :=
-    setOf fun (w, ψ) ↦
+    Set.ofPred fun (w, ψ) ↦
       Associated (asAlgHom ψ.val P.f) (asAlgHom ψ.val X - asAlgHom w.val (root P.f)) ∧
       ∀ r : R, asAlgHom w.val (AdjoinRoot.of P.f r) = asAlgHom ψ.val (C r)
   map f := by
     rintro ⟨w, ψ⟩ ⟨h_assoc, h_const⟩
     refine ⟨?_, fun r ↦ congrArg f.hom.hom (h_const r)⟩
-    show Associated (f.hom.hom (asAlgHom ψ.val P.f))
+    change Associated (f.hom.hom (asAlgHom ψ.val P.f))
       (f.hom.hom (asAlgHom ψ.val X) - f.hom.hom (asAlgHom w.val (root P.f)))
     simpa only [map_sub] using h_assoc.map f.hom.hom
 
