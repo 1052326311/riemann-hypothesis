@@ -754,7 +754,8 @@ lemma mem_of_fixed_thetaPhiInvS {K : Subalgebra ℚ_[p] ℂ_[p]} {y : PadicAlgCl
       (IsIntegral.of_mem_of_fg _ h_fg _ hx).tower_top
   -- `g` fixes `x'`, which lies in the field of `K`.
   have h_fix : (g : Gp p) x' = x' := g.property ⟨x', hxK⟩
-  exact (smul_coe_Cp (g := (g : Gp p)) x').trans (congrArg (algebraMap (PadicAlgCl p) ℂ_[p]) h_fix)
+  exact (UniformSpace.Completion.algEquiv_smul_coe (g : Gp p) x').trans
+    (congrArg (algebraMap (PadicAlgCl p) ℂ_[p]) h_fix)
 
 /-- Let `c.S` be the image in A_inf of the chart's map Λ⟦X⟧ → A_inf, and let y ∈ O^♭ be fixed by
 every g ∈ G_p that fixes S pointwise. Then for every N and all large n, the N-th component of y in
@@ -773,7 +774,7 @@ lemma eventually_exists_coeff_eq_of_fixed {y : OFlat}
     simp only [t, ← coe_smul, ← thetaPhiInv_smul, h_teich, h g hg]
   obtain ⟨_, ⟨x, x_fixed, rfl⟩, x_near : ‖(t : ℂ_[p]) - x‖ < ‖(p : ℂ_[p])‖⟩ :=
     SeminormedAddCommGroup.mem_closure_iff.mp (ax_mem_closure_fixedField _ t_fixed) ‖(p : ℂ_[p])‖
-      (by simp [NeZero.ne])
+      (by simp [Nat.pos_of_neZero])
   -- The ranges increase, because `thetaPhiInvS (n + 1) (φ s) = thetaPhiInvS n s`.
   have h_succ (n : ℕ) (s : c.S) : c.thetaPhiInvS (n + 1) (c.φ s) = c.thetaPhiInvS n s := by
     simp [φ]
@@ -800,7 +801,8 @@ lemma eventually_exists_coeff_eq_of_fixed {y : OFlat}
   obtain ⟨α, hα⟩ : ∃ α : c.S, (thetaPhiInv n α.val : ℂ_[p]) = a • (1 : ℂ_[p]) :=
     (c.thetaPhiInvS n).range.smul_mem (one_mem _) a
   -- `x = t - (t - x)` is integral, so the value `a` of `α` divides the value `a • x` of `s`.
-  let x_int : OC := t - ⟨(t : ℂ_[p]) - x, mem_valRingCp.mpr (x_near.trans norm_p_lt_one).le⟩
+  let x_int : OC :=
+    t - ⟨(t : ℂ_[p]) - x, mem_valRingCp.mpr (x_near.trans (PadicComplex.norm_p_lt_one p)).le⟩
   have hx_int : (x_int : ℂ_[p]) = x := by simp [x_int]
   have dvd : thetaPhiInv n α.val ∣ thetaPhiInv n s.val := by
     refine ⟨x_int, Subtype.ext ?_⟩

@@ -725,7 +725,7 @@ lemma toWittResidue_smul_of_isFrob {n : ℕ} (h_isFrob : IsFrob (intQpBar p) (p 
         simpa using (Selmer.valuation_intQpBar_le_iff y 1).mpr (by simpa using h_le)
       have h_norm : ‖g⁻¹ • y - y ^ p ^ n‖ < 1 := by simpa using h_cong y h_y_le
       -- the embedding of `ℚ̄_p` in `ℂ_p` commutes with `g⁻¹`, powers and differences
-      simpa [↓smul_coe_Cp, coe_eq, ← map_pow, ← map_sub] using h_norm
+      simpa [↓UniformSpace.Completion.algEquiv_smul_coe, coe_eq, ← map_pow, ← map_sub] using h_norm
   refine WittVector.ext fun i ↦ ?_
   let x : OFlat := a.coeff i
   -- the `i`-th coordinates are the residues of `(φ ^ n g) • x` and `x`; suppose that their
