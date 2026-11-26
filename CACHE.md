@@ -48,8 +48,8 @@ Pull requests land through GitHub's merge queue. `.github/workflows/build.yml` h
 `lake build`, the queue's required check. It builds every pull request to `main` on a
 GitHub-hosted runner, and every merge queue group (`merge_group`), push to `main` and manual run
 on the self-hosted runner described below, with the exact record if there is one and the
-baseline otherwise. It fails if `lake build` fails, if the build log contains "declaration uses
-'sorry'", or if `scripts/PrintAxioms.lean` reports any axiom other than `propext`,
+baseline otherwise. It fails if `lake build` fails, if the build log contains `` declaration uses
+`sorry` ``, or if `scripts/PrintAxioms.lean` reports any axiom other than `propext`,
 `Classical.choice` and `Quot.sound` for the five theorems. It never publishes anything.
 
 On the self-hosted runner the job builds with `lake build -o`, then `scripts/ci-cache-stage.py`
