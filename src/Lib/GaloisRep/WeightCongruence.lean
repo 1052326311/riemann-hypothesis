@@ -355,7 +355,7 @@ lemma New.mem_uniformClosure_weylRep_coeff {l N : ℕ} {Φ : Type} [Fact l.Prime
   let κ (d : Φ → ℕ) (τ : Φ) (h : ℕ) : ℕ := (N + 1) ^ (4 * (N - h)) + if h = 1 then d τ else 0
   let E (F : MatrixPoly (Σ _ : Φ, Fin N) k) : C(X, k) :=
     ⟨fun γ ↦ (rowSubst (fun τ ↦ (z γ τ).1) F).eval y, by
-      simp [rowSubst, eval₂_eq, hom_bind₁]
+      simp [rowSubst, eval₂_eq]
       fun_prop⟩
   let S : Submodule k C(X, k) :=
     span k {E F | (d) (F ∈ nabla k Sigma.fst (diagramWeight (fun _ ↦ N + 1) (κ d)))}

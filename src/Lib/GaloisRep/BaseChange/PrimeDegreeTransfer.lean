@@ -531,7 +531,6 @@ private lemma exists_isTransferLevel [hμ : IsStep (E := E) E' μ]
   have X_eq_Kw (w : FinPlace E) : w ∈ X → ∀ u ∈ placesAbove E' {w}, m u = localIntGL n u :=
     fun ⟨_hw_off, hw_max, _hw_split, _hw_matched⟩ ↦ hw_max
   let N : Subgroup (Gf E' n) := localLevel n (placesAbove E' Z)ᶜ m
-
   obtain ⟨Y, idem_XY, on_X_le, XY_eq, idem_sum, N_eq⟩ : ∃ Y : Set (FinPlace E),
       idem (placesAbove E' X) * idem (placesAbove E' Y) = 0 ∧
       supportedOn n (placesAbove E' X) ≤ localLevel n (placesAbove E' Y) m ∧

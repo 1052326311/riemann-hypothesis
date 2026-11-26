@@ -281,7 +281,7 @@ lemma U.isRootQuotient_map {f : R →+* S} (hf : ∀ x : R, f (star x) = star (f
       (map f hf (one_map_ringHom f) a : U (1 : Matrix n n S)) := by
   have h_map : (a.val.val * (aeval γ.val.val z)ᴴ).map f = (aeval γ.val.val z).map f :=
     congrArg (fun M : Matrix n n R ↦ M.map f) h_root
-  show (a.val.val).map f * (aeval ((γ.val.val).map f) (z.map f))ᴴ =
+  change (a.val.val).map f * (aeval ((γ.val.val).map f) (z.map f))ᴴ =
     aeval ((γ.val.val).map f) (z.map f)
   simpa [conjTranspose_map _ hf, map_aeval_matrix] using h_map
 

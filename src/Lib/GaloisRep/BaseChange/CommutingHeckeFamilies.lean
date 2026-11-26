@@ -553,7 +553,7 @@ lemma isLocalRetraction_ofSplitPlace (n : Type*) [Fintype n] [DecidableEq n] {w 
   · -- (c) the component at `ū` is integral exactly when that at `u` is
     simp_all [← below_star, star_eq_iff_star_eq, SetLike.ext_iff, placesAbove, localLevel]
     -- what is left: `localIntGL n u` is `GL_n` of the valuation integers at `u`
-    show ∀ x : Gf E' n, atPlace u x ∈ localIntGL n u ↔ atPlace u x ∈ intGL n Valued.v.integer
+    change ∀ x : Gf E' n, atPlace u x ∈ localIntGL n u ↔ atPlace u x ∈ intGL n Valued.v.integer
     exact fun x ↦ Iff.rfl
 
 /-- If no place of `T` lies in `S` or in its conjugate, the elements supported on `S ∪ S̄` are
