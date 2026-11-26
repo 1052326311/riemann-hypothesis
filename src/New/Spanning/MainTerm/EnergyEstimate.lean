@@ -140,7 +140,7 @@ lemma one_add_pow_six_mul_add_pow_ten_le_one_add_pow_four {u : ℝ} (hu : 0 ≤ 
 /-- The normalising constant `r` of the main term, used with `k = 𝔰.k - 1`: the product over the
 infinite places of √`openCellConst` and powers of the squared scales `frameScaleSq` of the frame
 vectors, divided by the number of Bessel coordinates. -/
-noncomputable abbrev normalizingConst (S : Filling E 𝔰) [S.IsAdmissible] (k : ℕ) : ℝ :=
+noncomputable abbrev normalizingConst (S : Filling E 𝔰) (k : ℕ) : ℝ :=
   (∏ v : NumberField.InfinitePlace E,
     √𝔰.openCellConst * ∏ a : Fin 𝔰.n, S.frameScaleSq v a ^ (k + 2 * a.rev)) /
       Fintype.card S.BesselCoord
