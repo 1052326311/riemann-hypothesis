@@ -498,8 +498,8 @@ def HodgeTatePair.cross {M L : AbFunctor HodgeTatePair} [HasFlatValues M]
   map_smul' t x := by
     -- the multiplication is linear in its first factor: `(t • a) * b = t • (a * b)`
     simp [smul_eq_comp, cup_comp_homClass_left, comp_assoc]
-    repeat erw [← homClass_comp]
-    refine congrArg (comp (x.cup y)) (congrArg TotalH.homClass ?_)
+    refine congrArg (comp (x.cup y)) ?_
+    refine (homClass_comp ..).symm.trans ((congrArg TotalH.homClass ?_).trans (homClass_comp ..))
     exact abTensor_hom_ext fun _ _ _ ↦ congrArg _ (smul_mul_assoc ..)
 
 
