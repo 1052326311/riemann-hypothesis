@@ -775,10 +775,8 @@ map. -/
 def mapₗ (F : AbFunctor C) [CoeffAction R F] (α : M ⟶ N) (n : ℕ) : H N F n →ₗ[R] H M F n :=
   { map F α n with map_smul' r := map_push α (CoeffAction.act r : End F).asHom }
 
-lemma mapExactFunctor_restrictAlong_id : x.mapExactFunctor (restrictAlong (𝟭 C)) = x := by
-  induction x with
-  | h₀ F f => simp [mapExactFunctor_mk₀, show (𝟭 C).whiskerLeft f = f from rfl]
-  | h S hS n x ih => simp [ih, mapExactFunctor_comp, mapExactFunctor_extClass]
+lemma mapExactFunctor_restrictAlong_id : x.mapExactFunctor (restrictAlong (𝟭 C)) = x :=
+  x.id_mapExactFunctor
 
 end H
 
