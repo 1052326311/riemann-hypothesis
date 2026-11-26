@@ -875,8 +875,11 @@ lemma IsChartCovered.pairRestrictBijective {n : ℕ} {X : CommAlg k ⥤ Type 1}
     have h_exists_mulMu_eq (r : a.coordRing) :
         ∃ t, mulMu D.test t = (ψ r).val.fst - thickeningOver.map f (s r).val.fst := by
       refine (h_exact _).1 ?_
-      erw [map_sub, proj.naturality_apply, (s _).property, (ψ _).property,
-        ConcreteCategory.congr_hom hψ r, sub_self]
+      rw [map_sub]
+      exact sub_eq_zero.mpr ((ψ r).property.trans
+        ((ConcreteCategory.congr_hom hψ r).symm.trans
+          ((congrArg (genericOver.map f) (s r).property).symm.trans
+            (proj.naturality_apply f (s r).val.fst).symm)))
     choose t ht using h_exists_mulMu_eq
     -- `g` must send `e_i` to `(t (a.coordinate i), M'-part of ψ (a.coordinate i))`, and coordinates
     -- determine lifts.
@@ -903,7 +906,9 @@ lemma IsChartCovered.pairRestrictBijective {n : ℕ} {X : CommAlg k ⥤ Type 1}
     ⟨_, hx⟩
   refine (existsUnique_congr fun g ↦ and_congr ?_ (by simp [HodgeTatePair.toTest])).1
     (h_existsUnique_hom_of_lift D f ψ (a.eq_comp_of_map_point_eq _ hx))
-  erw [Subtype.ext_iff, ← (h_map_comp_point ..).congr_left, (a.injective _).eq_iff]
+  rw [Subtype.ext_iff]
+  change s ≫ pairAlg.map g = ψ ↔ X.map (pairAlg.map g) (X.map s a.point) = X.map ψ a.point
+  exact (a.injective _).eq_iff.symm.trans ((h_map_comp_point s (pairAlg.map g)).congr_left)
 
 end HodgeTateRestriction
 
