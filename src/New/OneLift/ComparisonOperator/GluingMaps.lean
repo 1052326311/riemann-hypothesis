@@ -685,7 +685,8 @@ lemma M_pow_denominatorExponent_sq_mul_le_exp :
   set L : ℕ := card D.Φ * (D.t * (D.t * D.gap)) with hL
   have h_det (τ : NumberField.InfinitePlace D.E) :
       ∑ i ∈ range (card (FirstFactorIndex j)), (untwistedDescentPair j).colsPlus τ i ≤
-        D.natB + D.offWeight + D.gap + D.m * D.gap := by grind [card_detIndex j τ]
+        D.natB + D.offWeight + D.gap + D.m * D.gap := by
+    grind [card_detIndex_eq_sum j τ, card_detIndex_le j τ]
   set e : ℕ := card D.Φ * (3 * D.m * (D.natB + D.offWeight + D.gap + D.m * D.gap)) + L with he
   have h_exponent : (splittingV j 1).denominatorExponent ≤ e := by
     grw [DividedSplitting.denominatorExponent, h_det, colsMinus_le]
