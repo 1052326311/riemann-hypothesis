@@ -530,7 +530,7 @@ lemma frameModulus_ne_zero (h_minor : leadingMinor Z j ≠ 0) : S.frameModulus j
 
 /-- If the entries of `Z` are algebraic integers, then its first `j` rows completed by rows of `1`
 have entries that are integral at every finite place. -/
-lemma isIntMatrix_paddedLeading [HasPrimitiveRoot5040 E] {𝔰 : Shape} {j : Fin (𝔰.ϱ + 2)}
+lemma isIntMatrix_paddedLeading {𝔰 : Shape} {j : Fin (𝔰.ϱ + 2)}
     {Z : Matrix (Fin (𝔰.ϱ + 1)) (Fin (𝔰.ϱ + 1)) E}
     (hZ : ∀ a b : Fin (𝔰.ϱ + 1), IsIntegral ℤ (Z a b)) :
     IsIntMatrix ((Ô E).comap (algebraMap E (𝔸f E))) (paddedLeading j Z) := by
