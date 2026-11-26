@@ -109,7 +109,7 @@ lemma nonempty_carrierIndex_embedding_firstFactorIndex :
     Nonempty (D.CarrierIndex ↪ FirstFactorIndex j) := by
   have r_add_one : D.r + 1 = D.k + D.m := D.r_add_one
   refine nonempty_of_card_le ?_
-  simp only [card_firstFactorIndex, Fintype.card_sum, Fintype.card_fin]
+  simp only [Fintype.card_sum, Fintype.card_fin]
   omega
 
 /-- If `card N ≤ card n` and the diagram `κ` has no column of height at least `card N`, then
