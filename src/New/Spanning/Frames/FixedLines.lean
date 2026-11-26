@@ -654,8 +654,7 @@ lemma extendedBesselChar_eq_prod_toFibers (hψ : P.ψ = S.charOnPlaces T)
       have h_level : (S.toFibers T blk u i)⁻¹ * S.toFibers T blk x i ∈
           unitaryLevel integers (a.map (evalFiber T blk i))
             (S.latticeMiddle (LocProd (placeFiber T blk i))).splitGram := by
-        simpa only [MonoidHom.map_mul, MonoidHom.map_inv, Pi.mul_apply, Pi.inv_apply] using
-          (mem_unitaryLevel_iff_toFibers blk).1 hux i
+        simpa using (mem_unitaryLevel_iff_toFibers blk).1 hux i
       rw [extendedBesselChar_eq ((mem_besselU_iff_toFibers blk).1 hu i) h_level, hψ']
       simp only [simpleRootSum, map_mul, map_sum, toFibers_apply, Units.coe_map_inv,
         MonoidHom.coe_ofClass]
@@ -675,8 +674,7 @@ lemma extendedBesselChar_eq_prod_toFibers (hψ : P.ψ = S.charOnPlaces T)
     -- The elements `u i` of the fibres are the components of one element `v` over `T`.
     obtain ⟨(v : (S.latticeMiddle (LocProd T)).G), rfl⟩ := toFibers_surjective blk u
     have h_level : v⁻¹ * x ∈ unitaryLevel integers a (S.latticeMiddle (LocProd T)).splitGram :=
-      (mem_unitaryLevel_iff_toFibers blk).2 fun i ↦ by
-        simpa only [MonoidHom.map_mul, MonoidHom.map_inv, Pi.mul_apply, Pi.inv_apply] using hux i
+      (mem_unitaryLevel_iff_toFibers blk).2 fun i ↦ by simpa using hux i
     exact ⟨v, (mem_besselU_iff_toFibers blk).2 hu, h_level⟩
 
 variable {F' : ∀ i : ι, PlaceData (Fin (𝔰.k - (6 * 𝔰.ϱ + 13)))
@@ -738,8 +736,7 @@ lemma IsFillingData.exists_massIntegral_pi_eq (h : S.IsFillingData T F)
               ∂(F' i).groupMeasure := by
       rw [← integral_fintype_prod_eq_prod, ← integral_smul_measure, ← Measure.restrict_pi_pi,
         ← Measure.restrict_smul, ← ht, h_emb.setIntegral_map]
-      simp only [coe_comap, coe_pi, h_phase, MonoidHom.map_mul, MonoidHom.map_inv, Pi.mul_apply,
-        Pi.inv_apply]
+      simp [coe_pi, h_phase]
     let f (i : ι) (z : (S.latticeMiddle (LocProd (placeFiber T blk i))).G) : ℝ≥0∞ :=
       ‖∫ y in Y i, extendedBesselChar (F' i).levelUnit (y * z * y⁻¹) ∂(F' i).groupMeasure‖ₑ ^ 2
     -- The outer integral gives one more factor `t`: transport, then Tonelli.
@@ -751,8 +748,7 @@ lemma IsFillingData.exists_massIntegral_pi_eq (h : S.IsFillingData T F)
       _ = ‖t.toReal‖ₑ ^ 2 * ∫⁻ z, ∏ i : ι, f i (z i) ∂F.groupMeasure.map (S.toFibers T blk) := by
         rw [lintegral_const_mul' _ _ (by simp), h_emb.lintegral_map]
       _ = ‖t.toReal‖ₑ ^ 2 * t * ∏ i : ι, (F' i).massIntegral (Y i) := by
-        rw [ht, lintegral_smul_measure, TauCeti.lintegral_fintype_prod_eq_prod _
-          fun i ↦ show Measurable (f i) from (measurable_integral (by fun_prop)).eNorm.pow_const 2,
+        rw [ht, lintegral_smul_measure, TauCeti.lintegral_fintype_prod_eq_prod _ (by fun_prop),
           smul_eq_mul, mul_assoc]
         simp only [PlaceData.massIntegral, f]
   · rw [coe_comap, coe_pi, ← h_emb.map_apply, ht, smul_apply, Measure.pi_pi, smul_eq_mul]
