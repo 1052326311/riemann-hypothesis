@@ -295,9 +295,7 @@ lemma exists_eq_iFin_add_isotropicBasisFin_of_mulVec_eq_zero (D : V.Splitting V�
     {z : n → 𝔸f E} (hz : D.isotropicBasisFinᴴ *ᵥ z = 0) :
     ∃ (w : n₀ → 𝔸f E) (b : p → 𝔸f E), z = D.iFin *ᵥ w + D.isotropicBasisFin *ᵥ b := by
   obtain ⟨a, w, b, rfl⟩ := D.exists_eq_finFrameVector 1 1 z
-  obtain ⟨h_dual, -⟩ : D.isotropicBasisFinᴴ *ᵥ D.finFrameVector 1 1 a w b = a ∧
-      D.iFinᴴ *ᵥ D.finFrameVector 1 1 a w b = w :=
-        conjTranspose_isotropicBasisFin_iFin_mulVec_finFrameVector D a b w
+  have h_dual := (conjTranspose_isotropicBasisFin_iFin_mulVec_finFrameVector D a b w).1
   obtain rfl : a = 0 := h_dual.symm.trans hz
   exact ⟨w, b, finFrameVector_zero D w b⟩
 
@@ -314,7 +312,7 @@ lemma exists_eq_add_of_zeroTermFin_ne_zero (D : V.Splitting V₀ p) {y : n → �
     simpa using exists_sub_orthogonal_of_zeroTermFin_ne_zero D 1 1 h_ne (by simp)
       fun x hx ↦ by rw [one_mulVec, finHeisenbergOp_vacElem hx]
   obtain ⟨w, b, h_sub⟩ := exists_eq_iFin_add_isotropicBasisFin_of_mulVec_eq_zero D h_perp
-  exact ⟨l, hl, w, b, by rw [← h_sub, sub_add_cancel]⟩
+  exact ⟨l, hl, w, b, sub_eq_iff_eq_add.1 h_sub⟩
 
 /-- The translates of the vacuum under the finite Heisenberg operators of `x` and of `x + l`, with
 `l` in the standard lattice `Ô ^ n`, agree up to a root of unity. -/
