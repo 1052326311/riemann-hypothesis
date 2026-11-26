@@ -1,6 +1,5 @@
 module
 
-public import Lib.Adelic.Unitary.Defs
 public import Lib.Cohomology.Etale.RelativeChains
 public import Lib.Cohomology.LerayHirsch
 public import Lib.General.Algebra.CohomologyBaseChange
@@ -904,7 +903,6 @@ abelian groups, `ℓ` kills the total cohomology `TotalH N M.functor`, the sum o
 `Ext^n (N, M.functor)`. -/
 lemma TorsionCoeff.nsmul_totalH_eq_zero (y : TotalH N M.functor) : ℓ • y = 0 := by
   -- `End M.functor` acts on total cohomology, and `ℓ` times the identity of `M.functor` is zero
-  let act : CoeffAction (End M.functor) M.functor := ⟨RingHom.id (End M.functor)⟩
   have h_zero : ℓ • (1 : End M.functor) = 0 := End.ext (by bound [M.prime_smul_eq_zero])
   rw [← smul_one_smul (End M.functor) ℓ y, h_zero, zero_smul]
 

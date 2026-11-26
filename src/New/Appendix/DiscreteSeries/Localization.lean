@@ -132,7 +132,7 @@ lemma norm_sub_one_sq (g : USign ε) :
   set x : Matrix n n ℂ := (g : Matrix n n ℂ) - 1
   set y : Matrix n n ℂ := noncompactPart ε g
   have h_row (i : n) : ∑ j : n, ‖x i j‖ ^ 2 = 2 * ∑ j : n, ‖y i j‖ ^ 2 - 2 * (x i i).re := by
-    linarith [two_mul_re_sub_one_apply g i]
+    linarith only [two_mul_re_sub_one_apply g i]
   calc ‖x‖ ^ 2 = ∑ i : n, ∑ j : n, ‖x i j‖ ^ 2 := frobenius_norm_sq_eq_sum
     _ = ∑ i : n, (2 * ∑ j : n, ‖y i j‖ ^ 2 - 2 * (x i i).re) := sum_congr rfl fun i _ ↦ h_row i
     _ = 2 * ‖y‖ ^ 2 - 2 * x.trace.re := by
@@ -259,7 +259,8 @@ lemma exists_unitary_sub_one_eq_inclMatrix {u : Matrix X X ℂ} {Y : Type}
   calc (1 + Q * (u - 1) * Qᴴ)ᴴ * signMatrix ε * (1 + Q * (u - 1) * Qᴴ)
       = signMatrix ε + Q * (uᴴ - 1) * (Qᴴ * signMatrix ε) + signMatrix ε * Q * (u - 1) * Qᴴ +
           Q * (uᴴ - 1) * (Qᴴ * (signMatrix ε * Q)) * (u - 1) * Qᴴ := by
-        simp [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, add_assoc, add_left_comm]
+        simp [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc]
+        abel
     _ = signMatrix ε + Q * ((uᴴ - 1) + (u - 1) + (uᴴ - 1) * (u - 1)) * Qᴴ := by
         simp [hQ_sgn, hQ_sgn', hQ_iso, Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, add_assoc]
     _ = signMatrix ε := by simp [h_expand, hu]

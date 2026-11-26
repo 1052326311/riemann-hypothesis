@@ -323,35 +323,25 @@ needed. -/
 lemma IsAcyclicOver.isCohomEquiv (hB : IsDomain B) (hB' : IsDomain B') (u : T' ⟶ T)
     (hT : IsAcyclicOver q Λ) (hT' : IsAcyclicOver q' Λ) :
     IsCohomEquiv (locConstCoeff Λ) (freeAb.map u) := by
-  obtain ⟨h_inj, h_onto⟩ : Function.Injective (locConstClass (Λ := Λ) q 0) ∧
-      ∀ n : ℕ, Surjective (locConstClass (Λ := Λ) q n) := hT
-  obtain ⟨h_inj', h_onto'⟩ : Function.Injective (locConstClass (Λ := Λ) q' 0) ∧
-      ∀ n : ℕ, Surjective (locConstClass (Λ := Λ) q' n) := hT'
+  obtain ⟨h_inj, h_onto⟩ := hT
+  obtain ⟨h_inj', h_onto'⟩ := hT'
   rintro (_ | n)
   · -- the spectra are connected, so the constants give all of `H⁰` on both sides
     have h_const : Bijective fun x : Λ ↦ locConstClass q 0 (.const _ x) :=
       .comp ⟨h_inj, h_onto 0⟩ (down_bijective.comp bijective_const_of_isDomain)
     have h_const' : Bijective fun x : Λ ↦ locConstClass q' 0 (.const _ x) :=
       .comp ⟨h_inj', h_onto' 0⟩ (down_bijective.comp bijective_const_of_isDomain)
-    have h_sq (x : Λ) :
-        H.map (locConstCoeff Λ) (freeAb.map u) 0 (locConstClass q 0 (.const _ x)) =
-          locConstClass q' 0 (.const _ x) := by
-      -- constants pull back to constants along any ring map
-      have h_pull (c : TestRing) (y : T'.obj c) :
-          (locConstSpec Λ).map (q c (u c y)).down (.const _ x) =
-            (locConstSpec Λ).map (q' c y).down (.const _ x) := by
-        tauto
-      exact map_locConstClass h_pull 0
-    exact (bijective_iff_of_comm_sq (f := id) h_sq h_const h_const').mp bijective_id
+    refine (bijective_iff_of_comm_sq (f := id) ?_ h_const h_const').mp bijective_id
+    exact fun x ↦ map_locConstClass (fun _ _ ↦ by tauto) 0
   · -- in positive degree `locConstClass` is zero and onto, so both groups vanish
-    have h_triv (x : H (freeAb T) (locConstCoeff Λ) (n + 1)) : x = 0 := by
-      obtain ⟨f, rfl⟩ := h_onto (n + 1) x
+    constructor
+    · intro x₁ x₂ _
+      obtain ⟨_, rfl⟩ := h_onto (n + 1) x₁
+      obtain ⟨_, rfl⟩ := h_onto (n + 1) x₂
       simp [locConstClass]
-    have h_triv' (y : H (freeAb T') (locConstCoeff Λ) (n + 1)) : y = 0 := by
-      obtain ⟨f, rfl⟩ := h_onto' (n + 1) y
-      simp [locConstClass]
-    exact ⟨fun x₁ x₂ _ ↦ (h_triv x₁).trans (h_triv x₂).symm,
-      fun y ↦ ⟨0, (map_zero _).trans (h_triv' y).symm⟩⟩
+    · intro y
+      obtain ⟨_, rfl⟩ := h_onto' (n + 1) y
+      exact ⟨0, by simp [locConstClass]⟩
 
 /-- A filtered colimit of test rings, taken in commutative rings, is a test ring: absolutely
 integrally closed, comparable for divisibility after splitting by an idempotent, and reduced. -/
@@ -523,31 +513,21 @@ admit an idempotent `e` with `a ∣ e b` and `b ∣ (1 − e) a`), then `W` is a
 that roots of monic polynomials, the idempotents that compare two elements, and reducedness all pull
 back along `g`. -/
 lemma IsSolutionClosed.isTest (h : IsSolutionClosed g) (hV : IsTest V) : IsTest W := by
-  have h_dvd_iff {a b : W} : g a ∣ g b ↔ a ∣ b := h.map_dvd_iff
-  obtain ⟨hg_inj, hg_closed⟩ := h
-  have hV_reduced : IsReduced V := hV.isReduced
+  have := hV.isReduced
   refine { toIsAbsIntegrallyClosed := ⟨fun P h_monic h_deg ↦ ?_⟩, isComparableRing := fun x y ↦ ?_,
-           isReduced := isReduced_of_injective g hg_inj }
+           isReduced := isReduced_of_injective g h.1 }
   · -- `P(x) = 0` is equation number `n + 2` for the `n = P.natDegree + 1` coefficients of `P`
     obtain ⟨x, hx⟩ := hV.toIsAbsIntegrallyClosed.exists_eval₂_eq_zero g h_monic h_deg
-    have h_sol : ∃ x : V, IsSolution (g ∘ P.coeff) x (P.natDegree + 3) :=
-      ⟨x, show ∑ k ∈ Finset.range (P.natDegree + 1), (g ∘ P.coeff) k * x ^ k = 0 by
-        simpa [P.eval₂_eq_sum_range] using hx⟩
-    obtain ⟨x, hx⟩ := hg_closed (P.natDegree + 3) P.coeff h_sol
-    change ∑ k ∈ Finset.range (P.natDegree + 1), (g ∘ P.coeff) k * g x ^ k = 0 at hx
-    have h_sum : g (∑ k ∈ Finset.range (P.natDegree + 1), P.coeff k * x ^ k) = g 0 := by
-      simpa using hx
-    exact ⟨x, (P.eval_eq_sum_range x).trans (hg_inj h_sum)⟩
+    obtain ⟨x, hx⟩ := h.2 (P.natDegree + 3) P.coeff
+      ⟨x, by simpa [IsSolution, P.eval₂_eq_sum_range] using hx⟩
+    refine ⟨x, (P.eval_eq_sum_range x).trans (h.1 ?_)⟩
+    simpa [IsSolution] using hx
   · -- equation `0` for the coefficients `x, y`; divisibility descends along `g`
-    have h_sol : ∃ e : V, IsSolution (g ∘ fun k ↦ [x].getD k y) e 0 :=
-      hV.isComparableRing (g x) (g y)
-    obtain ⟨e, he_sol⟩ := hg_closed 0 (fun k ↦ [x].getD k y) h_sol
-    change IsIdempotentElem (g e) ∧ g x ∣ g e * g y ∧ g y ∣ (1 - g e) * g x at he_sol
-    obtain ⟨he_idem, h_dvd_x, h_dvd_y⟩ := he_sol
-    refine ⟨e, ?_, ?_, ?_⟩
-    · exact hg_inj ((map_mul g e e).trans he_idem.eq)
-    · rwa [← h_dvd_iff, map_mul]
-    · rwa [← h_dvd_iff, map_mul, map_sub, map_one]
+    obtain ⟨e, he_idem, h_dvd_x, h_dvd_y⟩ :=
+      h.2 0 (fun k ↦ [x].getD k y) (hV.isComparableRing (g x) (g y))
+    exact ⟨e, h.1 ((map_mul g e e).trans he_idem.eq),
+      by simpa [← h.map_dvd_iff] using h_dvd_x,
+      by simpa [← h.map_dvd_iff] using h_dvd_y⟩
 
 /-- For any family of commutative rings R o there are an endofunctor E of commutative rings and a
 natural map θ : A → E(A) such that (a) every E(A) is a test ring, and (b) every ring map φ from

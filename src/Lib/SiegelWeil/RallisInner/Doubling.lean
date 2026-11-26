@@ -351,7 +351,7 @@ lemma graphSplitting_lagrangian_injective :
   -- Equal graphs have frames `(δ'⁻¹, -1) = (δ⁻¹, -1) * c`; the lower block forces `c = 1`.
   intro δ δ' h_eq
   have h_frames : ∃ c : Matrix n n E, (graphSplitting S δ⁻¹).k * c = (graphSplitting S δ'⁻¹).k :=
-    Filling.exists_mul_eq_of_col_mem_range fun i ↦ h_eq.ge ⟨_, mulVec_single_one _ i⟩
+    exists_mul_eq_of_range_le fun i ↦ h_eq.ge ⟨_, mulVec_single_one _ i⟩
   -- `-coe_units_inv` keeps the inverse of a unit from turning into a matrix inverse.
   simpa [fromRows_ext_iff, ← Units.ext_iff, -coe_units_inv] using h_frames
 
@@ -451,7 +451,7 @@ lemma exists_doubling_bound (h_rank : 2 * card n < card m) : ∃ C : ENNReal, C 
   · let e : U S.J ≃ S.Γ := .ofInjective _ S.ratEmbed_injective
     calc _ ≤ Z * ‖d‖ₑ := by
           rw [← e.tsum_eq, ← ENNReal.tsum_mul_right]
-          refine ENNReal.tsum_le_tsum fun δ ↦ .trans (le_of_eq ?_) (le_opENorm _ d)
+          refine tsum_le_tsum fun δ ↦ .trans (le_of_eq ?_) (le_opENorm _ d)
           exact congrArg eNorm (zeroTerm_graphSplitting_doubleDatum b f f' g g' δ).symm
       _ ≤ _ := by grw [hd, mul_assoc, ← le_add_self]
 
