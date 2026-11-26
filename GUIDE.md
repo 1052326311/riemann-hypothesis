@@ -138,13 +138,13 @@ The class `D.HasLogBound u F l` of `New/Reduction/Data/Magnitudes` states |F| �
 
 ## 5. Global settings
 
-`Lib/Speed`, imported through `Lib/Base`, holds the main settings that apply to the whole development. They steer instance search and `simp`. They add no axiom. With `Lib/Speed` emptied, every file still compiled on Lean v4.33.1. They can influence which instance a statement inside the development picks up, but not the five theorems: their types are constants of Mathlib and of `Statements.lean`, which does not import the settings. Apart from these, `lakefile.toml` sets options for all files: no automatic implicit variables, `maxHeartbeats`, `maxSynthPendingDepth`, the thread stack and one printing option.
+`Lib/Speed`, imported through `Lib/Base`, holds the main settings that apply to the whole development. They steer `simp`. They add no axiom. With `Lib/Speed` emptied, every file still compiled on Lean v4.33.1. They cannot change the five theorems: their types are constants of Mathlib and of `Statements.lean`, which does not import the settings. Apart from these, `lakefile.toml` sets options for all files: no automatic implicit variables, `maxHeartbeats`, `maxSynthPendingDepth`, the thread stack and one printing option.
 
 | Setting | Effect on what you read |
 |---|---|
 | Changed `simp` set | `attribute [simp ←, simp]` tags a list of Mathlib lemmas in both directions, which erases them from the default set of every importing file. A proof names such a lemma when it needs it. |
 | `IsVoid` | `simp` rewrites `IsEmpty α` to this synonym and stops there. |
-| Instance priorities | A list of Mathlib instances is tried later. A second, short list is in `Lib/General/NumberTheory/CoefficientRings`, and some instances of the development have low priority. |
+| Instance priorities | A short list of Mathlib instances in `Lib/General/NumberTheory/CoefficientRings` is tried later, and some instances of the development have low priority. |
 
 Besides these, five Mathlib lemmas get the tag `fun_prop` where they are first needed, and some definitions of the development are marked irreducible. Other settings end with their declaration, section or file: `seal … in`, `open scoped Classical in`, `set_option`, a few `attribute [-simp]`, `attribute [-instance]` and `attribute [local simp]` lines, and `attribute [local instance low] Fintype.ofFinite` in files that sum over finite types. A name in an `open` line may switch on scoped instances, coercions or `simp` lemmas of the development.
 
