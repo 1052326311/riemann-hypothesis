@@ -545,7 +545,7 @@ lemma exists_fundamental_domain_freeLattice (c : S.Classes) (a : Fin 𝔰.ϱ) :
 (`IsFreeEntry`) of the row e_a of the real image of any `γ ∈ S.classUnipotent c` lie in
 `freeLattice c a`, the lattice of rescaled rational vectors `x` on the free columns with
 `freeBlock c a *ᵥ x` integral. -/
-lemma rowCoords_fst_mem_freeLattice [S.IsAdmissible] (c : S.Classes) (a : Fin 𝔰.ϱ) (γ : S.classUnipotent c) :
+lemma rowCoords_fst_mem_freeLattice (c : S.Classes) (a : Fin 𝔰.ϱ) (γ : S.classUnipotent c) :
     freeRowCoords (classUnipotentToInf c γ) a ∈ freeLattice c a := by
   let row : 𝔰.BesselIndex → 𝔸f E :=
     finAdeleMatrix ((S.M : E)⁻¹ • ((γ : Matrix 𝔰.BesselIndex 𝔰.BesselIndex E) - 1)) (inl a)
