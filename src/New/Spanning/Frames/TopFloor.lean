@@ -107,7 +107,7 @@ lemma PlaceData.fiberPairing_orbitPoint {F : PlaceData ι T (m + 1)} (Z : F.Inte
 the norm of the last frame vector `z`. -/
 lemma mulVec_mem_lastVectorQuadric {A : Type} {𝔰 : Shape} [SemilocalField A] [StarRing A]
     {T : 𝔰.Form A}
-    [IsHermitianUnit T.splitGram] {l : T.G} (hl : l ∈ T.floorGroup 𝔰.ϱ) {e : 𝔰.BesselIndex → A}
+    {l : T.G} (hl : l ∈ T.floorGroup 𝔰.ϱ) {e : 𝔰.BesselIndex → A}
     (he : e ∈ lastVectorQuadric T) : (l : GL 𝔰.BesselIndex A).val *ᵥ e ∈ lastVectorQuadric T := by
   obtain ⟨h_floor, h_norm⟩ : (∀ i : 𝔰.BesselIndex, floorOf i < 𝔰.ϱ → e i = 0) ∧
       star e ⬝ᵥ T.splitGram *ᵥ e = T.splitGram 𝔰.z 𝔰.z := he
