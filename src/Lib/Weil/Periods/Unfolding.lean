@@ -270,11 +270,14 @@ lemma integral_tsum_classTerm_eq_zero (hW : Y.IsEquivariant W)
   let := compHom (ratMatrices E ι' ι ⧸ Y.nonnegMaps d) (.inl Y.ratBessel (V'.ratParabolic d))
   let Z : SubMulAction Y.ratBessel (ratMatrices E ι' ι ⧸ Y.nonnegMaps d) :=
     ⟨S, fun γ w hw ↦ h_stable w hw γ⟩
+  -- the action on `Z`, given once so that instance search does not look for it again
+  let : MulAction Y.ratBessel Z := Z.mulAction
   let i : Y.ratBessel →* Y.besselGroup := Subgroup.inclusion inf_le_right
   have term_smul (γ : Y.ratBessel) (w : Z) (r : Y.besselGroup) :
       classTerm α Φ W (γ • w : Z).val h (i γ * r) = classTerm α Φ W w.val h r := by
-    change classTerm α Φ W ((γ, (1 : V'.ratParabolic d)) • w.val) h _ = _
-    simpa using classTerm_smul Y' α Φ hW hd γ 1 w h r
+    have h_eq := classTerm_smul Y' α Φ hW hd γ 1 w h r
+    rw [OneMemClass.coe_one, one_mul] at h_eq
+    exact h_eq
   -- Each orbit unfolds to an integral over the quotient by the stabiliser; there left translation
   -- by some `u` multiplies the term by a constant `c ≠ 1` of modulus one.
   have orbit_zero (q : Quot (orbitRel Y.ratBessel Z)) : ∑' w : Quot.mk _ ⁻¹' {q},
@@ -291,7 +294,8 @@ lemma integral_tsum_classTerm_eq_zero (hW : Y.IsEquivariant W)
       Quotient.eq.trans comm
     obtain ⟨fixes, unfold⟩ := integral_tsum_orbit (μ := .haar)
       (k := fun w : Z ↦ classTerm α Φ W w.val h) (inclusion_injective _) (inclusion_range _)
-      (by fun_prop) term_smul stab_eq mem_orbit
+      (fun w ↦ ((term_cont w).comp (continuous_const.prodMk continuous_id)).measurable)
+      term_smul stab_eq mem_orbit
     obtain ⟨-, -, sum_eq⟩ := unfold (.inl (lintegral_tsum_enorm_classTerm_lt_top Y' α Φ hW hd h S))
     exact sum_eq.trans
       (integral_quotMeasure_eq_zero_of_twist _ fixes (by fun_prop) c_norm c_ne twist)
