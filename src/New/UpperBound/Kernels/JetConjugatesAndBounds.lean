@@ -563,7 +563,7 @@ lemma norm_integral_normalizedVolume_le {ι : Type} [Fintype ι] [DecidableEq ι
     (by positivity))
 
 /-- The vacuum `realVac y` has modulus `exp (-|y|² / 2)`. -/
-lemma norm_realVac {ι : Type} [Fintype ι] [DecidableEq ι] (y : ι → ℂ) :
+lemma norm_realVac {ι : Type} [Fintype ι] (y : ι → ℂ) :
     ‖realVac y‖ = exp (-(∑ i : ι, ‖y i‖ ^ 2) / 2) := by
   rw [realVac, star_dotProduct_self_eq_sum, Complex.norm_exp]
   norm_cast
