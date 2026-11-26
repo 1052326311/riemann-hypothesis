@@ -576,11 +576,6 @@ lemma finrank_eq_abelianDim (Q : RealVectors E n ≃L[ℝ] V) : finrank ℂ V = 
   rw [abelianDim]
   linarith
 
-/-- `finrank_eq_abelianDim` for a period map `Q`, for dot notation; only the real isomorphism is
-used. -/
-lemma IsPeriodMap.finrank_eq_abelianDim (_hQ : IsPeriodMap ℓ Q) : finrank ℂ V = abelianDim E n :=
-  New.Variety.finrank_eq_abelianDim Q
-
 /-- Let `Q` and `R` be period maps for the matrices `ℓ` and `J` (hypotheses `hQ`, `hR`). If a
 complex linear map `F` corresponds under them to a matrix `z ∈ GL n E` (hypothesis `hF`), then
 `z ℓ z⁻¹ = J` at `v₀`. -/

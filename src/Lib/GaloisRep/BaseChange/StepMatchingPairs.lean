@@ -268,10 +268,8 @@ lemma exists_places_above_one_side {S : Set (FinPlace E)} (h_split : ∀ w ∈ S
     rcases Sym2.eq_iff.1 h_pair with ⟨h_eq, -⟩ | ⟨h_eq, -⟩
     · exact ⟨v, hv, .inl h_eq⟩
     · exact ⟨v, hv, .inr h_eq⟩
-  have hV_inj : InjOn (FinPlace.below E) V := by
-    intro u hu v hv h_below
-    have h_pair_eq : belowPair E u = belowPair E v := by simp [belowPair, h_below]
-    exact hV_inj_pair hu hv h_pair_eq
+  have hV_inj : InjOn (FinPlace.below E) V :=
+    InjOn.of_comp (g := fun w : FinPlace E ↦ s(w, star w)) hV_inj_pair
   refine ⟨V, hV, hV_inj, ?_, subset_antisymm ?_ ?_⟩
   · rintro _ ⟨u, hu, rfl⟩ ⟨v, hv, hvu⟩
     have h_pair_eq : belowPair E u = belowPair E v := by simp [belowPair, hvu, Sym2.eq_swap]
@@ -412,10 +410,8 @@ lemma isMatchingPairAbove_of_mem_biInvariantPairs {μ : (𝔸f E)ˣ →* ℂˣ} 
       ((localLevel n A : Set (Gf E' n)).indicator 1 * F : Gf E' n → ℂ) δ
     simp_all [IsBiInvariantAt, indicator, leftTranslation, funext_iff, mul_mem_cancel_left,
       mul_mem_cancel_right]
-  have hμ_loc : ∀ w ∈ FinPlace.below E '' V, ∀ x : (LocField w)ˣ, μ (locIdele w x) = 1 := by
-    rintro _ ⟨v, hv, rfl⟩
-    obtain ⟨h_trivial, -⟩ := h_matched v hv
-    exact h_trivial
+  have hμ_loc : ∀ w ∈ FinPlace.below E '' V, ∀ x : (LocField w)ˣ, μ (locIdele w x) = 1 :=
+    forall_mem_image.2 fun v hv ↦ (h_matched v hv).1
   have h_one (u : FinPlace E') (hu : u.below E ∉ FinPlace.below E '' V) :
       (1 + idem V • (X - 1) : (𝔸f E')[X]).map (evalAt u) = 1 := by
     have huV : u ∉ V := fun huV ↦ hu ⟨u, huV, rfl⟩

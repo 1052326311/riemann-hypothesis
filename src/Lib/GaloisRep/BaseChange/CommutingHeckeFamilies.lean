@@ -598,17 +598,9 @@ lemma exists_remaining_places (H : ∀ w ∈ T, w ∉ S ∧ star w ∉ S)
           star (u.below E) ∉ S ∧ star (star (u.below E)) ∉ S := H _ hu
       rw [star_star] at h_not_S
       exact not_or.2 ⟨h_not_S, h_star_not_S⟩
-  have h_compl : (placesAbove E' S)ᶜ = placesAbove E' T ∪ placesAbove E' Y := by
-    ext u
-    rw [mem_compl_iff, mem_union, h_mem_Y]
-    constructor
-    · intro hS
-      by_cases hT : u ∈ placesAbove E' T
-      · exact .inl hT
-      · exact .inr ⟨hS, hT⟩
-    · rintro (hT | ⟨hS, -⟩)
-      · exact h_notMem_S u hT
-      · exact hS
+  have h_compl : (placesAbove E' S)ᶜ = placesAbove E' T ∪ placesAbove E' Y :=
+    (union_sdiff_cancel (t := (placesAbove E' S)ᶜ) h_notMem_S).symm.trans
+      (congrArg (placesAbove E' T ∪ ·) (Set.ext fun u ↦ (h_mem_Y u).symm))
   refine ⟨Y, ?_, ?_, ?_, ?_, ?_⟩
   · refine DFunLike.ext _ _ fun u ↦ ?_
     by_cases hu : u ∈ placesAbove E' T

@@ -125,10 +125,6 @@ open PowerSeries IsUltrametricDist
 namespace New
 variable {p : ℕ} [Fact p.Prime]
 
-/-- If `g(0) = 0`, then `(exp g)' = exp g * g'`, where `exp g` is `expSubst g`. -/
-lemma derivative_expSubst {g : ℂ_[p]⟦X⟧} (hg_zero : constantCoeff g = 0) :
-    d⁄dX (expSubst g) = expSubst g * d⁄dX g := by
-  rw [expSubst, derivative_subst (.of_constantCoeff_zero' hg_zero), derivative_exp]
 
 /-- If `g(0) = 0`, then `exp g` has constant term `1`. -/
 lemma constantCoeff_expSubst {g : ℂ_[p]⟦X⟧} (hg_zero : constantCoeff g = 0) :

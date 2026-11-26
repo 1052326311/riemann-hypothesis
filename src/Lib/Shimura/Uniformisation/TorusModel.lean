@@ -283,7 +283,7 @@ lemma ThetaTori.PeriodMap.exists_uniformisation_of_isSeparatingFamily
             eq_zero_iff := fun z ↦ ⟨h_kill z, h_ker z⟩
             immersive := fun z ↦ ⟨hY.holomorphicAt hN z, h_imm z⟩
             universal := fun γ hγ ↦ ?_ }, hY, rfl, rfl,
-    by simp [← Y.isPeriodMap.finrank_eq_abelianDim, F_equiv.finrank_eq]⟩
+    by simp [← finrank_eq_abelianDim Y.realEquiv, F_equiv.finrank_eq]⟩
   obtain ⟨F', hF'⟩ := u.universal γ hγ
   refine ⟨F_equiv.symm.toContinuousLinearEquiv ∘L F', fun w ↦ ?_⟩
   simp [he, hF']

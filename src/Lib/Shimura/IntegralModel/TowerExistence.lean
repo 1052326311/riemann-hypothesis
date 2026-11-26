@@ -195,7 +195,7 @@ lemma New.Variety.UniversalFamily.GraphClosure.isTangentPoly_localTerm_of_transl
   -- it remains to check its dimension and its base point, that `dc` is injective, and `dv = dc K`
   refine ⟨.of ℂ _, ⟨homMk σ ((hσ.comp_base_eq fun _ ↦ w _).trans (map_comp ..).symm)⟩, K, ?_, ?_,
     fun x y hxy ↦ ?_, fun x ↦ up_inj.mpr (OverMorphism.ext ?_), hdet⟩
-  · simp [(f.torus 0).isPeriodMap.finrank_eq_abelianDim, Module.finrank_pi_fintype]
+  · simp [finrank_eq_abelianDim (f.torus 0).realEquiv, Module.finrank_pi_fintype]
   · -- the jet `σ` lies over the point of `f.ballPoint a.markedPoint 0 = a`
     refine congrArg ULift.up (OverMorphism.ext (hσ.fst_comp.trans ?_))
     rw [hf.ballPoint_zero]

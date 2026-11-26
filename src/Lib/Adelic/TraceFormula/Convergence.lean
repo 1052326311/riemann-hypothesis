@@ -106,8 +106,6 @@ lemma partialKernel_ratEmbed_mul {k : GInf E s → ℂ} (φ : Gf E n → ℂ) {Z
     (hν : ∀ γ : U V.J, ν * γ ∈ Z ↔ γ ∈ Z) (g x : G E s) :
     V.partialKernel k φ Z (V.ratEmbed ν * g) x = V.partialKernel k φ Z g x := by
   classical
-  have h_point (γ : U V.J) :
-      (V.ratEmbed ν * g)⁻¹ * V.ratEmbed (ν * γ) * x = g⁻¹ * V.ratEmbed γ * x := by simp [mul_assoc]
   calc V.partialKernel k φ Z (V.ratEmbed ν * g) x
       = ∑' γ : U V.J, V.kernelTerm k φ (Z.indicator 1) (V.ratEmbed ν * g) (ν * γ) x :=
         ((Equiv.mulLeft ν).tsum_eq _).symm
