@@ -1,6 +1,6 @@
 module
 
-public import Lib.CM.Sigma.Basic
+public import Lib.Shimura.ComplexTheta.AppellHumbertData
 public import Lib.DiscreteSeries.Bessel.FrameFibre
 public import Lib.DiscreteSeries.Bruhat.FloorFibre
 public import Lib.DiscreteSeries.Bruhat.SphereFibres
