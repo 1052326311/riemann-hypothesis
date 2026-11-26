@@ -781,9 +781,9 @@ lemma exists_lowerChain_integral_and_weylNormSq_le : ∃ c : D.MFoldTwist → �
         ∀ g : Gf D.E (D.Y D.m),
           weylNormSq (σ ∘ (D.lowerChain .one (s • r φ)).val g) ≤
             exp (2 * D.x ^ 201 * D.b ^ 2) * B := by
-  refine D.exists_dualPairing_eq_mul_lastPathPeriod.elim fun c hc ↦
-    hc.2.elim fun Ψ hΨ ↦ hΨ.2.elim fun β hβ ↦ hβ.elim fun r hr ↦
-      D.exists_mul_lastPathPeriod_mem_embValRing.elim fun N hN ↦ ?_
+  obtain ⟨c, hc, Ψ, hΨ, β, r, hr_onto, h_period⟩ :=
+    D.exists_dualPairing_eq_mul_lastPathPeriod
+  obtain ⟨N, hN_ne, hN_le, h_integral⟩ := D.exists_mul_lastPathPeriod_mem_embValRing
   -- If `β = 0` all pairings vanish and `s = 1`, `ε = 0` will do; otherwise `s` turns `β` into the
   -- hook number times `N`.
   let s : ℂ := if β = 0 then 1 else D.dualHook * N / β
@@ -791,7 +791,7 @@ lemma exists_lowerChain_integral_and_weylNormSq_le : ∃ c : D.MFoldTwist → �
   have hs_ne : s ≠ 0 := by
     by_cases hβ0 : β = 0
     · simp [s, hβ0]
-    · simp [s, hβ0, hN.1]
+    · simp [s, hβ0, hN_ne]
   have hs : s * β = D.dualHook * (ε * N) := by
     by_cases hβ0 : β = 0 <;> simp [s, ε, hβ0]
   let Ξ (ϑ : D.MFoldTwist) (φ : D.gridLevelForms D.m) (x : Gf D.E (D.Y D.m))
@@ -804,15 +804,15 @@ lemma exists_lowerChain_integral_and_weylNormSq_le : ∃ c : D.MFoldTwist → �
     calc _ = s * (v ⬝ᵥ D.dualPairing.map (↑) *ᵥ ((c ϑ / c 1 : ℂ) • D.lowerChain ϑ (r φ)).1 x) := by
           rw [map_smul, smul_comm, Submodule.coe_smul_of_tower, Pi.smul_apply, mulVec_smul,
             dotProduct_smul, smul_eq_mul]
-      _ = s * (β * Ξ ϑ φ x v) := by rw [hr.2]
+      _ = s * (β * Ξ ϑ φ x v) := by rw [h_period]
       _ = _ := by rw [← mul_assoc, hs, mul_assoc, mul_assoc]
-  refine ⟨c, hc.1, r, s, hr.1, hs_ne, fun ϑ p _ _ φ hp hφ ↦ ?_, fun σ φ B hB x ↦ ?_⟩
+  refine ⟨c, hc, r, s, hr_onto, hs_ne, fun ϑ p _ _ φ hp hφ ↦ ?_, fun σ φ B hB x ↦ ?_⟩
   · -- (a) At integral points the delta forms of integral vectors are integral.
     have hε_int : ε ∈ embValRing := by by_cases hβ0 : β = 0 <;> simp [ε, hβ0]
     have hΞ_int {x : Gf D.E (D.Y D.m)} (hx : x ∈ integralAbove (D.Y D.m) p)
         (w : WeylIndex (D.Y D.m) (D.lastPathColumns false) → ℤ) :
         N * Ξ ϑ φ x (fun i ↦ w i) ∈ embValRing := by
-      refine hN.2.2 (hΨ.1 ϑ) (fixedByOuterLevels_lastPathConjDelta ϑ x _ φ) hp (Bool.forall_bool.2
+      refine h_integral (hΨ ϑ) (fixedByOuterLevels_lastPathConjDelta ϑ x _ φ) hp (Bool.forall_bool.2
         ⟨weylGauge_lastPathConjDelta_le_one ϑ x hx w, fun g ↦ ?_⟩)
       simpa only [mul_one] using hφ g
     exact weylGauge_le_one_of_integralAbove _ fun x hx ↦
@@ -821,7 +821,7 @@ lemma exists_lowerChain_integral_and_weylNormSq_le : ∃ c : D.MFoldTwist → �
   -- (b) The conjugates of the sum `Ξ` for delta forms are small.
   have hΞ_le (v : D.DualVector) :
       ‖σ (Ξ 1 φ x v)‖ ≤ exp (D.x ^ 200 * D.b ^ 2) * √(weylNormSq (σ ∘ v)) * √B :=
-    D.norm_lastPathPeriod_le (hΨ.1 1) (fixedByOuterLevels_lastPathConjDelta 1 x v φ) σ
+    D.norm_lastPathPeriod_le (hΨ 1) (fixedByOuterLevels_lastPathConjDelta 1 x v φ) σ
       (B := fun z ↦ if z then B else weylNormSq (σ ∘ v))
       (Bool.forall_bool.2 ⟨weylNormSq_lastPathConjDelta_le 1 x v σ, hB⟩)
   have hε_le : ‖σ ε‖ ≤ 1 := by by_cases hβ0 : β = 0 <;> simp [ε, hβ0]
@@ -837,8 +837,7 @@ lemma exists_lowerChain_integral_and_weylNormSq_le : ∃ c : D.MFoldTwist → �
       _ ≤ D.dualHook * 1 * exp (D.x ^ 99 * D.b ^ 2) *
           (exp (D.x ^ 200 * D.b ^ 2) * √(weylNormSq (σ ∘ v)) * √B) := by
           gcongr
-          · exact hN.2.1
-          · exact hΞ_le v
+          exact hΞ_le v
       _ = D.dualHook * exp (D.x ^ 99 * D.b ^ 2) * exp (D.x ^ 200 * D.b ^ 2) * √B *
           √(weylNormSq (σ ∘ v)) := by ring
       _ ≤ _ := by grw [D.dualHook_mul_exp_le]
@@ -884,14 +883,15 @@ lemma exists_span_short_lifts_eq_top : ∃ c : D.MFoldTwist → ℂˣ,
       ∀ (σ : ℂ ≃+* ℂ) (g : Gf D.E (D.Y D.m)),
         weylNormSq (σ ∘ (D.lowerChain .one y).val g) ≤ exp (D.x ^ 202 * D.b ^ 2)} = ⊤ := by
   -- Short forms `φ` span and `r` is onto, so the forms `s • r φ` span.
-  refine D.exists_lowerChain_integral_and_weylNormSq_le.elim fun c hc ↦
-    hc.2.elim fun r hr ↦ hr.elim fun s hs ↦ ⟨c, hc.1, eq_top_mono ?_ hs.1⟩
+  obtain ⟨c, hc, r, s, hr_onto, hs_ne, h_integral, h_norm⟩ :=
+    D.exists_lowerChain_integral_and_weylNormSq_le
+  refine ⟨c, hc, eq_top_mono ?_ hr_onto⟩
   rw [r.range_eq_map, ← D.span_isShort_eq_top_gridLevelForms, map_span_le]
   intro φ hφ
-  refine (smul_mem_iff _ hs.2.1).1 (subset_span
-    ⟨fun ϑ p _ place hp ↦ hs.2.2.1 ϑ p place φ hp (hφ.1 p), fun σ g ↦ ?_⟩)
+  refine (smul_mem_iff _ hs_ne).1 (subset_span
+    ⟨fun ϑ p _ place hp ↦ h_integral ϑ p place φ hp (hφ.1 p), fun σ g ↦ ?_⟩)
   calc _ ≤ exp (2 * D.x ^ 201 * D.b ^ 2) * exp (D.x ^ 99 * D.b ^ 2) :=
-        hs.2.2.2 σ φ _ (hφ.2 σ) g
+        h_norm σ φ _ (hφ.2 σ) g
     _ = exp (2 * D.x ^ 201 * D.b ^ 2 + D.x ^ 99 * D.b ^ 2) := by rw [exp_add]
     _ ≤ _ := exp_le_exp.2 D.le_of_hasLogBound
 

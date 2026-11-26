@@ -211,18 +211,6 @@ private lemma apply_conj_eq_smul_of_cyclotomicCharMod_eq {x : Gal(Ω/ℚ) → Qu
   rw [cocycle_conj_eq_smul (apply_mul_of_mem_vanishingCocycles hx) h_fix]
   simpa using cyclotomicPowDirichlet_smul h_cyc (hx_tors φ)
 
-/-- Let `x ∈ component l e ψ ν` be killed by `m`, and let `σ` fix the `N m`-th roots of unity and
-satisfy `σ * σ = 1`. Then `2 • x σ = 0`. -/
-private lemma two_smul_apply_eq_zero_of_mul_self_eq_one {x : Gal(Ω/ℚ) → QuotSpan ((l : O) ^ ν)}
-    (hx : x ∈ component l e ψ ν) (hx_tors : ∀ g : Gal(Ω/ℚ), m • x g = 0) {σ : Gal(Ω/ℚ)}
-    (hσ : σ ∈ cycloGalGroup (N * m)) (hσ_sq : σ * σ = 1) :
-    (2 : O) • x σ = 0 := by
-  -- `σ` acts trivially on `x σ`, so the cocycle rule gives `x (σ * (σ * σ)) = 3 • x σ`, while
-  -- `σ * (σ * σ) = σ`.
-  have h_val : x (σ * (σ * σ)) = x σ := by rw [hσ_sq, mul_one]
-  simpa [apply_mul_of_mem_vanishingCocycles hx, hx_tors, two_smul,
-    cyclotomicPowDirichlet_smul_eq_self hσ] using h_val
-
 /-- Let `s u ∈ Gal(Ω/ℚ)` act on the `N m`-th roots of unity by `u ∈ (ℤ/N m)ˣ`, and let the
 decomposition group of the place `B` fix them. If `w u` is a place of `ℚ(μ_{N m})` below
 `(s u)⁻¹ • B` for each `u`, then the places `w u` are pairwise distinct. -/
@@ -325,8 +313,12 @@ lemma artin_reciprocity_of_mem_component {a : ℕ} (ha : l.Coprime a) (ha_one : 
   -- `χ` kills complex conjugations `σ`, since `2 • x σ = 0` and `2 ∣ d`.
   have conj_zero (σ : G) (hσ : IsComplexConj σ) : χ.val σ = 0 := by
     have hσ_sq : (σ : Gal(Ω/ℚ)) * σ = 1 := by simp [← Subgroup.coe_mul, hσ.mul_self]
-    simp [χ, d, mul_comm (2 : O), mul_smul,
-      two_smul_apply_eq_zero_of_mul_self_eq_one hx hx_tors σ.prop hσ_sq]
+    -- The cocycle rule evaluates `x (σ * (σ * σ)) = x σ` as `3 • x σ = x σ`.
+    have h_val : x (σ * (σ * σ) : Gal(Ω/ℚ)) = x σ := by rw [hσ_sq, mul_one]
+    have h_two : (2 : O) • x σ = 0 := by
+      simpa [apply_mul_of_mem_vanishingCocycles hx, hx_tors, two_smul,
+        cyclotomicPowDirichlet_smul_eq_self σ.prop] using h_val
+    simp [χ, d, mul_comm (2 : O), mul_smul, h_two]
   -- Above `l`, `χ` kills the decomposition group, since `(a ^ e - 1) • x g = 0` there.
   have dec_zero (A : ClosurePlace) (hA : A.valuation l < 1) (g : G)
       (hg : (g : Gal(Ω/ℚ)) ∈ decompGroup Gal(Ω/ℚ) A) : χ.val g = 0 := by
@@ -769,9 +761,6 @@ lemma exists_modEq_one_forall_isUnit_pow_sub_one (hl : N < l) :
     .of_map PadicInt.toZMod _ (by simpa [sub_eq_zero] using hb.pow_ne_one_of_pos_of_lt hk.ne' hkl)
   simpa using h_unit.map (algebraMap ℤ_[l] O)
 
-private lemma isUnit_two_of_two_lt (hl : 2 < l) : IsUnit (2 : O) := by
-  exact_mod_cast isUnit_natCast_of_not_dvd (O := O) (not_dvd_of_pos_of_lt two_pos hl)
-
 /-- For `e ≠ 0` and `l > N + e + 3`, the numbers `a ^ e - 1` and `a ^ (e + 1) - 1` are units of `O`
 for some `a ≡ 1 mod N` prime to `l`. -/
 lemma exists_modEq_one_coprime_isUnit_pow_sub_one (he_ne_zero : e ≠ 0) (hl : N + e + 3 < l) :
@@ -1106,7 +1095,8 @@ lemma exists_detecting_points_component (h_bound : IsStickelbergerBound N e X)
   -- `l ^ m ∣ X` in `O`.
   by_contra! h_blind
   set m : ℕ := X.factorization l + 1
-  have h_two : IsUnit (2 : O) := isUnit_two_of_two_lt (by lia)
+  have h_two : IsUnit (2 : O) := by
+    exact_mod_cast isUnit_natCast_of_not_dvd (O := O) (not_dvd_of_pos_of_lt two_pos (by lia : 2 < l))
   have h_totient : IsUnit (φ (N * l) : O) := isUnit_totient_mul (by lia)
   obtain ⟨a, ha, hla, h_pow, h_pow_succ⟩ :=
     exists_modEq_one_coprime_isUnit_pow_sub_one (O := O) he_ne_zero hl

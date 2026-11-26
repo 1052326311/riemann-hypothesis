@@ -2,6 +2,7 @@ module
 
 public import Lib.Adelic.Adeles.LocalFactors
 public import Lib.ClassField.Global.AlbertBrauerHasseNoether
+import TauCeti.NumberTheory.PrimitivePrimeDivisors.Zsigmondy
 
 /-!
 # Artin's reciprocity law and the sign law
@@ -288,32 +289,15 @@ lemma QZChar.apply_pow (χ : QZChar Γ) (g : Γ) (n : ℕ) : χ.val (g ^ n) = n 
 the order of `a` modulo `p`. -/
 lemma exists_prime_dvd_orderOf {l a : ℕ} (hl : l.Prime) (ha : 1 < a) :
     ∃ p : ℕ, p.Prime ∧ 2 < p ∧ IsUnit (a : ZMod p) ∧ l ∣ orderOf (a : ZMod p) := by
-  -- Take a prime factor `p` of the cyclotomic value `Φ_N (a)`, where `N = l (l + 1)`.
-  let N : ℕ := l * (l + 1)
-  have hN : 1 < N := one_lt_mul'' hl.one_lt (by simp [hl.pos])
-  have hN_ne : N ≠ 0 := hN.ne_bot
-  have h_eval_gt : a - 1 < ((cyclotomic N ℤ).eval ↑a).natAbs :=
-    sub_one_lt_natAbs_cyclotomic_eval hN ha.ne'
-  obtain ⟨p, hp, hp_dvd⟩ := exists_prime_and_dvd (n := ((cyclotomic N ℤ).eval ↑a).natAbs) (by omega)
-  have : Fact p.Prime := ⟨hp⟩
-  -- Modulo `p` the order of `a` is the part `m` of `N` prime to `p`; in particular `m < p`.
-  let m : ℕ := ordCompl[p] N
-  have m_pos : 0 < m := ordCompl_pos p hN_ne
-  have : NeZero (↑m : ZMod p) := .of_not_dvd (ZMod p) (not_dvd_ordCompl hp hN_ne)
-  have h_root : (cyclotomic (p ^ N.factorization p * m) (ZMod p)).IsRoot (a : ℤ) := by
-    refine (cyclotomic.eval_apply (a : ℤ) _ (algebraMap ℤ (ZMod p))).trans <| ?_
-    rwa [eq_intCast, intCast_zmod_eq_zero_iff_dvd, Int.natCast_dvd, ordProj_mul_ordCompl_eq_self]
-  have h_prim : IsPrimitiveRoot (a : ZMod p) m := isRoot_cyclotomic_prime_pow_mul_iff_of_charP.mp
-    (mod_cast h_root)
-  have m_lt : m < p := h_prim.eq_orderOf.trans_lt (orderOf_lt hp.one_lt _)
-  -- If `p` divided `l`, then `l + 1` would divide `m`, and `l < m < p ≤ l`.
-  have h_not_dvd : ¬p ∣ l := fun hpl ↦ by
-    have h_succ : l + 1 ∣ m := dvd_ordCompl_of_dvd_not_dvd (dvd_mul_left (l + 1) l) fun h ↦ by
-      simpa [hp.ne_one] using dvd_sub h hpl
-    linarith [le_of_dvd m_pos h_succ, le_of_dvd hl.pos hpl]
-  have h_dvd : l ∣ m := dvd_ordCompl_of_dvd_not_dvd (dvd_mul_right l (l + 1)) h_not_dvd
-  have hp_two_lt : 2 < p := (hl.two_le.trans (le_of_dvd m_pos h_dvd)).trans_lt m_lt
-  exact ⟨p, hp, hp_two_lt, h_prim.isUnit m_pos.ne', by rwa [← h_prim.eq_orderOf]⟩
+  -- By Zsigmondy's theorem, whose exceptional orders are `2` and `6`, `a` has order exactly
+  -- `4 * l` modulo some prime `p`. Then `4 * l < p`.
+  have hl_two : 2 ≤ l := hl.two_le
+  obtain ⟨p, hp, h_order⟩ : ∃ p : ℕ, p.Prime ∧ orderOf (a : ZMod p) = 4 * l :=
+    (TauCeti.exists_prime_orderOf_eq_iff ha (by omega)).mpr
+      ⟨fun ⟨h, _⟩ ↦ by omega, fun ⟨_, h⟩ ↦ by omega⟩
+  have h_lt : orderOf (a : ZMod p) < p := orderOf_lt hp.one_lt _
+  have h_pos : 0 < orderOf (a : ZMod p) := by omega
+  exact ⟨p, hp, by omega, (orderOf_pos_iff.mp h_pos).isUnit, Dvd.intro_left 4 h_order.symm⟩
 
 /-- Artin's lemma: for a Frobenius `σ` at a place `A` of `Ω` over the finite place `v` of `K` (`v.q`
 the size of its residue field), a prime `l` and `m ≠ 0`, some character `χ` that satisfies the

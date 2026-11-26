@@ -767,13 +767,7 @@ lemma IsFillingData.massIntegral_pi_mul_le (h : S.IsFillingData T F)
       F.massIntegral ((Subgroup.pi .univ W).comap (S.toFibers T blk)) *
         F.groupMeasure ((Subgroup.pi .univ Y).comap (S.toFibers T blk)) := by
   -- Mass integral and volume of a product are products, up to constants that agree on both sides.
-  obtain ⟨t, h_prod⟩ : ∃ t : ℝ≥0∞,
-      ∀ Z : ∀ i : ι, Subgroup (S.latticeMiddle (LocProd (placeFiber T blk i))).G,
-        F.massIntegral ((Subgroup.pi .univ Z).comap (S.toFibers T blk)) =
-          ‖t.toReal‖ₑ ^ 2 * t * ∏ i : ι, (F' i).massIntegral (Z i) ∧
-        F.groupMeasure ((Subgroup.pi .univ Z).comap (S.toFibers T blk)) =
-          t * ∏ i : ι, (F' i).groupMeasure (Z i) :=
-    h.exists_massIntegral_pi_eq blk h'
+  obtain ⟨t, h_prod⟩ := h.exists_massIntegral_pi_eq blk h'
   calc F.massIntegral ((Subgroup.pi .univ Y).comap (S.toFibers T blk)) *
         F.groupMeasure ((Subgroup.pi .univ W).comap (S.toFibers T blk)) * ∏ i : ι, c i
     _ = ‖t.toReal‖ₑ ^ 2 * t * t * ∏ i : ι,

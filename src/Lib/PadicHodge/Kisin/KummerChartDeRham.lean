@@ -217,19 +217,20 @@ lemma zTau_mul_E_dvd_smul_sub (s : k.S) : k.zTau * k.E ∣ g • s - s := by
   grw [zTau, mul_rotate, mul_assoc, k.associated_E_mul_tau_mu.dvd]
   apply k.dvd_smul_sub_of_fixesLambda _ h_const
   -- `z = [ϖ]` and `g z = [ϖ']` with `ϖ' = g ϖ`; `ϖ'` has the same untilt as `ϖ`, so `ϖ' = ϖ η`.
-  -- `erw` sees through the coercion of `z` from `S` to `A_inf`.
-  erw [← theta_smul, k.z_eq_teichmuller, smul_teichmuller] at *
-  generalize MonoidHom.inr (Multiplicative ℕ) (Gp p) (toGp (γ : Γ)) • k.varpiFlat = ϖ'
-    at h_fix ⊢
-  change theta (WittVector.teichmuller p ϖ') = theta (WittVector.teichmuller p k.varpiFlat) at h_fix
-  change WittVector.teichmuller p k.varpiFlat * mu ∣
-    WittVector.teichmuller p ϖ' - WittVector.teichmuller p k.varpiFlat
-  have h_untilt_dvd : k.varpiFlat.untilt ∣ ϖ'.untilt := by simpa using h_fix.symm.dvd
+  let a : FrobGal := MonoidHom.inr (Multiplicative ℕ) (Gp p) (toGp (γ : Γ))
+  have h_z : k.z.val = WittVector.teichmuller p k.varpiFlat := k.z_eq_teichmuller
+  have h_fix' : theta (a • k.z.val) = theta k.z.val :=
+    (theta_smul (toGp (γ : Γ)) k.z.val).trans h_fix
+  change k.z.val * mu ∣ a • k.z.val - k.z.val
+  rw [h_z, smul_teichmuller] at h_fix' ⊢
+  rw [h_z] at hz
+  generalize a • k.varpiFlat = ϖ' at h_fix' ⊢
+  have h_untilt_dvd : k.varpiFlat.untilt ∣ ϖ'.untilt := by simpa using h_fix'.symm.dvd
   obtain ⟨η, hη⟩ : k.varpiFlat ∣ ϖ' := Variety.untilt_dvd_iff.mp h_untilt_dvd
   -- `η` has untilt `1`, as `ϖ` and `ϖ η` have the same nonzero untilt; so `θ (φ ^ n ([η] - 1)) = 0`
   -- for all `n`, which makes `[η] - 1` a multiple of `μ` (`mu_dvd_of_theta_frobEnd`)
   have hη_one : η.untilt = 1 := by
-    have h_untilt : k.varpiFlat.untilt * η.untilt = k.varpiFlat.untilt := by simpa [hη] using h_fix
+    have h_untilt : k.varpiFlat.untilt * η.untilt = k.varpiFlat.untilt := by simpa [hη] using h_fix'
     have h_ne : k.varpiFlat.untilt ≠ 0 := by simpa using hz
     exact (mul_eq_left₀ h_ne).mp h_untilt
   have h_theta (j : ℕ) : theta (frobEnd^[j] (WittVector.teichmuller p η - 1)) = 0 := by
