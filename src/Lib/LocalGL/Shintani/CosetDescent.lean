@@ -241,7 +241,7 @@ lemma DescendsTo.iff_comp_inl_eq_evalGL :
 
 /-- If in every rank some Z-combination of characters descends to F, then F lifts to some class
 function G over k'. -/
-lemma Lift.exists_lift_of_descendsTo [Finite k']
+lemma Lift.exists_lift_of_descendsTo
     (h : ∀ m : ℕ, ∃ Φ ∈ virtualChars Z (GalSemidirect k k' (Fin m)), DescendsTo Φ F) :
     ∃ G : Hall k', Lift Z F G := by
   choose Φ h_virt h_desc using h
