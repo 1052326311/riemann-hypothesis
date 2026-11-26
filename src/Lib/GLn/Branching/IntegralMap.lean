@@ -259,7 +259,7 @@ private lemma exists_eval_detPowToPoly_eq_mul_branchKernel {c : ℤ} {η : WeylI
   conv_rhs => simp +singlePass [← det_transpose, -finRotate_symm_apply]
   congr! <;> simp +instances (disch := grind) [ite_eq_right, ← Fin.eq_mk_iff_val_eq,
     Nat.mod_eq_of_lt, Fin.add_def, -finRotate_symm_apply, ← Equiv.eq_symm_apply,
-    Function.swap] <;> rfl
+    Function.swap]
 
 /-- Let `c • (weylKernel n γ₁ P₁ * weylKernel n κ' P) = toPoly n κ₀ η` for an integer `c` and an
 integer vector `η`, where `γ₁ τ h = γ τ (h + 1)`, `P` is the permutation array of the row order
