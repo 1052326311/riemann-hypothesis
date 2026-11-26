@@ -184,7 +184,7 @@ domain `A` of characteristic zero, lie in a finite `A`-algebra `B` whose ring of
 lemma exists_galois_hull [Finite ι]
     [IsDomain A] [IsNoetherianRing A] [CharZero A] [IsIntegrallyClosed A]
     [IsAlgClosed L] [Algebra A L] [FaithfulSMul A L] (hg : ∀ i : ι, IsIntegral A (g i)) :
-    ∃ᵉ (B : CommAlgCat.{0} A) (_ : Fintype Gal(B/A)) (j : B →ₐ[A] L) (x : ι → B),
+    ∃ B : CommAlgCat.{0} A, ∃ _ : Fintype Gal(B/A), ∃ j : B →ₐ[A] L, ∃ x : ι → B,
       Algebra.IsInvariant A B Gal(B/A) ∧ (algebraMap A B).Finite ∧ Injective j ∧ j ∘ x = g := by
   -- `B` is the integral closure of `A` in a finite Galois extension `N` of `Frac A` in `L` that
   -- contains the `g i`.
