@@ -7,9 +7,12 @@ name: batch building
 # A batch is assembled by hand on a branch of this repository named `batch/...`, built from `main`,
 # with one merge commit for each pull request, and its own pull request lands it through the merge
 # queue. A `batch/...` branch is being built when it has commits that `main` does not have and its
-# latest pull request is open. A branch with no pull request yet counts for three hours after its
-# tip commit, since a batch is pushed some minutes before its pull request is opened. A branch that
-# shares no history with `main`, such as those from before `main` was replaced, is not a batch.
+# latest pull request is open. A batch is pushed some minutes before its pull request is opened, so
+# a branch with no pull request yet counts too, unless a batch's pull request was opened after its
+# tip commit: a batch is often pushed again under another name, such as `batch/m11b-on-main` after
+# `batch/m11-on-main`, and only the last gets a pull request, which supersedes the others. It
+# counts for an hour after its tip commit at most. A branch that shares no history with `main`,
+# such as those from before `main` was replaced, is not a batch.
 #
 # An open pull request is in a batch being built when its head commit is one of the commits that
 # the batch has and `main` does not, and it does not hold a batch itself. Every such pull request
@@ -29,9 +32,10 @@ name: batch building
 # What it does not do: a pull request pushed to after the batch took it loses the label, although
 # the batch still lands the commit it took. Closing a batch's pull request without merging it
 # starts no run: the label comes off at the next half-hourly run, or when the branch is deleted.
-# A batch branch that is replaced by another, as `batch/m11-on-main` was by
-# `batch/m11b-on-main`, and never gets a pull request still counts for three hours after its tip
-# commit, so a pull request in it that the replacement left out keeps the label until then.
+# A batch branch that nobody opens a pull request for, and that no later batch supersedes, still
+# counts for an hour after its tip commit, so the pull requests in it keep the label until then.
+# One that is superseded counts until the next run after the later batch's pull request is opened,
+# which starts no run itself: until the next half-hourly run or push.
 #
 # A push to a `batch/...` branch runs that branch's copy of a workflow, and a batch can hold pull
 # requests that change workflows, so no workflow with write access runs on that push. The relay

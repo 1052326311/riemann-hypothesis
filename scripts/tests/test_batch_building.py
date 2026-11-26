@@ -28,10 +28,11 @@ def at(minutes):
 
 def branch(name, *, status="ahead", commits=(), pulls=(), age=10):
     """A `batch/...` branch. `status` is what comparing it with main answers, None for no common
-    ancestor. `commits` are those main does not have. `pulls` holds (number, state) or (number,
-    state, home) for its pull requests, latest first. Its tip commit is `age` minutes old."""
+    ancestor. `commits` are those main does not have. `pulls` holds (number, state), and optionally
+    the repository its branch is in and how many minutes ago it was opened, for its pull requests,
+    latest first. Its tip commit is `age` minutes old."""
     return {"name": name, "status": status, "commits": list(commits), "age": age,
-            "pulls": [p if len(p) == 3 else p + ("o/r",) for p in pulls]}
+            "pulls": [p + ("o/r", 1000)[len(p) - 2:] for p in pulls]}
 
 
 def pull(number, head, *, ref=None, home="o/r", labels=()):
@@ -54,6 +55,8 @@ class Fake(building.GitHub):
         self.left = remaining
         # Pull requests whose label writes GitHub refuses, with this status.
         self.refuse = {}
+        # Batch pull requests whose branches were deleted, as (number, minutes ago it was opened).
+        self.deleted = []
 
     def call(self, method, path, payload=None):
         self.calls += 1
@@ -97,9 +100,18 @@ class Fake(building.GitHub):
                 if key.startswith("h"):
                     found = self.branches_.get(name, {"pulls": []})["pulls"]
                     answer["p" + key[1:]] = {"nodes": [
-                        {"number": n, "state": state, "headRepository": {"nameWithOwner": home} if home else None}
-                        for n, state, home in found]}
+                        {"number": n, "state": state, "createdAt": at(opened),
+                         "headRepository": {"nameWithOwner": home} if home else None}
+                        for n, state, home, opened in found]}
             return {"repository": answer}
+        if "$count" in query:
+            nodes = [{"number": n, "createdAt": at(opened), "headRefName": b["name"],
+                      "headRepository": {"nameWithOwner": home}}
+                     for b in self.branches_.values() for n, _, home, opened in b["pulls"]]
+            nodes += [{"number": n, "createdAt": at(opened), "headRefName": f"batch/gone-{n}",
+                       "headRepository": {"nameWithOwner": "o/r"}} for n, opened in self.deleted]
+            nodes.sort(key=lambda node: node["createdAt"], reverse=True)
+            return {"repository": {"pullRequests": {"nodes": nodes[:variables["count"]]}}}
         if "search(" in query:
             nodes = [{"number": n, "state": state} for n, state in self.closed.items()]
             nodes += [{"number": p["number"], "state": "OPEN"} for p in self.pulls_ if MEMBER in p["labels"]]
@@ -219,13 +231,71 @@ class Branches(unittest.TestCase):
         self.assertIn("batch/m1: being built, because it has no pull request yet and its tip commit "
                       "is 20 min old; 1 commits that `main` does not have", log)
 
+    def test_retries_are_superseded_once_the_last_is_opened(self):
+        # m11 and m11b were pushed 30 and 20 minutes ago and never opened; m11c, pushed 15 minutes
+        # ago, was opened 10 minutes ago. #2 is in m11 and m11b only.
+        gh = Fake([branch("batch/m11", commits=["a", "b"], age=30),
+                   branch("batch/m11b", commits=["a", "b"], age=20),
+                   branch("batch/m11c", commits=["a"], age=15, pulls=[(30, "OPEN", "o/r", 10)])],
+                  [pull(1, "a"), pull(2, "b", labels=[MEMBER])])
+        log = sync(gh)
+        self.assertEqual(gh.writes, [("add", 1), ("remove", 2)])
+        self.assertIn("batch/m11: not being built, because it has no pull request and batch pull request "
+                      "#30 was opened after its tip commit", log)
+        self.assertIn("#1: labelled `batch-building`, because its head commit is in batch/m11c", log)
+        self.assertEqual([name for name, _ in gh.compared], ["batch/m11c"])
+
+    def test_retries_count_until_the_last_is_opened(self):
+        gh = Fake([branch("batch/m11", commits=["a", "b"], age=30),
+                   branch("batch/m11b", commits=["a"], age=20),
+                   branch("batch/m10", status="behind", age=200, pulls=[(20, "MERGED", "o/r", 190)])],
+                  [pull(1, "a"), pull(2, "b")])
+        sync(gh)
+        self.assertEqual(gh.writes, [("add", 1), ("add", 2)])
+
+    def test_an_unopened_branch_newer_than_every_opened_batch_counts(self):
+        gh = Fake([branch("batch/m12", commits=["b"], age=5),
+                   branch("batch/m11c", commits=["a"], age=15, pulls=[(30, "OPEN", "o/r", 10)])],
+                  [pull(1, "a"), pull(2, "b")])
+        sync(gh)
+        self.assertEqual(gh.writes, [("add", 1), ("add", 2)])
+
+    def test_pushing_to_an_open_batch_supersedes_nothing(self):
+        # m11c was opened before m12 was pushed, and pushed to again since, say with main merged in.
+        gh = Fake([branch("batch/m12", commits=["b"], age=5),
+                   branch("batch/m11c", commits=["a"], age=1, pulls=[(30, "OPEN", "o/r", 10)])],
+                  [pull(2, "b")])
+        sync(gh)
+        self.assertEqual(gh.writes, [("add", 2)])
+
+    def test_a_batch_opened_from_a_branch_deleted_since_supersedes_too(self):
+        gh = Fake([branch("batch/m6", commits=["a"], age=30)], [pull(1, "a", labels=[MEMBER])])
+        gh.deleted = [(40, 20)]
+        log = sync(gh)
+        self.assertEqual(gh.writes, [("remove", 1)])
+        self.assertIn("batch/m6: not being built, because it has no pull request and batch pull request "
+                      "#40 was opened after its tip commit", log)
+
+    def test_pull_requests_from_forks_supersede_nothing(self):
+        gh = Fake([branch("batch/m12", commits=["b"], age=30),
+                   branch("batch/m13", status=None, age=500, pulls=[(50, "OPEN", "fork/r", 5)])],
+                  [pull(2, "b")])
+        sync(gh)
+        self.assertEqual(gh.writes, [("add", 2)])
+
+    def test_the_backstop_is_an_hour(self):
+        self.assertEqual(building.UNOPENED, datetime.timedelta(hours=1))
+        gh = Fake([branch("batch/m1", commits=["a"], age=59)], [pull(1, "a")])
+        sync(gh)
+        self.assertEqual(gh.writes, [("add", 1)])
+
     def test_a_stale_branch_without_a_pull_request_is_not(self):
         old = int(building.UNOPENED.total_seconds() // 60)
         gh = Fake([branch("batch/m1", commits=["a"], age=old)], [pull(1, "a", labels=[MEMBER])])
         log = sync(gh)
         self.assertEqual(gh.writes, [("remove", 1)])
         self.assertIn("batch/m1: not being built, because it has no pull request and its tip commit "
-                      "is 3 h 0 min old", log)
+                      "is 1 h 0 min old", log)
         self.assertEqual(gh.compared, [])
 
 

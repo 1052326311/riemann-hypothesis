@@ -16,8 +16,14 @@ being built when:
   `main` was replaced, is not a batch. One that `main` has all of (`behind` or `identical`) has
   landed.
 - and its latest pull request is open. A branch whose latest pull request was merged or closed is
-  not being built. A branch with no pull request yet counts only while its tip commit is less than
-  UNOPENED old, so that a branch nobody opens a pull request for does not keep its labels for good.
+  not being built. A branch with no pull request yet is a batch that is about to be opened, unless
+  it has been superseded: a batch is often pushed again under another name, and only the last
+  gets a pull request. So it counts only while no batch branch has a pull request opened after its
+  tip commit, and while its tip commit is less than UNOPENED old, so that a branch nobody opens a
+  pull request for does not keep its labels for good. The time a pull request was opened is what
+  counts, not its branch's tip: a batch being built that is pushed again, say with `main` merged
+  in, supersedes nothing. The pull requests of branches deleted since count as well, as far as the
+  latest RECENT pull requests of this repository go.
 
 Only pull requests from the branch itself count, not those from a branch of the same name in a
 fork.
@@ -51,8 +57,11 @@ MEMBER = _labels.MEMBER
 PREFIX = _labels.PREFIX
 MAIN = "main"
 # How long a batch branch with no pull request counts as being built, from its tip commit's
-# committer date. A batch branch is pushed some minutes before its pull request is opened.
-UNOPENED = datetime.timedelta(hours=3)
+# committer date, if no batch is opened after it. A batch branch is pushed some minutes before its
+# pull request is opened, between 6 and 25 so far: this is only a backstop.
+UNOPENED = datetime.timedelta(hours=1)
+# The latest pull requests of this repository read for batches opened from branches deleted since.
+RECENT = 50
 # The run stops before GitHub says fewer than this many REST requests are left this hour, leaving
 # the allowance to the other workflows, and the rest to the next run.
 RESERVE = 200
@@ -72,8 +81,15 @@ BRANCHES = """query($owner: String!, $name: String!, $after: String) {
 # The latest pull requests from a branch, by its name. A fork's branch of the same name answers
 # too, so a few more than one are read.
 HEADS = """pullRequests(headRefName: $h%d, first: 10, orderBy: {field: CREATED_AT, direction: DESC}) {
-      nodes { number state headRepository { nameWithOwner } }
+      nodes { number state createdAt headRepository { nameWithOwner } }
     }"""
+RECENT_PULLS = """query($owner: String!, $name: String!, $count: Int!) {
+  repository(owner: $owner, name: $name) {
+    pullRequests(first: $count, orderBy: {field: CREATED_AT, direction: DESC}) {
+      nodes { number createdAt headRefName headRepository { nameWithOwner } }
+    }
+  }
+}"""
 OPEN = """query($owner: String!, $name: String!, $after: String) {
   repository(owner: $owner, name: $name) {
     pullRequests(states: OPEN, first: 100, after: $after) {
@@ -129,7 +145,7 @@ class GitHub(_rest.GitHub):
 
     def latest_pulls(self, names):
         """The latest pull request from each branch of this repository named in `names`, as
-        {"number", "state"}, by name. A branch without one is left out."""
+        {"number", "state", "opened"}, by name. A branch without one is left out."""
         found = {}
         for start in range(0, len(names), CHUNK):
             chunk = names[start:start + CHUNK]
@@ -142,8 +158,18 @@ class GitHub(_rest.GitHub):
                 ours = [node for node in data[f"p{i}"]["nodes"]
                         if _labels.holds_batch(self.repo, (node.get("headRepository") or {}).get("nameWithOwner"), name)]
                 if ours:
-                    found[name] = {"number": ours[0]["number"], "state": ours[0]["state"]}
+                    found[name] = {"number": ours[0]["number"], "state": ours[0]["state"],
+                                   "opened": when(ours[0]["createdAt"])}
         return found
+
+    def recent_batches(self):
+        """The pull requests holding a batch among the latest RECENT of this repository, as
+        {"number", "opened"}, whether their branches still exist or not."""
+        nodes = self.graphql(RECENT_PULLS, owner=self.owner, name=self.name, count=RECENT)
+        return [{"number": node["number"], "opened": when(node["createdAt"])}
+                for node in nodes["repository"]["pullRequests"]["nodes"]
+                if _labels.holds_batch(self.repo, (node.get("headRepository") or {}).get("nameWithOwner"),
+                                       node["headRefName"])]
 
     def compare(self, branch):
         """How `branch` compares with `main`: (GitHub's status, the commits it has that `main` does
@@ -219,6 +245,9 @@ def batches(gh, now, log):
     """The batches being built, as {branch: set of the commits it has that `main` does not}."""
     branches = gh.branches()
     pulls = gh.latest_pulls([branch["name"] for branch in branches])
+    # The batch opened last, which supersedes every branch without a pull request pushed before it.
+    opened = list(pulls.values()) + gh.recent_batches()
+    last = max(opened, key=lambda pull: pull["opened"]) if opened else None
     found = {}
     for branch in branches:
         name, pull = branch["name"], pulls.get(branch["name"])
@@ -231,6 +260,10 @@ def batches(gh, now, log):
             if old is None or old >= UNOPENED:
                 log.append(f"{name}: not being built, because it has no pull request and its tip "
                            f"commit is {age(old) + ' old' if old is not None else 'not dated'}")
+                continue
+            if last and last["opened"] > branch["date"]:
+                log.append(f"{name}: not being built, because it has no pull request and batch pull "
+                           f"request #{last['number']} was opened after its tip commit")
                 continue
         status, commits = gh.compare(name)
         if status is None:
