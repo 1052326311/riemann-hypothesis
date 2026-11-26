@@ -207,24 +207,16 @@ lemma integral_mul_liftY (ϑ : D.TameChar) {j : ℕ} (hj : j < D.m) (z : D.ConjF
     ∫ h : New.G D.E (D.signsY (j + 1)), z h * liftY ϑ j f h ∂(D.spaceY (j + 1)).quotMeasure =
       ∫ g : New.G D.E (D.signsY j), transposedLiftY ϑ j z g * f g ∂(D.spaceY j).quotMeasure := by
   obtain ⟨h_up, h_down⟩ := isArrow_datumY ϑ hj
-  calc
-    _ = stdLevelIndex (levelY ϑ j) * ∫ h, z h * formLift (thetaKernelY ϑ j) _ _ (datumY ϑ j) f h
-        ∂(D.spaceY (j + 1)).quotMeasure := by
-      rw [← integral_const_mul]
-      congr with h
-      have h_lift : liftY ϑ j f h = stdLevelIndex (levelY ϑ j) *
-          formLift (thetaKernelY ϑ j) _ _ (datumY ϑ j) f h := rfl
-      rw [h_lift, mul_left_comm]
-    _ = stdLevelIndex (levelY ϑ j) *
-        ∫ g, f g * formLift (thetaKernelY ϑ j).swap _ _ (datumY ϑ j) z g
-          ∂(D.spaceY j).quotMeasure := by
-      rw [h_up.integral_mul_formLift_swap h_down]
-    _ = _ := by
-      rw [← integral_const_mul]
-      congr with g
-      have h_descent : transposedLiftY ϑ j z g = stdLevelIndex (levelY ϑ j) *
-          formLift (thetaKernelY ϑ j).swap _ _ (datumY ϑ j) z g := rfl
-      rw [h_descent, mul_comm (f g), mul_assoc]
+  have h1 : ∀ h, z h * liftY ϑ j f h =
+      stdLevelIndex (levelY ϑ j) *
+        (z h * formLift (thetaKernelY ϑ j) _ _ (datumY ϑ j) f h) :=
+    fun _ => mul_left_comm _ _ _
+  have h2 : ∀ g, transposedLiftY ϑ j z g * f g =
+      stdLevelIndex (levelY ϑ j) *
+        (f g * formLift (thetaKernelY ϑ j).swap _ _ (datumY ϑ j) z g) :=
+    fun _ => (mul_assoc _ _ _).trans (congrArg _ (mul_comm _ _))
+  simp_rw [h1, h2, integral_const_mul]
+  rw [h_up.integral_mul_formLift_swap h_down]
 
 /-- Let `ϑ` be a tame character and `u` an element of its level `levelY ϑ j`: an integral finite
 adelic point of `G_j = U(Y_j)` that reduces to `1` at the chosen places and at the places of the
