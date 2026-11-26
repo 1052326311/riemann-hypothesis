@@ -439,11 +439,8 @@ lemma IsLieLine.exists_detects_tangent {R : Type} [CommRing R] [Algebra R k]
     specOver.map_bijective.surjective.exists.mp
       (h_lift (L 1 + p) (by simp [p, hL.smul_apply, hd, h_tors]))
   -- `T` is any function with nonzero derivative along `v₀`, if there is one
-  obtain ⟨T, hT⟩ : ∃ T : S, (v₀ T).snd = 0 → ∀ a : S, (v₀ a).snd = 0 := by
-    by_cases h_all : ∀ a : S, (v₀ a).snd = 0
-    · exact ⟨0, fun _ ↦ h_all⟩
-    · obtain ⟨T, hT_ne⟩ := not_forall.mp h_all
-      exact ⟨T, fun hT_zero ↦ absurd hT_zero hT_ne⟩
+  obtain ⟨T, hT⟩ : ∃ T : S, (v₀ T).snd = 0 → ∀ a : S, (v₀ a).snd = 0 :=
+    forall_imp_iff_exists_imp.mp id
   refine ⟨T, fun v hv hvT a ↦ ?_⟩
   -- As `c * (star β - b) = 1` on points of `Spec S`, `v - p = L m` for some `m`: `v = m • v₀`.
   -- (The calls below leave out `Spec.map_comp`: with `← Spec.map_comp_assoc` it makes simp loop.)
