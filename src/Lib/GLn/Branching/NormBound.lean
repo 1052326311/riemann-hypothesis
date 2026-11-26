@@ -1,6 +1,6 @@
 module
 
-public import Lib.GLn.SchurModule.LeadingRows
+public import Lib.GLn.SchurModule.GramMatrix
 public import TauCeti.Data.Fin.Basic
 
 /-!
@@ -9,7 +9,8 @@ public import TauCeti.Data.Fin.Basic
 This file treats the branching from `GL(n + 1)` to `GL(n) × GL(1)` for the representations of
 `∏ τ, GL (N τ)`. The rows `N τ` are the rows `n τ` together with one new row, given by `ι τ`. A
 weight `κ` is given by the numbers `κ τ h` of columns of height `h` at the place `τ`. This file
-defines the branching vector and writes products of kernels as the minors of one filling. It
+defines the branching vector and shows that a hook number times a product of two kernels is the
+polynomial of an integral vector, through the multiplication matrix `New.GL.comulMatrix`. It
 proves the norm bound for an equivariant matrix from the fact that the matrix times its adjoint
 commutes with the smaller group, so is a scalar.
 
@@ -106,190 +107,320 @@ lemma rowSubst_branchVector (s : Φ → R) :
   simp [newRowOrder, blockScalar, rankAt_eq_succ ι, reindex_equiv (ι _), diagramWeight_apply,
     Nat.Ioo_eq_range']
 
-/-! ### The product of the two kernels as the minors of one filling -/
+/-! ### The product of the two kernels through the multiplication matrix -/
 
-variable {R} {κ : Φ → ℕ → ℕ}
+open scoped Kronecker
 
-/-- For numberings `e τ` of the rows, the kernel at the array `permArray e` is the product over `τ`
-and `h` of the minor on the first `h` rows in the order `e τ`, to the power `κ τ h`. -/
-lemma weylKernel_permArray_eq_prod_minor (e : ∀ τ : Φ, n τ ≃ Fin (rankAt n τ)) :
-    weylKernel n κ (permArray fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ)) =
-      ∏ τ : Φ, ∏ h : Fin (rankAt n τ),
-        minor R (Sigma.mk τ ∘ (e τ).symm ∘ Fin.castLE h.is_le') ^ κ τ h := by
-  classical
-  have h_entry (τ : Φ) (h : Fin (rankAt n τ)) (s t : Fin h) :
-      ∑ a : n τ, permArray (R := R) (fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ)) (⟨τ, a⟩, s) •
-          MvPolynomial.X (R := R) ((⟨τ, a⟩ : Σ τ : Φ, n τ), (t : ℕ)) =
-        MvPolynomial.X (⟨τ, (e τ).symm (Fin.castLE h.is_le' s)⟩, (t : ℕ)) := by
-    have h_iff (a : n τ) : (e τ a : ℕ) = s ↔ a = (e τ).symm (Fin.castLE h.is_le' s) := by
-      simp [Equiv.eq_symm_apply, Fin.ext_iff]
-    simp [permArray, h_iff, ite_smul]
-  simp only [weylKernel, rowSubst_highestPoly, prod_range, h_entry, minor, Function.comp_apply]
+variable {R} {κ β α : Φ → ℕ → ℕ}
 
-omit [Fintype Φ] in
-/-- Substituting the permutation matrices of `σ` carries the minor on given rows to the minor on
-their images under `σ τ`. -/
-lemma rowSubst_permMatrix_minor (σ : ∀ τ : Φ, Equiv.Perm (n τ)) {τ : Φ} {h : ℕ}
-    (rows : Fin h → n τ) :
-    rowSubst (fun τ : Φ ↦ (σ τ).permMatrix R) (minor R (Sigma.mk τ ∘ rows)) =
-      minor R (Sigma.mk τ ∘ σ τ ∘ rows) := by
-  rw [minor, minor, AlgHom.map_det]
-  refine congrArg det (Matrix.ext fun s t ↦ ?_)
-  simp [rowSubst, PEquiv.toMatrix_apply, ite_smul]
+omit [∀ τ, DecidableEq (n τ)] in
+/-- If `β τ h ≤ γ τ h` for every height `h < rankAt n τ`, the kernel of `β` divides the kernel of
+`γ` at every array `y`: both are products of the same minors, to the powers `β τ h` and `γ τ h`. -/
+lemma weylKernel_dvd_weylKernel (y : ((τ : Φ) × n τ) × ℕ → R)
+    (h_le : ∀ τ : Φ, ∀ h < rankAt n τ, β τ h ≤ γ τ h) :
+    weylKernel n β y ∣ weylKernel n γ y := by
+  simp only [weylKernel, rowSubst_highestPoly]
+  exact prod_dvd_prod_of_dvd _ _ fun τ _ ↦ prod_dvd_prod_of_dvd _ _ fun h h_mem ↦
+    pow_dvd_pow _ (h_le τ h (mem_range.mp h_mem))
 
-/-- The cyclic permutation of `Fin N` that moves `p` to the front and each position below `p` to the
-next one; it is the identity if `N ≤ p`. -/
-def frontPermutation (N p : ℕ) : Equiv.Perm (Fin N) :=
-  if hp : p < N then Fin.cycleRange ⟨p, hp⟩ else 1
+/-- Let the polynomial of the integral vector `ζ` be a multiple of the product of the kernel of `γ`
+at the row order `e` and the kernel of `κ'` at the row order `e'`. Then `ζ` is a weight vector:
+the matrix `schur κ` of the diagonal matrices with entries `x τ a` multiplies it by the product of
+the `x τ a` to the powers `λ_γ(τ, e τ a) + λ_κ'(τ, e' τ a)`, with `λ = New.diagramWeight`. -/
+lemma schur_diagonal_mulVec_eq_smul_of_toPoly_eq [DecidableEq Φ]
+    (e e' : ∀ τ : Φ, n τ ≃ Fin (rankAt n τ)) {ζ : WeylIndexFamily n κ → ℤ} {c : ℤ}
+    (hζ : toPoly n κ ζ =
+      c • (weylKernel n γ (permArray fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ)) *
+        weylKernel n κ' (permArray fun (τ : Φ) (a : n τ) ↦ (e' τ a : ℕ))))
+    (x : ∀ τ : Φ, n τ → ℤ) :
+    schur κ (fun τ : Φ ↦ diagonal (x τ)) *ᵥ ζ =
+      (∏ τ : Φ, ∏ a : n τ, x τ a ^ (diagramWeight (rankAt n) γ (τ, e τ a) +
+        diagramWeight (rankAt n) κ' (τ, e' τ a))) • ζ := by
+  -- A diagonal matrix is triangular for every row order, so it scales both kernels.
+  have h_triangular (e : ∀ τ : Φ, n τ ≃ Fin (rankAt n τ)) (τ : Φ) :
+      (diagonal (x τ))ᵀ.BlockTriangular (e τ) := by
+    rw [diagonal_transpose]
+    exact blockTriangular_diagonal _
+  have h_subst : toPoly n κ (schur κ (fun τ : Φ ↦ diagonal (x τ)) *ᵥ ζ) =
+      rowSubst (fun τ : Φ ↦ diagonal (x τ)) (toPoly n κ ζ) := by
+    simp [toPoly_schur FitsRanks.refl, detPow]
+  refine toPoly_injective ?_
+  rw [h_subst, map_smul, hζ, map_smul, map_mul,
+    rowSubst_weylKernel_permArray _ _ (h_triangular e),
+    rowSubst_weylKernel_permArray _ _ (h_triangular e'), smul_mul_smul_comm, smul_comm c]
+  simp only [diagonal_apply_eq, pow_add, prod_mul_distrib]
 
-/-- For `p < N` the permutation sends a position below `p` to the next one and `p` to `0`, and it
-fixes the later positions. -/
-lemma frontPermutation_val {N p : ℕ} (hp : p < N) (i : Fin N) :
-    (frontPermutation N p i : ℕ) =
-      if (i : ℕ) < p then (i : ℕ) + 1 else if (i : ℕ) = p then 0 else (i : ℕ) := by
-  obtain ⟨M, rfl⟩ : ∃ M : ℕ, N = M + 1 := ⟨N - 1, by omega⟩
-  rw [frontPermutation, dite_eq_left hp]
-  split_ifs with h_lt h_eq
-  · exact Fin.coe_cycleRange_of_lt h_lt
-  · rw [Fin.cycleRange_of_eq (show i = ⟨p, hp⟩ from Fin.ext h_eq), Fin.val_zero]
-  · rw [Fin.cycleRange_of_gt (show ⟨p, hp⟩ < i by grind)]
+/-- Let `ζ` be an integral weight vector of weight `w` for `κ + κ'`: the matrix `schur (κ + κ')`
+of the diagonal matrices with entries `x τ a` multiplies it by the product of the `x τ a ^ w τ a`.
+If the multiplication matrix `comulMatrix ℤ n κ κ'` sends `ζ` to a vector with a nonzero entry at
+`(i, i')`, the numbers of entries equal to `a` in the fillings `i` and `i'` add up to `w τ a`. -/
+lemma tableauWeight_add_eq_of_comulMatrix_mulVec_ne_zero [DecidableEq Φ]
+    {ζ : WeylIndexFamily n (κ + κ') → ℤ} {w : ∀ τ : Φ, n τ → ℕ}
+    (h_weight : ∀ x : ∀ τ : Φ, n τ → ℤ, schur (κ + κ') (fun τ : Φ ↦ diagonal (x τ)) *ᵥ ζ =
+      (∏ τ : Φ, ∏ a : n τ, x τ a ^ w τ a) • ζ)
+    {i : WeylIndexFamily n κ} {i' : WeylIndexFamily n κ'}
+    (h_ne : (comulMatrix ℤ n κ κ' *ᵥ ζ) (i, i') ≠ 0) (τ : Φ) (a : n τ) :
+    tableauWeight i τ a + tableauWeight i' τ a = w τ a := by
+  -- Multiply the row `(τ, a)` by `2` and leave the others: a product of powers of the entries is
+  -- then a power of `2`.
+  let x (σ : Φ) (b : n σ) : ℤ := if (⟨σ, b⟩ : Σ σ : Φ, n σ) = ⟨τ, a⟩ then 2 else 1
+  have h_prod (w : ∀ σ : Φ, n σ → ℕ) : ∏ σ : Φ, ∏ b : n σ, x σ b ^ w σ b = 2 ^ w τ a :=
+    calc ∏ σ : Φ, ∏ b : n σ, x σ b ^ w σ b
+      _ = ∏ p : Σ σ : Φ, n σ, x p.1 p.2 ^ w p.1 p.2 :=
+        (Fintype.prod_sigma fun p : Σ σ : Φ, n σ ↦ x p.1 p.2 ^ w p.1 p.2).symm
+      _ = 2 ^ w τ a := by
+        have h_other (p : Σ σ : Φ, n σ) (hp : p ≠ ⟨τ, a⟩) : x p.1 p.2 ^ w p.1 p.2 = 1 := by
+          simp only [x, ite_eq_right hp, one_pow]
+        rw [Fintype.prod_eq_single ⟨τ, a⟩ h_other]
+        simp only [x, ite_true]
+  -- The entry at `(i, i')` of both sides of the equivariance of the multiplication matrix.
+  have h_left : ((schur κ (fun σ : Φ ↦ diagonal (x σ)) ⊗ₖ schur κ' fun σ : Φ ↦ diagonal (x σ)) *ᵥ
+        comulMatrix ℤ n κ κ' *ᵥ ζ) (i, i') =
+      2 ^ (tableauWeight i τ a + tableauWeight i' τ a) * (comulMatrix ℤ n κ κ' *ᵥ ζ) (i, i') := by
+    simp only [schur_diagonal, h_prod, diagonal_kronecker_diagonal, mulVec_diagonal, pow_add]
+  have h_right : (comulMatrix ℤ n κ κ' *ᵥ schur (κ + κ') (fun σ : Φ ↦ diagonal (x σ)) *ᵥ ζ)
+        (i, i') = 2 ^ w τ a * (comulMatrix ℤ n κ κ' *ᵥ ζ) (i, i') := by
+    rw [h_weight, h_prod, mulVec_smul, Pi.smul_apply, smul_eq_mul]
+  have h_eq : (2 : ℤ) ^ (tableauWeight i τ a + tableauWeight i' τ a) *
+        (comulMatrix ℤ n κ κ' *ᵥ ζ) (i, i') =
+      2 ^ w τ a * (comulMatrix ℤ n κ κ' *ᵥ ζ) (i, i') := by
+    rw [← h_left, ← h_right, mulVec_mulVec, mulVec_mulVec, comulMatrix_equivariant]
+  exact pow_right_injective₀ (by norm_num : (0 : ℤ) < 2) (by norm_num) (mul_right_cancel₀ h_ne h_eq)
 
-variable (n) in
-/-- The renaming of the rows `n τ` that moves the row at position `p τ` to the front and each
-earlier row to the next position. -/
-def frontRenaming (p : Φ → ℕ) (τ : Φ) : Equiv.Perm (n τ) :=
-  (rowEquivFin n τ).symm.permCongr (frontPermutation (rankAt n τ) (p τ))
+/-- Let `v` be an integral vector for `κ` whose nonzero coordinates `v i` lie at fillings `i` in
+which every row `(τ, a)` occurs at least `λ(τ, e τ a)` times, with `λ = New.diagramWeight`. Then
+`v` is a multiple of the evaluation vector `weylEval n κ y` at the permutation array `y` of the row
+order `e`, with factor the pairing of `v` with that vector under the matrix `weylGramOver`. -/
+lemma eq_smul_weylEval_of_diagramWeight_le [DecidableEq Φ] (e : ∀ τ : Φ, n τ ≃ Fin (rankAt n τ))
+    (v : WeylIndexFamily n κ → ℤ)
+    (h_wt : ∀ i : WeylIndexFamily n κ, v i ≠ 0 → ∀ (τ : Φ) (a : n τ),
+      diagramWeight (rankAt n) κ (τ, e τ a) ≤ tableauWeight i τ a) :
+    v = (v ⬝ᵥ weylGramOver *ᵥ weylEval n κ (permArray fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ))) •
+      weylEval n κ (permArray fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ)) := by
+  -- Pairing with the polynomial of `v` under `fockPairing` is a linear form with the values
+  -- `hookNumber κ (rankAt n) * v i` on the basis; apply
+  -- `map_nablaBasis_eq_map_weylKernel_mul_weylEval` to it and cancel the hook number.
+  funext i
+  have h_form := map_nablaBasis_eq_map_weylKernel_mul_weylEval e i (fockPairing ℤ (toPoly n κ v))
+    fun h_ne τ a ↦ h_wt i (by
+      rw [fockPairing_toPoly_nablaBasis] at h_ne
+      exact right_ne_zero_of_mul h_ne) τ a
+  rw [fockPairing_toPoly_nablaBasis, ← toPoly_weylEval, fockPairing_toPoly_toPoly, mul_assoc]
+    at h_form
+  exact mul_left_cancel₀ (Int.cast_ne_zero.mpr hookNumber_pos.ne') h_form
 
-/-- The rows of column `j` among the columns of height `h`, when the first `k` of these columns hold
-the rows at the positions `0, …, h - 1` and the others those at the positions `1, …, h`. -/
-def extremalRows {τ : Φ} (k : ℕ) (h : Fin (rankAt n τ)) (j : ℕ) : Fin h → n τ :=
-  if j < k then (rowEquivFin n τ).symm ∘ Fin.castLE h.is_le'
-  else (rowEquivFin n τ).symm ∘ finRotate (rankAt n τ) ∘ Fin.castLE h.is_le'
+/-- Let the polynomial of the integral vector `ζ` for `β + α` be a multiple of the product of the
+kernel of `γ` at the row order `e` and the kernel of `κ'` at the row order `e'`. Suppose that for
+every row `(τ, a)` with `λ_β(τ, e τ a) ≠ 0` the sum `λ_β(τ, e τ a) + λ_α(τ, 0)` is at most
+`λ_γ(τ, e τ a) + λ_κ'(τ, e' τ a)`, with `λ = New.diagramWeight`. Then the multiplication matrix
+`comulMatrix ℤ n β α` sends `ζ` to a pure tensor whose factor for `β` is the evaluation vector at
+the permutation array of `e`. -/
+lemma exists_comulMatrix_mulVec_eq_vec [DecidableEq Φ] (e e' : ∀ τ : Φ, n τ ≃ Fin (rankAt n τ))
+    {ζ : WeylIndexFamily n (β + α) → ℤ} {c : ℤ}
+    (hζ : toPoly n (β + α) ζ =
+      c • (weylKernel n γ (permArray fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ)) *
+        weylKernel n κ' (permArray fun (τ : Φ) (a : n τ) ↦ (e' τ a : ℕ))))
+    (h_wt : ∀ (τ : Φ) (a : n τ), diagramWeight (rankAt n) β (τ, e τ a) ≠ 0 →
+      diagramWeight (rankAt n) β (τ, e τ a) + diagramWeight (rankAt n) α (τ, 0) ≤
+        diagramWeight (rankAt n) γ (τ, e τ a) + diagramWeight (rankAt n) κ' (τ, e' τ a)) :
+    ∃ a : WeylIndexFamily n α → ℤ, comulMatrix ℤ n β α *ᵥ ζ =
+      (vecMulVec a (weylEval n β (permArray fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ)))).vec := by
+  -- For each filling `i'` for `α`, the entries at `(·, i')` form a vector `v i'` for `β`.
+  let v (i' : WeylIndexFamily n α) (i : WeylIndexFamily n β) : ℤ :=
+    (comulMatrix ℤ n β α *ᵥ ζ) (i, i')
+  -- At a nonzero entry the weights of `i` and `i'` add up to the weight of `ζ`, and a row occurs
+  -- in `i'` at most `λ_α(τ, 0)` times; so it occurs in `i` at least `λ_β(τ, e τ a)` times.
+  have h_low (i' : WeylIndexFamily n α) (i : WeylIndexFamily n β) (h_ne : v i' i ≠ 0) (τ : Φ)
+      (a : n τ) : diagramWeight (rankAt n) β (τ, e τ a) ≤ tableauWeight i τ a := by
+    obtain h_zero | h_pos := Nat.eq_zero_or_pos (diagramWeight (rankAt n) β (τ, e τ a))
+    · rw [h_zero]
+      exact Nat.zero_le _
+    have h_sum : tableauWeight i τ a + tableauWeight i' τ a =
+        diagramWeight (rankAt n) γ (τ, e τ a) + diagramWeight (rankAt n) κ' (τ, e' τ a) :=
+      tableauWeight_add_eq_of_comulMatrix_mulVec_ne_zero
+        (schur_diagonal_mulVec_eq_smul_of_toPoly_eq e e' hζ) h_ne τ a
+    have h_single : tableauWeight i' τ a ≤ diagramWeight (rankAt n) α (τ, 0) := by
+      simpa using (sum_tableauWeight_le i' τ {a}).1
+    have h_count := h_wt τ a h_pos.ne'
+    omega
+  refine ⟨fun i' ↦ v i' ⬝ᵥ weylGramOver *ᵥ
+    weylEval n β (permArray fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ)), funext fun ⟨i, i'⟩ ↦ ?_⟩
+  exact congrFun (eq_smul_weylEval_of_diagramWeight_le e (v i') (h_low i')) i
 
-/-- Let `κ₀ τ h = κ' τ h + γ τ h` for `0 < h < rankAt n τ`. The product of the kernel of `γ` at the
-row order shifted by one and the kernel of `κ'` at the row order `rowEquivFin` is the product, over
-the columns of `κ₀`, of the minors on the rows `extremalRows (κ' τ h) h j`. -/
-lemma weylKernel_mul_weylKernel_eq_prod_minor
+/-- Over an infinite domain, if the multiplication matrix `comulMatrix R n κ κ'` sends the vector
+`ζ` for `κ + κ'` to the pure tensor of `ξ` and `η`, the polynomial `toPoly n (κ + κ') ζ` is the
+product of the polynomials of `ξ` and `η`. -/
+lemma toPoly_eq_mul_of_comulMatrix_mulVec_eq [IsDomain R] [Infinite R] [DecidableEq Φ]
+    {ζ : WeylIndexFamily n (κ + κ') → R} {ξ : WeylIndexFamily n κ → R}
+    {η : WeylIndexFamily n κ' → R}
+    (h_tensor : comulMatrix R n κ κ' *ᵥ ζ = (vecMulVec η ξ).vec) :
+    toPoly n (κ + κ') ζ = toPoly n κ ξ * toPoly n κ' η := by
+  -- The multiplication matrix is an isometry, so its transpose sends `G ξ ⊗ G η` to `G ζ`.
+  have h_coord : (vecMulVec (weylGramOver *ᵥ η) (weylGramOver *ᵥ ξ)).vec ᵥ* comulMatrix R n κ κ' =
+      weylGramOver *ᵥ ζ :=
+    calc (vecMulVec (weylGramOver *ᵥ η) (weylGramOver *ᵥ ξ)).vec ᵥ* comulMatrix R n κ κ'
+      _ = (comulMatrix R n κ κ')ᵀ *ᵥ ((weylGram n κ).map (Int.cast : ℤ → R) ⊗ₖ
+            (weylGram n κ').map (Int.cast : ℤ → R)) *ᵥ (vecMulVec η ξ).vec := by
+        simp only [kronecker_mulVec_vec, mul_vecMulVec, vecMulVec_mul, vecMul_transpose,
+          mulVec_transpose]
+      _ = weylGramOver *ᵥ ζ := by
+        rw [← h_tensor, mulVec_mulVec, mulVec_mulVec, Matrix.mul_assoc, comulMatrix_isometry]
+  exact (vecMul_comulMatrix_eq_iff.mp h_coord).symm
+
+omit [∀ τ, DecidableEq (n τ)] in
+/-- Let `e` be a row order in which every row stands at most one place before its place in
+`rowEquivFin`. Let `κ'` have no column of height below `q`, let `β` have none of height `q` or
+more and `α` none of a height `h` with `0 < h < q`, and let `β τ h + α τ h = κ' τ h + γ τ h` for
+`0 < h < rankAt n τ`. For a row `(τ, a)` with `λ_β(τ, e τ a) ≠ 0`, the sum
+`λ_β(τ, e τ a) + λ_α(τ, 0)` is at most `λ_γ(τ, e τ a)` plus `λ_κ'` at the place of the row in
+`rowEquivFin`, with `λ = New.diagramWeight`. -/
+lemma diagramWeight_add_le_of_ne_zero {q : ℕ} (e : ∀ τ : Φ, n τ ≃ Fin (rankAt n τ))
+    (he : ∀ (τ : Φ) (a : n τ), (rowEquivFin n τ a : ℕ) ≤ e τ a + 1)
+    (hq : ∀ τ : Φ, ∀ i < q, κ' τ i = 0)
+    (hβ : ∀ (τ : Φ) (h : ℕ), q ≤ h → β τ h = 0)
+    (hα : ∀ τ : Φ, ∀ h ∈ Ioo 0 (rankAt n τ), h < q → α τ h = 0)
+    (h_sum : ∀ τ : Φ, ∀ h ∈ Ioo 0 (rankAt n τ), (β + α) τ h = (κ' + γ) τ h)
+    (τ : Φ) (a : n τ) (h_ne : diagramWeight (rankAt n) β (τ, e τ a) ≠ 0) :
+    diagramWeight (rankAt n) β (τ, e τ a) + diagramWeight (rankAt n) α (τ, 0) ≤
+      diagramWeight (rankAt n) γ (τ, e τ a) +
+        diagramWeight (rankAt n) κ' (τ, rowEquivFin n τ a) := by
+  simp only [diagramWeight_apply] at h_ne ⊢
+  -- Some column of `β` is higher than `e τ a`, so `e τ a + 1 < q`, and the row stands before
+  -- the place `q` in `rowEquivFin`.
+  obtain ⟨h₀, h₀_mem, h₀_ne⟩ := exists_ne_zero_of_sum_ne_zero h_ne
+  have h_lt : (e τ a : ℕ) + 1 < q := by
+    by_contra! h_ge
+    exact h₀_ne (hβ τ h₀ (h_ge.trans (mem_Ioo.mp h₀_mem).1))
+  -- The columns of `α` of positive height are higher than `e τ a`.
+  have h_α : ∑ h ∈ Ioo 0 (rankAt n τ), α τ h ≤ ∑ h ∈ Ioo (e τ a : ℕ) (rankAt n τ), α τ h := by
+    refine sum_le_sum_of_ne_zero fun h h_mem h_ne ↦ ?_
+    refine mem_Ioo.mpr ⟨lt_of_not_ge fun h_le ↦ h_ne (hα τ h h_mem ?_), (mem_Ioo.mp h_mem).2⟩
+    omega
+  -- So are the columns of `κ'` beyond the place of the row in `rowEquivFin`.
+  have h_κ' : ∑ h ∈ Ioo (e τ a : ℕ) (rankAt n τ), κ' τ h ≤
+      ∑ h ∈ Ioo (rowEquivFin n τ a : ℕ) (rankAt n τ), κ' τ h := by
+    refine sum_le_sum_of_ne_zero fun h h_mem h_ne ↦ ?_
+    refine mem_Ioo.mpr ⟨lt_of_not_ge fun h_le ↦ h_ne (hq τ h ?_), (mem_Ioo.mp h_mem).2⟩
+    have h_place := he τ a
+    omega
+  have h_split : ∑ h ∈ Ioo (e τ a : ℕ) (rankAt n τ), β τ h +
+        ∑ h ∈ Ioo (e τ a : ℕ) (rankAt n τ), α τ h =
+      ∑ h ∈ Ioo (e τ a : ℕ) (rankAt n τ), κ' τ h + ∑ h ∈ Ioo (e τ a : ℕ) (rankAt n τ), γ τ h := by
+    rw [← sum_add_distrib, ← sum_add_distrib]
+    refine sum_congr rfl fun h h_mem ↦ h_sum τ h (mem_Ioo.mpr ⟨?_, (mem_Ioo.mp h_mem).2⟩)
+    exact (Nat.zero_le _).trans_lt (mem_Ioo.mp h_mem).1
+  calc ∑ h ∈ Ioo (e τ a : ℕ) (rankAt n τ), β τ h + ∑ h ∈ Ioo 0 (rankAt n τ), α τ h
+    _ ≤ ∑ h ∈ Ioo (e τ a : ℕ) (rankAt n τ), β τ h +
+        ∑ h ∈ Ioo (e τ a : ℕ) (rankAt n τ), α τ h := Nat.add_le_add_left h_α _
+    _ = ∑ h ∈ Ioo (e τ a : ℕ) (rankAt n τ), γ τ h +
+        ∑ h ∈ Ioo (e τ a : ℕ) (rankAt n τ), κ' τ h := h_split.trans (add_comm _ _)
+    _ ≤ ∑ h ∈ Ioo (e τ a : ℕ) (rankAt n τ), γ τ h +
+        ∑ h ∈ Ioo (rowEquivFin n τ a : ℕ) (rankAt n τ), κ' τ h := Nat.add_le_add_left h_κ' _
+
+/-- Let `e` be a row order in which every row stands at most one place before its place in
+`rowEquivFin`. Let `κ'` have no column of height below `q`, and let `κ₀ τ h = κ' τ h + γ τ h` for
+`0 < h < rankAt n τ`. Then some integer `c` with `0 < c` (a hook number) satisfies two claims.
+(a) `c ≤ (L ^ L) ^ 3` for every bound `L` of the number of boxes of `κ₀` in the columns of height
+`h` with `q ≤ h < rankAt n τ`. (b) `c` times the kernel of `γ` at the permutation array of `e`,
+times the kernel of `κ'` at that of `rowEquivFin`, equals `toPoly n κ₀ η` for some
+`η : WeylIndexFamily n κ₀ → ℤ`. -/
+lemma exists_smul_weylKernel_mul_weylKernel_eq_toPoly [DecidableEq Φ] {q : ℕ}
+    (e : ∀ τ : Φ, n τ ≃ Fin (rankAt n τ))
+    (he : ∀ (τ : Φ) (a : n τ), (rowEquivFin n τ a : ℕ) ≤ e τ a + 1)
+    (hq : ∀ τ : Φ, ∀ i < q, κ' τ i = 0)
     (hκ₀ : ∀ τ : Φ, ∀ h ∈ Ioo 0 (rankAt n τ), κ₀ τ h = (κ' + γ) τ h) :
-    weylKernel n γ (permArray fun (τ : Φ) (a : n τ) ↦
-          ((finRotate (rankAt n τ)).symm (rowEquivFin n τ a) : ℕ)) *
-        weylKernel n κ' (permArray fun (τ : Φ) (a : n τ) ↦ (rowEquivFin n τ a : ℕ)) =
-      ∏ τ : Φ, ∏ h : Fin (rankAt n τ), ∏ j : Fin (κ₀ τ h),
-        minor R (Sigma.mk τ ∘ extremalRows (κ' τ h) h j) := by
-  -- Both sides are products over `τ` and `h`. For a height `h > 0` the first `κ' τ h` columns
-  -- give the minor in the order `rowEquivFin`, and the other `γ τ h` the minor in the shifted
-  -- order.
-  have h_shift : weylKernel n γ (permArray fun (τ : Φ) (a : n τ) ↦
-        ((finRotate (rankAt n τ)).symm (rowEquivFin n τ a) : ℕ)) =
-      ∏ τ : Φ, ∏ h : Fin (rankAt n τ), minor R (Sigma.mk τ ∘ (rowEquivFin n τ).symm ∘
-        finRotate (rankAt n τ) ∘ Fin.castLE h.is_le') ^ γ τ h :=
-    weylKernel_permArray_eq_prod_minor fun τ ↦ (rowEquivFin n τ).trans (finRotate _).symm
-  simp only [weylKernel_permArray_eq_prod_minor (rowEquivFin n), h_shift, ← prod_mul_distrib]
-  refine Finset.prod_congr rfl fun τ _ ↦ Finset.prod_congr rfl fun h _ ↦ ?_
-  obtain h_zero | h_pos : (h : ℕ) = 0 ∨ 0 < (h : ℕ) := Nat.eq_zero_or_pos h
-  · have h_empty : IsEmpty (Fin h) := ⟨fun s ↦ s.pos.ne' h_zero⟩
-    simp [minor]
-  have h_split : κ₀ τ h = κ' τ h + γ τ h := hκ₀ τ h (mem_Ioo.mpr ⟨h_pos, h.isLt⟩)
-  rw [h_split, Fin.prod_univ_add, mul_comm]
-  simp [extremalRows]
-
-/-- A filling of the diagram of `κ₀` without its first `p τ` rows, with entries in the last
-`rankAt n τ - p τ` rows, numbered from `0`. Among the columns of height `k`, the first
-`κ' τ (p τ + k)` hold the rows `0, …, k - 1` and the others the rows `1, …, k`. -/
-def extremalFilling (p : Φ → ℕ) (κ₀ κ' : Φ → ℕ → ℕ) :
-    ColumnFilling (fun τ : Φ ↦ Fin (rankAt n τ - p τ)) (flatColumns p κ₀) :=
-  fun (τ : Φ) (k : Fin (rankAt (fun σ : Φ ↦ Fin (rankAt n σ - p σ)) τ)) (j : Fin (κ₀ τ (p τ + k))) ↦
-    if (j : ℕ) < κ' τ (p τ + k) then ⟨Fin.castLE k.is_le', Fin.strictMono_castLE _⟩
-    else ⟨fun s : Fin k ↦ ⟨s + 1, by omega⟩, fun _ _ hst ↦ Nat.add_lt_add_right hst 1⟩
-
-omit [Fintype Φ] [∀ τ, DecidableEq (n τ)] in
-/-- Put the first `p τ` rows on top of `extremalFilling p κ₀ κ'`. In column `j` of height `h` the
-entry of index `s` is then the position `s` if `s < p τ` or `j < κ' τ h`, and `s + 1` otherwise. -/
-lemma leadingWedge_extremalFilling {p : Φ → ℕ}
-    (h_rank : ∀ τ : Φ, p τ + rankAt (fun σ : Φ ↦ Fin (rankAt n σ - p σ)) τ = rankAt n τ) (τ : Φ)
-    (h : Fin (rankAt n τ)) (j : Fin (κ₀ τ h)) (s : Fin h) :
-    ((leadingWedge h_rank (extremalFilling p κ₀ κ') τ h j).val s : ℕ) =
-      if (s : ℕ) < p τ ∨ (j : ℕ) < κ' τ h then (s : ℕ) else (s : ℕ) + 1 := by
-  obtain ⟨h, rfl⟩ : ∃ i : Fin (p τ + rankAt (fun σ : Φ ↦ Fin (rankAt n σ - p σ)) τ),
-      Fin.cast (h_rank τ) i = h := ⟨Fin.cast (h_rank τ).symm h, rfl⟩
-  induction h using Fin.addCases with
-  | left h =>
-    rw [ite_eq_left (Or.inl (s.isLt.trans h.isLt))]
-    exact leadingWedge_castAdd h_rank _ τ h j s
-  | right k =>
-    rw [leadingWedge_natAdd h_rank (extremalFilling p κ₀ κ') τ k j]
-    induction s using Fin.addCases with
-    | left a => simp [Fin.append_left]
-    | right a =>
-      by_cases hj : (j : ℕ) < κ' τ (p τ + k) <;>
-        simp [Fin.append_right, extremalFilling, hj, add_assoc]
-
-omit [Fintype Φ] [∀ τ, DecidableEq (n τ)] in
-/-- Let a column of height `h` hold the positions `f s = s` if `s < p τ` or `j < k`, and
-`f s = s + 1` otherwise, where `j < k` does not occur for `0 < h ≤ p τ`. After the row at position
-`p τ` is moved to the front, its minor is that on `extremalRows k h j` up to sign. -/
-lemma exists_minor_extremalRows_eq_smul {τ : Φ} {p : Φ → ℕ} {h : Fin (rankAt n τ)}
-    (hp : p τ < rankAt n τ) {j k : ℕ} {f : Fin h → Fin (rankAt n τ)}
-    (hf : ∀ s : Fin h, (f s : ℕ) = if (s : ℕ) < p τ ∨ j < k then (s : ℕ) else (s : ℕ) + 1)
-    (h_low : 0 < (h : ℕ) → (h : ℕ) ≤ p τ → k ≤ j) :
-    ∃ ε : ℤˣ, minor ℤ (Sigma.mk τ ∘ extremalRows k h j) =
-      (ε : ℤ) • minor ℤ (Sigma.mk τ ∘ frontRenaming n p τ ∘ (rowEquivFin n τ).symm ∘ f) := by
-  obtain h_zero | h_pos : (h : ℕ) = 0 ∨ 0 < (h : ℕ) := Nat.eq_zero_or_pos h
-  · have h_empty : IsEmpty (Fin h) := ⟨fun s ↦ s.pos.ne' h_zero⟩
-    exact ⟨1, by simp [minor]⟩
-  by_cases hj : j < k
-  · -- As `p τ < h`, the renaming permutes the first `h` rows among themselves.
-    have hp_lt : p τ < h := lt_of_not_ge fun h_le ↦ (h_low h_pos h_le).not_gt hj
-    let ρ : Equiv.Perm (Fin h) := (frontPermutation h (p τ)).symm
-    have h_rows : extremalRows k h j = (frontRenaming n p τ ∘ (rowEquivFin n τ).symm ∘ f) ∘ ρ := by
-      funext s
-      obtain ⟨t, rfl⟩ := (frontPermutation h (p τ)).surjective s
-      simp [extremalRows, frontRenaming, ρ, Fin.ext_iff, hj, hf, frontPermutation_val hp_lt,
-        frontPermutation_val hp]
-    refine ⟨Equiv.Perm.sign ρ, ?_⟩
-    rw [h_rows, minor, minor, zsmul_eq_mul]
-    exact det_permute ρ (of fun s t : Fin h ↦ MvPolynomial.X (R := ℤ)
-      ((⟨τ, frontRenaming n p τ ((rowEquivFin n τ).symm (f s))⟩ : Σ σ : Φ, n σ), (t : ℕ)))
-  · -- The renaming sends the positions of the column, which omit `p τ`, to `1, …, h` in this order.
-    have h_rows : extremalRows k h j = frontRenaming n p τ ∘ (rowEquivFin n τ).symm ∘ f := by
-      funext s
-      have h_rotate : (finRotate (rankAt n τ) (Fin.castLE h.is_le' s) : ℕ) = s + 1 :=
-        Fin.coe_finRotate_of_add_one_lt (show (s : ℕ) + 1 < rankAt n τ by omega)
-      have h_front : (frontPermutation (rankAt n τ) (p τ) (f s) : ℕ) = s + 1 := by
-        grind [frontPermutation_val]
-      simpa [extremalRows, frontRenaming, Fin.ext_iff, hj] using h_rotate.trans h_front.symm
-    exact ⟨1, by simp [h_rows]⟩
-
-/-- Let `p τ` be below the number of rows `rankAt n τ` whenever there are rows, and let `h_rank`
-say that the first `p τ` rows and the remaining `rankAt n τ - p τ` make up all the rows. Let `κ'`
-have no column of height `h` with `0 < h ≤ p τ`, and let `κ₀ τ h = κ' τ h + γ τ h` for
-`0 < h < rankAt n τ`. Put the first `p τ` rows on top of `extremalFilling p κ₀ κ'` and move the row
-at position `p τ` to the front. Up to sign, the product of minors becomes the product of the kernel
-of `γ` at the row order shifted by one and the kernel of `κ'` at the row order `rowEquivFin`. -/
-lemma exists_smul_rowSubst_extremalFilling {p : Φ → ℕ}
-    (h_rank : ∀ τ : Φ, p τ + rankAt (fun σ : Φ ↦ Fin (rankAt n σ - p σ)) τ = rankAt n τ)
-    (hp : ∀ τ : Φ, 0 < rankAt n τ → p τ < rankAt n τ)
-    (h_low : ∀ (τ : Φ) (h : ℕ), 0 < h → h ≤ p τ → κ' τ h = 0)
-    (hκ₀ : ∀ τ : Φ, ∀ h ∈ Ioo 0 (rankAt n τ), κ₀ τ h = (κ' + γ) τ h) :
-    ∃ ε : ℤˣ, (ε : ℤ) • rowSubst (fun τ : Φ ↦ (frontRenaming n p τ).permMatrix ℤ)
-        (fillingPoly ℤ (leadingWedge h_rank (extremalFilling p κ₀ κ'))) =
-      weylKernel n γ (permArray fun (τ : Φ) (a : n τ) ↦
-          ((finRotate (rankAt n τ)).symm (rowEquivFin n τ a) : ℕ)) *
-        weylKernel n κ' (permArray fun (τ : Φ) (a : n τ) ↦ (rowEquivFin n τ a : ℕ)) := by
-  set T : ColumnFilling n κ₀ := leadingWedge h_rank (extremalFilling p κ₀ κ')
-  have h_column : ∀ (τ : Φ) (h : Fin (rankAt n τ)) (j : Fin (κ₀ τ h)), ∃ ε : ℤˣ,
-      minor ℤ (Sigma.mk τ ∘ extremalRows (κ' τ h) h j) =
-        (ε : ℤ) • minor ℤ (Sigma.mk τ ∘ frontRenaming n p τ ∘ fillingRows T τ h j) :=
-    fun τ h j ↦ exists_minor_extremalRows_eq_smul (hp τ h.pos)
-      (leadingWedge_extremalFilling h_rank τ h j) fun h_pos h_le ↦ by simp [h_low τ h h_pos h_le]
-  choose ε hε using h_column
-  have h_subst : rowSubst (fun τ : Φ ↦ (frontRenaming n p τ).permMatrix ℤ) (fillingPoly ℤ T) =
-      ∏ τ : Φ, ∏ h : Fin (rankAt n τ), ∏ j : Fin (κ₀ τ h),
-        minor ℤ (Sigma.mk τ ∘ frontRenaming n p τ ∘ fillingRows T τ h j) := by
-    simp only [fillingPoly, tableauPoly, map_prod, rowSubst_permMatrix_minor]
-  refine ⟨∏ τ : Φ, ∏ h : Fin (rankAt n τ), ∏ j : Fin (κ₀ τ h), ε τ h j, ?_⟩
-  rw [weylKernel_mul_weylKernel_eq_prod_minor hκ₀, h_subst]
-  simp only [hε, zsmul_eq_mul, Units.coe_prod, Int.cast_prod, Finset.prod_mul_distrib]
+    ∃ c : ℤ, 0 < c ∧
+      (∀ L : ℕ, ∑ τ : Φ, ∑ h ∈ Ico q (rankAt n τ), h * κ₀ τ h ≤ L → c ≤ (L ^ L) ^ 3) ∧
+      ∃ η : WeylIndexFamily n κ₀ → ℤ,
+        c • (weylKernel n γ (permArray fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ)) *
+            weylKernel n κ' (permArray fun (τ : Φ) (a : n τ) ↦ (rowEquivFin n τ a : ℕ)) :
+              MatrixPoly (Σ τ : Φ, n τ) ℤ) =
+          toPoly n κ₀ η := by
+  -- Split `κ₀ = β + α`: `β` holds the columns of `γ` of height below `q`, and `α` the others.
+  let β : Φ → ℕ → ℕ := fun τ h ↦ if h ∈ Ioo 0 (min q (rankAt n τ)) then γ τ h else 0
+  have hβ_le : β ≤ κ₀ := fun τ h ↦ by
+    by_cases h_mem : h ∈ Ioo 0 (min q (rankAt n τ))
+    · have h_split := hκ₀ τ h (mem_Ioo.mpr ⟨(mem_Ioo.mp h_mem).1,
+        (mem_Ioo.mp h_mem).2.trans_le (min_le_right _ _)⟩)
+      simp only [β, ite_eq_left h_mem, h_split, Pi.add_apply, le_add_iff_nonneg_left, zero_le]
+    · simp only [β, ite_eq_right h_mem, zero_le]
+  obtain ⟨α, rfl⟩ := exists_add_of_le hβ_le
+  have hβ (τ : Φ) (h : ℕ) (h_le : q ≤ h) : β τ h = 0 :=
+    ite_eq_right fun h_mem ↦ h_le.not_gt ((mem_Ioo.mp h_mem).2.trans_le (min_le_left _ _))
+  have hα (τ : Φ) (h : ℕ) (h_mem : h ∈ Ioo 0 (rankAt n τ)) (h_lt : h < q) : α τ h = 0 := by
+    have h_split : β τ h + α τ h = κ' τ h + γ τ h := hκ₀ τ h h_mem
+    have h_low : β τ h = γ τ h :=
+      ite_eq_left (mem_Ioo.mpr ⟨(mem_Ioo.mp h_mem).1, lt_min h_lt (mem_Ioo.mp h_mem).2⟩)
+    have h_zero := hq τ h h_lt
+    omega
+  set K_γ : MatrixPoly (Σ τ : Φ, n τ) ℤ :=
+    weylKernel n γ (permArray fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ))
+  set K_κ' : MatrixPoly (Σ τ : Φ, n τ) ℤ :=
+    weylKernel n κ' (permArray fun (τ : Φ) (a : n τ) ↦ (rowEquivFin n τ a : ℕ))
+  let K_β : MatrixPoly (Σ τ : Φ, n τ) ℤ :=
+    weylKernel n β (permArray fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ))
+  -- The kernel of `β` divides that of `γ`, and is not zero.
+  obtain ⟨F, hF⟩ : K_β ∣ K_γ := weylKernel_dvd_weylKernel _ fun τ h _ ↦ by
+    by_cases h_mem : h ∈ Ioo 0 (min q (rankAt n τ))
+    · simp only [β, ite_eq_left h_mem, le_refl]
+    · simp only [β, ite_eq_right h_mem, zero_le]
+  have hK_ne : K_β ≠ 0 := fun h_zero ↦ by
+    simpa [K_β, h_zero] using eval_weylKernel_permArray (R := ℤ) (κ := β) e
+  -- The product of the kernels has the weight of `β + α`, so the hook number of `β + α` times it
+  -- is the polynomial of an integral vector `ζ`.
+  have h_weight : diagramWeight (rankAt n) (β + α) =
+      diagramWeight (rankAt n) γ + diagramWeight (rankAt n) κ' := by
+    ext ⟨τ, i⟩
+    rw [Finsupp.add_apply, diagramWeight_apply, diagramWeight_apply, diagramWeight_apply,
+      ← sum_add_distrib]
+    refine sum_congr rfl fun h h_mem ↦ (hκ₀ τ h (mem_Ioo.mpr ⟨?_, (mem_Ioo.mp h_mem).2⟩)).trans
+      (add_comm _ _)
+    exact (Nat.zero_le _).trans_lt (mem_Ioo.mp h_mem).1
+  have h_mem : K_γ * K_κ' ∈ nablaFamily ℤ n (β + α) := by
+    rw [nablaFamily, h_weight]
+    exact SetLike.mul_mem_graded (weylKernel_mem_nablaFamily _) (weylKernel_mem_nablaFamily _)
+  obtain ⟨ζ, hζ⟩ := exists_toPoly_eq_hookNumber_smul h_mem
+  -- The multiplication matrix sends `ζ` to a pure tensor `a ⊗ ev`, with `ev` the evaluation
+  -- vector for `β`, whose polynomial is the kernel of `β`. Divide by that kernel.
+  obtain ⟨a, ha⟩ := exists_comulMatrix_mulVec_eq_vec e (rowEquivFin n) hζ
+    (diagramWeight_add_le_of_ne_zero e he hq hβ hα hκ₀)
+  have h_quot : toPoly n α a = hookNumber (β + α) (rankAt n) • (F * K_κ') := by
+    have h_eval : toPoly n β (weylEval n β (permArray fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ))) =
+        K_β := toPoly_weylEval _
+    refine mul_left_cancel₀ hK_ne ?_
+    rw [← h_eval, ← toPoly_eq_mul_of_comulMatrix_mulVec_eq ha, hζ, hF, h_eval, mul_assoc,
+      mul_smul_comm]
+  -- Pair with the basis for `α`: the hook number of `α` times `a` is the hook number of `β + α`
+  -- times an integral vector `a₀`.
+  let a₀ : WeylIndexFamily n α → ℤ := fun j ↦ fockPairing ℤ (F * K_κ') (nablaBasis ℤ n α j)
+  have h_coeff : hookNumber α (rankAt n) • a = hookNumber (β + α) (rankAt n) • a₀ := by
+    funext j
+    simpa [a₀, -zsmul_eq_mul] using congrArg (fun P ↦ fockPairing ℤ P (nablaBasis ℤ n α j)) h_quot
+  -- An integer left inverse `M` of the multiplication matrix recovers `ζ` from the tensor.
+  obtain ⟨M, hM⟩ := hasLeftInv_comulMatrix (n := n) (κ := β) (κ' := α)
+  let η : WeylIndexFamily n (β + α) → ℤ := M *ᵥ (vecMulVec a₀
+    (weylEval n β (permArray fun (τ : Φ) (a : n τ) ↦ (e τ a : ℕ)))).vec
+  have h_η : hookNumber (β + α) (rankAt n) • η = hookNumber α (rankAt n) • ζ := by
+    rw [← one_mulVec ζ, ← hM, ← mulVec_mulVec, ha, ← mulVec_smul, ← mulVec_smul, ← vec_smul,
+      ← vec_smul, ← smul_vecMulVec, ← smul_vecMulVec, h_coeff]
+  refine ⟨hookNumber α (rankAt n), hookNumber_pos, fun L hL ↦ ?_, η, ?_⟩
+  · -- A column of `α` of positive height below `q` does not occur.
+    have h_boxes (τ : Φ) : ∑ h ∈ range (rankAt n τ), h * α τ h ≤
+        ∑ h ∈ Ico q (rankAt n τ), h * (β + α) τ h :=
+      calc ∑ h ∈ range (rankAt n τ), h * α τ h
+        _ ≤ ∑ h ∈ Ico q (rankAt n τ), h * α τ h := by
+          refine sum_le_sum_of_ne_zero fun h h_mem h_ne ↦ ?_
+          have h_pos : 0 < h := Nat.pos_of_ne_zero (left_ne_zero_of_mul h_ne)
+          have h_rank : h < rankAt n τ := mem_range.mp h_mem
+          refine mem_Ico.mpr ⟨le_of_not_gt fun h_lt ↦ right_ne_zero_of_mul h_ne ?_, h_rank⟩
+          exact hα τ h (mem_Ioo.mpr ⟨h_pos, h_rank⟩) h_lt
+        _ ≤ ∑ h ∈ Ico q (rankAt n τ), h * (β + α) τ h :=
+          sum_le_sum fun h _ ↦ Nat.mul_le_mul_left h (Nat.le_add_left _ _)
+    exact hookNumber_le ((sum_le_sum fun τ _ ↦ h_boxes τ).trans hL)
+  · refine smul_right_injective _ (hookNumber_pos (κ := β + α) (N := rankAt n)).ne' ?_
+    change hookNumber (β + α) (rankAt n) • hookNumber α (rankAt n) • (K_γ * K_κ') =
+      hookNumber (β + α) (rankAt n) • toPoly n (β + α) η
+    rw [← map_smul, h_η, map_smul, hζ, smul_comm]
 
 /-- Let `κ'` have no column of height below `q`, and let `κ₀ τ h = κ' τ h + γ τ h` for
 `0 < h < rankAt n τ`. Here `weylKernel n κ y` is the polynomial `f(yᵀx)` in `x`, with `f` the
@@ -310,44 +441,19 @@ lemma exists_smul_weylKernel_mul_eq_toPoly [DecidableEq Φ] {q : ℕ}
             weylKernel n κ' (permArray fun (τ : Φ) (a : n τ) ↦ (rowEquivFin n τ a : ℕ)) :
               MatrixPoly (Σ τ : Φ, n τ) ℤ) =
           toPoly n κ₀ η := by
-  -- Let `p` be `q - 1`, capped at the last position. Every column of height above `p` contains the
-  -- rows at the positions `1, …, p`, and a column of height `h ≤ p` holds those at `1, …, h`. Up to
-  -- a renaming of the rows and a sign, the product is thus that of a filling with `p` leading rows,
-  -- and the hook number `c` of the diagram without its first `p` rows makes `c` times that product
-  -- the image of an integral vector.
-  let p : Φ → ℕ := fun τ ↦ min (q - 1) (rankAt n τ - 1)
-  have h_rank (τ : Φ) : p τ + rankAt (fun σ : Φ ↦ Fin (rankAt n σ - p σ)) τ = rankAt n τ := by
-    simp [rankAt, p]
-  have hp (τ : Φ) (h_pos : 0 < rankAt n τ) : p τ < rankAt n τ := by grind
-  have h_low (τ : Φ) (h : ℕ) (h_pos : 0 < h) (h_le : h ≤ p τ) : κ' τ h = 0 := hq τ h (by grind)
-  let c : ℤ := hookNumber (flatColumns p κ₀) (rankAt fun τ : Φ ↦ Fin (rankAt n τ - p τ))
-  obtain ⟨η, hη⟩ : ∃ η : WeylIndexFamily n κ₀ → ℤ,
-      toPoly n κ₀ η = c • fillingPoly ℤ (leadingWedge h_rank (extremalFilling p κ₀ κ')) :=
-    exists_toPoly_eq_hookNumber_smul_leadingWedge h_rank _
-  obtain ⟨ε, hε⟩ := exists_smul_rowSubst_extremalFilling h_rank hp h_low hκ₀
-  -- The Schur matrix of the transposed permutation matrices acts as the renaming of the rows.
-  let P (τ : Φ) : Matrix (n τ) (n τ) ℤ := (frontRenaming n p τ).permMatrix ℤ
-  have h_rename :
-      toPoly n κ₀ (schur κ₀ (fun τ : Φ ↦ (P τ)ᵀ) *ᵥ η) = rowSubst P (toPoly n κ₀ η) := by
-    simp [toPoly_schur FitsRanks.refl, detPow]
-  refine ⟨c, hookNumber_pos, fun L hL ↦ ?_, (ε : ℤ) • schur κ₀ (fun τ : Φ ↦ (P τ)ᵀ) *ᵥ η, ?_⟩
-  · -- A column of height `h ≥ p τ` leaves `h - p τ` boxes below the first `p τ` rows, which is
-    -- `0` if `h < q`.
-    have h_boxes (τ : Φ) :
-        ∑ h ∈ range (rankAt (fun σ : Φ ↦ Fin (rankAt n σ - p σ)) τ), h * flatColumns p κ₀ τ h ≤
-          ∑ h ∈ Ico q (rankAt n τ), h * κ₀ τ h :=
-      calc
-        _ = ∑ h ∈ Ico (p τ) (rankAt n τ), (h - p τ) * κ₀ τ h := by
-          simp [sum_Ico_eq_sum_range, flatColumns, rankAt]
-        _ ≤ ∑ h ∈ Ico q (rankAt n τ), (h - p τ) * κ₀ τ h := by
-          refine sum_le_sum_of_ne_zero fun h h_mem h_ne ↦ ?_
-          have h_above : h - p τ ≠ 0 := left_ne_zero_of_mul h_ne
-          grind
-        _ ≤ ∑ h ∈ Ico q (rankAt n τ), h * κ₀ τ h := by
-          gcongr
-          exact Nat.sub_le _ _
-    exact hookNumber_le ((sum_le_sum fun τ _ ↦ h_boxes τ).trans hL)
-  · rw [map_smul, h_rename, hη, map_smul, smul_comm (ε : ℤ) c, hε]
+  -- The cyclic shift moves every row but the first one place back, so
+  -- `exists_smul_weylKernel_mul_weylKernel_eq_toPoly` applies to the shifted row order.
+  have h_rotate (M : ℕ) (i : Fin M) : (finRotate M i : ℕ) ≤ i + 1 := by
+    cases M with
+    | zero => exact i.elim0
+    | succ M =>
+      rw [coe_finRotate]
+      split_ifs <;> omega
+  refine exists_smul_weylKernel_mul_weylKernel_eq_toPoly
+    (fun τ : Φ ↦ (rowEquivFin n τ).trans (finRotate (rankAt n τ)).symm) (fun τ a ↦ ?_) hq hκ₀
+  obtain ⟨i, hi⟩ := (finRotate (rankAt n τ)).surjective (rowEquivFin n τ a)
+  rw [Equiv.trans_apply, ← hi, Equiv.symm_apply_apply]
+  exact h_rotate _ i
 
 end New.GL
 
