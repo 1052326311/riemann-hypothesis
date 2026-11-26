@@ -182,10 +182,11 @@ lemma New.norm_term_le_exp_mul (a : ℕ → ℂ) {z : ℂ} (σ E : ℝ) {n : ℕ
     ‖term a (1 + z) n‖ ≤ Real.exp E * ‖term a (1 + σ) n‖ := by
   obtain rfl | hn := eq_or_ne n 0
   · simp
-  -- `↓cpow_add` must fire before simp rewrites the exponent.
-  have h_eq : ‖term a (1 + z) n‖ = Real.exp (Real.log n * (σ - z.re)) * ‖term a (1 + σ) n‖ := by
-    simp [hn, ↓cpow_add, cpow_def, norm_exp, field, mul_sub, Real.exp_sub, ← natCast_log]
-  grw [h_eq, h_le]
+  have hn_pos : 0 < (n : ℝ) := Nat.cast_pos.2 (Nat.pos_of_ne_zero hn)
+  simp only [norm_term_eq, if_neg hn, add_re, one_re, ofReal_re]
+  rw [show 1 + z.re = (1 + σ) - (σ - z.re) by ring,
+    Real.rpow_sub hn_pos, div_div_eq_mul_div, mul_comm ‖a n‖, mul_div_assoc]
+  grw [Real.rpow_def_of_pos hn_pos (σ - z.re), h_le]
 
 /-- The Dirichlet series of the function that is `Λ n` at the numbers `n` that are not prime and
 `0` at the primes converges absolutely at `3 / 4 = 1 + -4⁻¹`, because Chebyshev's functions satisfy
