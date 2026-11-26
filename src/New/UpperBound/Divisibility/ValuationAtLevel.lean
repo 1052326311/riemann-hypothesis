@@ -419,7 +419,9 @@ lemma liftInPairs_gluedDoubleLiftDatum (v : ∀ j : ℕ, (D.homX j).finitePart) 
           (T * (diagN (P := D.nonInducedPlaces) (N := D.N) (D.InitIndex (2 * i)) D.piNPlaces).val)) (v _)) φ =
         D.liftCharAtN ϑ (2 * i + 1) (D.n (2 * i + 1)) (diagN (N := D.N) (D.InitIndex (2 * i)) D.piNPlaces) •
           ρ (D.diagPointN (2 * i + 1))⁻¹ (D.liftAtN ϑ (2 * i) (v (2 * i)) (liftFn f) φ) := by
-    simpa [ρ, liftAtN_apply] using D.lift_schrodingerOpAt_comp ϑ _ _ f (diagN (N := D.N) _ D.piNPlaces) 1 φ
+    simpa only [ρ, liftAtN_apply, Representation.inv_self_apply, inv_one, Units.val_one,
+      Matrix.one_mul, map_one, div_one, one_apply_eq_self] using
+      D.lift_schrodingerOpAt_comp ϑ _ _ f (diagN (N := D.N) _ D.piNPlaces) 1 φ
   let k₂ : GL (D.X (2 * i + 1 + 1)) (LocProd D.nonInducedPlaces) :=
     diagN (N := D.N) (D.InitIndex (2 * i + 1 + 1)) (D.nonInducedPlaces \ D.piNPlaces)
   have h_second
