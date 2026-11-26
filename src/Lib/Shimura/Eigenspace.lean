@@ -1,6 +1,7 @@
 module
 
 public import Lib.Cohomology.WoodsHole
+public import Lib.GaloisRep.Main.Defs
 public import Lib.PadicComparison.CrystallineFrobenius
 public import Lib.PadicHodge.Limit.CrystallineLimit
 public import Lib.Shimura.CongruenceRelation.EichlerShimura
