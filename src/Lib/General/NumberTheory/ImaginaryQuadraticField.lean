@@ -505,13 +505,10 @@ lemma q_eq_iff_chiK_ne_neg_one (hw : (p : 𝓞 (QuadField d)) ∈ w.asIdeal) [Pr
   have frob_iff :
       (∀ x : 𝓞 (QuadField d), π x ^ p ^ 1 = π x) ↔ π (betaK d) ^ p ^ 1 = π (betaK d) := by
     refine ⟨fun h_all ↦ h_all (betaK d), fun h_gen x ↦ ?_⟩
-    have hx : x ∈ Algebra.adjoin ℤ {betaK d} := by
-      simp [(different_eq_span_and_adjoin_betaK d).right]
-    induction hx using Algebra.adjoin_induction with
-    | mem y hy => rwa [Set.mem_singleton_iff.1 hy]
-    | algebraMap r => simp [← frobenius_def]
-    | add a b _ _ ha hb => rw [map_add, add_pow_char_pow, ha, hb]
-    | mul a b _ _ ha hb => rw [map_mul, mul_pow, ha, hb]
+    have h_eq : ((frobenius _ p).comp π).toIntAlgHom = π.toIntAlgHom :=
+      AlgHom.ext_of_adjoin_eq_top (different_eq_span_and_adjoin_betaK d).right
+        (Set.eqOn_singleton.2 (by simpa [frobenius_def] using h_gen))
+    simpa [frobenius_def] using DFunLike.congr_fun h_eq x
   rw [q_iff_frob, frob_iff]
   obtain rfl | hp2 := eq_or_ne p 2
   · -- Both sides hold: `betaK d * (1 - betaK d) = (d + 1) / 4` is even, and `2` is a square mod
