@@ -1,5 +1,7 @@
-import Lib.ClassField.Places.DecompositionCyclotomic
-import Lib.PadicHodge.PeriodRings.CrystallineRings
+module
+
+public import Lib.ClassField.Places.DecompositionCyclotomic
+public import Lib.PadicHodge.PeriodRings.CrystallineRings
 
 /-!
 # The cyclotomic action on μ, the period t, and the de Rham field B_dR
@@ -42,6 +44,8 @@ Théorie d'Iwasawa des représentations de de Rham d'un corps local, Ann. of Mat
 III.2-III.3; J.-M. Fontaine, Le corps des périodes p-adiques, Astérisque 223 (1994); X. Caruso, An
 introduction to p-adic period rings (2019), §3.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -215,9 +219,6 @@ times a unit of `Amax`. -/
 lemma associated_mu_mul_p_tPeriodAmax : Associated (mu * p : Amax) tPeriodAmax :=
   exists_tPeriod.choose_spec.1
 
-lemma frobEnd_tPeriodAmax : frobEnd tPeriodAmax = p * tPeriodAmax := by
-  obtain ⟨-, h_frob, -⟩ := (exists_tPeriod (p := p)).choose_spec
-  exact h_frob
 
 /-- For every `g` in the absolute Galois group G_p of Q_p, `g` acts on the chosen period
 `tPeriodAmax` in `Amax` by multiplication by χ(`g`) ∈ ℤ_p, where χ = `cyclotomicGp` is the p-adic

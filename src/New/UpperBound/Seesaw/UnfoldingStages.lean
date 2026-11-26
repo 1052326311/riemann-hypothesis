@@ -1,10 +1,12 @@
-import Lib.Weil.Periods.Unfolding
-import New.UpperBound.Objects.CharactersAtLevel
-import New.UpperBound.Objects.RowChain
-import New.UpperBound.Seesaw.Frequency
-import New.UpperBound.Seesaw.GluedLevel
-import New.UpperBound.Seesaw.LevelIdeles
-import New.UpperBound.Seesaw.Sandwich
+module
+
+public import Lib.Weil.Periods.Unfolding
+public import New.UpperBound.Objects.CharactersAtLevel
+public import New.UpperBound.Objects.RowChain
+public import New.UpperBound.Seesaw.Frequency
+public import New.UpperBound.Seesaw.GluedLevel
+public import New.UpperBound.Seesaw.LevelIdeles
+public import New.UpperBound.Seesaw.Sandwich
 
 /-!
 # Unfolding the chain of lifts: double lifts and the functions of the unfolding
@@ -44,6 +46,8 @@ Notions from other files:
 See `New.UpperBound.Seesaw.SeesawIdentity` for related work. See
 `Lib.Weil.CompactLift.DefiniteThetaLift` for sources.
 -/
+
+@[expose] public section
 
 /-!
 ## Two unfolding steps and the double lift of the finite evaluation
@@ -108,7 +112,7 @@ lemma arrowProduct_integrated_polyVector (P : MvPolynomial (NumberField.Infinite
           (rename (fun (v, j, i) ↦ (v, Sum.inl i, j)) P *
             rename (fun (v, i, j) ↦ (v, Sum.inr i, j)) Q))
         (arrowTensor (Φ ⊗ₜ Φ')) := by
-  simp [arrowProduct, flipPoly, pairSign, rename_eq_aeval, bind₁_bind₁, map_integrated,
+  simp [arrowProduct, flipPoly, pairSign, rename_eq_aeval, bind₁_bind₁, aeval_bind₁, map_integrated,
     realMap_flipCoords_polyVector, boxProd_integrated, realBoxProd_polyVector]
   -- the two descriptions of the renamed variables of `P` and `Q` agree by definition
   rfl

@@ -1,8 +1,10 @@
-import New.Congruences.FirstOrder.DenominatorBound
-import New.Congruences.GaloisRepresentations.RowsFromEigensystems
-import New.Congruences.Selmer.TwistingTheorem
-import New.Determinant.Chain.NormOfChain
-import New.OneLift.HeckeValues.CentralAction
+module
+
+public import New.Congruences.FirstOrder.DenominatorBound
+public import New.Congruences.GaloisRepresentations.RowsFromEigensystems
+public import New.Congruences.Selmer.TwistingTheorem
+public import New.Determinant.Chain.NormOfChain
+public import New.OneLift.HeckeValues.CentralAction
 
 /-!
 # All data have regular families of m-fold twists
@@ -42,6 +44,8 @@ of Petersson norms, 2006 (after Ribet, 1976; Wiles); Klosin, Congruences among m
 U(2,2) and the Bloch–Kato conjecture, 2009; Mazur–Rubin, Ranks of twists of elliptic curves, 2010.
 -/
 
+@[expose] public section
+
 open New Selmer Submodule Data GaloisRep Polynomial Multiset Finset Real
 
 /-- Let the projection to the space `Z` of lifts have denominator at most `exp β` per dimension of
@@ -65,7 +69,7 @@ natural number `a` are at most `log b` for every natural number `b ≥ a`. -/
 lemma New.Selmer.sum_padicValNat_mul_log_le (T : Finset ℕ) (hT : ∀ l ∈ T, l.Prime) {a b : ℕ}
     (hab : a ≤ b) : ∑ l ∈ T, (padicValNat l a : ℝ) * log l ≤ log b :=
   calc ∑ l ∈ T, (padicValNat l a : ℝ) * log l = ∑ l ∈ T, a.factorization l * log l :=
-      sum_congr rfl fun l hl ↦ by rw [a.factorization_def (hT l hl)]
+      sum_congr rfl fun l hl ↦ by rw [a.factorization_def (hT l hl), Nat.padicValNat_def]
     _ ≤ ∑ l ∈ T ∪ a.factorization.support, a.factorization l * log l := by
       grw [← T.subset_union_left]
     _ = log a := by

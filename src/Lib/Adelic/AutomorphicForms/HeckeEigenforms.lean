@@ -1,4 +1,6 @@
-import Lib.GLn.SchurModule.SchurNorm
+module
+
+public import Lib.GLn.SchurModule.SchurNorm
 
 /-!
 # Algebraic modular forms: delta forms, unitary translation and spanning by Hecke eigenforms
@@ -43,6 +45,8 @@ Known result: Finite dimension of spaces of algebraic modular forms and the Heck
 spanning them. Related files: `Lib.Adelic.AutomorphicForms.SmoothAlgebraicForms` and, for congruence
 subgroups and level structures, `Lib.Adelic.Unitary.CongruenceLevels`.
 -/
+
+@[expose] public section
 
 /-!
 ## Algebraic forms of a level: delta forms, values on classes, dimension
@@ -484,7 +488,7 @@ lemma le_span_isSphericalOff (M : Submodule ℂ (V.forms κ))
     fun w ⟨hw, hS, hS_star⟩ ↦ ⟨hw.star, hS_star, by rwa [star_star]⟩
   have h_span : M ≤ span ℂ {f ∈ M | ∃ t : FinPlace E → ℕ → ℂ, ∀ w ∈ T, ∀ (hw : w.IsSplit) (j : ℕ),
       heckeSplit (V.formTranslation κ) hw j f = t w j • f} :=
-    hB.le_span_joint_eigenvectors (fun w hw ↦ hw.left) h_star
+    hB.le_span_joint_eigenvectors (fun w (hw : w ∈ T) ↦ hw.left) h_star
       (fun w ⟨_, hS, hS_star⟩ ↦ h_level.trans (levelSpace_le_sphericalAt hS hS_star))
       fun w ⟨_, hS, hS_star⟩ hw ↦ h_hecke w hw hS hS_star
   refine h_span.trans (span_le.2 ?_)

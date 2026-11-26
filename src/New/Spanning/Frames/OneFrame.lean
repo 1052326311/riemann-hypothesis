@@ -1,4 +1,6 @@
-import New.Spanning.Frames.Densities
+module
+
+public import New.Spanning.Frames.Densities
 
 /-!
 # One frame
@@ -31,6 +33,8 @@ Notions from other files:
   floors from l on; `F.weightedSquareIntegral l k x` is its integral over the floors below l.
 * `F.IsNear l g`: the coset R^(l) g meets `F.boxSet`, where R^(l) = `partialUnitriangularGroup l`.
 -/
+
+@[expose] public section
 
 namespace New.Floors.PlaceData
 
@@ -542,7 +546,7 @@ lemma Gauge.lintegral_cutSquare_le (Γ : Gauge F) {k : T.G → T.G → ℂ} {d :
     have h_vol : F.FloorMassLe (l + 1) 1 1 := fun g' ↦ by
       have h_le : F.measureH {h : T.G | ∃ u ∈ besselU, u * (h * g') ∈ F.boxSet} ≤ 1 := h_mass g'
       -- Without `Subtype.exists` both sets keep the same form.
-      simpa [IsNear, hl_top, -Subtype.exists] using h_le
+      simpa [IsNear, hl_top, -Subtype.exists, Set.univ_inter] using h_le
     grw [heisenbergMeasure_eq_dirac_one (by lia),
       ← hK.pivotL1Norm_sq_le_of_floorMassLe_one h_vol, ← hK.enorm_partialCorrelation_le]
     simp
@@ -566,7 +570,6 @@ lemma Gauge.exists_factor_cutSquare_le (Γ : Gauge F) [F.groupMeasure.IsHaarMeas
         (∏ a ∈ range 𝔰.ϱ, Γ.floorConst a) *
           ∫⁻ g : T.G, ∫⁻ y : T.G, ‖k g y‖ₑ ^ 2 ∂F.quotientMeasureFrom 0 ∂F.quotientMeasureFrom
             0 := by
-  have h_meas (l : ℕ) : Measurable ↿(Γ.cutSquare k l) := Γ.measurable_cutSquare hK l
   induction hl using Nat.decreasingInduction with
   | self =>
     refine ⟨F.quotientMeasureFrom 0, inferInstance, by
@@ -625,7 +628,6 @@ theorem Gauge.lintegral_weightedSquare_le (Γ : Gauge F) [F.groupMeasure.IsHaarM
   -- Put `x = g⁻¹ ν y` with `ν` in the unipotent group of the first `l` floors. The modulus of the
   -- correlation does not depend on `ν`, and the weight has bounded integral over `ν`.
   have h_positions : MeasurableSet Γ.positionsOfSize := Γ.measurableSet_positionsOfSize
-  have h_meas : Measurable ↿(Γ.cutSquare k l) := Γ.measurable_cutSquare hK l
   obtain ⟨ρ, hρ, h_factor, h_mass⟩ := Γ.exists_factor_cutSquare_le hK hjl hl.step
   grw [← h_mass, lintegral_lintegral_swap (by fun_prop), ← lintegral_const_mul _ (by fun_prop)]
   gcongr with g

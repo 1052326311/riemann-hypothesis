@@ -1,4 +1,6 @@
-import Lib.PadicHodge.PeriodRings.Ainf
+module
+
+public import Lib.PadicHodge.PeriodRings.Ainf
 
 /-!
 # The period rings A, B⁺, B and B_dR⁺: θ, Frobenius, domains and contraction
@@ -42,6 +44,8 @@ Notions from other files:
 
 Known; see `Lib.PadicHodge.PeriodRings.DeRhamPeriods` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -91,8 +95,6 @@ instance [Algebra R Amax] : IsAdicComplete (span {(p : R)}) Amax :=
 /-- The image of the period ring A in B^+ = A[1/p], as an A_inf-subalgebra. -/
 def amaxImage : Subalgebra Ainf BPlus := (toAlgHom Ainf Amax BPlus).range
 
-lemma mem_amaxImage_iff {y : BPlus} : y ∈ amaxImage ↔ ∃ b : Amax, algebraMap Amax BPlus b = y :=
-  Iff.rfl
 
 /-- The element X = ξ/p of the period ring A: the image of the variable of A_inf[X]/(pX − ξ). -/
 def Amax.xiDivP : Amax := .of _ _ (root _)
@@ -386,7 +388,7 @@ lemma exists_reduction_mod_p :
       ∃ F : Amax →+* R, (∀ c : Ainf, F c = algebraMap Ainf R c) ∧ F xiDivP = .X :=
     exists_lift (algebraMap Ainf R) .X h_xi
   have hF (P : Ainf[X]) : F (aeval xiDivP P) = P.map (mk (span {↑p, xi})) := by
-    simp [R, hF_alg, hF_X, aeval_def, eval₂, sum, Polynomial.map]
+    simp [R, hF_alg, hF_X, aeval_def, eval₂_eq_sum, sum, Polynomial.map]
   refine ⟨F, hF, fun y ↦ ⟨?_, fun hy ↦ ?_⟩⟩
   · rintro ⟨c, rfl⟩
     rw [map_mul, map_natCast, h_p_zero, zero_mul]
@@ -808,7 +810,6 @@ lemma BPlus.eq_zero_of_forall_pow_dvd (a : Ainf)
         rfl
       exact (BPlus.isUnit_p.pow l).mul_left_cancel h_mul
     refine ⟨e, injective_Amax_BPlus ?_⟩
-    show (c : BPlus) = ((aeval Amax.xiDivP ((.X - C a) ^ m) * e : Amax) : BPlus)
     rw [hw, hw_eq, algebraMap.coe_mul]
   -- a nonzero polynomial is not divisible by `X - a` to its root multiplicity plus one
   have hFc_ne : F c ≠ 0 := fun h_zero ↦ hc ((hF_ker c).mpr h_zero)

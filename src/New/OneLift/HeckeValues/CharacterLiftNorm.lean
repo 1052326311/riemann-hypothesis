@@ -1,4 +1,6 @@
-import New.Determinant.Norms.AdjointThetaLift
+module
+
+public import New.Determinant.Norms.AdjointThetaLift
 
 /-!
 # The lift of a character and its squared norm as a Hecke L-value
@@ -47,6 +49,8 @@ Notions from other files:
 
 See `Lib.SiegelWeil.RallisInner.SharpData` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -183,29 +187,6 @@ theorem LValueData.trivialLift_eq_smul_thetaLift [WeilData E] :
       _ = _ := integral_quotMeasure_eq_classSum h_descent.rat_mul h_avg _ h_level
         h_descent.continuous
   rw [inner_smul_left, map_natCast, h_lift, h_sum, mul_inv_cancel_left₀ (by simp)]
-
-/-- For lift data `X` the target of the theta lift is the definite `U(n)`, with forms of weight
-`mixedWeight n colsPlus colsMinus`: as `colsMinus = 0` and `colsPlus τ` has `X.rowLength τ` columns
-of height `1`, it has the single row `X.rowLength τ` at each infinite place `τ`. Let `paramV` be the
-doubled Harish-Chandra parameter of this weight and `highestVector` its highest weight vector in the
-order that `paramV` gives to the basis.
-
-The lift of the constant function `1` on adelic `U(1)` by the theta kernel `pairThetaKernel` of the
-two spaces, at the datum `fockDatum` of the highest vector, is the function `ofAlgForm` on adelic
-`U(n)` attached to the algebraic form `X.trivialLift`, divided by the index of the level
-`X.chosenLevel` in the integral points of `U(1)`. -/
-lemma LValueData.lift_fockDatum_const_one [WeilData E] :
-    lift X.descentPair.pairThetaKernel (X.descentPair.fockDatum
-        (highestVector (mixedWeight n X.descentPair.colsPlus X.descentPair.colsMinus)
-          X.descentPair.paramV))
-        (fun _ : G E X.descentPair.signs ↦ 1) =
-      (stdLevelIndex X.chosenLevel : ℂ)⁻¹ • ofAlgForm X.descentPair.paramV 1 X.trivialLift.val := by
-  have h_val : X.trivialLift.val = (stdLevelIndex X.chosenLevel : ℂ) •
-      (X.descentPair.thetaLift X.fitsParams_descentPair X.constForm).val :=
-    congrArg Subtype.val X.trivialLift_eq_smul_thetaLift
-  rw [h_val, map_smul, inv_smul_smul₀ (by simp), X.descentPair.ofAlgForm_thetaLift,
-    X.fitsParams_descentPair.isArrow_fockDatum.coe_formLift]
-  rfl
 
 /-- The lift `X.trivialLift` has the Hecke polynomials of a lift of the trivial system of
 eigenvalues. That is, at a split place `w` of norm `q` with neither `w` nor `w̄` among the places of
@@ -352,7 +333,7 @@ lemma LValueData.blockMass_eq_blockMeanSquare_div :
   have h_twist (w : FinPlace E) :
       ((w.q : ℂ) - 1) / w.q = (w.q - 1) * w.q ^ (card n - 1) / w.q ^ card n := by
     rw [← pow_sub_one_mul X.one_lt_card.ne_bot (w.q : ℂ)]
-    field_simp
+    field_simp [w.q_bounds]
   calc X.descentPair.blockMass
       = (∏ i, (((X.twistPlace i).q : ℂ) - 1) * ((X.twistPlace i).q : ℂ) ^ (card n - 1)) /
           ((∏ i, ((X.chosenPlace i).q : ℂ) ^ card n) * ∏ i, ((X.twistPlace i).q : ℂ) ^ card n) /
@@ -402,11 +383,11 @@ lemma LValueData.blockMeanSquare_mul_relIndex_mul_prod_eq_pow :
     sub_ne_zero.2 (mod_cast (one_lt_pow₀ w.one_lt_q h_card).ne')
   have h_chosen (w : FinPlace E) :
       ((w.q : ℂ) ^ card n)⁻¹ * (w.q ^ card n - 1) * (1 - ((w.q : ℂ) ^ card n)⁻¹)⁻¹ = 1 := by
-    field_simp [h_ne w]
+    field_simp [w.q_bounds, h_ne w]
   have h_twist (w : FinPlace E) : ((w.q : ℂ) - 1) / w.q * (∑ j ∈ range (card n), (w.q : ℂ) ^ j) *
       (1 - ((w.q : ℂ) ^ card n)⁻¹)⁻¹ = w.q ^ (card n - 1) := by
     rw [div_mul_eq_mul_div, mul_geom_sum]
-    field_simp [h_ne w]
+    field_simp [w.q_bounds, h_ne w]
     rw [mul_pow_sub_one h_card]
   calc _ = (∏ i, ((X.chosenPlace i).q ^ card n : ℂ)⁻¹ * ((X.chosenPlace i).q ^ card n - 1) *
           (1 - ((X.chosenPlace i).q ^ card n : ℂ)⁻¹)⁻¹) *

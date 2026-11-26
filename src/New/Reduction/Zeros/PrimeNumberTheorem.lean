@@ -1,6 +1,8 @@
-import Lib.Analytic.PrimeNumberTheorem.Tauberian
-import Lib.Analytic.PrimeNumberTheorem.ZeroFreeRegion
-import New.Reduction.Zeros.PrimeError
+module
+
+public import Lib.Analytic.PrimeNumberTheorem.Tauberian
+public import Lib.Analytic.PrimeNumberTheorem.ZeroFreeRegion
+public import New.Reduction.Zeros.PrimeError
 
 /-!
 # The prime number theorem for the remainders `R_q`
@@ -28,6 +30,8 @@ Multiplicative Number Theory I, 2007, Cor. 11.19. Form here: the modulus is fixe
 the smoothed sum `∑_{n ≤ y} λ(n) (1/n - 1/y)` over the prime powers `n ≡ 1` mod `q`; for `d ≡ 3` mod
 `4` the primes that split in `ℚ(√-d)` have weight zero.
 -/
+
+@[expose] public section
 
 open ArithmeticFunction.vonMangoldt Complex Filter Finset MeasureTheory Nat Real Topology
 
@@ -226,14 +230,5 @@ theorem eventually_abs_primeRemainder_le (hd : d ≠ 2) (h_cop : q.Coprime d) (B
       (fun u v ↦ abs_primeRemainder_exp_sub_le) h_transform eventually_norm_logDerivMean_div_le B
   filter_upwards [tendsto_log_atTop.eventually h_bound, eventually_gt_atTop 0] with y hy hy_pos
   rwa [Real.exp_log hy_pos] at hy
-
-/-- For an odd prime `d` and `q` prime to `d` the remainder `primeRemainder d q` tends to `0` at
-infinity. Thus the constant `c_q = re (logDerivMean d q 1)` subtracted in it is the limit of
-`∑_{n ≤ y, n ≡ 1 mod q} Λ(n) (1 - (n/d)) (1/n - 1/y) - log y / φ(q)`. -/
-theorem tendsto_primeRemainder (hd : d ≠ 2) (h_cop : q.Coprime d) :
-    Tendsto (primeRemainder d q) atTop (𝓝 0) := by
-  have h_le : ∀ᶠ y : ℝ in atTop, ‖primeRemainder d q y‖ ≤ 1 / y.log := by
-    simpa only [pow_one, Real.norm_eq_abs] using eventually_abs_primeRemainder_le hd h_cop 1
-  exact squeeze_zero_norm' h_le (tendsto_log_atTop.const_div_atTop 1)
 
 end New

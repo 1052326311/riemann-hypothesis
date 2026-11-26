@@ -1,6 +1,8 @@
-import Lib.General.Algebra.LevelModulus
-import Lib.SiegelWeil.RallisInner.Doubling
-import Lib.SiegelWeil.UnramifiedSeries.RallisSeries
+module
+
+public import Lib.General.Algebra.LevelModulus
+public import Lib.SiegelWeil.RallisInner.Doubling
+public import Lib.SiegelWeil.UnramifiedSeries.RallisSeries
 
 /-!
 # Rallis' inner product formula for sharp data and injectivity of the theta lift
@@ -70,6 +72,8 @@ of modular forms of one and several variables, Ann. of Math. 102 (1975); method:
 liftings and Hecke L-functions, J. reine angew. Math. 485 (1997); Harris, Li, Skinner, The Rallis
 inner product formula and p-adic L-functions (2005); Finis, Ann. of Math. 163 (2006).
 -/
+
+@[expose] public section
 
 noncomputable section
 

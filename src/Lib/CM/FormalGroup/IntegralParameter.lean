@@ -1,4 +1,6 @@
-import Lib.CM.Integrality.TorsionValues
+module
+
+public import Lib.CM.Integrality.TorsionValues
 
 /-!
 # Integral series rings 𝔬[[T]], congruence parts of power series, a functional equation
@@ -47,6 +49,8 @@ The statements on the CM curve use only that `a₁` is integral; `x ∈ 𝔬[[y]
 the cubic.
 -/
 
+@[expose] public section
+
 /-! ## Rings of integral series in a generating parameter -/
 
 section IntegralParameter
@@ -93,7 +97,7 @@ lemma rescale_smul {a c : ℂ_[p]} {f : ℂ_[p]⟦X⟧} : rescale a (c • f) = 
 @[simp]
 lemma constantCoeff_subst_eq {T : ℂ_[p]⟦X⟧} (hT₀ : T.constantCoeff = 0) {f : ℂ_[p]⟦X⟧} :
     constantCoeff (f.subst T) = f.constantCoeff :=
-  constantCoeff_subst_of_constantCoeff_eq_zero T hT₀ f
+  PowerSeries.constantCoeff_subst_of_constantCoeff_zero hT₀ f
 
 /-- The linear coefficient of `f(T)` is the product of those of `f` and `T`, if `T(0) = 0`. -/
 lemma coeff_one_subst {T : ℂ_[p]⟦X⟧} (hT₀ : T.constantCoeff = 0) {f : ℂ_[p]⟦X⟧} :
@@ -321,7 +325,7 @@ lemma taylorVia_translatedX_mem_integralSeriesRing :
   have h_simple : IsUnit ((F.toPoly.map Φ).derivative.eval (Φ r)) := by
     simp [h_map, isUnit_iff_constantCoeff, hΦr₀, hy₀]
   have h_eq : Φ r = x :=
-    IsLocalRing.eq_of_eval_eq_zero_of_not_isUnit_sub hr_root.map hx_root h_congr h_simple
+    IsLocalRing.eq_of_eval_eq_zero_of_not_isUnit_sub (hr_root.map Φ) hx_root h_congr h_simple
   exact C.mem_integralSeriesRing.2 ⟨r, by rw [← hΦ, h_eq]⟩
 
 /-- For a `CMLattice` `C` (a lattice `Λ` with a point `t` of order two modulo `Λ`), let
