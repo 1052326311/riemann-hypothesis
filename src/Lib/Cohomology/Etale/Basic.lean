@@ -734,10 +734,8 @@ lemma H.dimension_shift_induction {P : ∀ {F : AbFunctor C} {n : ℕ}, H N F n 
 set_option backward.isDefEq.respectTransparency false
 
 lemma mapExactFunctor_mapExactFunctor :
-    (x.mapExactFunctor Φ).mapExactFunctor Θ = x.mapExactFunctor (Φ ⋙ Θ) := by
-  induction x with
-  | h₀ F f => simp [mapExactFunctor_mk₀]
-  | h S hS n x ih => simp [ih, mapExactFunctor_comp, mapExactFunctor_extClass]
+    (x.mapExactFunctor Φ).mapExactFunctor Θ = x.mapExactFunctor (Φ ⋙ Θ) :=
+  (x.comp_mapExactFunctor Φ Θ).symm
 
 /-- For a natural transformation η: Φ → Ψ of exact functors and x in Ext^n(N,F), pushing Φ(x)
 forward along η_F equals pulling Ψ(x) back along η_N, in Ext^n(ΦN,ΨF). -/
