@@ -65,7 +65,7 @@ open Matrix Kronecker NumberField Fintype Fock Space Splitting WeilData
 variable (W) in
 /-- The change of basis that makes the frame of `X.homTarget W` orthonormal and integral. -/
 def adaptedTargetBasis : GL (Unit × n) (𝔸 E) :=
-  kroneckerGL 1 (transposeGL W.dualFrame⁻¹)
+  Matrix.GeneralLinearGroup.kronecker 1 (transposeGL W.dualFrame⁻¹)
 
 variable (W) in
 omit [WeilData E] in

@@ -285,7 +285,8 @@ variable (W V) in
 /-- The block-diagonal change of basis, built from `star W.x` and `adaptedHomBasis Unit V`, in which
 the frame of `lineTermSplitting` is adapted (`isAdapted_lineTermSplitting`). -/
 noncomputable def lineTermBasis : GL (LineIndex n r) (𝔸 E) :=
-  blockGL (blockGL (kroneckerGL 1 (transposeGL (blockGL (star W.x, 1))), adaptedHomBasis Unit V), 1)
+  blockGL (blockGL (Matrix.GeneralLinearGroup.kronecker 1 (transposeGL (blockGL (star W.x, 1))),
+    adaptedHomBasis Unit V), 1)
 
 /-- Each line term is the mixed term `slice` (translation by `l`, then the zero term) of
 `lineTermSplitting`, the composite of `planeSplitting` and the model `β`, at the vector with last
@@ -323,7 +324,8 @@ lemma frameAt_lineTermSplitting (β : Bool) :
   cases β
   -- The second `simp` may open `hom` only after `hom_point_inv_mul_kronecker` has been used.
   all_goals
-    simp [lineTermSplitting, lineTermBasis, adaptedHomBasis, kroneckerGL, transposeGL, ← map_inv,
+    simp [lineTermSplitting, lineTermBasis, adaptedHomBasis, Matrix.GeneralLinearGroup.kronecker,
+      transposeGL, ← map_inv,
       fromBlocks_conjTranspose, conjTranspose_kronecker, planeSplitting, planeModel, map_J_inv,
       conjTranspose_transpose_eq_transpose_conjTranspose, star, Space.ratMap, removePlanes, kAdelic,
       lAdelic, iAdelic, kCoord, lCoord, iCoord, Space.map_J, Splitting.symm, Splitting.comp,
