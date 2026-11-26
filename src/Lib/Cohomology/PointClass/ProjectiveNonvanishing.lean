@@ -1243,15 +1243,12 @@ lemma New.Variety.projSpace.hodgeTateMap_pointClass_ne_zero {p : ℕ} {k : Type}
       let q := genericOver.whiskerLeft g
       have : IsIso q := Functor.isIso_whiskerLeft _ _
       have h_inj := (IsCohomEquiv.of_isIso (F := genericCoeff) (α := q) (d + d + 2)).1
-      have h_pull : restrictToPairs (H.map genericCoeff q _ x) = 0 := by
-        erw [restrictToPairs_map g, restrictToPairs_x]
-        exact h
+      have h_pull : restrictToPairs (H.map genericCoeff q _ x) = 0 :=
+        (restrictToPairs_map g x).trans ((congrArg (PairH.map g) restrictToPairs_x).trans h)
       apply h_inj
       apply IsChartCovered.pairRestrictBijective.injective_restrictToPairs
-      rw [h_pull]
-      have h_map_zero := map_zero (H.map genericCoeff q (d + d + 2))
-      erw [h_map_zero]
-      exact (map_zero restrictToPairs).symm
+      exact h_pull.trans ((congrArg restrictToPairs
+        (map_zero (H.map genericCoeff q (d + d + 2)))).trans (map_zero restrictToPairs)).symm
     rw [η_reg (N := _ ⋙ freeAb.obj (projSpace k d)) ξ x_zero, map_zero]
   induction d with
   | succ d ih =>
