@@ -535,7 +535,7 @@ private lemma exists_point_of_relations_eq_zero {V : (Spec (CommRingCat.of ℂ))
 `γ` through `x` the map `φ ∘ γ` is analytic, with derivative zero in each direction in which `γ`
 is constant to first order. -/
 lemma exists_holomorphic_chart (hd : SmoothOfRelativeDimension d A.hom) (x : ComplexPoint A) :
-    ∃ᵉ (φ : ComplexPoint A → Fin d → ℂ) (ψ : (Fin d → ℂ) → ComplexPoint A),
+    ∃ φ : ComplexPoint A → Fin d → ℂ, ∃ ψ : (Fin d → ℂ) → ComplexPoint A,
       φ x = 0 ∧
       -- (a) `ψ` is a left inverse of `φ` near `x`, where `φ` is continuous
       (∀ᶠ y : ComplexPoint A in 𝓝 x, ψ (φ y) = y ∧ ContinuousAt φ y) ∧
