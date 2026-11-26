@@ -63,8 +63,6 @@ section TateModule
 open CategoryTheory AddCommGrpCat Polynomial Module TotalH Function TensorProduct NeZero
   AddCommGroup
 
-set_option backward.isDefEq.respectTransparency false
-
 variable {C C' : Type _} [Category C] [Category C'] {ℓ : ℕ} {A : Type} [CommRing A]
   (g : C ⥤ TestOver A)
 
@@ -93,7 +91,8 @@ instance : HasFlatValues (tateModule g) where
     let : Module ℚᵐᵒᵖ (ℚ →+ (ringOf g ⋙ Gm) c) := AddMonoidHom.instDomMulActModule
     have : HasUniqueDiv (ℚ →+ (ringOf g ⋙ Gm).obj c) :=
       HasUniqueDiv.of_isTorsionFree ℚᵐᵒᵖ (ℚ →+ (ringOf g ⋙ Gm) c)
-    exact inferInstanceAs (Flat ℤ (AddMonoidHom.ker _))
+    let φ : (ℚ →+ (ringOf g ⋙ Gm).obj c) →+ (ringOf g ⋙ Gm).obj c := AddMonoidHom.eval 1
+    exact inferInstanceAs (Flat ℤ φ.ker)
 
 /-- Along a functor g to tests over A, the Kummer sequence 0 → 𝕋 → Hom(ℚ, G_m) → G_m → 0, with
 last map evaluation at 1, is short exact. -/
@@ -164,8 +163,6 @@ section TateAction
 open CategoryTheory AddCommGrpCat Polynomial Module TotalH Function TensorProduct NeZero
   AddCommGroup
 
-set_option backward.isDefEq.respectTransparency false
-
 variable {C C' : Type _} [Category C] [Category C'] {ℓ : ℕ} {A : Type} [CommRing A]
   {g : C ⥤ TestOver A} [u : InvertsPrime A ℓ] {S S' P F : AbFunctor C}
 
@@ -197,8 +194,13 @@ private lemma isPrimitiveRoot_tateRoot_tateGen {c : C} {K : Type} [CommRing K] [
   have h_ne_zero : NeZero (ℓ : K) := ⟨h_unit.ne_zero⟩
   have h_val : ((tateRoot ψ (tateGen g c (.of ⟨⟩))).val : K) =
       φ ((compatibleRootsOfUnity (A := A)).val (.ofAdd (1 / ℓ))) := by
-    simp only [tateRoot, tateGen, freeAb.desc_of]
-    rfl
+    have h_gen : tateGen g c (.of ⟨⟩) =
+        ⟨AddMonoidHom.comp (AddMonoidHom.mk' ULift.up fun _ _ ↦ rfl)
+            ((Units.map (algebraMap A (g c).1).1).comp compatibleRootsOfUnity.1).toAdditiveRight,
+          Gm.ext.2 ((congrArg (fun x : Aˣ ↦ algebraMap A (g c).1 x)
+            compatibleRootsOfUnity_ofAdd_one).trans (map_one _))⟩ :=
+      freeAb.desc_of (Y := onePointFunctor C) _ _ c ⟨⟩
+    exact congrArg (fun x : tateModule g c ↦ ((tateRoot ψ x).val : K)) h_gen
   have h_root : (cyclotomic ℓ K).IsRoot ((tateRoot ψ (tateGen g c (.of ⟨⟩))).val : K) := by
     rw [h_val, ← map_cyclotomic ℓ φ]
     exact isRoot_cyclotomic_compatibleRootsOfUnity.map φ
@@ -216,9 +218,9 @@ lemma isCohomEquiv_tensorPoint_tateGen (hS : ∀ (c : C) (x : S c), ℓ • x = 
   -- is i • ε plus an element t' that is locally divisible by ℓ, so that s ⊗ t' is locally zero.
   let ε {c : C} : tateModule g c := tateGen g c (.of ⟨⟩)
   -- The localization at a maximal ideal is a local domain, absolutely integrally closed.
-  have h_local {d : C} (m : Ideal ((ringOf g).obj d)) [m.IsPrime] :
+  have h_local {d : C} (m : Ideal ((ringOf g).obj d)) [hm : m.IsPrime] :
       IsAbsIntegrallyClosedLocal (Localization.AtPrime m) :=
-    (IsTest.exists_valuationSubring_atPrime (g d).property m).left
+    (@IsTest.exists_valuationSubring_atPrime _ _ (g d).property (m : Ideal (g d).obj) hm).left
   -- It suffices that kernel and cokernel are locally zero; by Zariski descent this is tested near
   -- each maximal ideal m, along each map f from c.
   have h_prim {c d : C} (f : c ⟶ d) (m : Ideal ((ringOf g).obj d)) [m.IsPrime] :
@@ -320,7 +322,6 @@ lemma TorsionCoeff.pullbackAlong_tensorPoint_comp_tateAction (y : TotalH S M.fun
         TotalH.comp_assoc_of_sq (y.naturality (tensorPoint (tateGen g))).symm _
     _ = TotalH.comp y (homClass (𝟙 M.functor)) := by
         rw [M.pullbackAlong_tensorPoint_tateAction, TotalH.map_id]
-        rfl
     _ = y := TotalH.comp_id
 
 /-- For coefficients K along g and M' along g∘φ, every class T in total Ext(K∘φ, M') commutes
@@ -389,24 +390,18 @@ lemma TorsionCoeff.mulClass_naturality [HasFlatValues S] (ξ : TotalH P (tateMod
       TotalH.map (abTensor.flip.obj (tateModule (φ ⋙ g))) (TotalH.map (restrictAlong φ) y) := by
     rw [TotalH.map_map, TotalH.map_map]
     rfl
-  calc mapThenComp (restrictAlong φ) T (K.mulClass ξ y)
-      = TotalH.comp (TotalH.map (restrictAlong φ) (TotalH.map (abTensor.obj S) ξ))
-          (TotalH.comp
-            (TotalH.map (restrictAlong φ) (TotalH.map (abTensor.flip.obj (tateModule g)) y))
-            (TotalH.comp (TotalH.map (restrictAlong φ) K.tateAction.toTotalH) T)) :=
-        (map_comp_assoc (restrictAlong φ) T).trans
-          (congrArg _ (map_comp_assoc (restrictAlong φ) T))
-    _ = TotalH.comp (TotalH.map (abTensor.obj (φ ⋙ S)) (TotalH.map (restrictAlong φ) ξ))
-          (TotalH.comp
-            (TotalH.map (abTensor.flip.obj (tateModule (φ ⋙ g))) (TotalH.map (restrictAlong φ) y))
-            (TotalH.comp (TotalH.map (abTensor.flip.obj (tateModule (φ ⋙ g))) T)
-              M'.tateAction.toTotalH)) :=
-        -- (a term: `rw` cannot match these sides, whose implicit objects differ by unfolding)
-        congrArg₂ (fun a b ↦ TotalH.comp a b) h_ξ
-          (congrArg₂ (fun a b ↦ TotalH.comp a b) h_y (K.tateAction_comm φ M' T))
-    _ = M'.mulClass (S := φ ⋙ S) (P := φ ⋙ P) (TotalH.map (restrictAlong φ) ξ)
-          (mapThenComp (restrictAlong φ) T y) :=
-        congrArg _ (map_comp_assoc (abTensor.flip.obj (tateModule (φ ⋙ g))) _).symm
+  have h_step1 : mapThenComp (restrictAlong φ) T (K.mulClass ξ y) =
+      TotalH.comp (TotalH.map (abTensor.obj (φ ⋙ S)) (TotalH.map (restrictAlong φ) ξ))
+        (TotalH.comp
+          (TotalH.map (abTensor.flip.obj (tateModule (φ ⋙ g))) (TotalH.map (restrictAlong φ) y))
+          (TotalH.comp (TotalH.map (abTensor.flip.obj (tateModule (φ ⋙ g))) T)
+            M'.tateAction.toTotalH)) :=
+    ((map_comp_assoc (restrictAlong φ) T).trans
+      (congrArg _ (map_comp_assoc (restrictAlong φ) T))).trans
+      (congrArg₂ (fun a b ↦ TotalH.comp a b) h_ξ
+        (congrArg₂ (fun a b ↦ TotalH.comp a b) h_y (K.tateAction_comm φ M' T)))
+  exact h_step1.trans
+    (congrArg _ (map_comp_assoc (abTensor.flip.obj (tateModule (φ ⋙ g))) M'.tateAction.toTotalH).symm)
 
 /-- Let Θ be a theory along g (an ℓ-torsion coefficient F = Θ.functor with Zariski descent that
 behaves well on closed loci). Let J be a compatible family of ideals J_c of the rings g(c), and
@@ -517,8 +512,6 @@ Here `g : C ⥤ TestOver A` is a functor to tests over `A`, `New.Variety.ringOf 
 section LineChernClass
 
 open CategoryTheory AddCommGrpCat Abelian TotalH FreeAddCommGroup Ideal
-
-set_option backward.isDefEq.respectTransparency false
 
 variable {C C' : Type _} [Category C] [Category C'] {ℓ : ℕ} {A : Type} [CommRing A]
   (g : C ⥤ TestOver A)
@@ -649,7 +642,8 @@ lemma add_rowUnit_eq {q' : projLine B'} {a : Bˣ} {b : B'ˣ}
 def affinePt (x : B) : projLine B := ⟨⟦(x - 1, 1)⟧⟩
 
 lemma map_affinePt (x : B) : projLine.map f (affinePt x) = affinePt (f x) := by
-  simp [affinePt, projLine]
+  change (⟨⟦(f (x - 1), f 1)⟧⟩ : projLine B') = affinePt (f x)
+  simp [affinePt]
 
 /-- The first coordinate of the row of the point `(x : 1)` is a unit exactly when `x` is a unit. -/
 lemma isUnit_unimodularRow_affinePt_iff {x : B} :
@@ -780,8 +774,6 @@ section EtaProduct
 
 open CategoryTheory AddCommGrpCat Abelian TotalH FreeAddCommGroup Ideal projLine
 
-set_option backward.isDefEq.respectTransparency false
-
 variable {C C' : Type _} [Category C] [Category C'] {ℓ : ℕ} {A : Type} [CommRing A]
   {g : C ⥤ TestOver A} {S : AbFunctor C} {Y : C ⥤ Type 1} (φ : C' ⥤ C)
 
@@ -808,9 +800,18 @@ lemma map_restrictAlong_etaClass :
   -- Restriction along `φ` is exact, so it maps the product of the extension classes of the cocycle
   -- and of the Kummer sequence to the product of the extension classes of the restricted sequences,
   -- which are the sequences along `φ ⋙ g`.
-  rw [etaClass, etaClass, TotalH.map_of, Ext.mapExactFunctor_comp, Ext.mapExactFunctor_extClass,
-    Ext.mapExactFunctor_extClass]
-  rfl
+  have h₁ : (cocycle g).shortExact_extension.extClass.mapExactFunctor (restrictAlong φ) =
+      (cocycle (φ ⋙ g)).shortExact_extension.extClass :=
+    Ext.mapExactFunctor_extClass (restrictAlong φ) (cocycle g).shortExact_extension
+  have h₂ : ((shortExact_kummerSeq g).extClass :
+      H (cocycle g).extension.X₁ (tateModule g) 1).mapExactFunctor (restrictAlong φ) =
+      (shortExact_kummerSeq (φ ⋙ g)).extClass :=
+    Ext.mapExactFunctor_extClass (restrictAlong φ) (shortExact_kummerSeq g)
+  rw [TotalH.map_of, etaClass, etaClass]
+  exact congrArg (DirectSum.of _ 2) <|
+    (Ext.mapExactFunctor_comp (restrictAlong φ) (cocycle g).shortExact_extension.extClass
+      ((shortExact_kummerSeq g).extClass : H (cocycle g).extension.X₁ (tateModule g) 1) rfl).trans
+      (congrArg₂ (fun a b ↦ a.comp b rfl) h₁ h₂)
 
 /-- If `S` has flat values, then `etaTensorClass g S` is the image of `η` under the exact functor
 `S ⊗ -`. -/
@@ -836,14 +837,21 @@ lemma map_etaClass_eq_zero_of_coboundary (b : freeAb Y ⟶ freeAb (projLineAlong
   have h_nat (c d : C) (f : c ⟶ d) (x : Y c) :
       s d (Y.map f x) = (cocycle g).extension.X₂.map f (s c x) := by
     refine Prod.ext ?_ (b.naturality_apply f (.of x))
-    simpa [s, Cocycle.extension, eq_neg_add_iff_add_eq, add_neg_eq_iff_eq_add] using
-      h_coboundary c d f x
+    show -u d (Y.map f x) = (ringOf g ⋙ Gm).map f (-u c x) + (cocycle g).component f (b c (.of x))
+    rw [map_neg, h_coboundary c d f x]
+    abel
   let b' : freeAb Y ⟶ (cocycle g).extension.X₂ := freeAb.desc s h_nat
+  let g_proj : (cocycle g).extension.X₂ ⟶ freeAb (projLineAlong g) := (cocycle g).extension.g
   -- the second coordinate of `b'` is `b`
-  have h_lift : b = b' ≫ (cocycle g).extension.g := freeAb.hom_ext fun c x ↦ by aesop
+  have h_lift : b = b' ≫ g_proj := freeAb.hom_ext fun c x ↦ by
+    change b c (.of x) = g_proj c (b' c (.of x))
+    rw [freeAb.desc_of]
+    rfl
   -- `etaClass` starts with the extension class of the cocycle, which dies on the middle term.
-  have h_middle : H.map (tateModule g) (cocycle g).extension.g 2 (etaClass g) = 0 := by
-    simp [etaClass, H.map, ShortComplex.ShortExact.comp_extClass_assoc]
+  have h_middle : H.map (tateModule g) g_proj 2 (etaClass g) = 0 := by
+    rw [etaClass]
+    exact (cocycle g).shortExact_extension.comp_extClass_assoc
+      ((shortExact_kummerSeq g).extClass : H (cocycle g).extension.X₁ (tateModule g) 1) rfl
   rw [h_lift, H.map_comp]
   exact (congrArg (H.map (tateModule g) b' 2) h_middle).trans (map_zero _)
 
@@ -881,7 +889,9 @@ lemma exists_etaClass_supported_diagonal (q q' : (projLineAlong g).sections) :
     rw [← q.property f, ← q'.property f]
     exact map_rowDet ((ringOf g).map f) (q.val c) (q'.val c)
   let J : IdealFamily (ringOf g) := ⟨fun c ↦ span {rowDet (q.val c) (q'.val c)}, fun f ↦ by
-    rw [map_span, Set.image_singleton, h_gen f, span_singleton_mul_left_unit (Units.isUnit _)]⟩
+    let u : ((ringOf g).obj _)ˣ :=
+      (rowUnit ((ringOf g).map f) (.of (q.val _) + .of (q'.val _))).down.toMul
+    rw [map_span, Set.image_singleton, h_gen f, span_singleton_mul_left_unit u.isUnit]⟩
   refine ⟨J, fun c h_bot ↦
     -- Where `J c` is zero the determinant is zero, so the points agree.
     eq_iff_unimodularRow_fst_mul_snd_eq.mpr (sub_eq_zero.mp (span_singleton_eq_bot.mp h_bot)), ?_⟩
@@ -1014,7 +1024,6 @@ lemma mulClass_eq_comp_etaAt [HasFlatValues S] {P : AbFunctor C} (ξ : TotalH P 
   have h_right : comp y (M.etaAt b).toTotalH =
       pullbackAlong (tensorPoint b S) (M.mulClass (etaClass g).toTotalH y) := by
     rw [comp_etaAt, etaTensorClass_of_hasFlatValues, mulClass_apply]
-    rfl -- the sides differ only in implicit objects
   rw [h_right, pullbackAlong_tensorPoint_mulClass M ρ ξ y,
     pullbackAlong_tensorPoint_mulClass M b (etaClass g).toTotalH y, hξ]
 
