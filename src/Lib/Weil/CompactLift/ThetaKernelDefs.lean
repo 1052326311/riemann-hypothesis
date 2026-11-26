@@ -56,7 +56,7 @@ lemma coeff_aeval_smul_X {σ : Type*} (Q : MvPolynomial σ ℂ) (t : ℂ) (m : �
     classical
     rw [h_mon]
     by_cases h : u = m <;> simp [h]
-  | add p q hp hq => simp [hp, hq, mul_add, -aeval_eq_bind₁]
+  | add p q hp hq => simp [hp, hq, mul_add]
 
 /-- A complex polynomial is homogeneous of degree `d` exactly when multiplying the variables by
 any `t ≠ 0` multiplies it by `t ^ d`. -/
@@ -342,7 +342,7 @@ lemma schurJet_jetSeries_eq_smul (hκ : IsLiftWeight n n' κ eb e) (c : ℂ)
   -- An entry of the jet matrix is the theta functional at the Fock vector of an entry of
   -- `schur κ (c • z)`, and `c` comes out of that entry.
   ext i' i
-  simp [schurJet, -aeval_eq_bind₁, aeval_smul_X_schur hκ.1 c, aeval_X_left_apply]
+  simp [schurJet, aeval_smul_X_schur hκ.1 c, aeval_X_left_apply]
 
 /-- The theta function of a Schur coefficient is a matrix coefficient of the jet matrix. Assume
 `IsLiftWeight n n' κ eb e`, and let the characters `a`, `b` have weights `ea`, `eb`, with ψ, ψ' the
