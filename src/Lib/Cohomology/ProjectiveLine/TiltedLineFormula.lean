@@ -753,8 +753,9 @@ lemma isLerayHirschBasis_lineBasis_of_injective
   let π := elementsProj (projLineAlong g)
   change _ = sliceEquiv
     (Θ.mulClass (etaClass g).toTotalH p.1 + sliceEquiv.symm (TotalH.map (restrictAlong π) p.2))
-  erw [map_add, Θ.sliceEquiv_mulClass, AddEquiv.apply_symm_apply]
-  exact add_comm _ _
+  refine (add_comm _ _).trans ?_
+  exact ((map_add sliceEquiv _ _).trans
+    (congrArg₂ (· + ·) (Θ.sliceEquiv_mulClass ..) (sliceEquiv.apply_symm_apply _))).symm
 
 
 -- Keeps definitional checks from unfolding the group structure of the Ext groups.
