@@ -502,12 +502,9 @@ theorem Gauge.formIntegrandL1Norm_sq_le_of_char (hk : F.IsCut W) (hj : j ≤ �
     refine eNorm_ne_zero.1 h_ne (integral_eq_zero_of_ae (ae_floorMeasure_mem.mono fun σ hσ ↦
       integral_eq_zero_of_ae (ae_floorMeasure_mem.mono fun τ hτ ↦ ?_)))
     exact mul_eq_zero_of_right _ (by simpa [or_iff_not_imp_left] using h_zero σ hσ τ hτ)
-  obtain ⟨t, ht, h_size, h_size'⟩ : ∃ t ∈ floorGroup j,
-      Γ.HasMatrixSize (60 * 𝔰.n ^ 2) (t * g).val.val ∧
-      Γ.HasMatrixSize (99 * 𝔰.n ^ 2) (t * ((weylElem j p)⁻¹ * g)).val.val :=
-    exists_hasMatrixSize_of_isNear hj hp
-      ((ker₁.isNear_of_partialCorrelation_ne_zero hfσ).of_floorGroup_mul hσ)
-      ((ker₂.isNear_of_partialCorrelation_ne_zero hfτ).of_floorGroup_mul hτ)
+  obtain ⟨t, ht, h_size, h_size'⟩ := Γ.exists_hasMatrixSize_of_isNear hj hp
+    ((ker₁.isNear_of_partialCorrelation_ne_zero hfσ).of_floorGroup_mul hσ)
+    ((ker₂.isNear_of_partialCorrelation_ne_zero hfτ).of_floorGroup_mul hτ)
   let S : Set T.G := {σ | t.val.val *ᵥ orbitPoint j σ ∈ Γ.vecsOfSize (60 * 𝔰.n ^ 2 + 6)}
   let S' : Set T.G := {τ | t.val.val *ᵥ orbitPoint j τ ∈ Γ.vecsOfSize (99 * 𝔰.n ^ 2 + 6)}
   have h_supp : ∀ᵐ σ ∂F.floorMeasure j, f σ ≠ 0 → σ ∈ S :=
@@ -646,12 +643,9 @@ lemma Gauge.lintegral_heisenbergMeasure_le_of_heads (hk : F.IsCut W) {i : ℕ} (
   have h_move (n : T.G) (hn : n ∈ S) : ∃ t ∈ floorGroup (i + 1),
       Γ.HasMatrixSize (99 * 𝔰.n ^ 2) (t * n * g).val.val := by
     obtain ⟨-, h_weyl, h_near⟩ := hn
-    obtain ⟨t, ht, -, h_size⟩ : ∃ t ∈ floorGroup (i + 1),
-        Γ.HasMatrixSize (60 * 𝔰.n ^ 2) (t * (weylElem (i + 1) p * (n * g))).val.val ∧
-        Γ.HasMatrixSize (99 * 𝔰.n ^ 2) (t * (n * g)).val.val := by
-      simpa only [inv_mul_cancel_left] using
-        Γ.exists_hasMatrixSize_of_isNear i.isLt hp h_weyl (by simpa using h_near)
-    exact ⟨t, ht, by rwa [mul_assoc]⟩
+    obtain ⟨t, ht, -, h_size⟩ :=
+      Γ.exists_hasMatrixSize_of_isNear i.isLt hp h_weyl (by simpa using h_near)
+    exact ⟨t, ht, by simpa only [inv_mul_cancel_left, mul_assoc] using h_size⟩
   have h_head (n : T.G) (hn : n ∈ S) : (p i).val ∈ Γ.ofSize (10 * 𝔰.n) := by
     obtain ⟨-, ⟨s, h_box⟩, h_near⟩ := hn
     have h_near' :
