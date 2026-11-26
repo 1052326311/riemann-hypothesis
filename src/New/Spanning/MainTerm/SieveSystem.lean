@@ -99,7 +99,7 @@ lemma norm_prod_mul_le_prod_mul {f : τ → ℂ} {g : τ → ℝ} {a : ℂ} {b :
 
 /-- Schur's product theorem for finitely many kernels: the entrywise product of positive
 semidefinite kernels `A v` over `v ∈ s` and `B` is positive semidefinite. -/
-lemma posSemidef_prod_mul {σ κ : Type} [Fintype κ] {A : σ → κ → κ → ℂ} {B : κ → κ → ℂ}
+lemma posSemidef_prod_mul {σ κ : Type} {A : σ → κ → κ → ℂ} {B : κ → κ → ℂ}
     (hA : ∀ v : σ, (Matrix.of (A v)).PosSemidef) (hB : (Matrix.of B).PosSemidef) (s : Finset σ) :
     (Matrix.of fun i j : κ ↦ (∏ v ∈ s, A v i j) * B i j).PosSemidef := by
   classical
