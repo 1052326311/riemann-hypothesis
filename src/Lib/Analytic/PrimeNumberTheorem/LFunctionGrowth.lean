@@ -99,7 +99,6 @@ lemma norm_regularL_le_linear (hs : 1 / 2 ≤ s.re) : ‖regularL χ s‖ ≤ 8 
       ‖regularL χ z‖ ≤ 8 * N * ‖z‖ := by
     have hz_pos : 0 < z.re := by linarith
     have hz_norm : 1 / 2 ≤ ‖z‖ := hz.trans (re_le_norm z)
-    have hN : (0 : ℝ) ≤ N := Nat.cast_nonneg N
     by_cases hχ : χ = 1
     · have h_eq : regularL χ z = (z - 1) / z * χ.LFunction z := by
         simp [regularL, entireL, hχ, LFunctionTrivChar₁, Function.update_of_ne hz1]
