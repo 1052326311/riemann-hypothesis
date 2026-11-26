@@ -122,8 +122,6 @@ rank `k`. The Weil representation `ω_{χ_S, χ_T}` is `pairWeil` at these chara
 def _root_.New.HeckeChar.IsSplitting.autChar (h : χ.IsSplitting k) : AutChar E :=
   (HeckeChar.isSplitting_iff.mp h).choose
 
-lemma spaceChar_autChar (h_split : χ.IsSplitting k) : h_split.autChar.spaceChar k = χ :=
-  (HeckeChar.isSplitting_iff.mp h_split).choose_spec.left
 
 /-- The splitting character of `ν * ν'` at rank `k + l` is the product of those of `ν` at rank `k`
 and of `ν'` at rank `l`, as for an orthogonal sum of spaces. -/

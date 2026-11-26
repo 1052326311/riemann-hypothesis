@@ -72,24 +72,6 @@ lemma charUnramifiedAt_zpow_neg_of_notMem_badPlaces (p : D.CriticalPair) (δ : �
     (by simp [p.tamePart_eq_one, hv_not_chosen])
     (by simp [p.tamePart_eq_one, hv_star_not_chosen]) 0 0
 
-/-- Let `ℓ` be a prime, `p = (ν, z)` a pair and `δ` a sign, and let `ϑ = p.stickelbergerChar δ` be
-the `ℓ`-adic Galois character attached to the base change of `ν ^ (-δ)` to the field `E` of the data
-`D`. Then `ϑ` is trivial on the inertia groups at all places outside `badPlaces D ℓ`, the places
-dividing `ℓ p₀ p₁ N`, where `p₀`, `p₁` and `N` are the three primes of `D`. -/
-lemma stickelbergerChar_eq_one_of_mem_inertiaAbove (p : D.CriticalPair) (δ : ℤˣ) {g : AbsGal D}
-    (hg : g ∈ inertiaAbove (badPlaces D ℓ : Set (FinPlace D.E))ᶜ) :
-    p.stickelbergerChar (ℓ := ℓ) δ g = 1 := by
-  obtain ⟨v, hv, A, hA, hg⟩ := hg
-  -- The class of `g` is the local Artin symbol of a unit `x` at `v`.
-  obtain ⟨x, hx_unit, hx⟩ := hA.exists_localArtin_eq (inv_mem hg) 0
-  have hx_one : ((p.hasWeight.zpow (-δ : ℤˣ)).toAlgebraic 0 0).character (locIdele v x) = 1 :=
-    charUnramifiedAt_zpow_neg_of_notMem_badPlaces p δ hv x (by simpa using hx_unit)
-  ext
-  rw [CriticalPair.stickelbergerChar, avatar_localArtin _ hA
-    (.inl (not_isChosen_of_notMem_badPlaces hv).1) hx,
-    hx_one]
-  simp
-
 /-- Let `p = (ν, z)` be a ramified pair: the residue characters of `ν` are nontrivial exactly at the
 chosen places, which divide a fixed integer of norm `p₀ p₁`. Let `w` be a chosen place not above
 `ℓ`, let `δ` be a sign and let `ϑ = p.stickelbergerChar δ` be the `ℓ`-adic Galois character attached
@@ -330,7 +312,6 @@ theorem exists_stickelbergerSystem_β_le_and_norm_eq {w : FinPlace D.E} (hw : D.
   refine ⟨{
     twistChar := p.stickelbergerChar δ
     continuous_twistChar := continuous_avatar _
-    unramified := fun _ ↦ stickelbergerChar_eq_one_of_mem_inertiaAbove p δ
     twistChar_apply_ne_one := (stickelbergerChar_tameGenerator_ne_one_and_pow_eq_one hw hℓ hp δ).1
     exponents := K.toList.map Nat.cast
     element := Θ

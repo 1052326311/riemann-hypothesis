@@ -475,7 +475,7 @@ variable {E n m : Type} [Field E] [CMType E] {𝔪 : Modulus E} [Fintype n] [Dec
   [Fintype m] [DecidableEq m] {s : n → ℤˣ} {t : m → ℤˣ} [WeilData E] {w : FinPlace E}
   {ν : AutChar E}
 
-/-- A function `Ψ ≠ 0` on matrices modulo `𝔪` is sharp for a group `J` with `J(𝔪) ≤ J ≤ K₀` if `J`
+/-- A function `Ψ ≠ 0` on matrices modulo `𝔪` is sharp for a group `J` with `J(𝔪) ≤ J` if `J`
 fixes `Ψ ⊗ vac` and, for a fixed matrix `A`, the matrix `A x` lies in the image of `J` whenever
 `Ψ x ≠ 0`. Here `K₀ = stdLevel E n` is the group of integral points, `J(𝔪)` consists of those that
 are `1` modulo `𝔪`, and `Ψ ⊗ vac = vacuumDatum S T 𝔪 Ψ`. -/
@@ -483,8 +483,6 @@ structure SiegelWeil.IsSharpFn (S : Space E n s) (T : Space E m t) (b : AutChar 
     (J : Subgroup (Gf E n)) (Ψ : Matrix m n 𝔪.ResidueRing → ℂ) : Prop where
   /-- The principal level of `𝔪` lies in `J`. -/
   principal_le : 𝔪.levelOfSubgroup ⊥ ≤ J
-  /-- The points of `J` are integral. -/
-  le_stdLevel : J ≤ stdLevel E n
   /-- The function is not zero. -/
   ne_zero : Ψ ≠ 0
   /-- The group `J` fixes the datum `Ψ ⊗ vac`. -/
@@ -577,8 +575,8 @@ lemma SiegelWeil.IsSharpFn.weilMatrixCoeff_eq_zero_of_notMem_stdLevel (hΨ : IsS
 
 /-- The coefficient of a sharp datum. Let the signs of `S` agree or `𝔪 ≠ (1)`, and let `Ψ` be sharp
 for `J` relative to `b` (`IsSharpFn`): `Ψ ≠ 0` is a function on `m × n` matrices modulo `𝔪`,
-`J(𝔪) ≤ J ≤ K₀` with `K₀ = stdLevel E n`, `J` fixes `Ψ ⊗ vac`, and for a fixed matrix `A` the matrix
-`A x` lies in the image of `J` whenever `Ψ x ≠ 0`. Then `Ψ ⊗ vac` (`vacuumDatum`) satisfies
+`J(𝔪) ≤ J`, `J` fixes `Ψ ⊗ vac`, and for a fixed matrix `A` the matrix `A x` lies in the image
+of `J` whenever `Ψ x ≠ 0`. Write `K₀ = stdLevel E n`. Then `Ψ ⊗ vac` (`vacuumDatum`) satisfies
 `IsSharp` for `J` off the places of `𝔪 𝔪̄`: its matrix coefficient at the finite points integral off
 `𝔪 𝔪̄` is the mean of `|Ψ|²` times the indicator of `J`, and its mass is this mean divided by the
 index `[K₀ : J ∩ K₀]`. -/
@@ -603,7 +601,8 @@ lemma SiegelWeil.IsSharpFn.isSharp (hΨ : IsSharpFn S T b 𝔪 J Ψ)
     simp [vacuumDatum, projOn_schrodingerOp_vacElem, hB]
   · -- the coefficient at a point `g` integral off `𝔪 𝔪̄`
     split_ifs with g_lvl
-    · exact congrArg _ (hΨ.fixes g g_lvl.1)
+    · exact congrArg (dataInner (S.hom T) (vacuumDatum S T 𝔪 Ψ).1)
+        (hΨ.fixes g (Subgroup.mem_inf.1 g_lvl).1)
     by_cases g_int : g ∈ stdLevel E n
     · exact hΨ.weilMatrixCoeff_eq_zero_of_mem_stdLevel_of_notMem ⟨g, g_int⟩ fun h_mem ↦
         g_lvl ⟨h_mem, g_int⟩
@@ -629,7 +628,6 @@ lemma SiegelWeil.isSharpFn_of_mul_eq_one (S : Space E n s) (T : Space E m t) (b 
     IsSharpFn S T b 𝔪 (𝔪.levelOfSubgroup ⊥) F := by
   refine
     { principal_le := le_rfl
-      le_stdLevel := Subgroup.map_subtype_le _
       ne_zero := hF_ne
       fixes := ?_
       exists_mul_eq := ⟨A, fun x hx ↦ ⟨1, one_mem _, by simp [hA x hx]⟩⟩ }

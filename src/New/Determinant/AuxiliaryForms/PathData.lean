@@ -94,7 +94,6 @@ the places of `ϑ`, if `z` is false, and `𝔟 = ϖ ^ D.natB` if `z` is true. He
 abbrev triangleModulus (z : Bool) (ϑ : D.MFoldTwist) : Modulus D.E :=
   D.twistModulus (triangleTwist ϑ z) (D.triangleExponent z)
 
-lemma triangleModulus_false : triangleModulus false ϑ = D.twistModulus ϑ 1 := rfl
 
 
 /-- Let `ϑ` be an `m`-fold twist, `Q` the product of its places, `ϖ = D.piM` the generator of the
