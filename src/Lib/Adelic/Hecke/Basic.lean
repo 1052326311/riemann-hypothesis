@@ -232,7 +232,7 @@ abbrev HasFiniteCosets : Prop := (support fun q : G ⧸ K ↦ f q.out).Finite
 
 /-- The function f on G is left and right K-invariant and supported on finitely many cosets gK. -/
 abbrev IsHeckeFunction : Prop :=
-  HasFiniteCosets K f ∧ ∀ᵉ (g : G) (k ∈ K), f (g * k) = f g ∧ f (k * g) = f g
+  HasFiniteCosets K f ∧ ∀ g : G, ∀ k ∈ K, f (g * k) = f g ∧ f (k * g) = f g
 
 variable {K K' f}
 

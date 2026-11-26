@@ -756,7 +756,7 @@ the chosen representatives `q.out` of the cosets `q` equals the sum of `f (a * q
 /-- A sum over coset representatives of `G ⧸ H` of a right `H`-invariant function does not
 change under left translation. -/
 lemma New.sum_mul_out {G B : Type*} [Group G] [AddCommMonoid B] (H : Subgroup G) [Fintype (G ⧸ H)]
-    (f : G → B) (hf : ∀ᵉ (x : G) (y ∈ H), f (x * y) = f x) (a : G) :
+    (f : G → B) (hf : ∀ x : G, ∀ y ∈ H, f (x * y) = f x) (a : G) :
     ∑ q : G ⧸ H, f (a * q.out) = ∑ q : G ⧸ H, f q.out := by
   -- `q ↦ a • q` permutes the cosets, and `(a • q).out = a * q.out * y` for some `y ∈ H`.
   refine Fintype.sum_equiv (MulAction.toPerm a) _ _ fun q ↦ ?_
