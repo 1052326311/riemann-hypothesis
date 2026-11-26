@@ -594,6 +594,14 @@ lemma paramW_lt_iff (τ : D.Φ) {a b : D.RowIndex} :
     D.paramW τ a < D.paramW τ b ↔ D.basisNumber b < D.basisNumber a := by
   simp [paramW, (D.targetParameter_strictAnti τ).lt_iff_gt]
 
+/-- At every infinite place `v`, the parameter `D.paramW v` decreases along the numbering
+`D.basisNumber` of the basis of `Y₀`: exactly `D.basisNumber i` of its entries exceed the entry at
+`i` (`decreasingPosition` is the number of larger entries). -/
+lemma decreasingPosition_paramW (v : D.Φ) (i : D.RowIndex) :
+    decreasingPosition (D.paramW v) i = D.basisNumber i :=
+  D.card_filter_basisNumber (q := fun j : D.RowIndex ↦ D.paramW v i < D.paramW v j) 0
+    (D.basisNumber i) (by simp [paramW_lt_iff]) (by simp)
+
 /-- For 1 ≤ j ≤ m, the space W_j has exactly m − j minus signs. -/
 lemma negCount_signsW (j : D.LiftIndex) : negCount (D.signsW j) = D.m - j := by
   have h_neg (x : D.RowIndex) :

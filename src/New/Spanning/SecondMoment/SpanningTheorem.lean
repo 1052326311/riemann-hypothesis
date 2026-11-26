@@ -55,14 +55,6 @@ variable {P : Parameters} (D : Data P)
 
 section TargetDimension
 
-/-- At every infinite place `v`, the parameter `D.paramW v` decreases along the numbering
-`D.basisNumber` of the basis of `Y₀`: exactly `D.basisNumber i` of its entries exceed the entry at
-`i` (`decreasingPosition` is the number of larger entries). -/
-lemma decreasingPosition_paramW (v : D.Φ) (i : D.RowIndex) :
-    decreasingPosition (D.paramW v) i = D.basisNumber i :=
-  D.card_filter_basisNumber (q := fun j : D.RowIndex ↦ D.paramW v i < D.paramW v j) 0
-    (D.basisNumber i) (by simp [paramW_lt_iff]) (by simp)
-
 /-- The forms of principal level on the definite space `D.spaceW D.m`, where the level is free, have
 dimension `#Ḡ · mass_r` times the product over the infinite places of the formal degrees of the
 parameter `D.paramW v` for the definite signs. Here `Ḡ = D.chosenGL` and `mass_r = mass D.E D.r`. -/

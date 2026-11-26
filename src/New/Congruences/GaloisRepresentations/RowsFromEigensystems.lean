@@ -1,6 +1,6 @@
 import New.Congruences.GaloisRepresentations.RowsAndColumnsFromLabels
+import New.Determinant.AuxiliaryForms.RegularParameters
 import New.OneLift.ComparisonOperator.ExchangeData
-import New.Spanning.SecondMoment.SpanningTheorem
 
 /-!
 # Main summand conditions on Hodge–Tate jumps and existence of main summands for Hecke eigensystems
