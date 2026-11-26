@@ -150,16 +150,6 @@ lemma abs_primeRemainder_exp_sub_le {u v : ℝ} (hu : 0 ≤ u) (huv : u ≤ v) (
     _ ≤ 26 * (v - u) := by linarith
 
 /-- For a character `ψ` mod `q` let `L_ψ = entireL ψ` be `L(s, ψ)`, times `s - 1` if `ψ` is
-principal, and let `ψ' = quadTwist ψ d` be `ψ (·/d)`. The function `logDerivMean d q`, that is
-`(∑_ψ (logDeriv L_ψ' - logDeriv L_ψ) - 1) / φ(q)`, is analytic at every point where no `L_ψ` and no
-`L_ψ'` vanishes. -/
-lemma analyticAt_logDerivMean {s : ℂ} (h_char : ∀ ψ : DirichletCharacter ℂ q, entireL ψ s ≠ 0)
-    (h_twist : ∀ ψ : DirichletCharacter ℂ q, entireL (quadTwist ψ d) s ≠ 0) :
-    AnalyticAt ℂ (logDerivMean d q) s := by
-  unfold logDerivMean
-  fun_prop (disch := simp only [h_char, h_twist, ne_eq, not_false_eq_true]) [logDeriv]
-
-/-- For a character `ψ` mod `q` let `L_ψ = entireL ψ` be `L(s, ψ)`, times `s - 1` if `ψ` is
 principal, and let `ψ' = quadTwist ψ d` be `ψ (·/d)`. If all `logDeriv L_ψ` and `logDeriv L_ψ'` have
 norm at most `C` at `s`, then `logDerivMean d q = (∑_ψ (logDeriv L_ψ' - logDeriv L_ψ) - 1) / φ(q)`
 has norm at most `2 C + 1` at `s`, since there are `φ(q)` characters mod `q`. -/

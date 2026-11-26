@@ -254,6 +254,8 @@ lemma hookNumber_one_row [DecidableEq Φ] {N : Φ → ℕ} (hN : ∀ τ : Φ, 1 
   rw [Fintype.prod_eq_single (Fin.castLE (hN τ).le 0) fun b hb ↦ by simp [hb.symm]]
   simp
 
+variable [DecidableEq Φ] [Field R] [CharZero R]
+
 end New
 
 end OneRow

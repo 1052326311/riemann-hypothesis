@@ -490,7 +490,6 @@ of row `a` is above `card C - card R`. -/
 theorem New.IsMatch.centredParam_lt_or_lt (hm : IsMatch T l l') {a b : R} (h_le : l b ≤ l a) :
     (Fintype.card C - Fintype.card R : ℤ) < -T.centredParam l b ∨
       (Fintype.card C - Fintype.card R : ℤ) < T.centredParam l a := by
-  have h_centred_le : T.centredParam l b ≤ T.centredParam l a := by simpa using h_le
   have h_abs := neg_le_abs (Fintype.card R - Fintype.card C : ℤ)
   obtain ⟨c, -, h_large⟩ | h_free := hm.left a
   · -- Row `a` is matched: its centred parameter, times the sign of the variable, is large.

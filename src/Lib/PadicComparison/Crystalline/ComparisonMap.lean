@@ -363,7 +363,7 @@ open AddMonoidAlgebra Algebra TensorProduct AlgebraMonoidAlgebra in
 algebra A_inf[G] (and an A_inf-algebra through it), and b = O^♭[G] ⊗_{A_inf[G]} T, assumed perfect.
 Then there is an A_inf-algebra map k : T → W(b) that induces a bijection of p-adic completions. -/
 private lemma exists_isCompletionBijective_witt_tensor (G : Type) [AddCommMonoid.{0} G]
-    [Module ℚ≥0 G] (T : CommAlg Ainf[G]) [Etale Ainf[G] T] [Algebra Ainf T]
+    (T : CommAlg Ainf[G]) [Etale Ainf[G] T] [Algebra Ainf T]
     [IsScalarTower Ainf Ainf[G] T]
     (h_perf : PerfectRing (CommAlgCat.of OFlat (OFlat[G] ⊗[Ainf[G]] T)) p) :
     ∃ k : CommAlgCat.of Ainf T ⟶ wittFunctor.obj (CommAlgCat.of OFlat (OFlat[G] ⊗[Ainf[G]] T)),
@@ -473,7 +473,7 @@ lemma hasCrysComparison_of_etale (G : Type) [AddCommMonoid.{0} G] [Module ℚ≥
     exists_isCompletionBijective_witt_tensor G T h_perf
   -- `B ≅ OC ⊗ T`, so `Hom(B, -)` on `OC`-algebras is `Hom(T, -)` over `Ainf`.
   let iso : reprBy B ≅ restrictAlg Ainf OC ⋙ reprBy (.of Ainf T) :=
-    reprFunctor.mapIso (isoMk ((bc _).symm.trans (liftIso.restrictScalars _))).op ≪≫
+    reprFunctor.mapIso (CommAlgCat.isoMk ((bc OC).symm.trans (liftIso.restrictScalars OC))).op ≪≫
       isoOfAppBijective _ (pointMap_algBaseChange_unit_bijective (.of Ainf T))
   have h_witt : HasCrysComparison (restrictAlg Ainf OC ⋙ reprBy (.of Ainf T)) :=
     hasCrysComparison_of_witt ⟨b, h_perf, h_reg⟩ k hk
@@ -1210,8 +1210,7 @@ lemma span_range_crysComparison_pull_eq_top (hi_iso : IsIso i) [IsDomain S]
   have h_torsionFree : IsTorsionFree S Amax := by
     -- `p` is regular on `Amax`, and every nonzero element of `S` divides a power of `p`.
     refine isTorsionFree_of_dvd_pow h.isSMulRegular_natCast fun ht ↦ ?_
-    obtain ⟨k, hk⟩ := associated_pow_irreducible ht hp
-    exact ⟨k, hk.dvd⟩
+    exact (associated_pow_irreducible ht hp).imp fun _ hk ↦ hk.dvd
   algebraize [r, (algebraMap Amax Bmax).comp (algebraMap S Amax)]
   let N : CrysTest S ⥤ Ab := freeAb.obj (pdReduction r ⋙ V.toFunctor)
   -- Completed base change `L` along `S → Amax` is left adjoint to restriction of scalars.

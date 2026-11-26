@@ -72,7 +72,7 @@ lemma copyExponent_apply {X : Type} {k : ℕ} (α : Fin k → X × Unit →₀ �
 
 /-- The coefficient at `copyExponent α` of a product of series, each in the variables of its own
 copy, is the product of the coefficients at the exponents `α b` of the copies. -/
-lemma coeff_prod_rename_copyEmbedding {X R : Type} [Fintype X] [CommRing R] {k : ℕ}
+lemma coeff_prod_rename_copyEmbedding {X R : Type} [CommRing R] {k : ℕ}
     (α : Fin k → X × Unit →₀ ℕ) (Ψ : Fin k → MvPowerSeries (X × Unit) R) :
     coeff (copyExponent α) (∏ b : Fin k, rename (copyEmbedding b) (Ψ b)) =
       ∏ b : Fin k, coeff (α b) (Ψ b) := by
@@ -426,7 +426,8 @@ theorem exists_rpow_neg_localPrimeSumTotal_le_norm_coeff {P : Parameters} (D : D
   have h_normVac : 0 < ‖(ιₚ scaledVac : ℂ_[p])‖ := by simp [h_scaledVac, NeZero.ne D.M, hy]
   have h_factor :
       intFactor * c₀ = scaledVac * (∏ τ : D.Φ, D.lossProduct (ν (τ, ())) : ℕ) ^ 2 := by
-    simp [h_scaledVac, intFactor, Finset.prod_pow, mul_right_comm]
+    push_cast [h_scaledVac, intFactor, Finset.prod_pow]
+    ring
   have h_normLoss : ‖(ιₚ (∏ τ : D.Φ, D.lossProduct (ν (τ, ())) : ℕ) : ℂ_[p])‖ = p ^ (-valLoss) :=
     norm_natCast_prod_eq_rpow_neg_sum fun τ ↦ D.lossProduct_ne_zero _
   have h_normFactorial : ‖(ιₚ (∏ τ : D.Φ, (ν (τ, ()))! : ℕ) : ℂ_[p])‖ = p ^ (-valFactorial) :=

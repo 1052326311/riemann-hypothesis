@@ -211,7 +211,7 @@ theorem firstMinimum_mul_le_hom [Nonempty n] [Nonempty n']
   · -- both minima are at most `1` and the denominator is a natural number
     grw [firstMinimum_le_one, firstMinimum_le_one]
     · simp [Nat.cast_inv_le_one, ← Nat.cast_mul]
-    all_goals simp [firstMinimum_pos, le_of_lt]
+    simp [firstMinimum_pos, le_of_lt]
   choose Y Y_mem Y_short using S.exists_short_basis hN_mem
   -- `k`, the matrix of `z` in adelic coordinates, takes the coordinates of `y` to those of `z y`
   let k : Matrix n' n (𝔸 E) := vecToMatrix ((S.hom T).vecAtPoint z)
@@ -620,7 +620,7 @@ namespace New.Rows
 
 /-- A point of the archimedean unitary group has operator norm at least `1` at every place, so the
 largest of these norms is at least `1`. -/
-@[bound] theorem one_le_maxOpNorm {E n : Type} [Field E] [NumberField E] [IsCMField E] [Fintype n]
+@[bound] theorem one_le_maxOpNorm {E n : Type} [Field E] [NumberField E] [Fintype n]
     [DecidableEq n] [Nonempty n] {s : n → ℤˣ} (h : GInf E s) : 1 ≤ maxOpNorm h := by
   obtain ⟨w⟩ : Nonempty (InfinitePlace E) := inferInstance
   exact (U.one_le_norm (h w)).trans (norm_le_pi_norm (fun w ↦ (h w : Matrix n n ℂ)) w)

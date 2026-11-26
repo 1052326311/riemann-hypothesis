@@ -364,7 +364,6 @@ lemma exists_functional_equation_exponentSeries {ϖ : ℂ_[p]} {Y : (valRingCp p
   set π : ℂ_[p] := ιₚ (piPrime d p)
   set q : ℕ := primeNorm d p
   set i : ℕ := leastFlatDegree d p
-  have hp0 : (p : ℂ_[p]) ≠ 0 := Nat.cast_ne_zero.2 (Fact.out : p.Prime).ne_zero
   have hq0 : (q : ℂ_[p]) ≠ 0 := Nat.cast_ne_zero.2 (one_lt_primeNorm d p).ne_bot
   have hϖ0 : ϖ ≠ 0 := ne_zero_of_norm_eq_rpow hϖ
   have hϖπ : ‖ϖ‖ ^ (q - 1) = ‖π‖ := by rw [hϖ, norm_piPrime_eq_rpow_pow]
