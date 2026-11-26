@@ -235,7 +235,7 @@ private lemma pull_mk₀_comp_contractionPow_one_eq_pull_extClass_oneSubMu
     let a' : Y.GenericRing := genericOver.map f.fst a
     change b' - mulMu Y.test (a' * -ExteriorAlgebra.algebraMapInv
       (contraction f.snd (.ι _ w'))) = b' + mulMu Y.test (f.snd m).fst
-    erw [← hw_smul, map_smulₛₗ]
+    rw [← hw_smul, map_smulₛₗ]
     -- After unfolding `contraction`, both sides read `f b + mulMu (f a * f w)`, through maps of
     -- pairs that agree by definition.
     simp [contraction]
