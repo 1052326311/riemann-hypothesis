@@ -1,8 +1,10 @@
-import Lib.General.LinearAlgebra.BlockEmbeddings
-import Lib.General.LinearAlgebra.TensorChains
-import New.Spanning.Frames.FiniteShells
-import New.Spanning.MainTerm.FillingLevel
-import New.Spanning.Unfolding.Climbing
+module
+
+public import Lib.General.LinearAlgebra.BlockEmbeddings
+public import Lib.General.LinearAlgebra.TensorChains
+public import New.Spanning.Frames.FiniteShells
+public import New.Spanning.MainTerm.FillingLevel
+public import New.Spanning.Unfolding.Climbing
 
 /-!
 # Groups that fix given vectors at chosen places have a small mass integral
@@ -44,6 +46,8 @@ Notions from other files:
 
 See `New.Spanning.MainTerm.EnergyEstimate` for related work.
 -/
+
+@[expose] public section
 
 namespace New.Filling
 

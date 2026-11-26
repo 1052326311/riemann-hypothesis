@@ -1,8 +1,10 @@
-import Lib.Cohomology.WoodsHole
-import Lib.PadicComparison.CrystallineFrobenius
-import Lib.PadicHodge.Limit.CrystallineLimit
-import Lib.Shimura.CongruenceRelation.EichlerShimura
-import Lib.Shimura.Transfer.Lefschetz
+module
+
+public import Lib.Cohomology.WoodsHole
+public import Lib.PadicComparison.CrystallineFrobenius
+public import Lib.PadicHodge.Limit.CrystallineLimit
+public import Lib.Shimura.CongruenceRelation.EichlerShimura
+public import Lib.Shimura.Transfer.Lefschetz
 
 /-!
 # Eigenquotients for Hecke eigensystems and the Galois representations they cut out
@@ -101,6 +103,8 @@ et représentations l-adiques, Sém. Bourbaki 355 (1969), Thm 4.9; Harris and Ta
 cohomology of some simple Shimura varieties (2001), ch. VII; Wedhorn, Congruence relations on some
 Shimura varieties, J. reine angew. Math. 524 (2000).
 -/
+
+@[expose] public section
 
 /-!
 ## The largest quotient on which Hecke operators act by an eigensystem

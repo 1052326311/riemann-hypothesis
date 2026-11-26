@@ -1,4 +1,6 @@
-import Lib.Cohomology.PointClass.ProjectiveNonvanishing
+module
+
+public import Lib.Cohomology.PointClass.ProjectiveNonvanishing
 
 /-!
 # The Hodge–Tate map keeps classes of points on a projective variety linearly independent
@@ -45,6 +47,8 @@ by transfer along a finite linear projection. Source: Faltings, p-adic Hodge the
 (compatibility with traces and cycle classes); for transfer, Suslin–Voevodsky, Singular homology of
 abstract algebraic varieties, Invent. Math. 123 (1996), §§4–6.
 -/
+
+@[expose] public section
 
 open CategoryTheory Function CommAlgCat New.Variety CutsOutLocus IsCoordsWithUnit projSpace
   MvPolynomial Finset RingHom Fin CommAlg IsLocalization Away Field Submodule Algebra Ideal

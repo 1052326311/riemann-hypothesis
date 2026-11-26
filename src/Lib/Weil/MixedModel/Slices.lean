@@ -1,7 +1,9 @@
-import Lib.SiegelWeil.Tower.LineTerms
-import Lib.Weil.DualPair.ThetaIntegrals
-import Lib.Weil.MixedModel.FockSections
-import Lib.Weil.TameGaussSum
+module
+
+public import Lib.SiegelWeil.Tower.LineTerms
+public import Lib.Weil.DualPair.ThetaIntegrals
+public import Lib.Weil.MixedModel.FockSections
+public import Lib.Weil.TameGaussSum
 
 /-!
 # Real, named and finite slices of data in the mixed model of an adapted splitting
@@ -48,6 +50,8 @@ Notions from other files:
 
 Known; see `Lib.Weil.MixedModel.ZeroTerm` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

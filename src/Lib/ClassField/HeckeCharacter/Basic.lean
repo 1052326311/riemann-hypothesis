@@ -1,6 +1,8 @@
-import Lib.ClassField.GaloisCohomology.KummerCyclicClasses
-import Lib.ClassField.Places.Ideles
-import Lib.GaloisRep.Hilbert90.UnitaryGroups
+module
+
+public import Lib.ClassField.GaloisCohomology.KummerCyclicClasses
+public import Lib.ClassField.Places.Ideles
+public import Lib.GaloisRep.Hilbert90.UnitaryGroups
 
 /-!
 # Characters of U(1) of a CM field: existence, weights and conjugates
@@ -40,6 +42,8 @@ Notions from other files:
 
 Known; see `Lib.ClassField.Global.CMSplittingCharacters` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

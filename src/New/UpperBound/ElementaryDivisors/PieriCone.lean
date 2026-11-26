@@ -1,4 +1,6 @@
-import Lib.Base
+module
+
+public import Lib.Base
 
 /-!
 # The Pieri cone, the step map and the slab: interlacing and volume of the cone
@@ -32,6 +34,8 @@ the application `v j` is true for even `j`.
 
 See `New.UpperBound.ElementaryDivisors.DefectCount` for related work.
 -/
+
+@[expose] public section
 
 namespace New
 

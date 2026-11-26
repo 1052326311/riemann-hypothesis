@@ -1,4 +1,6 @@
-import Lib.ClassField.Places.GaloisDefs
+module
+
+public import Lib.ClassField.Places.GaloisDefs
 
 /-!
 # Continuous cohomology of discrete modules: cocycles, H², cyclic classes, local Artin map
@@ -37,6 +39,8 @@ Known; see `Lib.ClassField.GaloisCohomology.KummerCyclicClasses`, `Lib.ClassFiel
 `Lib.ClassField.Places.LocalFields` and `Lib.ClassField.LocalDuality.CrystallineDuality` for
 sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

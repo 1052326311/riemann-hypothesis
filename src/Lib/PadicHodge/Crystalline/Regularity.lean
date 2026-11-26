@@ -1,4 +1,6 @@
-import Lib.PadicHodge.Crystalline.FixedRatios
+module
+
+public import Lib.PadicHodge.Crystalline.FixedRatios
 
 /-!
 # Regularity of B_max, closure of admissibility, and crystalline descent from inertia
@@ -44,6 +46,8 @@ Summer School notes on p-adic Hodge theory (2009), 2.3.1, 5.2.1, 6.3, 9.1–9.3.
 
 See also `Lib.PadicHodge.PeriodRings.DeRhamPeriods` and `Lib.PadicHodge.Kisin.PeriodMatrixFrame`.
 -/
+
+@[expose] public section
 
 /-!
 ## Closure properties of admissible representations

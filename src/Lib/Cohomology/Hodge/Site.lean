@@ -1,5 +1,7 @@
-import Lib.Cohomology.Hodge.CupProduct
-import Lib.General.Geometry.EtaleCharts
+module
+
+public import Lib.Cohomology.Hodge.CupProduct
+public import Lib.General.Geometry.EtaleCharts
 
 /-!
 # Hodge cohomology on algebras with free modules; universal points of charts
@@ -35,6 +37,8 @@ Notions from other files:
 
 Known; see `Lib.Cohomology.Hodge.FixedPointFormula` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

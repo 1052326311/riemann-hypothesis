@@ -1,5 +1,7 @@
-import New.OneLift.ComparisonOperator.DeterminantProducts
-import New.OneLift.ComparisonOperator.GluedLattices
+module
+
+public import New.OneLift.ComparisonOperator.DeterminantProducts
+public import New.OneLift.ComparisonOperator.GluedLattices
 
 /-!
 # The polynomial map ζ, the datum Ψ^add and the series Υ; norm, degree and denominator of ζ
@@ -42,6 +44,8 @@ Notions from other files:
 
 See `New.OneLift.ComparisonOperator.FirstFactors` for related work.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,5 +1,7 @@
-import Lib.GLn.SchurModule.SchurOrthogonality
-import Lib.General.LinearAlgebra.Eigenvalues
+module
+
+public import Lib.GLn.SchurModule.SchurOrthogonality
+public import Lib.General.LinearAlgebra.Eigenvalues
 
 /-!
 # Laurent polynomials on the torus and Weyl's character and dimension formulas
@@ -45,6 +47,8 @@ Classical Groups (1939), ch. VII; Fulton and Harris, Representation Theory (1991
 
 See also `Lib.DiscreteSeries.Character.FormalDegree`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,10 +1,12 @@
-import Lib.CM.Sigma.Basic
-import Lib.DiscreteSeries.Bessel.FrameFibre
-import Lib.DiscreteSeries.Bruhat.FloorFibre
-import Lib.DiscreteSeries.Bruhat.SphereFibres
-import Lib.Weil.Construction.HeisenbergModel
-import New.Spanning.Bessel.Basic
-import New.Spanning.Frames.Correlations
+module
+
+public import Lib.CM.Sigma.Basic
+public import Lib.DiscreteSeries.Bessel.FrameFibre
+public import Lib.DiscreteSeries.Bruhat.FloorFibre
+public import Lib.DiscreteSeries.Bruhat.SphereFibres
+public import Lib.Weil.Construction.HeisenbergModel
+public import New.Spanning.Bessel.Basic
+public import New.Spanning.Frames.Correlations
 
 /-!
 # Floor measures at the complex place: Haar measure, place datum and gauge
@@ -59,6 +61,8 @@ Notions from other files:
 
 See `Lib.DiscreteSeries.Bruhat.ComplexPlace` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

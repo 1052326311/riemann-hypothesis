@@ -1,7 +1,9 @@
-import Lib.Adelic.Reduction.DefiniteClassSums
-import Lib.GLn.SchurModule.SchurOrthogonality
-import Lib.GaloisRep.Main.Defs
-import Lib.Weil.Construction.ThetaJets
+module
+
+public import Lib.Adelic.Reduction.DefiniteClassSums
+public import Lib.GLn.SchurModule.SchurOrthogonality
+public import Lib.GaloisRep.Main.Defs
+public import Lib.Weil.Construction.ThetaJets
 
 /-!
 # Algebraic forms on definite unitary groups, their pairing and Harish-Chandra parameters
@@ -47,6 +49,8 @@ Notions from other files:
 Known result: algebraic modular forms on definite unitary groups, their invariant pairing and
 Harish-Chandra parameters. Source: B. Gross, Algebraic modular forms, Israel J. Math. 113 (1999).
 -/
+
+@[expose] public section
 
 noncomputable section
 

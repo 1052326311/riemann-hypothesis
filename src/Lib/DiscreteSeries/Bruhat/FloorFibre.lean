@@ -1,5 +1,7 @@
-import Lib.DiscreteSeries.Bruhat.ComplexPlace
-import Lib.General.Measure.FibreMeasure
+module
+
+public import Lib.DiscreteSeries.Bruhat.ComplexPlace
+public import Lib.General.Measure.FibreMeasure
 
 /-!
 # Measures of a floor below fibre measures, at the place ℂ
@@ -41,6 +43,8 @@ Notions from other files:
 
 Known; see `Lib.DiscreteSeries.Bruhat.ComplexPlace` for sources.
 -/
+
+@[expose] public section
 
 namespace New.Floors
 

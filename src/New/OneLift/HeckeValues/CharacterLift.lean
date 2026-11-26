@@ -1,6 +1,8 @@
-import Lib.Weil.CompactLift.DefiniteThetaLift
-import New.Determinant.Norms.VectorKernel
-import New.UpperBound.Kernels.JetConjugatesAndBounds
+module
+
+public import Lib.Weil.CompactLift.DefiniteThetaLift
+public import New.Determinant.Norms.VectorKernel
+public import New.UpperBound.Kernels.JetConjugatesAndBounds
 
 /-!
 # The lift of a character from U(1): kernel, descent and Galois conjugates
@@ -51,6 +53,8 @@ The sections "The lift and the descent" and "The parameter of the line and a Hec
 up, for the data `New.LValueData`, steps of the known expression of critical Hecke L-values of CM
 fields as squared norms of theta lifts from U(1).
 -/
+
+@[expose] public section
 
 noncomputable section
 

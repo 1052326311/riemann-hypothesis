@@ -1,4 +1,6 @@
-import Lib.Adelic.Witt.WittTheorem
+module
+
+public import Lib.Adelic.Witt.WittTheorem
 
 /-!
 # Floor groups, Weyl elements and the Bessel subgroup of a split unitary group
@@ -45,6 +47,8 @@ unfolding, for which it supplies the groups. Sources: A. Borel, Introduction to 
 Proc. Sympos. Pure Math. 9 (1966) (Poincaré series); V. Platonov, A. Rapinchuk, Algebraic groups and
 number theory (1994) §7.1; for the set-up, W. T. Gan, B. Gross, D. Prasad, Astérisque 346 (2012).
 -/
+
+@[expose] public section
 
 noncomputable section
 

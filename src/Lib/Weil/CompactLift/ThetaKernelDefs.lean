@@ -1,4 +1,6 @@
-import Lib.Weil.DualPair.WeilAction
+module
+
+public import Lib.Weil.DualPair.WeilAction
 
 /-!
 # The jet matrix of a definite pair is a kernel for algebraic forms
@@ -32,6 +34,8 @@ Notions from other files:
 
 Known; see `Lib.Weil.CompactLift.DefiniteThetaLift` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

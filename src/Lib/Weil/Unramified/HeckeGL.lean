@@ -1,5 +1,7 @@
-import Lib.Adelic.Unitary.CongruenceLevels
-import Lib.LocalGL.Iwahori.ParahoricStructure
+module
+
+public import Lib.Adelic.Unitary.CongruenceLevels
+public import Lib.LocalGL.Iwahori.ParahoricStructure
 
 /-!
 # Hecke operators of GL_n at a finite place and local criteria for principal level
@@ -38,6 +40,8 @@ cosets, indexed by the subspaces of dimension j of k_w^n.
 
 See also `Lib.Adelic.Unitary.CongruenceLevels`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

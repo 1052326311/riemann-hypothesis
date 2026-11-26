@@ -1,5 +1,7 @@
-import Lib.General.Groups.BesselGroups
-import Lib.General.Groups.CharacterTheory
+module
+
+public import Lib.General.Groups.BesselGroups
+public import Lib.General.Groups.CharacterTheory
 
 /-!
 # Hall algebra of class functions: induction product, Mackey formula, Frobenius reciprocity
@@ -39,6 +41,8 @@ Notions from other files:
 
 Known; see `Lib.LocalGL.Green.TauFunctions` and `Lib.LocalGL.Green.CuspidalFunctions` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

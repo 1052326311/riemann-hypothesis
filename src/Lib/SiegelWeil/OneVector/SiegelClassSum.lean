@@ -1,6 +1,8 @@
-import Lib.Analytic.EntireLFunction
-import Lib.SiegelWeil.Formula.WeilRange
-import Lib.Weil.MixedModel.AdaptedSplitting
+module
+
+public import Lib.Analytic.EntireLFunction
+public import Lib.SiegelWeil.Formula.WeilRange
+public import Lib.Weil.MixedModel.AdaptedSplitting
 
 /-!
 # Siegel–Weil for one vector, Siegel's class sum formula and the ratio of masses
@@ -54,6 +56,8 @@ vectors of norm one and a Gauss sum bound. Source: W. T. Gan, J. Hanke, J.-K. Yu
 formula of Shimura, Duke Math. J. 107 (2001); M. Kirschmer, Definite quadratic and hermitian forms
 with small class number (2016), 4.2.7, 4.2.9.
 -/
+
+@[expose] public section
 
 section OneVector
 

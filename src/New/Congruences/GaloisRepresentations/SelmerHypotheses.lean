@@ -1,8 +1,10 @@
-import Lib.GaloisRep.LocalGlobal.LabelCompatibility
-import Lib.GaloisRep.Main.DivisibleSelmerModules
-import New.Congruences.LocalLoss.Basic
-import New.OneLift.TestedForms
-import New.UpperBound.Objects.Rows
+module
+
+public import Lib.GaloisRep.LocalGlobal.LabelCompatibility
+public import Lib.GaloisRep.Main.DivisibleSelmerModules
+public import New.Congruences.LocalLoss.Basic
+public import New.OneLift.TestedForms
+public import New.UpperBound.Objects.Rows
 
 /-!
 # Bad places, ℓ-adic avatars and hypotheses on conjugate self-dual representations
@@ -39,6 +41,8 @@ Notions from other files:
 
 See `Lib.ClassField.Avatar.LocalGlobalCompatibility` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

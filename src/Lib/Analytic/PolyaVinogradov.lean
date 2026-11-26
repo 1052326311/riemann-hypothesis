@@ -1,4 +1,6 @@
-import Lib.Analytic.ZeroSymmetry
+module
+
+public import Lib.Analytic.ZeroSymmetry
 
 /-!
 # Gauss sums of primitive characters and the Pólya–Vinogradov bound
@@ -17,6 +19,8 @@ proved here for initial intervals only, with the explicit bound `2 √q (1 + log
 general character is reduced to the primitive character that induces it by a Möbius sieve. Source:
 Pólya 1918, Vinogradov 1918; Davenport, Multiplicative Number Theory; Montgomery–Vaughan Thm 9.18.
 -/
+
+@[expose] public section
 
 open Complex Finset DirichletCharacter Real ZMod ArithmeticFunction Moebius NeZero Nat
 

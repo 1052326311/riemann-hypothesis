@@ -1,7 +1,9 @@
-import Lib.General.Geometry.GeometricPoints
-import Lib.Shimura.ThetaGroup
-import Lib.Shimura.ThetaNormality.NormalGeneration
-import Lib.Shimura.Uniformisation.HolomorphicFamilies
+module
+
+public import Lib.General.Geometry.GeometricPoints
+public import Lib.Shimura.ThetaGroup
+public import Lib.Shimura.ThetaNormality.NormalGeneration
+public import Lib.Shimura.Uniformisation.HolomorphicFamilies
 
 /-!
 # Uniformisations over an arc: theta coordinates, Weil pairing and extension of maps
@@ -51,6 +53,8 @@ Moret-Bailly, Pinceaux de variétés abéliennes, Astérisque 129 (1985), II.3.5
 
 See also `Lib.Shimura.IntegralModel.UniversalFamily` and `Lib.Shimura.Uniformisation.AppellHumbert`.
 -/
+
+@[expose] public section
 
 namespace New.Variety
 

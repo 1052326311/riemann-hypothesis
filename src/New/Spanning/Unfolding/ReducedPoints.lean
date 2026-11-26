@@ -1,4 +1,6 @@
-import New.Spanning.RemainingTerms.BorderedDeterminant
+module
+
+public import New.Spanning.RemainingTerms.BorderedDeterminant
 
 /-!
 # Eichler-type unipotent elements, colouring bounds and reduced points
@@ -35,6 +37,8 @@ Notions from other files:
 
 Here and below `M = S.M` is the level of the filling data `S`.
 -/
+
+@[expose] public section
 
 namespace New.Filling
 

@@ -1,5 +1,7 @@
-import Lib.PadicHodge.Crystalline.HodgeTateForms
-import Lib.PadicHodge.Kisin.Charts
+module
+
+public import Lib.PadicHodge.Crystalline.HodgeTateForms
+public import Lib.PadicHodge.Kisin.Charts
 
 /-!
 # Witt coefficients, the Frobenius group action and existence of Kummer charts
@@ -32,6 +34,8 @@ Notions from other files:
 Known; see `Lib.PadicHodge.Kisin.PeriodMatrixFrame` and `Lib.PadicHodge.PeriodRings.DeRhamPeriods`
 for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

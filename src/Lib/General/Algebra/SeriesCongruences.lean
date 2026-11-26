@@ -1,4 +1,6 @@
-import Lib.General.Algebra.AdicCompletion
+module
+
+public import Lib.General.Algebra.AdicCompletion
 
 /-!
 # Power series with prime power exponents, congruences and convergent sums
@@ -30,6 +32,8 @@ Known result: elementary facts on power series in characteristic `p`.
 Known result: elementary facts on formal power series with the topology of coefficientwise
 convergence. Source: Bourbaki, Algebra II, Chapter IV.
 -/
+
+@[expose] public section
 
 /-! ## Series with prime power exponents -/
 

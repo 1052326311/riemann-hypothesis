@@ -1,4 +1,6 @@
-import New.Spanning.Unfolding.Terms
+module
+
+public import New.Spanning.Unfolding.Terms
 
 /-!
 # Near terms in the filling theorem: the bound for an orbit, the tail and the open-cell term
@@ -33,6 +35,8 @@ Notions from other files:
 * `New.Filling.termDiscNorm`, `New.Filling.pairCountScale` (from `New.Spanning.Unfolding.Terms`):
   the product over the infinite places of |𝗀(γ)|_v, and the number n_p = #R̄₀ n_X N^(−kf).
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,6 +1,8 @@
-import Lib.Adelic.Witt.WittTheorem
-import Lib.DiscreteSeries.Haar.GramPolar
-import Lib.General.Analysis.PackingAndSobolev
+module
+
+public import Lib.Adelic.Witt.WittTheorem
+public import Lib.DiscreteSeries.Haar.GramPolar
+public import Lib.General.Analysis.PackingAndSobolev
 
 /-!
 # Haar measure on U(J): U(n) has mass one, covering bounds for norm balls
@@ -44,6 +46,8 @@ Functions of Several Complex Variables in the Classical Domains (1963), ch. III;
 The volume of a compact Lie group, Invent. Math. 56 (1980); B. Gross, On the motive of a reductive
 group, Invent. Math. 130 (1997).
 -/
+
+@[expose] public section
 
 /-! ## U(n) has mass one -/
 

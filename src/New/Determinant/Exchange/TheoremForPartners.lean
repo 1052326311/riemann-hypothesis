@@ -1,6 +1,8 @@
-import Lib.Weil.DualPair.Flip
-import New.Determinant.Exchange.RealVectors
-import New.Determinant.Exchange.VanishingDescends
+module
+
+public import Lib.Weil.DualPair.Flip
+public import New.Determinant.Exchange.RealVectors
+public import New.Determinant.Exchange.VanishingDescends
 
 /-!
 # Exchange of theta integrals for matched functions and for data modulo an ideal
@@ -58,6 +60,8 @@ of non-trivial automorphic characters of orthogonal groups, arXiv 2401.13469, 20
 The regularized Siegel–Weil formula (second term identity) and the Rallis inner product formula,
 2014.
 -/
+
+@[expose] public section
 
 noncomputable section
 

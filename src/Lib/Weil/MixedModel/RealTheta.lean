@@ -1,5 +1,7 @@
-import Lib.Weil.Construction.ProductsAndTransport
-import Lib.Weil.MixedModel.IsotropicSplitting
+module
+
+public import Lib.Weil.Construction.ProductsAndTransport
+public import Lib.Weil.MixedModel.IsotropicSplitting
 
 /-!
 # Real data, the entire theta function, and the real vacuum in the mixed model
@@ -40,6 +42,8 @@ Notions from other files:
 
 Known; see `Lib.Weil.Fock.OscillatorPair` and `Lib.Weil.MixedModel.ZeroTerm` for sources.
 -/
+
+@[expose] public section
 
 namespace New.Space
 

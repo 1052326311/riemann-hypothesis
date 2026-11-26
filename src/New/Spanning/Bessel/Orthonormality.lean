@@ -1,6 +1,8 @@
-import Lib.DiscreteSeries.Bessel.SchurBound
-import Lib.DiscreteSeries.Bessel.UnipotentHaarMeasure
-import New.Spanning.Bessel.Basic
+module
+
+public import Lib.DiscreteSeries.Bessel.SchurBound
+public import Lib.DiscreteSeries.Bessel.UnipotentHaarMeasure
+public import New.Spanning.Bessel.Basic
 
 /-!
 # Normalisation of a Bessel function and of its cut
@@ -33,6 +35,8 @@ Notions from other files:
 
 See `New.Spanning.Bessel.CutTailBound` for related work.
 -/
+
+@[expose] public section
 
 open Matrix MeasureTheory Complex Subgroup ComplexConjugate
 

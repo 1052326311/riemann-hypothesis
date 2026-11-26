@@ -1,6 +1,8 @@
-import Lib.Cohomology.Etale.ProperFunctors
-import Lib.Cohomology.ProjectiveLine.ChernClass
-import Lib.Cohomology.ProperBaseChange.SubringSplitting
+module
+
+public import Lib.Cohomology.Etale.ProperFunctors
+public import Lib.Cohomology.ProjectiveLine.ChernClass
+public import Lib.Cohomology.ProperBaseChange.SubringSplitting
 
 /-!
 # Proper base change over AIC valuation rings and its consequences for ℤ/ℓ-cohomology
@@ -64,6 +66,8 @@ with a Mayer–Vietoris splitting, together with Kummer theory. Source: Artin, S
 5.4, 5.5 (1973); Stacks Project Tag 095S; reduction to spaces of places as in Scholze, Étale
 cohomology of diamonds (2017), Thm 19.2 and Lemma 19.4, after Huber, Math. Ann. 295 (1993).
 -/
+
+@[expose] public section
 
 noncomputable section
 

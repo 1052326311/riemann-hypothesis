@@ -1,4 +1,6 @@
-import Lib.General.NumberTheory.EmbeddingsAndDifferent
+module
+
+public import Lib.General.NumberTheory.EmbeddingsAndDifferent
 
 /-!
 # The imaginary quadratic field ℚ(√−d): characters, Frobenius and splitting of primes
@@ -30,6 +32,8 @@ consequences of lifting the exponent at `2` for integers, which do not involve `
 * `New.QuadField.span_eq_or_exists_span_eq_mul`: `p` is inert in `K`, or it is the product of two
   places of degree one; `New.QuadField.prime_inert_or_eq_mul` also lists the places above `p`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

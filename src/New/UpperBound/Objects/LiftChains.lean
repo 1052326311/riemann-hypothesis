@@ -1,9 +1,11 @@
-import Lib.General.LinearAlgebra.BlockEmbeddings
-import Lib.Shimura.HeckeTower.HeckeData
-import Lib.Weil.CompactLift.ThetaKernelDefs
-import New.Reduction.Data.Sizes
-import New.UpperBound.Objects.LabelsAndIndexTypes
-import New.UpperBound.Objects.LiftLawsModuloN
+module
+
+public import Lib.General.LinearAlgebra.BlockEmbeddings
+public import Lib.Shimura.HeckeTower.HeckeData
+public import Lib.Weil.CompactLift.ThetaKernelDefs
+public import New.Reduction.Data.Sizes
+public import New.UpperBound.Objects.LabelsAndIndexTypes
+public import New.UpperBound.Objects.LiftLawsModuloN
 
 /-!
 # Chains of theta lifts, jointly invariant combinations, and free levels
@@ -34,6 +36,8 @@ Notions from other files:
   inside the finite adelic group.
 * `New.Data.n`: The rank 𝗇_j = k + j(t + 1) of X_j.
 -/
+
+@[expose] public section
 
 noncomputable section
 

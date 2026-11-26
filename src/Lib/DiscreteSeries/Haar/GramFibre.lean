@@ -1,5 +1,7 @@
-import Lib.DiscreteSeries.Haar.TotalMass
-import Lib.General.Measure.FibreMeasure
+module
+
+public import Lib.DiscreteSeries.Haar.TotalMass
+public import Lib.General.Measure.FibreMeasure
 
 /-!
 # The fibre measure of the Gram map
@@ -32,6 +34,8 @@ Notions from other files:
 Known result: the invariant measure `dY / dT` on tuples of vectors with a given Gram matrix. Source:
 C. L. Siegel, Über die analytische Theorie der quadratischen Formen, Ann. of Math. 36 (1935).
 -/
+
+@[expose] public section
 
 noncomputable section
 

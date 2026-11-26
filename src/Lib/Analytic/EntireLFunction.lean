@@ -1,4 +1,6 @@
-import Lib.General.NumberTheory.ImaginaryQuadraticField
+module
+
+public import Lib.General.NumberTheory.ImaginaryQuadraticField
 
 /-!
 # Quadratic twists, polar functions and logarithmic derivatives of Dirichlet L-functions
@@ -30,6 +32,8 @@ Notions from other files:
 
 Known; see `Lib.Analytic.Landau` for sources.
 -/
+
+@[expose] public section
 
 open ArithmeticFunction DirichletCharacter Complex Set Filter MeasureTheory Metric ProbabilityTheory
   Nat Topology ComplexOrder AnalyticOnNhd Real

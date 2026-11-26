@@ -1,6 +1,8 @@
-import New.Spanning.MainTerm.Frequencies
-import New.Spanning.RemainingTerms.Box
-import New.Spanning.Unfolding.BesselLevelStructure
+module
+
+public import New.Spanning.MainTerm.Frequencies
+public import New.Spanning.RemainingTerms.Box
+public import New.Spanning.Unfolding.BesselLevelStructure
 
 /-!
 # One-sided Poisson summation, sums over frequencies, and the sieve over all places
@@ -53,6 +55,8 @@ X^ε are known in the literature. Related work: Jacquet, Smooth transfer of Kloo
 decomposition of GL(3) Kloosterman sums and the spectral large sieve, 2015; Deshouillers–Iwaniec,
 Kloosterman sums and Fourier coefficients of cusp forms, 1982.
 -/
+
+@[expose] public section
 
 namespace New.Filling
 

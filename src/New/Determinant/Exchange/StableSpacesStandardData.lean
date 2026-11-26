@@ -1,4 +1,6 @@
-import New.Determinant.Exchange.MatchingPartners
+module
+
+public import New.Determinant.Exchange.MatchingPartners
 
 /-!
 # Criteria for a function with a matched function to lie in a stable space; vanishing of lifts
@@ -38,6 +40,8 @@ Notions from other files:
 * `New.Space.Splitting.partialMean`: the mean of a Fourier coefficient over the shifts of one more
   isotropic vector; `New.Space.Splitting.ShearInvariant` is its invariance under local shears.
 -/
+
+@[expose] public section
 
 /-! ## Stable spaces containing a standard datum -/
 

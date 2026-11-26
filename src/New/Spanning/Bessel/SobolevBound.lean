@@ -1,5 +1,7 @@
-import Lib.DiscreteSeries.Bessel.SchurBound
-import New.Spanning.Bessel.MeanValue
+module
+
+public import Lib.DiscreteSeries.Bessel.SchurBound
+public import New.Spanning.Bessel.MeanValue
 
 /-!
 # Unfolding bounds over G₁ and the L² bound at the section γ_Z via Sobolev
@@ -39,6 +41,8 @@ Notions from other files:
 
 See `New.Spanning.Bessel.FillingData` for related work.
 -/
+
+@[expose] public section
 
 /-!
 ## An unfolding bound over G₁ for suitable weights

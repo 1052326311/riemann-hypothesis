@@ -1,6 +1,8 @@
-import Lib.ClassField.Places.ProfiniteGalois
-import Lib.General.Algebra.AbsIntegrallyClosed
-import Lib.General.Algebra.AdicCompletion
+module
+
+public import Lib.ClassField.Places.ProfiniteGalois
+public import Lib.General.Algebra.AbsIntegrallyClosed
+public import Lib.General.Algebra.AdicCompletion
 
 /-!
 # Tilting, Fontaine's θ, the ring O_C and Ax's theorem on Galois invariants in ℂ_p
@@ -36,6 +38,8 @@ Notions from other files:
 
 Known; see `Lib.PadicHodge.PeriodRings.DeRhamPeriods` and `Lib.PadicHodge.TateSen` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

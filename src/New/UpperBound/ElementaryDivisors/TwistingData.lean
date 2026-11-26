@@ -1,5 +1,7 @@
-import Lib.GLn.SchurModule.Basic
-import Lib.General.Groups.BesselGroups
+module
+
+public import Lib.GLn.SchurModule.Basic
+public import Lib.General.Groups.BesselGroups
 
 /-!
 # Frobenius cycles, the twisted action of GL_k(W), depth and defect
@@ -47,6 +49,8 @@ the variables: for both parities, the translate of a polynomial `h` in the lette
 
 See `New.UpperBound.ElementaryDivisors.DefectCount` for related work.
 -/
+
+@[expose] public section
 
 noncomputable section
 

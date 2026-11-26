@@ -1,6 +1,8 @@
-import Lib.Adelic.Unitary.ComponentsAndBlockSums
-import Lib.LocalGL.Green.CuspidalFunctions
-import Lib.LocalGL.Shintani.CosetRootChoice
+module
+
+public import Lib.Adelic.Unitary.ComponentsAndBlockSums
+public import Lib.LocalGL.Green.CuspidalFunctions
+public import Lib.LocalGL.Shintani.CosetRootChoice
 
 /-!
 # Descent of class functions along a coset and lifts from GL_n(k') ⋊ Gal(k'/k)
@@ -44,6 +46,8 @@ Notions from other files:
 Known; see `Lib.LocalGL.Shintani.LiftingGreenCharacters` and `Lib.LocalGL.Green.CuspidalFunctions`
 for sources.
 -/
+
+@[expose] public section
 
 namespace New
 

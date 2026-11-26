@@ -1,8 +1,10 @@
-import New.Reduction.PrimeSums
-import New.Spanning.Unfolding.FillingAdmissible
-import New.UpperBound.Divisibility.ChainDatumExpansion
-import New.UpperBound.Objects.RowChain
-import New.UpperBound.Size.Estimates
+module
+
+public import New.Reduction.PrimeSums
+public import New.Spanning.Unfolding.FillingAdmissible
+public import New.UpperBound.Divisibility.ChainDatumExpansion
+public import New.UpperBound.Objects.RowChain
+public import New.UpperBound.Size.Estimates
 
 /-!
 # Archimedean size of the composite lift, and passage to target forms by the good projection
@@ -43,6 +45,8 @@ which gives the size side of the product formula. Related work on algebraic modu
 on lattice classes: Gross, Algebraic modular forms, 1999; Greenberg–Voight, Lattice methods for
 algebraic modular forms on classical groups, 2014.
 -/
+
+@[expose] public section
 
 /-!
 ## Archimedean size bound for the composite of theta lifts on source forms

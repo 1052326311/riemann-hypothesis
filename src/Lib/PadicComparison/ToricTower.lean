@@ -1,4 +1,6 @@
-import Lib.PadicComparison.Descent.AlmostDescent
+module
+
+public import Lib.PadicComparison.Descent.AlmostDescent
 
 /-!
 # Wang sequence on C × Bℕ, lines, and root systems of units via periodic sequences
@@ -53,6 +55,8 @@ for rigid-analytic varieties, Forum Math. Pi 1 (2013), Lemmas 4.5 and 5.5; Bhatt
 2018, Lemma 7.3; Stacks project, tag 0EBS; G. Faltings, p-adic Hodge theory, J. Amer. Math. Soc. 1
 (1988).
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,5 +1,7 @@
-import New.OneLift.ComparisonOperator.DeterminantProducts
-import New.UpperBound.Kernels.ThetaLiftGauge
+module
+
+public import New.OneLift.ComparisonOperator.DeterminantProducts
+public import New.UpperBound.Kernels.ThetaLiftGauge
 
 /-!
 # Rational equivariance, integrality and size of definite theta kernels
@@ -31,6 +33,8 @@ Notions from other files:
 * `New.Rows.twoSidedSubst`: the substitution `x_τ ↦ c_τᵀ x_τ g_τᵀ` on complex polynomials in the
   entries of `N × L` matrices `x_τ`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

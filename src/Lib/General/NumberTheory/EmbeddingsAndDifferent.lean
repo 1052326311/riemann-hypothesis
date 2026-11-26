@@ -1,4 +1,6 @@
-import Lib.Adelic.Adeles.AdditiveCharacter
+module
+
+public import Lib.Adelic.Adeles.AdditiveCharacter
 
 /-!
 # Embeddings, differents and the maximal real subfield of a CM field
@@ -28,6 +30,8 @@ trace, the norm, the different and the discriminant.
 * `New.Variety.prod_embeddings_eq_prod_pairs`: a product over the complex embeddings of a totally
   complex field, grouped into conjugate pairs.
 -/
+
+@[expose] public section
 
 /-! ## Differents and root discriminants -/
 

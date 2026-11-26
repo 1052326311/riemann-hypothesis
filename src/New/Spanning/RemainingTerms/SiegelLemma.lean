@@ -1,6 +1,8 @@
-import Lib.Adelic.Adeles.LocalFactors
-import Lib.General.NumberTheory.LatticeCovolumes
-import New.Spanning.Unfolding.Setup
+module
+
+public import Lib.Adelic.Adeles.LocalFactors
+public import Lib.General.NumberTheory.LatticeCovolumes
+public import New.Spanning.Unfolding.Setup
 
 /-!
 # Discriminants of sublattices, Siegel's lemma and a height zeta function of subspaces
@@ -37,6 +39,8 @@ out by lattice vectors; a power of the product of their norms is bounded by an e
 depending on the degree, the codimension and the root discriminant, times its discriminant. Source:
 E. Bombieri, J. Vaaler, On Siegel's lemma, Invent. Math. 73 (1983).
 -/
+
+@[expose] public section
 
 noncomputable section
 

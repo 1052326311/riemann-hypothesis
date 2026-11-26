@@ -1,5 +1,7 @@
-import Lib.Weil.Periods.Equivariant
-import New.Spanning.Unfolding.PoincareSeries
+module
+
+public import Lib.Weil.Periods.Equivariant
+public import New.Spanning.Unfolding.PoincareSeries
 
 /-!
 # The Bessel function as an integral over `R(F_∞)`
@@ -37,6 +39,8 @@ Notions from other files:
 
 Related work on Bessel periods and on second moments is listed in `New.Spanning.Unfolding.Moments`.
 -/
+
+@[expose] public section
 
 open MeasureTheory Measure Matrix ComplexConjugate NumberField
 

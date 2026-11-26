@@ -1,7 +1,9 @@
-import Lib.Weil.DualPair.TwoEdges
-import Lib.Weil.MixedModel.AdaptedSplitting
-import Lib.Weil.Periods.ConstantTerm
-import New.UpperBound.Objects.Rows
+module
+
+public import Lib.Weil.DualPair.TwoEdges
+public import Lib.Weil.MixedModel.AdaptedSplitting
+public import Lib.Weil.Periods.ConstantTerm
+public import New.UpperBound.Objects.Rows
 
 /-!
 # Finite zero terms and the evaluation of pairs of edges in the tower of spaces `Y_k`
@@ -55,6 +57,8 @@ Notions from other files:
 See `New.UpperBound.Seesaw.SeesawIdentity` for related work. See `Lib.Weil.MixedModel.ZeroTerm` for
 sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

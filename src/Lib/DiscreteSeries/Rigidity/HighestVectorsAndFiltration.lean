@@ -1,5 +1,7 @@
-import Lib.DiscreteSeries.Holomorphic.HighestVectorExtension
-import Lib.General.LinearAlgebra.Eigenvalues
+module
+
+public import Lib.DiscreteSeries.Holomorphic.HighestVectorExtension
+public import Lib.General.LinearAlgebra.Eigenvalues
 
 /-!
 # K-highest vectors, norm bounds, Casimir growth on the filtration, and analytic vectors
@@ -54,6 +56,8 @@ Source: R. Parthasarathy, Classification of discrete series by minimal K-type, R
 of Math. 102 (1975) 535-564; Vogan-Zuckerman, Compositio 53 (1984) Prop 6.1; Nelson, Analytic
 vectors, Ann. of Math. 70 (1959) 572-615.
 -/
+
+@[expose] public section
 
 namespace New
 

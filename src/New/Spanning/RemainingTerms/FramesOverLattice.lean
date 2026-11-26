@@ -1,4 +1,6 @@
-import New.Spanning.RemainingTerms.FrameParts
+module
+
+public import New.Spanning.RemainingTerms.FrameParts
 
 /-!
 # Counting frames over a lattice of small discriminant
@@ -29,6 +31,8 @@ Notions from other files:
 * `New.genIndex d`: the generalised index of an idele `d`, the inverse of the factor by which `d`
   scales Haar measure.
 -/
+
+@[expose] public section
 
 namespace New.Filling
 

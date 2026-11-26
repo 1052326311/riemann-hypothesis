@@ -1,5 +1,7 @@
-import Lib.Shimura.ThetaModuli.PELThetaTori
-import Lib.Shimura.Transfer.MarkedPairs
+module
+
+public import Lib.Shimura.ThetaModuli.PELThetaTori
+public import Lib.Shimura.Transfer.MarkedPairs
 
 /-!
 # Period signatures, analytic families of theta tori and the ball chart of moduli points
@@ -48,6 +50,8 @@ Notions from other files:
 
 Known; see `Lib.Shimura.Uniformisation.AppellHumbert` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

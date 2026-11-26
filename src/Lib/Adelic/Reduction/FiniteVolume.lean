@@ -1,6 +1,8 @@
-import Lib.Adelic.Reduction.MinkowskiTheorems
-import Lib.Adelic.Unitary.WeakApproximation
-import Lib.General.NumberTheory.SUnitsAndClassNumber
+module
+
+public import Lib.Adelic.Reduction.MinkowskiTheorems
+public import Lib.Adelic.Unitary.WeakApproximation
+public import Lib.General.NumberTheory.SUnitsAndClassNumber
 
 /-!
 # Adelic reduction theory, Mahler's criterion and finite volume of the arithmetic quotient
@@ -49,6 +51,8 @@ Bombieri-Vaaler, On Siegel's lemma, Invent. Math. 73 (1983).
 For the adelic points of unitary groups and their Haar measures, see
 `Lib.Adelic.Unitary.WeakApproximation`.
 -/
+
+@[expose] public section
 
 /-! ## Reduced rational bases in a compact set of adelic matrices -/
 

@@ -1,7 +1,9 @@
-import Lib.CM.FormalGroup.PrimeNotation
-import Lib.GLn.Dual
-import New.UpperBound.Kernels.JetConjugatesAndBounds
-import New.UpperBound.Objects.Columns
+module
+
+public import Lib.CM.FormalGroup.PrimeNotation
+public import Lib.GLn.Dual
+public import New.UpperBound.Kernels.JetConjugatesAndBounds
+public import New.UpperBound.Objects.Columns
 
 /-!
 # Prime-by-prime divisibility measures; short forms span the ramified source forms
@@ -43,6 +45,8 @@ Notions from other files:
 The exponents are used in `New.UpperBound.Divisibility.LocalDivisibility`, the short forms in
 `New.Reduction.ShortAndEnough` and `New.Determinant.AuxiliaryForms.SpanningForms`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

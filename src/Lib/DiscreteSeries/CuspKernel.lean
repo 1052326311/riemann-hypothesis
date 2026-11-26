@@ -1,5 +1,7 @@
-import Lib.Adelic.Reduction.FirstMinimumShortBases
-import Lib.General.LinearAlgebra.HermitianMatrices
+module
+
+public import Lib.Adelic.Reduction.FirstMinimumShortBases
+public import Lib.General.LinearAlgebra.HermitianMatrices
 
 /-!
 # Kernels kill bounded radical-invariant functions; dilations along isotropic subspaces
@@ -30,6 +32,8 @@ hypotheses on `H`, `ℓ` and `D` stated below. Source: R. Godement, C. R. Acad. 
 here are B. Barnes, Proc. Edinburgh Math. Soc. 23 (1980), and A. Valette, Math. Ann. 294 (1992)
 277-287.
 -/
+
+@[expose] public section
 
 /-!
 ## A kernel kills bounded functions left invariant under a radical

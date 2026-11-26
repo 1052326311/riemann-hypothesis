@@ -1,8 +1,10 @@
-import New.Determinant.Chain.NormOfChain
-import New.OneLift.ComparisonOperator.GluedForms
-import New.OneLift.ComparisonOperator.ProductsSpan
-import New.OneLift.FalseLifts.PeriodsOfFalseLifts
-import New.Spanning.SecondMoment.SpanningTheorem
+module
+
+public import New.Determinant.Chain.NormOfChain
+public import New.OneLift.ComparisonOperator.GluedForms
+public import New.OneLift.ComparisonOperator.ProductsSpan
+public import New.OneLift.FalseLifts.PeriodsOfFalseLifts
+public import New.Spanning.SecondMoment.SpanningTheorem
 
 /-!
 # The first factors and the gluing maps
@@ -41,6 +43,8 @@ Related work: Böcherer–Dummigan–Schulze-Pillot, Yoshida lifts and Selmer gr
 Hida family of theta lift from U(1) to definite U(2), 2024; Prasanna, Integrality of a ratio of
 Petersson norms and level-lowering congruences, 2006.
 -/
+
+@[expose] public section
 
 noncomputable section
 

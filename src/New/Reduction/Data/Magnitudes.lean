@@ -1,4 +1,6 @@
-import New.Reduction.Data.AdmissibleData
+module
+
+public import New.Reduction.Data.AdmissibleData
 
 /-!
 # Logarithmic bounds for the sizes of the data
@@ -32,6 +34,8 @@ Notions from other files:
 * `D.weight`: the weight at the places `D.Φ`; it is `b` on the set `D.bPlaces` of `b`-places and
   `offWeight = a / x₁` elsewhere, where `a = x b`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

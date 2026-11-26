@@ -1,5 +1,7 @@
-import Lib.GaloisRep.Main.Defs
-import Lib.LocalGL.Iwahori.HeckeDegrees
+module
+
+public import Lib.GaloisRep.Main.Defs
+public import Lib.LocalGL.Iwahori.HeckeDegrees
 
 /-!
 # Chains of roots of the Hecke polynomial of a spherical vector
@@ -37,6 +39,8 @@ Source: Tadić, Classification of unitary representations in irreducible represe
 linear group (non-archimedean case), Ann. ENS 19 (1986); Bernstein, P-invariant distributions on
 GL(N), LNM 1041 (1983) for the inequality at the ends of segments.
 -/
+
+@[expose] public section
 
 open ComplexOrder Finset Module New Pi Polynomial Valued Complex
 

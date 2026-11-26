@@ -1,5 +1,7 @@
-import Lib.Cohomology.PointClass.NoetherNormalization
-import Lib.PadicComparison.Primitive.PeriodCoefficients
+module
+
+public import Lib.Cohomology.PointClass.NoetherNormalization
+public import Lib.PadicComparison.Primitive.PeriodCoefficients
 
 /-!
 # Projective space as a functor, and injective pull-back along Noether normalisation
@@ -36,6 +38,8 @@ Notions from other files:
 
 Known; see `Lib.Cohomology.PointClass.LinearIndependence` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

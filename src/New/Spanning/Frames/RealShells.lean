@@ -1,6 +1,8 @@
-import New.Spanning.Bessel.Orthonormality
-import New.Spanning.Frames.RealPlaceGauge
-import New.Spanning.Frames.Shells
+module
+
+public import New.Spanning.Bessel.Orthonormality
+public import New.Spanning.Frames.RealPlaceGauge
+public import New.Spanning.Frames.Shells
 
 /-!
 # Cut Bessel functions at ℂ: integration of the local estimates over shells
@@ -49,6 +51,8 @@ Notions from other files:
   a < j. A normalised integral is an integral over G₁ times this density and
   `New.Floors.IsCutBessel.formConst`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

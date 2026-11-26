@@ -1,5 +1,7 @@
-import Lib.DiscreteSeries.Bessel.UnipotentHaarMeasure
-import New.Spanning.Unfolding.Packing
+module
+
+public import Lib.DiscreteSeries.Bessel.UnipotentHaarMeasure
+public import New.Spanning.Unfolding.Packing
 
 /-!
 # The Bessel kernel and the integral of a class cutoff over the real unipotent group
@@ -36,6 +38,8 @@ Notions from other files:
 * `New.Filling.unipotentCovolume`: an explicit positive number built from M, N, |κ|, ϱ, the
   discriminant of E and the scales of the frame at the infinite places.
 -/
+
+@[expose] public section
 
 /-!
 ## Continuity of the Bessel kernel and the bound of an amplitude

@@ -1,8 +1,10 @@
-import Lib.Adelic.Unitary.Defs
-import Lib.Cohomology.Etale.RelativeChains
-import Lib.Cohomology.LerayHirsch
-import Lib.General.Algebra.CohomologyBaseChange
-import Lib.PadicComparison.HodgeTate.ExtCocycles
+module
+
+public import Lib.Adelic.Unitary.Defs
+public import Lib.Cohomology.Etale.RelativeChains
+public import Lib.Cohomology.LerayHirsch
+public import Lib.General.Algebra.CohomologyBaseChange
+public import Lib.PadicComparison.HodgeTate.ExtCocycles
 
 /-!
 # Tensoring degree-two classes; cohomology theories with ℓ-torsion coefficients
@@ -62,6 +64,8 @@ is stated here. Source: for the setting, Milne, Étale Cohomology, Ch. VI.
 
 See also `Lib.Cohomology.Etale.FilteredLimits` and `Lib.PadicComparison.Duality.GoodPairs`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

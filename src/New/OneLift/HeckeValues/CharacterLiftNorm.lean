@@ -1,4 +1,6 @@
-import New.Determinant.Norms.AdjointThetaLift
+module
+
+public import New.Determinant.Norms.AdjointThetaLift
 
 /-!
 # The lift of a character and its squared norm as a Hecke L-value
@@ -47,6 +49,8 @@ Notions from other files:
 
 See `Lib.SiegelWeil.RallisInner.SharpData` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

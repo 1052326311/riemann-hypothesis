@@ -1,9 +1,11 @@
-import Lib.General.Groups.IndexOfProduct
-import New.Spanning.Unfolding.FrameMass
-import New.Spanning.Unfolding.PoincareSeries
-import New.Spanning.Unfolding.ReducedGroups
-import New.UpperBound.Seesaw.EdgePairEvaluation
-import New.UpperBound.Size.ShortColumns
+module
+
+public import Lib.General.Groups.IndexOfProduct
+public import New.Spanning.Unfolding.FrameMass
+public import New.Spanning.Unfolding.PoincareSeries
+public import New.Spanning.Unfolding.ReducedGroups
+public import New.UpperBound.Seesaw.EdgePairEvaluation
+public import New.UpperBound.Size.ShortColumns
 
 /-!
 # Filling data for admissible data: fit to Y₀, Bessel bounds, standing hypotheses
@@ -42,6 +44,8 @@ Notions from other files:
 * `New.Data.logLevelTarget`: a number `λ`, built from the mean of the `log (D.weight v)`, from
   `log (M rootDisc / 2π)` and from `log b`, with `λ ≤ log N ≤ λ + √(log b)`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

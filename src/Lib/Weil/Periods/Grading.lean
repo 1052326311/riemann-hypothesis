@@ -1,5 +1,7 @@
-import Lib.Adelic.Unitary.RationalPoints
-import Lib.DiscreteSeries.Rigidity.KernelFixes
+module
+
+public import Lib.Adelic.Unitary.RationalPoints
+public import Lib.DiscreteSeries.Rigidity.KernelFixes
 
 /-!
 # Graded hermitian spaces X ⊕ J_s, Bessel subgroups, the map T, and c_λ in a frame
@@ -56,6 +58,8 @@ Known; see `Lib.Weil.Periods.Unfolding` and `Lib.DiscreteSeries.CuspKernel` for 
 Part of a known construction: adelic points of unitary groups in rational coordinates. See
 `Lib.Adelic.Unitary.WeakApproximation`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

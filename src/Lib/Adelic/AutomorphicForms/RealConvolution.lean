@@ -1,6 +1,8 @@
-import Lib.Adelic.AutomorphicForms.Basic
-import Lib.Adelic.QuotientMeasure.IwasawaUnfolding
-import Lib.DiscreteSeries.Rigidity.KernelFixes
+module
+
+public import Lib.Adelic.AutomorphicForms.Basic
+public import Lib.Adelic.QuotientMeasure.IwasawaUnfolding
+public import Lib.DiscreteSeries.Rigidity.KernelFixes
 
 /-!
 # Convolution over real points, cusp kernels, the Petersson product and Poincaré series
@@ -48,6 +50,8 @@ Known result: convolution over real points, cusp kernels, the Petersson product 
 projected to forms, from the theory of cusp forms. For sources see
 `Lib.Adelic.AutomorphicForms.Cuspidality`.
 -/
+
+@[expose] public section
 
 /-! ## Convolution over the real points; cusp kernels -/
 

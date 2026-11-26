@@ -1,6 +1,8 @@
-import Lib.CM.Sigma.Basic
-import Lib.GLn.SchurModule.Basic
-import Lib.General.Algebra.AdicCompletion
+module
+
+public import Lib.CM.Sigma.Basic
+public import Lib.GLn.SchurModule.Basic
+public import Lib.General.Algebra.AdicCompletion
 
 /-!
 # Integral power series over ℂ_p: jets, the chain rule and the exponential
@@ -32,6 +34,8 @@ Notions from other files:
 Known results: the chain rule and the functional equation of the exponential for formal power
 series, and Legendre's formula for the valuation of a factorial.
 -/
+
+@[expose] public section
 
 /-! ## The inclusion of integral power series -/
 

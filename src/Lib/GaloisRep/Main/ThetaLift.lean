@@ -1,5 +1,7 @@
-import Lib.SiegelWeil.RallisInner.SharpData
-import Lib.Weil.CompactLift.DefiniteThetaLift
+module
+
+public import Lib.SiegelWeil.RallisInner.SharpData
+public import Lib.Weil.CompactLift.DefiniteThetaLift
 
 /-!
 # Theta lift of an algebraic form to a larger definite unitary group and its Hecke polynomials
@@ -30,6 +32,8 @@ string of a character of U(1). Source: Blasius, Rogawski, Motives for Hilbert mo
 Math. 114 (1993) and Shin, Ann. of Math. 173 (2011) for the idea (endoscopic transfer to odd rank);
 Harris, Soudry, Taylor, Invent. Math. 112 (1993) for theta lifts with a varying character.
 -/
+
+@[expose] public section
 
 /-!
 ## The monic Hecke polynomial and the reciprocal one

@@ -1,7 +1,9 @@
-import Lib.Cohomology.TorsionTheories
-import Lib.PadicComparison.Descent.AlmostDescent
-import Lib.PadicComparison.HodgeTate.GenericFibre
-import Lib.PadicHodge.ArtinSchreierSequence
+module
+
+public import Lib.Cohomology.TorsionTheories
+public import Lib.PadicComparison.Descent.AlmostDescent
+public import Lib.PadicComparison.HodgeTate.GenericFibre
+public import Lib.PadicHodge.ArtinSchreierSequence
 
 /-!
 # Tilts and period coefficients of p-adic tests: products, comparisons, theories
@@ -46,6 +48,8 @@ Notions from other files:
 Known; see `Lib.PadicComparison.Descent.TestCovers` and `Lib.PadicComparison.HodgeTate.PeriodMap`
 for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

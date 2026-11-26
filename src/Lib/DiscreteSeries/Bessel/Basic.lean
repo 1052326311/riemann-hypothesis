@@ -1,5 +1,7 @@
-import Lib.DiscreteSeries.Bruhat.FloorMeasures
-import Lib.DiscreteSeries.Haar.CayleyChart
+module
+
+public import Lib.DiscreteSeries.Bruhat.FloorMeasures
+public import Lib.DiscreteSeries.Haar.CayleyChart
 
 /-!
 # The real unitary group G₁, unipotent coordinates and Bessel functions
@@ -42,6 +44,8 @@ Notions from other files:
 Known; see `Lib.DiscreteSeries.Bruhat.FloorGroups`, `Lib.DiscreteSeries.Bessel.UnipotentHaarMeasure`
 and `Lib.DiscreteSeries.Bruhat.ComplexPlace` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

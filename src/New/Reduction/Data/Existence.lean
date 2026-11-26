@@ -1,5 +1,7 @@
-import Lib.Analytic.Primes
-import New.Reduction.Data.AdmissibleData
+module
+
+public import Lib.Analytic.Primes
+public import New.Reduction.Data.AdmissibleData
 
 /-!
 # Admissible data exist at every large x
@@ -37,6 +39,8 @@ numbering). Form here: all weights up to a given bound are avoided at once, modu
 integer, with a fixed number of digits and the explicit count of points on a sphere. This concerns
 `exists_three_term_free`.
 -/
+
+@[expose] public section
 
 /-!
 ## Existence of admissible data at every large integer x

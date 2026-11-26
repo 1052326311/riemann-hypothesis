@@ -1,7 +1,9 @@
-import New.Determinant.Twist.FitTwists
-import New.OneLift.ComparisonOperator.LineCoordinates
-import New.UpperBound.Kernels.DefiniteKernelSize
-import New.UpperBound.Size.Estimates
+module
+
+public import New.Determinant.Twist.FitTwists
+public import New.OneLift.ComparisonOperator.LineCoordinates
+public import New.UpperBound.Kernels.DefiniteKernelSize
+public import New.UpperBound.Size.Estimates
 
 /-!
 # The first factors: P_V along W_j and W^add, integrality and size
@@ -48,6 +50,8 @@ theta data are known in the literature. Related work: T. Yang, Theta liftings an
 1997; Böcherer–Schmidt, p-adic measures attached to Siegel modular forms, 2000; Harris–Li–Skinner,
 The Rallis inner product formula and p-adic L-functions, 2005.
 -/
+
+@[expose] public section
 
 noncomputable section
 

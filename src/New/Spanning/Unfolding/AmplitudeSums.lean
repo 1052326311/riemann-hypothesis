@@ -1,5 +1,7 @@
-import New.Spanning.Bessel.Orthonormality
-import New.Spanning.Unfolding.CutoffIntegral
+module
+
+public import New.Spanning.Bessel.Orthonormality
+public import New.Spanning.Unfolding.CutoffIntegral
 
 /-!
 # Sums of amplitudes over blocks
@@ -52,6 +54,8 @@ The results on block sums belong to two steps: the bound for the second moment o
 series (`New.Spanning.Unfolding.Moments`, which lists related work) and the bound for degenerate
 terms and pairs with different links (`New.Spanning.RemainingTerms.Sum`).
 -/
+
+@[expose] public section
 
 section AmplitudeSums
 

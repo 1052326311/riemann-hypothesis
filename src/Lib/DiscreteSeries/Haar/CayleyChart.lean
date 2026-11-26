@@ -1,5 +1,7 @@
-import Lib.General.LinearAlgebra.HermitianMatrices
-import Lib.General.Measure.HaarNormalisation
+module
+
+public import Lib.General.LinearAlgebra.HermitianMatrices
+public import Lib.General.Measure.HaarNormalisation
 
 /-!
 # Cayley chart and an explicit Haar measure on the unitary group U(J)
@@ -34,6 +36,8 @@ Notions from other files:
 
 Part of a known result: the Haar measure of U(J) in Cayley coordinates.
 -/
+
+@[expose] public section
 
 noncomputable section
 

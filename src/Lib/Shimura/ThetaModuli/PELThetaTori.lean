@@ -1,6 +1,8 @@
-import Lib.Shimura.ThetaModuli.FlatClosure
-import Lib.Shimura.ThetaNormality.NormalGeneration
-import Lib.Shimura.Uniformisation.AdelicFrames
+module
+
+public import Lib.Shimura.ThetaModuli.FlatClosure
+public import Lib.Shimura.ThetaNormality.NormalGeneration
+public import Lib.Shimura.Uniformisation.AdelicFrames
 
 /-!
 # PEL data, the adelic Riemann form and theta coordinates of polarised period maps
@@ -48,6 +50,8 @@ Notions from other files:
 Known; see `Lib.Shimura.IntegralModel.TowerExistence`, `Lib.Shimura.Uniformisation.AppellHumbert`
 and `Lib.Shimura.ThetaModuli.UniversalFamily` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

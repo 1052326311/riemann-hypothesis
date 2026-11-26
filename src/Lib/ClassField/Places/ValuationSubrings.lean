@@ -1,7 +1,9 @@
-import Lib.Adelic.Adeles.Basic
-import Lib.ClassField.Places.ProfiniteGalois
-import Lib.General.Algebra.AdicCompletion
-import Lib.General.Topology
+module
+
+public import Lib.Adelic.Adeles.Basic
+public import Lib.ClassField.Places.ProfiniteGalois
+public import Lib.General.Algebra.AdicCompletion
+public import Lib.General.Topology
 
 /-!
 # Valuation subrings over primes, primes from p-adic embeddings, and the efg formula
@@ -41,6 +43,8 @@ Notions from other files:
 
 Known; see `Lib.ClassField.Places.LocalFields` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

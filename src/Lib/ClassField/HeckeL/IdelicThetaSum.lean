@@ -1,4 +1,6 @@
-import Lib.Adelic.Adeles.IdeleModulus
+module
+
+public import Lib.Adelic.Adeles.IdeleModulus
 
 /-!
 # Idelic theta sums over principal ideles as Riemann sums
@@ -29,6 +31,8 @@ Notions from other files:
 
 Known; see `Lib.ClassField.HeckeL.ContinuationAtOne` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

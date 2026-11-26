@@ -1,7 +1,9 @@
-import Lib.General.Analysis.GaussianIntegral
-import Lib.General.Groups.CongruenceSubgroups
-import Lib.General.Measure.HaarNormalisation
-import Lib.General.Topology
+module
+
+public import Lib.General.Analysis.GaussianIntegral
+public import Lib.General.Groups.CongruenceSubgroups
+public import Lib.General.Measure.HaarNormalisation
+public import Lib.General.Topology
 
 /-!
 # Strong operator integrals, analyticity of parameter integrals, and Hua's integral bound
@@ -36,6 +38,8 @@ Known result: an upper bound for Hua's determinant integral. The integral is bou
 above, with an affine change of the rows, instead of being computed exactly. Source: Hua, Harmonic
 Analysis of Functions of Several Complex Variables in the Classical Domains, AMS 1963.
 -/
+
+@[expose] public section
 
 /-! ## The strong integral of a family of bounded operators -/
 

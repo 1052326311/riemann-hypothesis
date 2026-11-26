@@ -1,7 +1,9 @@
-import Lib.ClassField.HeckeCharacter.SplittingCharacters
-import Lib.SiegelWeil.SingularForms.CentreCoefficients
-import Lib.Weil.DualPair.KernelDecay
-import Lib.Weil.DualPair.KernelLaws
+module
+
+public import Lib.ClassField.HeckeCharacter.SplittingCharacters
+public import Lib.SiegelWeil.SingularForms.CentreCoefficients
+public import Lib.Weil.DualPair.KernelDecay
+public import Lib.Weil.DualPair.KernelLaws
 
 /-!
 # Characters on determinants, local values and characters tame for a modulus
@@ -41,6 +43,8 @@ Notions from other files:
 
 Known; see `Lib.ClassField.Global.CMSplittingCharacters` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,4 +1,6 @@
-import Lib.PadicHodge.PeriodRings.Ainf
+module
+
+public import Lib.PadicHodge.PeriodRings.Ainf
 
 /-!
 # The period rings A, B⁺, B and B_dR⁺: θ, Frobenius, domains and contraction
@@ -42,6 +44,8 @@ Notions from other files:
 
 Known; see `Lib.PadicHodge.PeriodRings.DeRhamPeriods` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

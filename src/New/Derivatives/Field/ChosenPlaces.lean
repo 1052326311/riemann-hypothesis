@@ -1,4 +1,6 @@
-import New.Reduction.Data.Magnitudes
+module
+
+public import New.Reduction.Data.Magnitudes
 
 /-!
 # Chosen places, characters of given weight, finiteness of pairs and sizes of the different
@@ -46,6 +48,8 @@ Notions from other files:
 * `New.Data.liftWeight`: The number w_j(σ) = κ(σ) + (j + 1/2) Δ, with κ = `New.Data.weight`, the gap
   Δ = `New.Data.gap` and Δ/2 = `New.Data.halfGap`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,4 +1,6 @@
-import Lib.Base
+module
+
+public import Lib.Base
 
 /-!
 # Adic completeness: p-adic tools, extension by continuity, topological bases
@@ -37,6 +39,8 @@ Notions of this file:
 
 Known; see `Lib.PadicComparison.Completion` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

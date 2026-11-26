@@ -1,4 +1,6 @@
-import Lib.Adelic.Unitary.Defs
+module
+
+public import Lib.Adelic.Unitary.Defs
 
 /-!
 # Characters of finite groups: averages, virtual characters and central projections
@@ -32,6 +34,8 @@ This file sets up the character theory of a finite group `G` that is used for th
   projection in every unitary representation. Hence convolution with it does not increase `ℓ²`
   norms.
 -/
+
+@[expose] public section
 
 noncomputable section
 

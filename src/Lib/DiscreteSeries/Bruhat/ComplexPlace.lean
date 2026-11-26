@@ -1,4 +1,6 @@
-import Lib.DiscreteSeries.Bessel.UnipotentHaarMeasure
+module
+
+public import Lib.DiscreteSeries.Bessel.UnipotentHaarMeasure
 
 /-!
 # The place ℂ: polar coordinates, Cartan decomposition and the measure of the hyperboloid
@@ -37,6 +39,8 @@ and the invariant measure of the hyperboloid h(v, v) = −1, here written in the
 top floor. Source: Knapp, Lie Groups Beyond an Introduction; Helgason, Groups and Geometric
 Analysis, Ch. I §5.
 -/
+
+@[expose] public section
 
 noncomputable section
 

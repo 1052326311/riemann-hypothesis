@@ -1,4 +1,6 @@
-import New.Derivatives.FormalGroup.ThetaProducts
+module
+
+public import New.Derivatives.FormalGroup.ThetaProducts
 
 /-!
 # Derivatives of integral expansions
@@ -29,6 +31,8 @@ least valuations become greatest norms and sums become products.
 
 At inert primes the rate `γ_p` is that of Katz, Divisibilities, congruences, and Cartier duality.
 -/
+
+@[expose] public section
 
 section LargestCoefficient
 

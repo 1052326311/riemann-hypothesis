@@ -1,5 +1,7 @@
-import New.Spanning.Bessel.SobolevBound
-import New.Spanning.Unfolding.Link
+module
+
+public import New.Spanning.Bessel.SobolevBound
+public import New.Spanning.Unfolding.Link
 
 /-!
 # Bounds near a point of Ω and the open cell bound for a Bessel system
@@ -43,6 +45,8 @@ Notions from other files:
 
 See `New.Spanning.Bessel.FillingData` for related work.
 -/
+
+@[expose] public section
 
 /-!
 ## Sizes at and near a point of Ω

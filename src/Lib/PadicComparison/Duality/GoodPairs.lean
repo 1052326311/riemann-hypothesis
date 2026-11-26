@@ -1,5 +1,7 @@
-import Lib.Cohomology.ProjectiveLine.TiltedLineFormula
-import Lib.PadicComparison.Duality.LineIntegration
+module
+
+public import Lib.Cohomology.ProjectiveLine.TiltedLineFormula
+public import Lib.PadicComparison.Duality.LineIntegration
 
 /-!
 # Good pairs: excision, Thom retraction and Alexander duality for principal opens
@@ -39,6 +41,8 @@ which the projective line is computed. In these theories, a class supported on t
 Sources for the theorems: SGA 4 XVI, SGA 4½ Finitude/Dualité; Faltings, Scholze primitive
 comparison. The proof is in the spirit of Dold–Puppe dualisability.
 -/
+
+@[expose] public section
 
 noncomputable section
 

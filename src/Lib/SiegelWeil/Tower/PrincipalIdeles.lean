@@ -1,4 +1,6 @@
-import Lib.Adelic.Adeles.AdditiveCharacter
+module
+
+public import Lib.Adelic.Adeles.AdditiveCharacter
 
 /-!
 # Principal ideles and a majorant on the complex torus
@@ -16,6 +18,8 @@ Notions from other files:
   chosen embeddings.
 * `New.ratAdeles E`: the image of E under `New.toAdele`, a lattice in the adeles.
 -/
+
+@[expose] public section
 
 namespace New
 

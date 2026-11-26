@@ -1,6 +1,8 @@
-import Lib.DiscreteSeries.Theta.FockDualPair
-import Lib.General.LinearAlgebra.MatricesNearIdentity
-import Lib.Weil.Fock.WeightedNorms
+module
+
+public import Lib.DiscreteSeries.Theta.FockDualPair
+public import Lib.General.LinearAlgebra.MatricesNearIdentity
+public import Lib.Weil.Fock.WeightedNorms
 
 /-!
 # Polynomial vectors in Fock space: inner product, density and Weil derivative
@@ -30,6 +32,8 @@ Notions from other files:
 
 Known; see `Lib.Weil.Fock.OscillatorPair` for sources.
 -/
+
+@[expose] public section
 
 /-- A sesquilinear form B on complex polynomials vanishes if B(1, 1) = 0 and multiplication by each
 variable X_j on either side moves to the derivative ∂_j on the other side:
