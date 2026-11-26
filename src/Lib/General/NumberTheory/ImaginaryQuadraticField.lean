@@ -1,4 +1,6 @@
-import Lib.General.NumberTheory.EmbeddingsAndDifferent
+module
+
+public import Lib.General.NumberTheory.EmbeddingsAndDifferent
 
 /-!
 # The imaginary quadratic field ℚ(√−d): characters, Frobenius and splitting of primes
@@ -30,6 +32,8 @@ consequences of lifting the exponent at `2` for integers, which do not involve `
 * `New.QuadField.span_eq_or_exists_span_eq_mul`: `p` is inert in `K`, or it is the product of two
   places of degree one; `New.QuadField.prime_inert_or_eq_mul` also lists the places above `p`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -123,7 +127,7 @@ instance : NeZero d := ⟨by grind [Fact]⟩
 lemma minpoly_I_mul_sqrt : X ^ 2 - C (-d : ℚ) = minpoly ℚ (I * (√d : ℂ)) := by
   have h_irred : Irreducible (X ^ 2 - C (-d : ℚ)) := by
     -- `-d` is negative, hence not a square in `ℚ`
-    refine X_pow_sub_C_irreducible_of_prime Nat.prime_two fun b hb ↦ ?_
+    refine irreducible_X_pow_sub_C_of_prime Nat.prime_two fun b hb ↦ ?_
     simpa [hb, NeZero.ne] using sq_nonneg b
   exact minpoly.eq_of_irreducible_of_monic h_irred (by simp [mul_pow, ← ofReal_pow]) (by monicity!)
 
@@ -156,15 +160,14 @@ open Subalgebra Int Algebra Ideal ZMod
 contains a primitive d-th root of unity, given by the quadratic Gauss sum. -/
 def embOfPrimitiveRoot (d : ℕ) {M : Type} [Field M] [CharZero M] {x : M} [h : Fact (d % 4 = 3)]
     [Fact d.Prime] (hx : IsPrimitiveRoot x d) : QuadField d →ₐ[ℚ] M :=
-  embOfSqrt d <| by
+  embOfSqrt d <|
     -- the square of the quadratic Gauss sum is `χ(-1) d`, and `χ(-1) = -1` as `d ≡ 3` mod `4`
     have h_neg_one : quadraticChar (ZMod d) (-1) = -1 := by
       simp [quadraticCharFun, exists_sq_eq_neg_one_iff, (Fact.out : d % 4 = 3)]
     have h_ne_one : (quadraticChar (ZMod d)).ringHomComp (castRingHom M) ≠ 1 :=
       MulChar.ne_one_iff.2 ⟨-1, by simp [h_neg_one, neg_eq_self]⟩
-    rw [gaussSum_sq h_ne_one ((quadraticChar_isQuadratic _).comp (castRingHom M))
-      (zmodChar_primitive_of_primitive_root d hx)]
-    simp [h_neg_one]
+    (gaussSum_sq h_ne_one ((quadraticChar_isQuadratic _).comp (castRingHom M))
+      (zmodChar_primitive_of_primitive_root d hx)).trans (by simp [h_neg_one])
 
 /-- For `d ≡ 3 mod 4`, `4` divides `d + 1`. -/
 @[simp]
@@ -398,15 +401,9 @@ lemma eq_map_betaK_pow_iff (hp_ne_two : p ≠ 2) (φ : 𝓞 (QuadField d) →+* 
   have h_frob : φ (sqrtNegDInt d) ^ p = chiK d p * φ (sqrtNegDInt d) := by
     rw [chiK_eq_pow_of_sq_eq_neg hp_ne_two (map_sqrtNegDInt_sq φ), pow_sub_one_mul hp.1.ne_zero]
   have h_iter : φ (sqrtNegDInt d) ^ p ^ n = chiK d p ^ n * φ (sqrtNegDInt d) := by
-    induction n with
-    | zero => simp
-    | succ n ih =>
-      calc
-        φ (sqrtNegDInt d) ^ p ^ (n + 1)
-        _ = (chiK d p ^ n * φ (sqrtNegDInt d) : R) ^ p := by rw [pow_succ, pow_mul, ih]
-        _ = frobenius R p (chiK d p ^ n) * φ (sqrtNegDInt d) ^ p := by rw [mul_pow, frobenius_def]
-        _ = chiK d p ^ (n + 1) * φ (sqrtNegDInt d) := by
-          rw [map_pow, map_intCast, h_frob, ← mul_assoc, ← pow_succ]
+    have h_comm : Function.Commute (· ^ p) ((chiK d p : R) * ·) := fun y ↦ by
+      simp [← frobenius_def]
+    simpa [pow_iterate, mul_left_iterate] using h_comm.iterate_eq_of_map_eq n h_frob
   -- Frobenius is a ring map, and `2` is a unit as `p` is odd.
   have h_add : φ (sqrtNegDInt d) ^ p ^ n = 2 * φ (betaK d) ^ p ^ n - 1 := by
     simp [← iterateFrobenius_def, map_ofNat]
@@ -443,7 +440,7 @@ lemma two_pow_dvd_or_of_pow_eq_one {q : ℤ} {o s : ℕ} (ho : 0 < o)
   have h_dvd : (2 : ℤ) ^ (s + 1) ∣ q ^ (o * 2) - 1 :=
     (intCast_eq_intCast_iff_dvd_sub 1 (q ^ (o * 2)) (2 ^ (s + 1))).1 (by simp [h_pow, pow_mul])
   have h_odd : Odd q := by
-    simpa [coe_int_isUnit_iff_isCoprime, IsCoprime.pow_left_iff] using
+    simpa [isUnit_intCast_iff_isCoprime, IsCoprime.pow_left_iff] using
       IsUnit.of_pow_eq_one h_pow ho.ne'
   have lte {e : ℤ} (he : e ^ (o * 2) = 1) (h_four : 4 ∣ q - e) : 2 ^ s ∣ (q - e) * o := by
     have h_lte : emultiplicity 2 (q ^ (o * 2) - e ^ (o * 2)) =
@@ -508,13 +505,10 @@ lemma q_eq_iff_chiK_ne_neg_one (hw : (p : 𝓞 (QuadField d)) ∈ w.asIdeal) [Pr
   have frob_iff :
       (∀ x : 𝓞 (QuadField d), π x ^ p ^ 1 = π x) ↔ π (betaK d) ^ p ^ 1 = π (betaK d) := by
     refine ⟨fun h_all ↦ h_all (betaK d), fun h_gen x ↦ ?_⟩
-    have hx : x ∈ Algebra.adjoin ℤ {betaK d} := by
-      simp [(different_eq_span_and_adjoin_betaK d).right]
-    induction hx using Algebra.adjoin_induction with
-    | mem y hy => rwa [Set.mem_singleton_iff.1 hy]
-    | algebraMap r => simp [← frobenius_def]
-    | add a b _ _ ha hb => rw [map_add, add_pow_char_pow, ha, hb]
-    | mul a b _ _ ha hb => rw [map_mul, mul_pow, ha, hb]
+    have h_eq : ((frobenius _ p).comp π).toIntAlgHom = π.toIntAlgHom :=
+      AlgHom.ext_of_adjoin_eq_top (different_eq_span_and_adjoin_betaK d).right
+        (Set.eqOn_singleton.2 (by simpa [frobenius_def] using h_gen))
+    simpa [frobenius_def] using DFunLike.congr_fun h_eq x
   rw [q_iff_frob, frob_iff]
   obtain rfl | hp2 := eq_or_ne p 2
   · -- Both sides hold: `betaK d * (1 - betaK d) = (d + 1) / 4` is even, and `2` is a square mod

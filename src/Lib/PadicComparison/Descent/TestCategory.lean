@@ -1,5 +1,7 @@
-import Lib.Cohomology.Etale.Basic
-import Lib.PadicHodge.PeriodRings.Ainf
+module
+
+public import Lib.Cohomology.Etale.Basic
+public import Lib.PadicHodge.PeriodRings.Ainf
 
 /-!
 # Divided power ideal, p-adic test rings, tilt, Witt vectors and reduction modulo p
@@ -36,6 +38,8 @@ Known; see `Lib.PadicComparison.Crystalline.ComparisonMap`, `Lib.PadicComparison
 `Lib.PadicComparison.Descent.AlmostDescent` and `Lib.PadicComparison.HodgeTate.PeriodMap` for
 sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -502,7 +506,7 @@ lemma IsReductionMod.surjective {R A B : Type*} [SMul R A] [Zero B] {m : R} {g :
 lemma IsReductionMod.exact {R A B : Type*} [SMul R A] [Zero B] {m : R} {g : A → B}
     (h_red : IsReductionMod m g) : Exact (m • ·) g := h_red.right
 
-private lemma subsingleton_wittVector {q : ℕ} {R : Type*} [CommRing R] [Subsingleton R] :
+private lemma subsingleton_wittVector {q : ℕ} {R : Type*} [Subsingleton R] :
     Subsingleton (WittVector q R) :=
   ⟨fun x y ↦ WittVector.ext fun n ↦ Subsingleton.elim (x.coeff n) (y.coeff n)⟩
 

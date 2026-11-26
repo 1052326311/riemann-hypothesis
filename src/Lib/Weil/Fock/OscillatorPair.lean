@@ -1,5 +1,7 @@
-import Lib.DiscreteSeries.FlenstedJensen.RightDerivatives
-import Lib.Weil.Fock.PolynomialVectors
+module
+
+public import Lib.DiscreteSeries.FlenstedJensen.RightDerivatives
+public import Lib.Weil.Fock.PolynomialVectors
 
 /-!
 # Harmonic matrix coefficients of the Weil representation and oscillator pairs on matrices
@@ -49,6 +51,8 @@ of U(p,q) and its connection with the generalized unit disk, Pacific J. Math. 12
 Prop. 2.2; G. B. Folland, Harmonic Analysis in Phase Space (1989), ch. 1, 4; H. Reiter, Metaplectic
 Groups and Segal Algebras, LNM 1382 (1989).
 -/
+
+@[expose] public section
 
 /-!
 ## Matrix coefficients between harmonic polynomial vectors
@@ -157,23 +161,17 @@ lemma fockMatrixCoeff_pderiv (hd : ∀ i j : ι, d i ≠ d j → (u : Matrix ι 
     by_cases h_label : d k = d i
     · simp [hQ k h_label hk]
     · simp [hd k i h_label]
-  have h_raise : fockMatrixCoeff u Q (raiseOp ε i P) =
-      ∑ k : ι, (u : Matrix ι ι ℂ) k i * ε k * fockMatrixCoeff u (lowerOp ε k Q) P :=
-    fockMatrixCoeff_raiseOp u P Q i
-  have h_lower : ε i * fockMatrixCoeff u Q (lowerOp ε i P) =
-      ∑ k : ι, star ((u : Matrix ι ι ℂ) k i) * fockMatrixCoeff u (raiseOp ε k Q) P :=
-    fockMatrixCoeff_lowerOp u P Q i
   obtain hi | hi := units_eq_one_or (ε i)
   · have h_left : fockMatrixCoeff u Q (pderiv i P) = ε i * fockMatrixCoeff u Q (lowerOp ε i P) := by
       simp [lowerOp, hi]
-    rw [h_left, h_lower]
+    rw [h_left, fockMatrixCoeff_lowerOp]
     refine sum_congr rfl fun k _ ↦ ?_
     obtain hk | hk := units_eq_one_or (ε k)
     · simp [complexLinearPart_apply, raiseOp, hi, hk]
     · simpa [complexLinearPart_apply, raiseOp, hi, hk] using h_other k
   · have h_left : fockMatrixCoeff u Q (pderiv i P) = -fockMatrixCoeff u Q (raiseOp ε i P) := by
       simp [raiseOp, hi]
-    rw [h_left, h_raise, ← sum_neg_distrib]
+    rw [h_left, fockMatrixCoeff_raiseOp, ← sum_neg_distrib]
     refine sum_congr rfl fun k _ ↦ ?_
     obtain hk | hk := units_eq_one_or (ε k)
     · simpa [complexLinearPart_apply, lowerOp, hi, hk] using h_other k

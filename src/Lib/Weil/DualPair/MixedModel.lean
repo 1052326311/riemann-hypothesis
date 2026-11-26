@@ -1,4 +1,6 @@
-import Lib.Weil.DualPair.WeilAction
+module
+
+public import Lib.Weil.DualPair.WeilAction
 
 /-!
 # Mixed models and zero terms of a pair with one split space: Levi and radical laws
@@ -37,6 +39,8 @@ splitting character and * is the conjugate transpose.
 
 Known; see `Lib.Weil.DualPair.ThetaLiftConvergence` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -226,7 +230,7 @@ lemma symm_homSource_zeroTerm_eq_integral (f : 𝒮 (V.hom T)) :
         (f (H.iAdelic *ᵥ y + H.lAdelic *ᵥ x)) := by
     refine (Equiv.ofInjective _ (toAdele (E := E)).injective.comp_left).hasSum_iff.mp ?_
     -- After reindexing, the index is a rational vector ξ, which acts by adding `toAdele ∘ ξ`.
-    show HasSum (fun ξ : n' × p → E ↦ H.slice (toAdele ∘ ξ + x) f y) _
+    change HasSum (fun ξ : n' × p → E ↦ H.slice (toAdele ∘ ξ + x) f y) _
     simpa [mulVec_add] using
       H.hasSum_theta_slice ((V.hom T).ϱ (H.iAdelic *ᵥ y + H.lAdelic *ᵥ x) f)
   -- Evaluation at `y` is the continuous linear map `evalAt`, so it commutes with the integral.
@@ -256,10 +260,6 @@ lemma homSlice_rho (x : Matrix n' p (𝔸 E)) (y : Matrix n' n (𝔸 E)) (f : �
     kronecker_mulVec_eq_matrixToVec, Matrix.mul_assoc, Matrix.mul_add, Matrix.add_mul,
     conjTranspose_transpose_eq_transpose_conjTranspose, ← mul_kronecker_mul, ← transpose_mul] using
     (D.homSource T).isMixedLaw_slice (matrixToVec (T.x.val * x)) (matrixToVec y) f
-
-/-- The character `New.WeilData.upsilonU1` is υ on the norm-one ideles. -/
-private lemma upsilonU1_apply (u : unitary (𝔸 E)) : upsilonU1.val u = υ.1 (Unitary.toUnits u) :=
-  rfl
 
 /-- On a norm-one idele u, the character `New.chiAdelic` x ↦ υ(x)|x|^(−1/2) is υ: the idele norm
 of u is one. -/

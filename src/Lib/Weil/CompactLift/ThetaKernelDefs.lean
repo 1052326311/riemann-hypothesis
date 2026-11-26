@@ -1,4 +1,6 @@
-import Lib.Weil.DualPair.WeilAction
+module
+
+public import Lib.Weil.DualPair.WeilAction
 
 /-!
 # The jet matrix of a definite pair is a kernel for algebraic forms
@@ -33,6 +35,8 @@ Notions from other files:
 Known; see `Lib.Weil.CompactLift.DefiniteThetaLift` for sources.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 namespace New
@@ -60,13 +64,13 @@ lemma isHomogeneous_iff_aeval_smul_X {σ : Type*} {Q : MvPolynomial σ ℂ} {d :
     Q.IsHomogeneous d ↔ ∀ t : ℂ, t ≠ 0 → Q.aeval (fun x : σ ↦ t • X x) = t ^ d • Q := by
   refine ⟨fun hQ t _ ↦ ?_, fun hQ m hm ↦ ?_⟩
   · ext m
-    rw [coeff_aeval_smul_X, MvPolynomial.coeff_smul, smul_eq_mul]
+    rw [coeff_aeval_smul_X, AddMonoidAlgebra.coeff_smul_apply, smul_eq_mul]
     by_cases h : m.degree = d
     · rw [h]
     · simp [hQ.coeff_eq_zero h]
   · -- Compare the coefficients at `m` for `t = 2`.
     have h_pow : (2 : ℂ) ^ m.degree = 2 ^ d := mul_right_cancel₀ hm <| by
-      rw [← coeff_aeval_smul_X, hQ 2 two_ne_zero, MvPolynomial.coeff_smul, smul_eq_mul]
+      rw [← coeff_aeval_smul_X, hQ 2 two_ne_zero, AddMonoidAlgebra.coeff_smul_apply, smul_eq_mul]
     rw [Finsupp.degree_eq_weight_one] at h_pow
     exact Nat.pow_right_injective le_rfl (mod_cast h_pow)
 
@@ -114,7 +118,7 @@ def pairWeilFinite : Gf E n × Gf E n' →* Module.End ℂ (V.hom T).finitePart 
     LinearMap.restrict (pairWeil V T a b ((1, p.1), 1, p.2)).1 fun f hf ↦ by
       -- Up to a scalar, `pairWeil` is `ω` at a point whose infinite part is trivial (`onHom_fin`).
       refine (finitePart _).smul_mem _ ?_
-      erw [onHom_fin]
+      rw [onHom_fin]
       exact omega_mem_finitePart _ hf
   map_one' := by
     ext

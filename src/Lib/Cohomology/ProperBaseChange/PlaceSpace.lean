@@ -1,4 +1,6 @@
-import Lib.Cohomology.Etale.FilteredLimits
+module
+
+public import Lib.Cohomology.Etale.FilteredLimits
 
 /-!
 # The space of places of residue fields and its properness over the base
@@ -27,6 +29,8 @@ Notions from other files:
 
 Known; see `Lib.Cohomology.ProperBaseChange.Theorem` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -228,7 +232,7 @@ variable {z} {R : Type} [CommRing R] [IsLocalRing R] {q : Ideal P} [M : q.IsMaxi
 /-- A ring map `g : P ⟶ F` to a field factors through the residue field of some prime `q` of
 `P`. -/
 lemma exists_algebraMap_residueField_comp_eq (g : P ⟶ of F) :
-    ∃ᵉ (q : PrimeSpectrum P) (l : of q.asIdeal.ResidueField ⟶ of F),
+    ∃ q : PrimeSpectrum P, ∃ l : of q.asIdeal.ResidueField ⟶ of F,
       ofHom (algebraMap P q.asIdeal.ResidueField) ≫ l = g := by
   -- Take `q = ker g`: elements outside it go to units of the field `F`.
   have := ker_isPrime g.hom

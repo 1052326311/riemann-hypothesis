@@ -1,6 +1,8 @@
-import Lib.General.Analysis.HolomorphicIntegrals
-import Lib.General.Geometry.GeometricPoints
-import Lib.Shimura.Uniformisation.HolomorphicFamilies
+module
+
+public import Lib.General.Analysis.HolomorphicIntegrals
+public import Lib.General.Geometry.GeometricPoints
+public import Lib.Shimura.Uniformisation.HolomorphicFamilies
 
 /-!
 # Exponential of compact commutative Lie groups and uniformisation of abelian varieties
@@ -41,6 +43,8 @@ Notions from other files:
 
 Known; see `Lib.Shimura.Uniformisation.AppellHumbert` for sources.
 -/
+
+@[expose] public section
 
 /-! ## The exponential map of a compact commutative complex Lie group -/
 
@@ -133,7 +137,7 @@ lemma New.isFullRankLattice_ker_of_isolated {G V : Type*} [AddCommGroup G] [Topo
            span_top := eq_top_iff'.mpr fun v ↦ by_contra fun hv ↦ ?_ }
   obtain ⟨l, lv_ne, l_ker⟩ := exists_le_ker_of_notMem hv
   have small : {b : V | |l b| < |l v|} ∈ 𝓝 (0 : V) :=
-    (isOpen_lt l.toContinuousLinearMap.cont.abs continuous_const).mem_nhds (by simpa using lv_ne)
+    l.toContinuousLinearMap.cont.abs.continuousAt (gt_mem_nhds (by simpa using lv_ne))
   have often : ∃ᶠ n : ℕ in atTop, n • e v ∈ e '' {b : V | |l b| < |l v|} :=
     (mapClusterPt_zero_atTop_nsmul (e v)).frequently (e_open (image_mem_map small))
   obtain ⟨n, ⟨b, lb_lt, eb_eq⟩, n_ge⟩ := (often.and_eventually (eventually_ge_atTop 1)).exists
@@ -186,7 +190,7 @@ strict derivative `(v, w) ↦ v + w` at `0`. If `x` is an exponential limit of a
 lies in the chart and `φ x = v` up to a relative error `ε`. -/
 private lemma New.eventually_norm_sub_le_of_isExpLimit {G V : Type*} [AddCommGroup G]
     [TopologicalSpace G]
-    [IsTopologicalAddGroup G] [FinComplexSpace V] {φ : G → V} {ψ : V → G} (h0 : φ 0 = 0)
+    [FinComplexSpace V] {φ : G → V} {ψ : V → G} (h0 : φ 0 = 0)
     (ψ_zero : ψ 0 = 0) {C : Set G} (zero_mem : (0 : G) ∈ C) (C_closed : IsClosed C)
     (hC_inv : ∀ x ∈ C, ψ (φ x) = x) (hC_cont : ∀ x ∈ C, ContinuousAt φ x)
     (add_mem_C : ∀ᶠ p : V × V in 𝓝 0, ψ p.1 + ψ p.2 ∈ C)
@@ -446,7 +450,7 @@ lemma exists_zero_set_chart {ι σ : Type} [Finite ι] [Finite σ] {d : ℕ} {F 
 a complex point `y` of `U`, a polynomial `q` in the generators takes the value of the polynomial
 function of `q` (constants evaluated at the base point) at the coordinates of `y`. -/
 private lemma ofSection_aeval_eq_eval {V : (Spec (CommRingCat.of ℂ)).Opens} {U : A.left.Opens}
-    (e : U ≤ A.hom ⁻¹ᵁ V) {ι σ : Type} [Finite ι] [Finite σ]
+    (e : U ≤ A.hom ⁻¹ᵁ V) {ι σ : Type} [Finite σ]
     [Algebra Γ(Spec (CommRingCat.of ℂ), V) Γ(A.left, U)]
     (h_alg : algebraMap Γ(Spec (CommRingCat.of ℂ), V) Γ(A.left, U) = (A.hom.appLE V U e).hom)
     (P : Algebra.SubmersivePresentation Γ(Spec (CommRingCat.of ℂ), V) Γ(A.left, U) ι σ)
@@ -496,7 +500,7 @@ affine opens `U` and `V`. Every zero `p` of the relations of `P`, read as polyno
 `ℂ^ι`, is the vector of coordinates of a complex point of `U`. -/
 private lemma exists_point_of_relations_eq_zero {V : (Spec (CommRingCat.of ℂ)).Opens}
     {U : A.left.Opens} (hV : IsAffineOpen V) (hU : IsAffineOpen U) (e : U ≤ A.hom ⁻¹ᵁ V)
-    {ι σ : Type} [Finite ι] [Finite σ] [Algebra Γ(Spec (CommRingCat.of ℂ), V) Γ(A.left, U)]
+    {ι σ : Type} [Finite σ] [Algebra Γ(Spec (CommRingCat.of ℂ), V) Γ(A.left, U)]
     (h_alg : algebraMap Γ(Spec (CommRingCat.of ℂ), V) Γ(A.left, U) = (A.hom.appLE V U e).hom)
     (P : Algebra.SubmersivePresentation Γ(Spec (CommRingCat.of ℂ), V) Γ(A.left, U) ι σ)
     (hV1 : LandsIn (𝟙 (Spec (CommRingCat.of ℂ))) V) (p : ι → ℂ)
@@ -531,7 +535,7 @@ private lemma exists_point_of_relations_eq_zero {V : (Spec (CommRingCat.of ℂ))
 `γ` through `x` the map `φ ∘ γ` is analytic, with derivative zero in each direction in which `γ`
 is constant to first order. -/
 lemma exists_holomorphic_chart (hd : SmoothOfRelativeDimension d A.hom) (x : ComplexPoint A) :
-    ∃ᵉ (φ : ComplexPoint A → Fin d → ℂ) (ψ : (Fin d → ℂ) → ComplexPoint A),
+    ∃ φ : ComplexPoint A → Fin d → ℂ, ∃ ψ : (Fin d → ℂ) → ComplexPoint A,
       φ x = 0 ∧
       -- (a) `ψ` is a left inverse of `φ` near `x`, where `φ` is continuous
       (∀ᶠ y : ComplexPoint A in 𝓝 x, ψ (φ y) = y ∧ ContinuousAt φ y) ∧
