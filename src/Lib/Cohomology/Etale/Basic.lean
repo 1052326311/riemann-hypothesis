@@ -100,7 +100,7 @@ scoped instance {F G : D ⥤ T} : CoeFun (F ⟶ G) fun _ ↦ ∀ A : D, F A ⟶ 
 /-- A subfunctor is applied to an object. -/
 scoped instance {F : D ⥤ Type _} : CoeFun (Subfunctor F) fun _ ↦ ∀ A : D, Set (F A) := ⟨(·.obj)⟩
 
-/-- The category of covariant functors from C to abelian groups. -/
+/-- The category of covariant functors from `D` to abelian groups. -/
 abbrev AbFunctor (D : Type*) [Category* D] := D ⥤ AddCommGrpCat.{1}
 
 -- `HasAbFunctorExt` is a reducible `def` and not an `abbrev`: the kernel then compares these
