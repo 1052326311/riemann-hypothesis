@@ -91,7 +91,7 @@ lemma IsFillingData.massIntegral_full_le {E : Type} {𝔰 : Shape} [Field E] [CM
 /-- Let `Z` be a group between the congruence subgroup of the place datum `F` and the integral
 points, and let `c = Z.massRatio` be its normalising constant in `ℝ≥0∞`. A bound `‖x‖ₑ ≤ c * D` with
 `D` finite gives `‖x / c.toReal‖ ≤ D.toReal`. -/
-lemma norm_div_massRatio_le {E : Type} {𝔰 : Shape} [Field E] [CMType E] [WeilData E]
+lemma norm_div_massRatio_le {E : Type} {𝔰 : Shape} [Field E] [CMType E]
     {S : Filling E 𝔰} {T : Finset (FinPlace E)} [T.StarStable] {P : IntegralPlace (LocProd T)}
     {F : PlaceData (Fin (𝔰.k - (6 * 𝔰.ϱ + 13))) (S.latticeMiddle (LocProd T)) (𝔰.ϱ + 1 + 2 * 𝔰.ϱ +
       5)}
