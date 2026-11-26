@@ -554,7 +554,7 @@ lemma exists_sub_one_mul_eq_isotropicFramePair_mul_add {r : ℕ} {p : Matrix �
       rfl
     rwa [h_eq, sub_mulVec, one_mulVec]
   obtain ⟨w, hw : isotropicFramePair γ' * w = (m - 1) * P * y⟩ :=
-    exists_mul_eq_of_col_mem_range h_col
+    exists_mul_eq_of_range_le h_col
   refine ⟨w * e, (m - 1) * P * b, ?_⟩
   rw [← Matrix.mul_assoc, hw, Matrix.mul_assoc _ y, Matrix.mul_assoc _ b, ← Matrix.mul_add, h_one,
     Matrix.mul_one]
