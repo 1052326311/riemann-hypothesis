@@ -657,9 +657,7 @@ lemma exists_isOperatorOfCost_mem_hodgeFil_succ (S : PairingSide O) (a : ℕ) (n
   -- the value of `x` is invariant modulo `hodgeFil n`, hence a constant modulo `hodgeFil n`; so
   -- `step` gives a constant modulo `hodgeFil (n + 1)`, and the retraction keeps it
   have x_mem : x.val ∈ S.extensionLattice.kisinLocAinf := x.property.1
-  obtain ⟨const, h_const⟩ : ∃ const : localFieldOf k.subgroup,
-      valueAt a μ (S.extensionLattice.depthStepOperator (cost a n) υ γ x.val) -
-        Algebra.cast const ∈ hodgeFil (n + 1) :=
+  obtain ⟨const, h_const⟩ :=
     step x.val x.property μ hμ (exists_valueAt_sub_mem_hodgeFil x_mem hμ h_inv)
   let y : S.extensionLattice.kisinLocAinf := p ^ cost a n • ⟨x.val, x_mem⟩ +
     ∑ l : Fin m, υ • ⟨_, zTauUnit_inv_smul_sub_mem_kisinLocAinf (γ l) x.property⟩
