@@ -248,7 +248,8 @@ lemma EtaleChart.tangent_mem_range_of_jet {X : CommAlg E ⥤ Type 1} (A : EtaleC
   let L : T →ₗ[k] Fin d → k := .pi fun i ↦ (γ (A.coordinate i)).snd
   have hL_coord (φ : T) : (fun i : Fin d ↦ (g φ (A.coordinate i)).snd) = L φ := by
     ext i
-    change (TrivSqZeroExt.map (Dual.eval k T φ) (γ (A.coordinate i))).snd = (γ (A.coordinate i)).snd φ
+    change (TrivSqZeroExt.map (Dual.eval k T φ) (γ (A.coordinate i))).snd =
+      (γ (A.coordinate i)).snd φ
     exact snd_map (Dual.eval k T φ) _
   have hL : Function.Injective L := by
     intro φ ψ h_eq
