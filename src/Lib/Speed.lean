@@ -5,12 +5,20 @@ public import Mathlib
 /-!
 # Speed settings
 
-The settings of this file make `simp` faster in all files of the development. They add no
-axiom, and no proof relies on them: with this file emptied, the other files still compile, more
-slowly.
+The three settings of this file make instance search and `simp` faster in all files of the
+development. They add no axiom, and no proof relies on them: with this file emptied, the other files
+still compile, more slowly.
 -/
 
 @[expose] public section
+
+-- Instance search tries these instances late (the default priority is 1000). They give the
+-- grade-zero part `A 0` of a graded ring its algebraic structure, and unifying `A 0` with an
+-- arbitrary subtype is expensive. Without them `New.Derivatives.Divisibility.NormalForm` times out
+-- and `Lib.GaloisRep.Hilbert90.UnitaryGroups` fails.
+attribute [instance 20] SetLike.GradeZero.instMonoid SetLike.GradeZero.instCommMonoid
+  SetLike.GradeZero.instSemiring SetLike.GradeZero.instCommSemiring SetLike.GradeZero.instRing
+  SetLike.GradeZero.instCommRing
 
 -- These lemmas leave the default `simp` set of every importing file. They match very many terms
 -- and then fail on a side condition. Tagging a lemma in both directions erases both, and, unlike
