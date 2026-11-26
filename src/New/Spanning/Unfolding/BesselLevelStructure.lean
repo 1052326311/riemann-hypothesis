@@ -895,7 +895,7 @@ contains a primitive 5040th root of unity, and let `S` be filling data over `E`.
 Let `γ` be a rational point of the standard unitary group in `n` variables, `|n| ≤ 𝔰.k`, and `g` a
 finite adelic point. If `g⁻¹ γ g` is integral (lies in `stdLevel E n`) and reduces to `1` at every
 place of `S.chosenPlaces i`, then `γ = 1`. -/
-lemma eq_one_of_reduceAt_eq_one [HasPrimitiveRoot5040 E] {n : Type}
+lemma eq_one_of_reduceAt_eq_one {n : Type}
     [Fintype n] [DecidableEq n] (hn : card n ≤ 𝔰.k) (i : Fin 2) {γ : U (stdSpace E n).J}
     {g : Gf E n} (h_int : g⁻¹ * (stdSpace E n).embFin γ * g ∈ stdLevel E n)
     (h_red : ∀ w : S.chosenPlaces i,
