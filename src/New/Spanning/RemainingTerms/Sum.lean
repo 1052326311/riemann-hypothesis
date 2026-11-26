@@ -134,7 +134,6 @@ lemma IsNearPairOverAgreeingBlock.corank_le_and_pairDiscriminant_le {E : Type} [
       ((le_mul_of_one_le_right (by positivity) h_one_le_d).trans h_pow_mul_disc_le)
   have h_codim : 18 * i ≤ 𝔰.n ^ 3 := Nat.le_of_mul_le_mul_right h_exp NeZero.one_le
   have h_rank_excess_le : j.val - 𝔰.ϱ ≤ 1 := by lia
-  have h_cube : 𝔰.n ≤ 𝔰.n ^ 3 := Nat.le_self_pow three_ne_zero _
   have h_ϱ_large : 10 ^ 5 ≤ 𝔰.ϱ := S.ten_pow_five_le_varrho
   lia
 
