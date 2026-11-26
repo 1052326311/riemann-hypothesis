@@ -896,6 +896,27 @@ lemma mem_liftIdeal_of_eq_mul_smul_sub {S : PairingSide O} {r : ℕ} {i : Letter
 
 /-! ### Monomials in p, z and E that lie in the ideals -/
 
+/-- The Galois difference of a monomial lowers its power of `z` by one after division by `zτE`. -/
+private lemma exists_monomial_lowering (c n : ℕ) :
+    let f : k.S := p ^ c * k.z ^ (n + 1)
+    ∃ (g : k.galMonoid) (α β : Ainf),
+      k.zTau * k.E * (↑(p ^ (c + padicValNat p (n + 1)) * k.z ^ n : k.S) + β * f) =
+        α * (g • (f : Ainf) - f) := by
+  intro f
+  obtain ⟨t, ht : toGp t.val • k.z.val = WittVector.teichmuller p epsTilt ^ 1 * k.z.val⟩ :=
+    k.exists_smul_z 1
+  obtain ⟨α, β, h_lift : tau * k.E * (p ^ padicValNat p (n + 1) + β * k.z) =
+      α * (WittVector.teichmuller p epsTilt ^ (n + 1) - 1)⟩ :=
+    k.exists_tau_mul_E_eq_mul_epsTilt_pow_sub_one n.add_one_ne_zero
+  have h_smul : toGp t.val • f.val =
+      p ^ c * (WittVector.teichmuller p epsTilt ^ (n + 1) * k.z.val ^ (n + 1)) := by
+    simp [f, ht, mul_pow]
+  refine ⟨⟨_, t, rfl⟩, α, β, ?_⟩
+  change _ = α * (toGp t.val • f.val - f)
+  simp only [h_smul, f, zTau]
+  push_cast
+  linear_combination ↑p ^ c * k.z.val ^ (n + 1) * h_lift
+
 /-- Going down a level, on a Kummer chart `k` with ring `k.S ⊂ A_inf` and coordinate `z = k.z`: if
 `p^c z^n` lies in `S.liftIdeal r 1 (σ i)`, where `σ i = i^p` is `k.letterFrob i` for the letter `i`
 (a unit of the field with `p ^ k.f` elements), if `p a ≤ n` and `c + v_p(n!) ≤ κ + v_p((p a)!)`,
@@ -914,26 +935,12 @@ lemma mem_liftIdeal_zero_of_mem_liftIdeal_one_letterFrob {S : PairingSide O} {r 
       p_pow_mul_z_pow_mem_liftIdeal_iff.1 (by simpa using h_mem)
     exact mem_of_dvd _ (mul_dvd_mul_right (pow_dvd_pow _ (by omega)) _) h_zero
   | @step n _ ih =>
-    -- Take `t` in `Γ'` with `t z = [ε] z`; the derivation by `t` lowers `n + 1` to `n`.
-    obtain ⟨t, ht : toGp t.1 • k.z.1 = WittVector.teichmuller p epsTilt ^ 1 * k.z.1⟩ :=
-      k.exists_smul_z 1
-    obtain ⟨α, β, h_lift : tau * k.E * (p ^ padicValNat p (n + 1) + β * k.z) =
-        α * (WittVector.teichmuller p epsTilt ^ (n + 1) - 1)⟩ :=
-      k.exists_tau_mul_E_eq_mul_epsTilt_pow_sub_one n.add_one_ne_zero
-    let f : k.S := p ^ c * k.z ^ (n + 1)
-    have h_smul : toGp t.1 • f.1 =
-        p ^ c * (WittVector.teichmuller p epsTilt ^ (n + 1) * k.z.1 ^ (n + 1)) := by
-      simp [f, ht, mul_pow]
-    have h_der : k.zTau * k.E * (↑(p ^ (c + padicValNat p (n + 1)) * k.z ^ n : k.S) + β * f) =
-        α * (toGp t.1 • f.1 - f) := by
-      simp only [h_smul, f, zTau]
-      push_cast
-      linear_combination ↑p ^ c * k.z.1 ^ (n + 1) * h_lift
+    obtain ⟨g, α, β, h_der⟩ := exists_monomial_lowering (k := k) c n
     -- The cost of the step is `v(n + 1)`, and `v((n + 1)!) = v(n + 1) + v(n!)`.
     rw [Nat.factorial_succ, Nat.padicValNat_def,
       Nat.multiplicity_mul n.add_one_ne_zero n.factorial_ne_zero, ← Nat.padicValNat_def,
       ← Nat.padicValNat_def] at h_cost
-    exact ih _ (mem_liftIdeal_of_eq_mul_smul_sub α β ⟨_, t, rfl⟩ h_mem h_der) (by omega)
+    exact ih _ (mem_liftIdeal_of_eq_mul_smul_sub α β g h_mem h_der) (by omega)
 
 /-- Trading `E` for `z` at level one, on a Kummer chart `k` with ring `k.S ⊂ A_inf`, coordinate
 `z = k.z` and generator `E = k.E` of ker θ: if `p^c z^a E^n` lies in `S.liftIdeal r 1 i`, if
@@ -1006,28 +1013,19 @@ lemma p_pow_mul_z_pow_pred_mem_liftIdeal {S : PairingSide O} {r c n : ℕ} {i : 
   -- identity `τ (p ^ (v + 1) + z β') = α ([ε] ^ n - 1)`; multiplied by `p ^ c z ^ n` it reads
   -- `zτ (p ^ (c + v + 1) z ^ (n - 1) + β' p ^ c z ^ n) = α (t - 1) (p ^ c z ^ n)`.
   obtain ⟨m, rfl⟩ : ∃ m : ℕ, n = m + 1 := Nat.exists_eq_add_of_le' hn_pos
-  obtain ⟨t, ht : toGp t.1 • k.z.1 = WittVector.teichmuller p epsTilt ^ 1 * k.z.1⟩ :=
-    k.exists_smul_z 1
-  obtain ⟨α, β, h_lift : tau * k.E * (p ^ padicValNat p (m + 1) + β * k.z) =
-      α * (WittVector.teichmuller p epsTilt ^ (m + 1) - 1)⟩ :=
-    k.exists_tau_mul_E_eq_mul_epsTilt_pow_sub_one m.add_one_ne_zero
+  let f : k.S := p ^ c * k.z ^ (m + 1)
+  obtain ⟨g, α, β, h_lower⟩ := exists_monomial_lowering (k := k) c m
   obtain ⟨e, he⟩ : k.z ∣ k.E - p := k.z_dvd_E_sub_p
   have hE : (k.E : Ainf) - p = k.z * e := by exact_mod_cast congrArg Subtype.val he
-  have h_lower : tau * ((p : Ainf) ^ (padicValNat p (m + 1) + 1) +
-        k.z * (p ^ padicValNat p (m + 1) * e + β * k.E)) =
-      α * (WittVector.teichmuller p epsTilt ^ (m + 1) - 1) := by
-    linear_combination h_lift - tau * (p : Ainf) ^ padicValNat p (m + 1) * hE
-  let f : k.S := p ^ c * k.z ^ (m + 1)
-  have h_smul : toGp t.1 • f.1 =
-      p ^ c * (WittVector.teichmuller p epsTilt ^ (m + 1) * k.z.1 ^ (m + 1)) := by
-    simp [f, ht, mul_pow]
   have h_der : k.zTau * ((p : Ainf) ^ (c + padicValNat p (m + 1) + 1) * k.z.val ^ m +
-      (p ^ padicValNat p (m + 1) * e + β * k.E) * f) = α * (toGp t.1 • f.1 - f) := by
-    simp only [h_smul, f, zTau]
-    push_cast
-    linear_combination ↑p ^ c * k.z.1 ^ (m + 1) * h_lower
+      (p ^ padicValNat p (m + 1) * e + β * k.E) * f) = α * (g • (f : Ainf) - f) := by
+    dsimp only [f]
+    push_cast at h_lower ⊢
+    simp only [pow_add, pow_succ] at h_lower ⊢
+    linear_combination h_lower - k.zTau * (p : Ainf) ^ c * (p : Ainf) ^ padicValNat p (m + 1) *
+      k.z.val ^ m * hE
   rw [Nat.add_sub_cancel]
-  exact mem_liftIdeal_of_eq_zTau_mul_smul_sub α _ ⟨_, t, rfl⟩ (by simpa [f] using h_mem) h_der
+  exact mem_liftIdeal_of_eq_zTau_mul_smul_sub α _ g (by simpa [f] using h_mem) h_der
 
 /-- Let `S : PairingSide O` be a pairing side and `i` a letter. This lemma repeatedly lowers the
 power of the coordinate `z = k.z` of the Kummer chart `k`. If `p ^ c * z ^ n` lies in
