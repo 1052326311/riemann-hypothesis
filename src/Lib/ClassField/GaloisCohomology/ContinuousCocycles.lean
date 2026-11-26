@@ -576,10 +576,6 @@ lemma IsShortExact.restrictAlong (h_exact : IsShortExact ι π) :
 restricted action. -/
 abbrev submodule : DiscreteModule R Γ := of (A.ρ.subrepresentation W h)
 
-private lemma discreteTopology_quotient : DiscreteTopology (A.V ⧸ W) :=
-  discreteTopology_iff_forall_isOpen.mpr fun s ↦
-    (W.isOpenQuotientMap_mkQ.isQuotientMap.isOpen_preimage (s := s)).mp (isOpen_discrete _)
-
 /-- For a Γ-stable R-submodule W of a discrete Γ-module A, the quotient A ⧸ W as a discrete
 Γ-module, with the action induced on cosets. -/
 abbrev quotient : DiscreteModule R Γ :=
