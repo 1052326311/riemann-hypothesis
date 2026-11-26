@@ -264,10 +264,8 @@ lemma exists_places_above_one_side {S : Set (FinPlace E)} (h_split : ∀ w ∈ S
     rcases Sym2.eq_iff.1 h_pair with ⟨h_eq, -⟩ | ⟨h_eq, -⟩
     · exact ⟨v, hv, .inl h_eq⟩
     · exact ⟨v, hv, .inr h_eq⟩
-  have hV_inj : InjOn (FinPlace.below E) V := by
-    intro u hu v hv h_below
-    have h_pair_eq : belowPair E u = belowPair E v := by simp [belowPair, h_below]
-    exact hV_inj_pair hu hv h_pair_eq
+  have hV_inj : InjOn (FinPlace.below E) V :=
+    InjOn.of_comp (g := fun w : FinPlace E ↦ s(w, star w)) hV_inj_pair
   refine ⟨V, hV, hV_inj, ?_, subset_antisymm ?_ ?_⟩
   · rintro _ ⟨u, hu, rfl⟩ ⟨v, hv, hvu⟩
     have h_pair_eq : belowPair E u = belowPair E v := by simp [belowPair, hvu, Sym2.eq_swap]
