@@ -512,8 +512,7 @@ lemma transposedChain_one_true_eq_transposedChain {b : ℕ} (ϑ : D.MFoldTwist) 
     rw [transposedChain_of_lt 1 hb, transposedChain_of_lt ϑ hb, ih, pointTransposedLift,
       pointTransposedLift, show triangleGLCard true ϑ b = triangleGLCard true 1 b from rfl,
       show triangleModulus true ϑ = triangleModulus true 1 from rfl,
-      show gridChar ϑ (!true) b = gridChar 1 (!true) b from
-        funext fun _ ↦ funext fun _ ↦ by rw [Bool.not_true, gridChar_false, gridChar_false]]
+      show gridChar ϑ (!true) b = gridChar 1 (!true) b from rfl]
 
 /-- Let `ϑ` be an m-fold twist (`MFoldTwist`), `y'` a conjugate form on `Y_m` and `φ` a form on
 `Ỹ^m_0`. Move them to `Y₀` and `Ỹ^0_0` by `transposedChain`, the composites of transposed theta
