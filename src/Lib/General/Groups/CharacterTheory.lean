@@ -245,6 +245,8 @@ lemma IsChar.star (hχ : IsChar χ) : IsChar fun g : G ↦ conj (χ g) := by
 an `S`-linear combination `f` of characters lies in the image of `S` in `ℂ`. -/
 lemma IsChar.exists_classInner_eq (hχ : IsChar χ) (hf : f ∈ virtualChars S G) :
     ∃ m : S, classInner χ f = algebraMap S ℂ m := by
+  -- Write `f = ∑ j, a j • ψ j` with characters `ψ j`. Each pairing is the dimension of the
+  -- space of equivariant maps from the representation for `χ` to the one for `ψ j`.
   obtain ⟨n, a, ψ, rfl⟩ := mem_span_set'.1 hf
   choose m hm using fun j : Fin n ↦
     show ∃ m : ℕ, classInner χ (ψ j) = m from by
