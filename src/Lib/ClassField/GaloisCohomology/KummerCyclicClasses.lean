@@ -128,7 +128,7 @@ abbrev unitsModule : DiscreteModule ℤ Γ :=
   of (unitsRep (Γ := Γ) (Ω := Ω)) <|
     -- the orbit map of each unit is locally constant
     continuous_prod_of_discrete_right.2 fun x ↦
-      ((isLocallyConstant_smul x.1).desc (fun g ↦ unitsRep g x) Units.val
+      ((isLocallyConstant_smul x.val).desc (fun g ↦ unitsRep g x) Units.val
         Units.val_injective).continuous
 
 /-- Additive maps from a finite group `A` to `Ωˣ` (written additively) form a finite set. -/
@@ -219,9 +219,9 @@ def cupProduct : Z1 M.ρ →+ Z1 N.ρ →+ W.H2 :=
       (fun x : Z1 M.ρ ↦
         AddMonoidHom.mk'
           (fun y : Z1 N.ρ ↦
-            (⟨fun p ↦ b (x.1 p.1) (N.ρ p.1 (y.1 p.2)), by
-              obtain ⟨hx_cont, hx⟩ := x.2
-              obtain ⟨hy_cont, hy⟩ := y.2
+            (⟨fun p ↦ b (x.val p.1) (N.ρ p.1 (y.val p.2)), by
+              obtain ⟨hx_cont, hx⟩ := x.property
+              obtain ⟨hy_cont, hy⟩ := y.property
               -- The cocycle identities and `e` make the terms cancel in pairs.
               exact ⟨by fun_prop, fun g h k ↦ by simp [hx, hy, ← e]⟩⟩ : Z2 W.ρ))
           (by simp [funext_iff]))
