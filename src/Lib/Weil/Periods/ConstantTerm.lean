@@ -1,4 +1,3 @@
-import Lib.Adelic.AutomorphicForms.BlockPeriods
 import Lib.General.LinearAlgebra.BlockEmbeddings
 import Lib.Weil.DualPair.MixedModel
 import Lib.Weil.Periods.BesselIntegral

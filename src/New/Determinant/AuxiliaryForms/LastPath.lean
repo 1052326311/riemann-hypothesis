@@ -1,3 +1,4 @@
+import Lib.Adelic.AutomorphicForms.BlockPeriods
 import New.Determinant.AuxiliaryForms.GridFirstColumns
 import New.Determinant.AuxiliaryForms.RegularParameters
 
