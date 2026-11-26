@@ -137,7 +137,7 @@ theorem TensorChain.lift_algFormRep_of_map_eq {z : ∀ i : ℕ, Gf E (n i)}
 /-- Let `φ` be fixed by the level `K 0`, and let each `a j` lie in `K j`. Acting on each datum `Φ i`
 by `(a i, a (i + 1))` and applying the chain to `φ` gives the right translate by `a j` of the chain
 applied to `φ`. -/
-lemma chain_equivariant [WeilData E] {φ : AlgForm (n 0) κ (e 0)}
+lemma chain_equivariant {φ : AlgForm (n 0) κ (e 0)}
     (hφ : φ ∈ levelSpace (algFormRep κ (e 0)) (K 0)) (a : ∀ j : ℕ, K j)
     (Φ : (j : ℕ) → S j) (j : ℕ) :
     chain k (fun i : ℕ ↦ (k i).ω (a i, (a (i + 1)).val) (Φ i)) j φ =
