@@ -607,7 +607,7 @@ lemma exists_tsum_schurWeight_le {B : Set (S.G E)}
       (realFrameGram_inv_mul_ratToInf (hu v) (hZ hp₀)) (h_pair hp₀ v (hu v))
   refine ⟨fun x ↦ ∏ v : InfinitePlace E, φ₀ v (x v),
     Finset.measurable_prod _ fun v _ ↦ (hφ₀_meas v).comp (measurable_pi_apply v), ?_, fun x ↦ ?_⟩
-  · rw [volume_pi, lintegral_pi_prod _ hφ₀_meas]
+  · rw [volume_pi, TauCeti.lintegral_fintype_prod_eq_prod _ hφ₀_meas]
     exact Finset.prod_le_prod fun v _ ↦ hφ₀_int v
   -- The kernel at the shifted lattice point of `p` bounds the ratio of the volumes of `p`.
   have h_ratio {p : S.G E} (hp : p ∈ B) (v : InfinitePlace E) :

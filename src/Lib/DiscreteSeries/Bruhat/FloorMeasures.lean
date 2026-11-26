@@ -977,7 +977,7 @@ lemma Place.lintegral_damped_fourier_le (ξ : A) {G : A → ℝ} (hG : Continuou
     _ = (∫⁻ a : A, ‖∫ v : A, G v * P.ψ (star v * ξ * a)‖ₑ) ^ card ι *
           ∫⁻ w : ι → A, ‖f w‖ₑ ^ 2 := by
       rw [lintegral_mul_const _ (by fun_prop), card, ← Finset.prod_const (lintegral ..),
-        ← lintegral_pi_prod _ (by fun_prop), volume_pi]
+        ← TauCeti.lintegral_fintype_prod_eq_prod _ (by fun_prop), volume_pi]
 /-- Plancherel's inequality at a place A: for a unit η and f measurable and integrable on A^ι,
 ∫ |∫ ψ(η v*w) f(w) dw|² dv ≤ (c/md η)^{|ι|} ∫ |f|². Here v*w is `star v ⬝ᵥ w`, ψ is the additive
 character of the place, and md is its `modulus`. The constant c = `kernelBound` is part of the data
