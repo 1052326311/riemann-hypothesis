@@ -391,7 +391,8 @@ lemma exists_chainDeterminant_eq_pow_mul_prod_liftDeterminant :
       _ = _ := by simp_rw [h_reindex_lifts, h_liftDet]
   -- The determinants are squares of real numbers, so they equal their norms.
   rw [mul_right_comm, ← hc]
-  simpa [chainDeterminant, liftDeterminant] using congrArg (fun z : ℂ ↦ (‖z‖ : ℂ)) h_chain_factorization
+  simpa [chainDeterminant, liftDeterminant] using
+    congrArg (fun z : ℂ ↦ (‖z‖ : ℂ)) h_chain_factorization
 
 /-- There is an integer `e` such that, for every twist `ϑ` whose first `m` powers are twists, the
 ratio `chainDeterminant ϑ / chainDeterminant 1` is `(normQ ϑ ^ (e / 2) * ∏_{1 ≤ i < j ≤ m}
@@ -410,8 +411,8 @@ theorem exists_div_chainDeterminant_one_eq :
   have h_untwisted_volume :
       D.chainDeterminant 1 = C ^ D.targetDim * ∏ j ∈ Icc 1 D.m, D.liftDeterminant 1 j := by
     simp [h_absolute_volume, D.prod_quotientRatio_one, toAutChar_one_and_toTwist_one_and_Q_one]
-  rw [h_absolute_volume ϑ, h_untwisted_volume, prod_div_distrib, Complex.ofReal_mul, mul_pow, mul_assoc,
-    mul_div_mul_left _ _ (by simp [hC.ne']), mul_div_assoc]
+  rw [h_absolute_volume ϑ, h_untwisted_volume, prod_div_distrib, Complex.ofReal_mul, mul_pow,
+    mul_assoc, mul_div_mul_left _ _ (by simp [hC.ne']), mul_div_assoc]
 
 open scoped ComplexOrder in
 /-- **Factorization of the determinant.** For the data `D`, let `ϑ` be an `m`-fold twist
