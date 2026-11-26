@@ -104,9 +104,18 @@ def fixedToEigen {H : Type*} [Group H] (ι : H →* G) (J : Subgroup H := K.coma
       ∀ ⦃W : Type⦄ [AddCommGroup.{0} W] [Module k W] ⦃π : Representation k G W⦄ ⦃v : W⦄,
         v ∈ levelSpace π K →
         π.asAlgebraHom a v ∈ levelSpace (π.comp ι) J χ}
-  add_mem' := by simp_all
-  zero_mem' := by simp_all
-  smul_mem' := by simp_all [smul_smul, mul_comm]
+  add_mem' ha hb := by
+    intro W _ _ π v hv
+    rw [map_add, LinearMap.add_apply]
+    exact add_mem (ha hv) (hb hv)
+  zero_mem' := by
+    intro W _ _ π v hv
+    rw [map_zero, LinearMap.zero_apply]
+    exact zero_mem _
+  smul_mem' c a ha := by
+    intro W _ _ π v hv
+    rw [map_smul, LinearMap.smul_apply]
+    exact Submodule.smul_mem _ c (ha hv)
 
 variable {K} {D D' D'' : Set G}
 
