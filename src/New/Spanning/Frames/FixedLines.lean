@@ -711,7 +711,6 @@ lemma IsFillingData.exists_massIntegral_pi_eq (h : S.IsFillingData T F)
     (h' i).isHaarMeasure_groupMeasure.sigmaFinite
   have _ : LocallyCompactSpace (∀ i : ι, (S.latticeMiddle (LocProd (placeFiber T blk i))).G) :=
     Pi.locallyCompactSpace_of_finite
-  have _ (i : ι) : Nonempty (S.latticeMiddle (LocProd (placeFiber T blk i))).G := ⟨1⟩
   have h_inv : (F.groupMeasure.map (S.toFibers T blk)).IsMulRightInvariant := by
     refine ⟨(toFibers_surjective blk).forall.2 fun x ↦ ?_⟩
     have h_right : MeasurePreserving (· * x) F.groupMeasure F.groupMeasure :=

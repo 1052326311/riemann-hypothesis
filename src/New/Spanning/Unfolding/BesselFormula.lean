@@ -242,7 +242,6 @@ lemma exists_integral_pi_eq (h : S.Fits V l kw Y η) :
   let μ : Measure (InfinitePlace E → 𝔰.besselGraph) := Measure.pi fun _ ↦ 𝔰.besselGraphMeasure
   let ν : Measure (InfinitePlace E → 𝔰.besselGraph) := haar.map h.besselRealEquiv
   have : MeasurableMul 𝔰.besselGraph := ContinuousMul.measurableMul
-  have : μ.IsHaarMeasure := Measure.pi.isHaarMeasure _
   have : ν.IsHaarMeasure := h.besselRealEquiv.isHaarMeasure_map haar
   refine ⟨haarScalarFactor μ ν, fun F ↦ ?_⟩
   have h_map : ∫ q, F q ∂ν = ∫ s : Y.besselReal, F (h.besselRealToPi s) ∂haar :=
