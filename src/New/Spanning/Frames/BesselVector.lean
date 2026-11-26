@@ -519,7 +519,7 @@ theorem enorm_sq_besselVector_mul_le_one (y : T.G) :
 
 /-- For a large lattice datum `F` and a group `Z` with K(g) ≤ Z ≤ K, let `fl = F.unipotentMass` be
 the mass of 𝖴 ∩ K(g) and `W_Z = Z.besselVector`. The squared norm of `√fl W_Z` on 𝖴∖G is the measure
-of `Z`; by `card_cosets_mul_groupMeasure` this is the number of cosets of K(g) in `Z` times the
+of `Z`, which is the number of cosets of K(g) in `Z` times the
 measure of K(g). Functions on 𝖴∖G are integrated against `F.quotientMeasureFrom 0`, the product of
 the measures of all floors. -/
 theorem lintegral_enorm_sq_besselVector :

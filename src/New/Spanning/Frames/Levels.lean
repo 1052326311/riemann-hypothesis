@@ -218,7 +218,7 @@ def stableProducts (a : Fin 𝔰.ϱ) (x y : T.G) : Set A :=
 
 /-- The depth of the vector e_a at the points x and x y: the inverse of the volume of 𝔡_a. In the
 place data that are used it is as follows. At the finite places it is the index of the ideal 𝔡_a if
-x is near at a + 1 (`New.Floors.IntegralPlace.IsLargeLatticeData.exists_ideal_depth_eq`). At a real
+x is near at a + 1. At a real
 place it is 1 / π times the infimum of |ζ|² at x plus |ζ|² at x y over the duals ζ of e_a in Y^(a)
 (`New.Floors.RealPlaceSizes.depth_eq`). -/
 def depth (a : Fin 𝔰.ϱ) (x y : T.G) : ℝ≥0∞ := (volume (F.stableProducts a x y))⁻¹
