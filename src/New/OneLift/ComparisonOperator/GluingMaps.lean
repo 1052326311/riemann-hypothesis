@@ -263,8 +263,9 @@ lemma firstFactorPairing_eq_mul_thirdExchangeLeftSide (i : ChoiceIndex j) (g : G
     (kernelClassSum_smul (O := D.descentPair ϑ j) ..)).trans
     (congrArg (firstFactorScale j * ·)
       (thirdExchangeLeftSide_eq_kernelClassSum ϑ j (u := Matrix.fromCols 1 0) ?_ g).symm)
-  -- `erw`, since `stackOverGenScalar` is a `fromRows` only up to unfolding
-  erw [Matrix.fromCols_mul_fromRows, Matrix.zero_mul, Matrix.one_mul, add_zero]
+  exact (Matrix.fromCols_mul_fromRows 1 0 i.1 _).trans
+    ((congrArg₂ (· + ·) (Matrix.one_mul i.1) (Matrix.zero_mul (l := D.CarrierIndex) _)).trans
+      (add_zero _))
 
 /-- Let `y` be a good form on the hermitian space `W_j = D.spaceW j`. The theta series
 `firstFactorPairing j ϑ i` on `U(W_j)` of a twist `ϑ` and a choice `i` is a finite combination of
