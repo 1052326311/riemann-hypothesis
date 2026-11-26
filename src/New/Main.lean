@@ -25,21 +25,11 @@ include h
 /-- Assume `DirichletLNonvanishingRightOfHalf` (hypothesis `h`): Dirichlet L-functions do not vanish
 for Re s > 1/2, the pole excepted. Then `DirichletLZerosOnLine` holds: every zero s of a Dirichlet
 L-function with 0 < Re s < 1 has Re s = 1/2. -/
-lemma New.zeros_on_line : DirichletLZerosOnLine := by
-  intro N _ χ s h_pos h_lt h_zero
-  have hs0 : 1 - s ≠ 1 := by aesop
-  have hs1 : s ≠ 1 := by aesop
-  -- A zero `s` that is not a pole of the gamma factor gives the zero `1 - s` of `L(·, χ⁻¹)`;
-  -- the gamma factor has no pole in `0 < re s` (Mathlib gives it the value `0` at a pole).
-  have h_gamma : χ.gammaFactor s ≠ 0 := by
-    grind [gammaFactor, Gammaℝ_ne_zero_of_re_pos, add_re, one_re]
-  have h_zero' : LFunction χ⁻¹ (1 - s) = 0 :=
-    (gammaFactor_eq_zero_or_LFunction_one_sub_eq_zero χ s h_pos.ne' hs1 h_zero).resolve_left h_gamma
-  -- Neither zero lies to the right of `1 / 2`.
-  have h_le : s.re ≤ 1 / 2 := le_of_not_gt fun hlt ↦ h N χ s hlt (.inr hs1) h_zero
-  have h_le' : (1 - s).re ≤ 1 / 2 := le_of_not_gt fun hlt ↦ h N χ⁻¹ (1 - s) hlt (.inr hs0) h_zero'
-  rw [sub_re, one_re] at h_le'
-  linarith
+lemma New.zeros_on_line : DirichletLZerosOnLine :=
+  fun N _ ↦ by
+    grind [h N, Complex.one_re, Complex.sub_re,
+      → New.gammaFactor_eq_zero_or_LFunction_one_sub_eq_zero, Complex.ext_iff,
+      DirichletCharacter.gammaFactor, Complex.Gammaℝ_ne_zero_of_re_pos]
 
 /-- Assume `DirichletLNonvanishingRightOfHalf` (hypothesis `h`): Dirichlet L-functions do not vanish
 for Re s > 1/2, the pole excepted. Then `RiemannZetaZerosOnLine` holds: every zero s of ζ outside
