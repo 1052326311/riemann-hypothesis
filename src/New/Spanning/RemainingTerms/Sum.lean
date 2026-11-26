@@ -208,14 +208,14 @@ lemma IsNearPairOverAgreeingBlock.termSize_mul_le {E : Type} [Field E] [CMType E
     _ ≤ (S.tailScale ^ 4 * D / S.pairCountScale) ^ 2 / ((d * η) ^ 2) ^ 𝔰.k := by gcongr
     _ = _ := by ring
 
-/-- Let `S` be data of the filling theorem that satisfy the standing hypotheses `S.IsAdmissible`.
+/-- Let `S` be data of the filling theorem.
 Let `(γ, γ')` be a near pair over the classes `c`, `c'`, whose common lattice `S.pairLattice` has
 corank `l = k - finrank E (commonLink γ γ')` and discriminant `d = S.pairDiscriminant c c' γ γ'`.
 Let `η > 0`. Suppose that `(d η)²` is at most the product of the two gauges, `D` bounds the
 constants `S.cellRankSecondMoment` of both cell ranks, and `τ ^ (l + 6) D η ^ (-k) ≤ B`. Then the
 product of the sizes `S.termSize` is at most `B d ^ (-k) / (τ ^ (l + 2) n_p)`. -/
 lemma IsNearPairOverAgreeingBlock.ofReal_termSize_mul_le {E : Type} [Field E] [CMType E]
-    {𝔰 : Shape} {S : Filling E 𝔰} [HasPrimitiveRoot5040 E] [S.IsAdmissible] {c c' : S.Classes}
+    {𝔰 : Shape} {S : Filling E 𝔰} [HasPrimitiveRoot5040 E] {c c' : S.Classes}
     {γ γ' : S.G E} (hq : S.IsNearPairOverAgreeingBlock c c' (γ, γ')) {η D B : ℝ} (hη : 0 < η)
     (h_gain : (S.pairDiscriminant c c' γ γ' * η) ^ 2 ≤
       S.levelGauge (S.cellRank γ) c c' γ * S.levelGauge (S.cellRank γ') c c' γ')
