@@ -385,10 +385,10 @@ private lemma isIntegral_aeval_of_evalForms_eq {G B : Type} [CommRing B] [Algebr
     (σ₀ : G) (hΛb : evalForms Λ (b σ₀) = f ∘ X) :
     (aeval (R := k) ↿b).IsIntegral := by
   let θ : MvPolynomial (Fin (d + 1)) k →ₐ[k] MvPolynomial (G × ι) k :=
-    bind₁ fun l ↦ rename (Prod.mk σ₀) (Λ l).val
+    aeval fun l ↦ rename (Prod.mk σ₀) (Λ l).val
   have hfactor : (aeval (R := k) ↿b).comp θ = f := by
     refine algHom_ext fun l ↦ ?_
-    simp only [θ, AlgHom.comp_apply, bind₁_X_right, aeval_rename]
+    simp only [θ, AlgHom.comp_apply, aeval_X, aeval_rename]
     exact congrFun hΛb l
   refine .tower_top θ.toRingHom _ ?_
   change ((aeval (R := k) ↿b).comp θ).toRingHom.IsIntegral
