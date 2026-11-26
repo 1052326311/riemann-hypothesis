@@ -558,7 +558,7 @@ lemma exists_kernel_isDisintegration_coordinateBox_le :
       ∀ (β : skewAdjoint A) (u : Aˣ),
         q β (coordinateBox (Fin F.blockRank) {x : A | u.val * x ∈ P.integers}) ≤
           idealZeta P.integers m * (P.modulus u)⁻¹ ^ (2 * m + 3) :=
-  exists_kernel_isDisintegration_le h.psi_add_star h.idealZeta_le_two
+  exists_kernel_isDisintegration_le h.idealZeta_le_two
     (Fintype.card_fin _) (by lia)
 
 /-- For a large lattice datum `F`, the elements of `F.productDifferences` are integral. These are

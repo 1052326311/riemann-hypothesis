@@ -319,8 +319,6 @@ The prime number theorem in this table is known (Montgomery and Vaughan, Multipl
 | Basis problem in the stable range, as a reproducing formula | `Lib/SiegelWeil/Reproduction` |  | S. Böcherer, Über die Fourier-Jacobi-Entwicklung Siegelscher Eisensteinreihen, Math. Z. 183 (1983); J.-S. Li, Crelle 428 (1992) |
 | Siegel–Weil formula in the convergent range for unitary groups over CM fields | `Lib/SiegelWeil/Formula/WeilRange` | `Lib/SiegelWeil/Formula/LagrangianZeroTerms` | A. Weil, Sur la formule de Siegel dans la théorie des groupes classiques, Acta Math. 113 (1965), n° 52 Thm 5; the method of proof follows Andrianov (1979), Harris (1981), and P. Garrett, The Siegel-Weil formula in the convergent range (notes, 2005) |
 | Reduction theory: existence of Siegel sets for unitary groups | `Lib/SiegelWeil/Formula/WeilRange` |  |  |
-| Bounds for local densities of hermitian forms by Gauss sums, part of Siegel's formula for representing a number by a hermitian form | `Lib/SiegelWeil/OneVector/ClassGaussSums` |  |  |
-| Bounds for local densities of hermitian forms by Gauss sums, part of Siegel's formula for representing a number by a hermitian form | `Lib/SiegelWeil/OneVector/SemilocalDensityBounds` |  |  |
 | A local density bound for hermitian forms | `Lib/SiegelWeil/OneVector/StandardQuadrics` |  |  |
 | Siegel's formula for representing a number by a hermitian form | `Lib/SiegelWeil/OneVector/SiegelClassSum` | `Lib/SiegelWeil/Mass`, `Lib/SiegelWeil/OneVector/FinitePlaceDensity` | A. Weil, Acta Math. 113 (1965), Thm 5 for one vector; classically, C. L. Siegel, Ann. of Math. 36 (1935), and H. Braun, Zur Theorie der hermitischen Formen, Abh. Math. Sem. Hamburg 14 (1941) |
 | Mass formula for unimodular hermitian lattices, as the ratio of consecutive masses | `Lib/SiegelWeil/OneVector/SiegelClassSum` |  | W. T. Gan, J. Hanke, J.-K. Yu, On an exact mass formula of Shimura, Duke Math. J. 107 (2001); M. Kirschmer, Definite quadratic and hermitian forms with small class number (2016), 4.2.7, 4.2.9 |
@@ -365,7 +363,6 @@ The prime number theorem in this table is known (Montgomery and Vaughan, Multipl
 | `Lib/General/LinearAlgebra` | `BlockEmbeddings`, `GramDeterminant`, `IdempotentRadical`, `MatricesNearIdentity`, `MatrixPolynomials`, `MinorProducts`, `PolarDecomposition`, `TensorChains` |
 | `Lib/General/Measure` | `HaarModulus`, `HaarNormalisation`, `IdempotentKernel`, `IntegralOperators`, `QuadricDisintegration` |
 | `Lib/General/NumberTheory` | `CMFields`, `CoefficientInclusion`, `CoefficientRings`, `EmbeddingsAndDifferent`, `FrobeniusOrbits`, `ImaginaryQuadraticField`, `LargeResidueField` |
-| `Lib/SiegelWeil/OneVector` | `ResidueClasses` |
 | `Lib/SiegelWeil/SingularForms` | `CentreCoefficients` |
 | `Lib/SiegelWeil/Tower` | `PrincipalIdeles` |
 | `Lib/Weil/Periods` | `RealAndFinitePoints`, `StringPowers` |
