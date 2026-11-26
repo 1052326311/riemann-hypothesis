@@ -294,22 +294,14 @@ at `P`, `π̄⁻¹` at the conjugate places and `1` elsewhere, has norm one: its
 conjugate is `1`. -/
 lemma star_one_add_neighbourScale_mul (hπ : IsSplitSquarefree P (N : E) π) :
     star (1 + neighbourScale P π) * (1 + neighbourScale P π) = 1 := by
-  -- For an idempotent `e`, the map `u ↦ 1 + e (u - 1)` takes inverses to inverses.
-  have h_inv {e u u' : 𝔸f E} (he : e * e = e) (hu : u * u' = 1) :
-      (1 + e * (u - 1)) * (1 + e * (u' - 1)) = 1 := by
-    linear_combination (u - 1) * (u' - 1) * he + e * hu
-  have h_factor : 1 + neighbourScale P π =
-      (1 + idem P * ((π : 𝔸f E) - 1)) * (1 + star (idem P) * (star (↑π⁻¹ : 𝔸f E) - 1)) := by
-    rw [neighbourScale]
-    linear_combination
-      -((π : 𝔸f E) - 1) * (star (↑π⁻¹ : 𝔸f E) - 1) * idem_mul_star hπ.isConjDisjoint
-  calc star (1 + neighbourScale P π) * (1 + neighbourScale P π)
-    _ = (1 + idem P * ((π : 𝔸f E) - 1)) * (1 + idem P * ((↑π⁻¹ : 𝔸f E) - 1)) *
-        ((1 + star (idem P) * (star (π : 𝔸f E) - 1)) *
-          (1 + star (idem P) * (star (↑π⁻¹ : 𝔸f E) - 1))) := by
-      simp only [h_factor, star_add, star_sub, star_mul', star_one, star_star]
-      ring
-    _ = 1 := by simp [h_inv, idem_mul_self, star_idem_mul_self, π.mul_inv, star_mul_star_inv π]
+  simp only [neighbourScale, star_add, star_sub, star_mul', star_one, star_star]
+  linear_combination
+    ((π : 𝔸f E) - 1) * ((↑π⁻¹ : 𝔸f E) - 1) * idem_mul_self (P : Set (FinPlace E)) +
+    (star (π : 𝔸f E) - 1) * (star (↑π⁻¹ : 𝔸f E) - 1) * star_idem_mul_self (P : Set (FinPlace E)) +
+    (((π : 𝔸f E) - 1) * (star (π : 𝔸f E) - 1) +
+      ((↑π⁻¹ : 𝔸f E) - 1) * (star (↑π⁻¹ : 𝔸f E) - 1)) * idem_mul_star hπ.isConjDisjoint +
+    idem (P : Set (FinPlace E)) * π.mul_inv +
+    star (idem (P : Set (FinPlace E))) * star_mul_star_inv π
 
 lemma normNegOne_mem : (normNegOne (E := E) : 𝔸f E) ∈ Ô E :=
   SetLike.coe_mem _
