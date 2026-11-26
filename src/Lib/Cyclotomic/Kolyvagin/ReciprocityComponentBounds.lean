@@ -618,7 +618,8 @@ lemma sum_floorDiff_dvd (h : IsStickelbergerBound N e X)
     simp only [floorDiff, ↓← map_neg, ofZMod_apply, QZ.fracRep_mk, mul_div, mod_eq_of_lt, val_lt,
       Int.fract_div_natCast_eq_div_natCast_mod]
     norm_cast
-    simp [-natCast_val, U, two_mul, sub_mul]
+    simp only [Int.cast_subNatNat, sub_mul, sum_sub_distrib, map_sub, map_sum, map_mul, map_natCast,
+      map_pow, two_mul, U]
     nth_rw 2 [← neg_bijective.sum_comp]
     simp [← h_odd, ← mul_assoc, ← mul_pow, h_char]
   -- Use `IsStickelbergerBound` at the levels `lⁿ⁺¹` and `lⁿ`. As `e ≠ 0`, the factor `l ^ e` turns
