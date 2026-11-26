@@ -564,7 +564,7 @@ def LineStage.consTautologicalPoint (t : LineStage A d) : LineStage A (d + 1) wh
   line_formula := t.line_formula.onElements
   points :=
     ⟨fun x ↦ Fin.cons x.2 (t.points.1 ((elementsProj (projLineAlong t.toTestOver)).obj x)), fun f ↦
-      funext (cases f.2 (congrFun (t.points.2
+      funext (cases f.map_val (congrFun (t.points.property
         ((elementsProj (projLineAlong t.toTestOver)).map f))))⟩
 
 /-- Integrating out the first parameter of r: pull back to the points of P¹, apply r with the
@@ -840,7 +840,7 @@ lemma isFiniteLerayHirsch_of_integrate_params (β : ι → TotalH (relFreeAb I.t
     -- `erw`: the target is well typed only after unfolding `Comparison.restrict`.
     erw [h_sum_r, h_proj]
     -- This is `h_sum_eq_foldr` at `t'` and the tautological section `a ↦ a.2` of `X`.
-    exact h_sum_eq_foldr t' ⟨fun a ↦ a.2, fun f ↦ f.2⟩ (r x)
+    exact h_sum_eq_foldr t' ⟨fun a ↦ a.val, fun f ↦ f.map_val⟩ (r x)
   | succ d ih =>
     -- Apply the induction hypothesis to the integrated operations.
     refine ih (fun j ↦ σ j.succ) (fun i ↦ (T i).integrate) fun t q' w ↦ ?_
@@ -931,7 +931,7 @@ lemma isFiniteLerayHirsch_topPoints_of_surjective {J : Type*} {d : J → ℕ}
   have h_chain :=
     I.exists_move_kernel
       (((Theory.locallyConstant.onElements (X := X)).onZeros I).onElements (X := _ ⋙ X)) h_max
-      (fun r ↦ ⟨_, fun f ↦ funext fun j ↦ (r j).2 f⟩) (fun _ hr ↦ funext hr)
+      (fun r ↦ ⟨_, fun f ↦ funext fun j ↦ (r j).property f⟩) (fun _ hr ↦ funext hr)
       (projLinePow.component ⟨_, fun f ↦ f.hom.map_val⟩) (projLinePow.component ⟨_, fun f ↦ f.2⟩)
       (pullbackAlong ((elementsProj _).whiskerLeft (abCoker.π _))
         (.homClass ((elementsProj _).whiskerLeft I.constToZeros)))
@@ -949,7 +949,7 @@ lemma isFiniteLerayHirsch_topPoints_of_surjective {J : Type*} {d : J → ℕ}
       ∑ i : β.support, mapThenComp (restrictAlong t.toTestOver) ((T i).app t w) (β i) =
         comp (TotalH.map (restrictAlong (sectionLift t.toTestOver t.points)) (lerayHirsch θ _ β) :)
           (I.extendToZeros t.theory t.points w) := by
-    simp_rw [show lerayHirsch θ _ β = _ from (β.1.sum_coe_sort _).symm, map_sum,
+    simp_rw [show lerayHirsch θ _ β = _ from (β.support.sum_coe_sort _).symm, map_sum,
       AddMonoidHom.finsetSum_apply]
     refine Finset.sum_congr rfl fun i _ ↦ ?_
     exact (mapThenComp_comp

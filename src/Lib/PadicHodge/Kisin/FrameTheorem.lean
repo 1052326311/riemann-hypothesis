@@ -422,7 +422,7 @@ private lemma sum_map_smul_eq_zero_of_sum_smul_eq_zero (F : Frame L) (f : Ainf �
     rintro μ ⟨hμ, -⟩
     have h_rel : ∑ i, phiInvToBdR 0 (c i) * μ (v i) ∈ (⊥ : Submodule BPlus BdR) := by
       simpa [smul_def', phiInvToBdR] using congrArg μ hc
-    have h_zero : ∑ i, algebraMap Ainf BdR (f (c i)).1 * μ (v i) = 0 := by
+    have h_zero : ∑ i, algebraMap Ainf BdR (f (c i)).val * μ (v i) = 0 := by
       simpa [phiInvToBdR] using
         sum_phiInvToBdR_map_mul_mem_of_mem_valueField f _ c (fun i ↦ hv_val i μ hμ) (W := ⊥) h_rel
     simp [ht, smul_def', h_zero]
