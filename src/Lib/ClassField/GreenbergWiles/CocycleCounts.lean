@@ -1,4 +1,6 @@
-import Lib.ClassField.GreenbergWiles.SplitPrimeReciprocity
+module
+
+public import Lib.ClassField.GreenbergWiles.SplitPrimeReciprocity
 
 /-!
 # Counts of trivialised Galois cocycles for projective modules and central scalars
@@ -44,6 +46,8 @@ Source: H. Darmon, F. Diamond, R. Taylor, Fermat's Last Theorem (1995; revised 2
 A. Wiles, Ann. of Math. 141 (1995), Prop. 1.6; J. S. Milne, Arithmetic Duality Theorems, I 4.10,
 5.1; L. Washington, Galois cohomology (1997), Thm 2.
 -/
+
+@[expose] public section
 
 /-!
 ## The count for a projective module

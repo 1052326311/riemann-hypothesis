@@ -1,5 +1,7 @@
-import New.Spanning.Bessel.Basic
-import New.Spanning.Frames.Depth
+module
+
+public import New.Spanning.Bessel.Basic
+public import New.Spanning.Frames.Depth
 
 /-!
 # The densities as integrals over pairs of frames
@@ -41,6 +43,8 @@ Notions from other files:
 
 See `New.Spanning.MainTerm.EnergyEstimate` for related work.
 -/
+
+@[expose] public section
 
 noncomputable section
 
