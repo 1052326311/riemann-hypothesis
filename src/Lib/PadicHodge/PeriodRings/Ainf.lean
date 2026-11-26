@@ -2,8 +2,6 @@ module
 
 import TauCeti.RingTheory.WittVector.ArtinSchreier
 import TauCeti.RingTheory.WittVector.Complete
-public import Mathlib.Algebra.CharP.Pi
-public import Mathlib.Algebra.Order.Star.Rat
 public import Mathlib.FieldTheory.IsAlgClosed.Classification
 public import Mathlib.RingTheory.WittVector.Compare
 public import Mathlib.Algebra.Polynomial.Degree.IsMonicOfDegree
