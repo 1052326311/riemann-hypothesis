@@ -101,7 +101,7 @@ lemma stringMap_eq_zero_of_gradeOf_ne {p : ι'} {q : ι} (h_grade : Y'.gradeOf p
   · obtain ⟨a | a, rfl⟩ := Y.indexEquiv.surjective q <;> simp [stringMap]
   obtain ⟨a | a, rfl⟩ := Y.indexEquiv.surjective q
   · simp [stringMap]
-  have h_ne : b.1 ≠ a.1 := by
+  have h_ne : b.val ≠ a.val := by
     simp only [gradeOf, Equiv.symm_apply_apply, Sum.elim_inr] at h_grade
     omega
   simp [stringMap, h_ne]
