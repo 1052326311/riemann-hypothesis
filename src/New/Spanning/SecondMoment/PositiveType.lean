@@ -128,7 +128,6 @@ lemma re_sum_addChar_dotProduct_mul_le [Fintype k] [DecidableEq k] {ψ : AddChar
   have h_cs : 2 * (⟪X₁, X₀⟫_ℂ).re ≤ ‖X₁‖ ^ 2 + ‖X₀‖ ^ 2 := by
     have h_re : (⟪X₁, X₀⟫_ℂ).re ≤ ‖X₁‖ * ‖X₀‖ := re_inner_le_norm (𝕜 := ℂ) X₁ X₀
     linarith [two_mul_le_add_sq ‖X₁‖ ‖X₀‖]
-  have hr_pos : 0 < r := by positivity
   calc (∑ s, ψ (x ⬝ᵥ (π s • z)) * Θ s).re
       = r * (2 * (⟪X₁, X₀⟫_ℂ).re / card G) / 2 := by simp [h_X, w, ← sum_div, field]
     _ ≤ r * ((‖X₁‖ ^ 2 + ‖X₀‖ ^ 2) / card G) / 2 := by gcongr
