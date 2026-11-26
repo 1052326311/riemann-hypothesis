@@ -642,8 +642,6 @@ lemma gap_le_abs_targetParameter_sub {n n' : ℕ} (hne : n + 1 - D.k ≠ n' + 1 
   -- The later entry is `halfGap - w_(a+1)` with `a = n' + 1 - k` positive.
   have h_step : D.liftWeight (n + 1 - D.k + 1) τ + D.gap ≤ D.liftWeight (n' + 1 - D.k + 1) τ :=
     D.liftWeight_succ_add_gap_le τ h_lt
-  have h_centre : D.gap ≤ D.liftWeight (n + 1 - D.k + 1) τ :=
-    D.gap_le_liftWeight_succ τ (n + 1 - D.k)
   have h_sizes : D.k + D.t + 1 ≤ D.halfGap := D.k_add_t_add_one_le_halfGap
   grind [targetParameter_eq]
 
