@@ -583,11 +583,11 @@ lemma IsNear.norm_map_leadingMinor_sq_le [S.IsAdmissible] (l : Fin (𝔰.ϱ + 1 
   grw [h_det, hl, ← pow_add, ← pow_mul]
   exact pow_le_pow_right₀ S.one_le_b h_exponent
 
-/-- Under `S.IsAdmissible`, if `γ` is a term over `(c, r, c')` and `u` is a term over `(c, r', d)`
+/-- If `γ` is a term over `(c, r, c')` and `u` is a term over `(c, r', d)`
 with the same frame image `frameImage γ = frameImage u`, then `r⁻¹ * r'` lies in
 `S.reducedImage besselS`, the reduced image of the Bessel subgroup. So `r` and `r'` lie in one left
 coset of it. -/
-lemma termsOver.inv_mul_mem_reducedImage [S.IsAdmissible] (hγ : γ ∈ S.termsOver c r c')
+lemma termsOver.inv_mul_mem_reducedImage (hγ : γ ∈ S.termsOver c r c')
     {r' : S.ResidueGL} {d : S.Classes} (hu : u ∈ S.termsOver c r' d)
     (h_same_frame : frameImage γ.val.val = frameImage u.val.val) :
     r⁻¹ * r' ∈ S.reducedImage besselS := by
