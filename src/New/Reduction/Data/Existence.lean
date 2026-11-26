@@ -239,7 +239,7 @@ lemma Parameters.exists_large_isSparse (P : Parameters) {s n H L : ℕ}
     have h_order : 2 ^ s ≤ (ℓ + 1) * (2 * i) :=
       two_pow_le_of_pow_eq_one (q := ℓ) hℓ.one_lt (by omega) (by simpa using h_pow)
     have h_small : (ℓ + 1) * (2 * i) ≤ (L + 1) * (2 * l₀ s) := Nat.mul_le_mul (by omega) (by omega)
-    nlinarith only [h_order, h_small, hL]
+    linarith only [h_order, h_small, hL]
 
 /-- **A large sparse set of places.** The infinite places `P.Φ s` of `E = P.E s` form the group
 `(ℤ/q₁)ˣ`. Let `0 < n`, `1 ≤ W ≤ 2 ^ s ≤ W ^ n`, `(2 l₀) ^ n ≤ W`, `3 l₀ n 2 ^ n ≤ W ^ 3` and
@@ -418,7 +418,7 @@ lemma mul_rank_lt_two_pow {y : ℝ} {m r s : ℕ} (hy : 0 < y) (h_large : 1e6 * 
     linarith [one_le_pow₀ (n := 2) (one_le_exp (x := 5 * y) (by positivity))]
   rw [h_pow, ← Nat.cast_lt (α := ℝ), Nat.cast_mul, Nat.cast_mul, Nat.cast_pow]
   calc _ ≤ 2 * (2592 * y) * (46 * exp (5 * y) ^ 2) := by grw [h_rank, hl, Nat.cast_ofNat]
-    _ < 1e6 * y * exp (5 * y) ^ 2 := by nlinarith [mul_pos hy (pow_pos (exp_pos (5 * y)) 2)]
+    _ < 1e6 * y * exp (5 * y) ^ 2 := by linarith [mul_pos hy (pow_pos (exp_pos (5 * y)) 2)]
     _ ≤ exp y * exp (5 * y) ^ 2 := by gcongr
     _ = exp (y / 2) ^ 22 := by
       rw [← exp_natCast_mul, ← exp_natCast_mul, ← exp_add]
