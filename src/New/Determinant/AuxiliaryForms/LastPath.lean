@@ -1,6 +1,8 @@
-import Lib.Adelic.AutomorphicForms.BlockPeriods
-import New.Determinant.AuxiliaryForms.GridFirstColumns
-import New.Determinant.AuxiliaryForms.RegularParameters
+module
+
+public import Lib.Adelic.AutomorphicForms.BlockPeriods
+public import New.Determinant.AuxiliaryForms.GridFirstColumns
+public import New.Determinant.AuxiliaryForms.RegularParameters
 
 /-!
 # The branching pairing and the periods on the last path
@@ -47,6 +49,8 @@ Notions from other files:
   `J(𝔞)` consists of the integral finite points that reduce to `1` modulo `𝔞`.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 /-! ## Branching pairing of interlacing weights of GL(n+1) and GL(n) -/
@@ -79,8 +83,8 @@ of the weight `(κ₀, e₀)` of `GL n`, where `#n' = #n + 1`. If `l` and `l'` i
 highest weights interlace: entry `q` of the highest weight of `(κ₀, e₀)` lies between the entries
 `q + 1` and `q` of that of `(κ, e)`. An entry is the exponent of the determinant plus a row length
 `diagramWeight`. -/
-lemma add_diagramWeight_mem_Icc_of_interlace {n n' : Type} [DecidableEq Φ] [Fintype n]
-    [DecidableEq n] [Fintype n'] [DecidableEq n'] {l : Φ → n → ℤ} {l' : Φ → n' → ℤ}
+lemma add_diagramWeight_mem_Icc_of_interlace {n n' : Type} [Fintype n]
+    [Fintype n'] {l : Φ → n → ℤ} {l' : Φ → n' → ℤ}
     (hn : card n' = card n + 1) (hl' : IsHCParam κ e l') (hl : IsHCParam κ₀ e₀ l)
     (h_interlace : ∀ (w : Φ) (x : ℤ),
       (#{j : n' | x < l' w j} - #{i : n | x < l w i} : ℤ) ∈ Icc 0 1)

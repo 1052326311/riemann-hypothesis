@@ -1,5 +1,7 @@
-import Lib.Adelic.TraceFormula.FibreIntegral
-import Lib.General.LinearAlgebra.Eigenvalues
+module
+
+public import Lib.Adelic.TraceFormula.FibreIntegral
+public import Lib.General.LinearAlgebra.Eigenvalues
 
 /-!
 # Coprime factors
@@ -42,6 +44,8 @@ Part of a known result: in a simple trace formula with a cuspidal test function 
 not elliptic vanish (Deligne and Kazhdan). The proof here is a descent of invariant distributions to
 the block diagonal subgroup.
 -/
+
+@[expose] public section
 
 open NumberField Polynomial Matrix Topology Filter Pointwise Multiplicative MeasureTheory
 
@@ -116,7 +120,7 @@ lemma mem_intGL_of_mul_radical (hε : IsIdempotentElem ε) (hε_int : ε ∈ O.m
     (conj_mem_range_radicalHom hε (inv_mem hh) (inv_mem hu)) h_val_inv⟩
 
 /-- The set `GL_n(O) N`, with `N` the radical of the idempotent `ε`. -/
-def iwasawaSet (hε : IsIdempotentElem ε) (O : Subring k) : Set (GL n k) :=
+noncomputable def iwasawaSet (hε : IsIdempotentElem ε) (O : Subring k) : Set (GL n k) :=
   (intGL n O : Set (GL n k)) * ((radicalHom hε).range : Set (GL n k))
 
 /-- The set `GL_n(O) N` is invariant under right translation by the radical `N`. -/
@@ -385,7 +389,7 @@ lemma isClosed_setOf_charpoly_eq [CommRing F] [TopologicalSpace F] [IsTopologica
     charpoly.univ_coeff_eval₂Hom n (RingHom.id F) (fun p : n × n ↦ M p.1 p.2) i
   have h_coeff (i : ℕ) : Continuous fun M : Matrix n n F ↦ M.charpoly.coeff i :=
     ((MvPolynomial.continuous_eval _).comp (by fun_prop)).congr (h_eval i)
-  simp only [Polynomial.ext_iff, Set.ofPred_forall]
+  simp only [AddMonoidAlgebra.ext_iff, Finsupp.ext_iff, Set.ofPred_forall]
   exact isClosed_iInter fun i ↦ isClosed_eq (h_coeff i) continuous_const
 
 variable [NormedField F]

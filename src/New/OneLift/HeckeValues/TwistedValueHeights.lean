@@ -1,9 +1,11 @@
-import New.Congruences.GaloisRepresentations.SelmerHypotheses
-import New.Derivatives.Sharpness.BoundAttained
-import New.OneLift.ComparisonOperator.ThreeExchanges
-import New.OneLift.FalseLifts.PeriodsOfFalseLifts
-import New.OneLift.HeckeValues.AlgebraicPartSize
-import New.OneLift.HeckeValues.CentralAction
+module
+
+public import New.Congruences.GaloisRepresentations.SelmerHypotheses
+public import New.Derivatives.Sharpness.BoundAttained
+public import New.OneLift.ComparisonOperator.ThreeExchanges
+public import New.OneLift.FalseLifts.PeriodsOfFalseLifts
+public import New.OneLift.HeckeValues.AlgebraicPartSize
+public import New.OneLift.HeckeValues.CentralAction
 
 /-!
 # Heights of ratios of twisted to untwisted Hecke values via rank-one theta lifts
@@ -57,6 +59,8 @@ at inert primes are known from the literature. Related work: Prasanna, Integrali
 Petersson norms, 2006; Coates–Liang–Sujatha, Tate–Shafarevich group for elliptic curves with CM II,
 2010 (after Katz, 1977); Y.-S. Lee, Hida family of theta lift from U(1) to definite U(2), 2024.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -177,7 +181,7 @@ largest `l`-adic norm of a coordinate of `h⁻¹ v`, in the representation of we
 twisted by the determinant powers `O.detExp`, with coordinates indexed by
 `WeylIndex n O.columnCount`. -/
 theorem pointForm_mem_integralForms {l : ℕ} [Fact l.Prime] {E r n : Type} [Field E] [CMType E]
-    [WeilData E] [Fintype r]
+    [Fintype r]
     [DecidableEq r] [Fintype n] [DecidableEq n] (j : PadicPlace l) {O : DescentPair E r n}
     {h : Gf E n} {Y : ∀ i : O.ChosenIndex, Matrix n r (ResField (O.placeAt (.inl i)))}
     {hY : ∀ i : O.ChosenIndex, (Y i).mulVec.Injective} {e : r ↪ n}

@@ -1,4 +1,6 @@
-import Lib.Cohomology.Etale.DenseSubfunctors
+module
+
+public import Lib.Cohomology.Etale.DenseSubfunctors
 
 /-!
 # Functors of points on algebras: open subfunctors, étale charts, atlases, charted schemes
@@ -43,6 +45,8 @@ Notions from other files:
 
 Known; see `Lib.Cohomology.Etale.FilteredLimits` and `Lib.PadicComparison.ToricTower` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -221,16 +225,14 @@ lemma map_eq_top_iff_forall_isField (φ : A ⟶ B) :
 
 /-- If `V` is open, a point lies in `V` as soon as all its values in fields do. Here
 `fieldLocus V` is the subfunctor of points whose values in fields lie in `V`. -/
-lemma IsOpenSubfunctor.fieldLocus_le (hV : IsOpenSubfunctor V) : fieldLocus V ≤ V := by
+lemma IsOpenSubfunctor.fieldLocus_le (hV : IsOpenSubfunctor V) : fieldLocus (fun K x ↦ x ∈ V K) ≤ V := by
   intro A x hx
   obtain ⟨I, hI⟩ : ∃ I : Ideal A, ∀ (B : CommAlg k) (φ : A ⟶ B),
       X.map φ x ∈ V B ↔ I.map φ.hom = ⊤ := hV A x
   -- `I` generates the unit ideal in every field over `A`, so it is the unit ideal.
-  have h_top : I.map (𝟙 A : A ⟶ A).hom = ⊤ := by
-    refine (map_eq_top_iff_forall_isField I _).2 fun K ψ hK h_le ↦ ?_
-    have : Nontrivial K := hK.nontrivial
-    have h_bot : I.map ψ.hom = ⊥ := by simpa [← map_eq_bot_iff_le_ker] using h_le
-    simpa [h_bot] using (hI K ψ).1 (hx K ψ hK)
+  have h_top : I.map (𝟙 A : A ⟶ A).hom = ⊤ :=
+    (map_eq_top_iff_forall_isField I _).2 fun K ψ hK ↦ by
+      simpa using (map_eq_top_iff_forall_isField I ψ).1 ((hI K ψ).1 (hx K ψ hK)) K (𝟙 K) hK
   simpa using (hI A (𝟙 A)).2 h_top
 
 /-- If the image of `x ∈ X(A)` under a map `φ` to a field `B` lies in the open subfunctor `V` of
@@ -431,7 +433,7 @@ lemma EtaleChart.point_mem_locus : a.point ∈ a.locus a.coordRing :=
 /-- A subfunctor `V` of the image `a.locus` of a chart `a` that is open in `a.locus` is cut out by
 its values in fields: a point whose values in fields lie in `V` lies in `V`. -/
 lemma EtaleChart.fieldLocus_eq_of_le_locus {V : Subfunctor X} (h_le : V ≤ a.locus)
-    (hV : IsOpenSubfunctor (V.preimage a.locus.ι)) : fieldLocus V = V := by
+    (hV : IsOpenSubfunctor (V.preimage a.locus.ι)) : fieldLocus (fun K x ↦ x ∈ V K) = V := by
   refine le_antisymm (fun A x hx ↦ ?_) fun A x hx K φ _ ↦ V.map φ hx
   have hx_chart : x ∈ a.locus A :=
     a.isOpenSubfunctor.fieldLocus_le A fun K ψ hK ↦ h_le _ (hx K ψ hK)

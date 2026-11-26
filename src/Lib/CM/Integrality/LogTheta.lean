@@ -1,6 +1,8 @@
-import Lib.CM.Integrality.IsogenyIntegrality
-import Lib.General.Algebra.SeriesBounds
-import Lib.General.NumberTheory.PadicLimitsValuation
+module
+
+public import Lib.CM.Integrality.IsogenyIntegrality
+public import Lib.General.Algebra.SeriesBounds
+public import Lib.General.NumberTheory.PadicLimitsValuation
 
 /-!
 # The logarithm of the theta function of a CM lattice and the integral group law
@@ -41,6 +43,8 @@ a constant. Moreover `θ(α z) / θ(z) ^ (α ᾱ)` is a unit on the formal group
 Known result: the formal group law of a Weierstrass curve has integral coefficients. Source:
 Silverman, The Arithmetic of Elliptic Curves, IV.1 and IV.2.
 -/
+
+@[expose] public section
 
 /-!
 ## The logarithm of the theta function
@@ -102,7 +106,8 @@ lemma IsSeriesGenerator.norm_coeff_two_le_one {p : ℕ} [Fact p.Prime] {B : Subr
     {T f : ℂ_[p]⟦X⟧}
     (hB : IsSeriesGenerator B T) (hf : f ∈ B) (hf₁ : coeff 1 f = 0) : ‖coeff 2 f‖ ≤ 1 := by
   obtain ⟨g, rfl⟩ := (hB.mem_iff f).1 hf
-  rw [coeff_one_subst hB.constantCoeff_eq_zero, hB.coeff_one, mul_one] at hf₁
+  rw [coeff_one_subst hB.constantCoeff_eq_zero, hB.coeff_one, mul_one,
+    Algebra.algebraMap_self_apply] at hf₁
   rw [coeff_two_subst hB.constantCoeff_eq_zero, hf₁, hB.coeff_one, zero_mul, zero_add, one_pow,
     mul_one]
   exact mem_range_seriesToCp.1 ⟨g, rfl⟩ 2
@@ -685,7 +690,7 @@ lemma translatedY_add_mem_multiSeriesRing [PrimeSevenModEight d] :
     have h_euler : D (eulerAddition a (x 0) (y 0) (x 1) (y 1) u) = 0 :=
       derivation_eulerAddition D (h_curve 0) (h_curve 1) (by rwa [mul_comm])
         (by simp [D, a, pderiv_C]) hDx₀ hDy₀ hDx₁ hDy₁
-    rw [← Derivation.sub_apply (eulerAddition ..), h_euler]
+    rw [← sub_apply (pderiv 0) (pderiv 1) (eulerAddition ..), h_euler]
     simp [pderiv_subst_linearSeries]
   · -- At `z₀ = 0` both `x₀` and `y₀` vanish.
     have h_kill {g : PowerSeries ℂ_[p]} (hg : g.constantCoeff = 0) :

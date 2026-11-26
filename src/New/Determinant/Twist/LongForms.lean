@@ -1,8 +1,10 @@
-import New.Congruences.FitTwistsExist
-import New.Determinant.AuxiliaryForms.SpanningForms
-import New.OneLift.LiftVolumeHeight
-import New.Reduction.IntegralTargetForms
-import New.UpperBound.Size.ArchimedeanSize
+module
+
+public import New.Congruences.FitTwistsExist
+public import New.Determinant.AuxiliaryForms.SpanningForms
+public import New.OneLift.LiftVolumeHeight
+public import New.Reduction.IntegralTargetForms
+public import New.UpperBound.Size.ArchimedeanSize
 
 /-!
 # Theorem C: integral forms are long
@@ -27,6 +29,8 @@ Notions from other files:
 * `D.HasSmallRatios θ`: the `m`-fold twists `ξ_ι = θ ι` have `Nm Q(ξ_ι)` prime to the prime of `ι`
   and inverse ratios of Hecke values of height at most `x₁`.
 -/
+
+@[expose] public section
 
 namespace New.Data
 
@@ -121,7 +125,6 @@ lemma mul_completion_cost_le {n n' : ℕ} (hn : (1 - 4 / D.b ^ 2) * D.targetDim 
     (h_card : D.targetDim = n + n') :
     n' * (2 * D.x₁ ^ 2 * D.b ^ 2 + D.b) ≤ D.targetDim * D.b := by
   -- There are at most `4 d / b²` forms, and the factor `b⁻²` cancels the `b²` in their cost.
-  have hb : 0 < D.b := HasLogBound.pos D
   have h_dim : (D.targetDim : ℝ) = n + n' := mod_cast h_card
   have h_few : (n' : ℝ) ≤ 4 / D.b ^ 2 * D.targetDim := by linarith
   have h_cost : 4 * (2 * D.x₁ ^ 2 + D.b⁻¹) ≤ D.b := D.le_of_hasLogBound
@@ -231,9 +234,8 @@ theorem integral_forms_long_with_completion_cost {n : ℕ} {y : Fin n → D.targ
       fun ι ↦ le_of_eq ?_
     rw [hγ_norm, Pi.pow_apply, inv_pow]
   have h_volume : HeightLe (D.targetDim * (D.b + D.f * D.a * D.logB ^ 4 - D.mainAmount))
-      fun ι : PrimePadicIso ↦ D.targetLattice.volume 1 / D.targetLattice.volume (θ ι) := by
-    simp only [volume_targetLattice]
-    exact heightLe_chainDeterminant_one_div hθ h_single
+      fun ι : PrimePadicIso ↦ D.targetLattice.volume 1 / D.targetLattice.volume (θ ι) :=
+    heightLe_chainDeterminant_one_div hθ h_single
   have h_nonneg : 0 ≤ c + 2 * δ + n' * (2 * D.x₁ ^ 2 * D.b ^ 2 + D.b) +
       D.targetDim * (D.b + D.f * D.a * D.logB ^ 4 - D.mainAmount) :=
     TwistedLattice.covolume_add_index_nonneg injective_lift_targetLattice h_indep h_card hθ.coprime

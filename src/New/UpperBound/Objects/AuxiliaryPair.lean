@@ -1,8 +1,10 @@
-import Lib.Adelic.AutomorphicForms.AutomorphicAsAlgebraic
-import Lib.ClassField.HeckeCharacter.TameModulus
-import Lib.GLn.Dual
-import Lib.General.Algebra.LevelModulus
-import Lib.Weil.Unramified.HeckeTransfer
+module
+
+public import Lib.Adelic.AutomorphicForms.AutomorphicAsAlgebraic
+public import Lib.ClassField.HeckeCharacter.TameModulus
+public import Lib.GLn.Dual
+public import Lib.General.Algebra.LevelModulus
+public import Lib.Weil.Unramified.HeckeTransfer
 
 /-!
 # Descent pairs: descent data for theta lifts to definite unitary groups
@@ -60,6 +62,8 @@ Notions from other files:
 See `Lib.Adelic.Unitary.CongruenceLevels` for sources.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 namespace New
@@ -98,10 +102,6 @@ def firstBlockHom :
   MonoidHom.pi fun
     | .inl i => (extendGL u).comp (Pi.evalMonoidHom _ i)
     | .inr _ => 1
-
-/-- At a place w of M the component of `firstBlockHom S u g` is diag(g_w, 1). -/
-lemma firstBlockHom_apply_inl (g : S.ChosenGL r) (i : S.ChosenIndex) :
-    firstBlockHom S u g (inl i) = extendGL (R := ResField (S.placeAt (inl i))) u (g i) := rfl
 
 /-- At a place of Q the component of `firstBlockHom S u g` is 1. -/
 lemma firstBlockHom_apply_inr (g : S.ChosenGL r) (i : S.TwistIndex) :
@@ -765,7 +765,7 @@ lemma _root_.New.fockRowSubst_fockLetters (s : r → ℤˣ) (ord : r → ℕ) (y
 /-- If the first weight is the number of negative signs of s, then (1, y), y in the compact group
 U(n)(ℝ), acts on the Fock vector of `New.fockLetters s ord c F` by substituting yᵀ in the variables
 of F if c = 1, and y⁻¹ otherwise. -/
-lemma _root_.New.realPairWeil_fockLetters [WeilData E]
+lemma _root_.New.realPairWeil_fockLetters
     (s : r → ℤˣ) (ord : r → ℕ) (γ' : InfinitePlace E → ℤ)
     (y : GInf E 1) (c : ℤˣ) (F : MatrixPoly ((_ : InfinitePlace E) × n) ℂ) :
     realPairWeil (n' := n) (s := s) (fun _ ↦ negCount s) γ' (1, y) (fockLetters s ord c F) =
@@ -1120,7 +1120,8 @@ lemma card_levelModulus_residueRing (X : LevelPlaces E) (e : ℕ) :
       (∏ i : X.ChosenIndex, (X.chosenPlace i).q) ^ e * ∏ i : X.TwistIndex, (X.twistPlace i).q := by
   -- The cardinality of the residue ring is the absolute norm of the ideal, which is multiplicative.
   rw [card_eq_nat_card]
-  change Ideal.absNorm (X.levelModulus e).ideal = _
+  change Nat.card (_ ⧸ (X.levelModulus e).ideal) = _
+  rw [← Ideal.absNorm_eq_natCard]
   simp [levelModulus]
 
 variable (N)

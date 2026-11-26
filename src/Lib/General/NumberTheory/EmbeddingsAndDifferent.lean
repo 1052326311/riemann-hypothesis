@@ -1,4 +1,6 @@
-import Lib.Adelic.Adeles.AdditiveCharacter
+module
+
+public import Lib.Adelic.Adeles.AdditiveCharacter
 
 /-!
 # Embeddings, differents and the maximal real subfield of a CM field
@@ -28,6 +30,8 @@ trace, the norm, the different and the discriminant.
 * `New.Variety.prod_embeddings_eq_prod_pairs`: a product over the complex embeddings of a totally
   complex field, grouped into conjugate pairs.
 -/
+
+@[expose] public section
 
 /-! ## Differents and root discriminants -/
 
@@ -80,14 +84,15 @@ lemma finrank_eq_two_mul_card_infinitePlace [IsTotallyComplex K] :
     finrank ℚ K = 2 * Core.numInfPlaces K := by simp [← sum_mult_eq, mul_comm]
 
 /-- The root discriminant `|disc K| ^ (1 / [K : ℚ])` of a totally complex field is positive. -/
-lemma rootDiscr_pos [IsTotallyComplex K] : 0 < rootDiscr K :=
-  rpow_pos_of_pos (by simp [discr_ne_zero]) _
+lemma rootDiscr_pos [IsTotallyComplex K] : 0 < rootDiscr K := by
+  rw [rootDiscr_def]
+  exact rpow_pos_of_pos (by simp [discr_ne_zero]) _
 
 /-- For a totally complex number field `K` with `r` infinite places and root discriminant `rd`,
 the absolute discriminant is `(rd ^ r) ^ 2`. -/
 lemma abs_discr_eq_rootDiscr_pow [IsTotallyComplex K] :
     (|NumberField.discr K| : ℝ) = (rootDiscr K ^ Core.numInfPlaces K) ^ 2 := by
-  simp [← pow_mul', ← finrank_eq_two_mul_card_infinitePlace, rootDiscr,
+  simp [← pow_mul', ← finrank_eq_two_mul_card_infinitePlace, rootDiscr_def,
     rpow_inv_natCast_pow, finrank_pos.ne']
 
 end New
@@ -264,7 +269,7 @@ lemma prod_embeddings_eq_prod_pairs {E : Type*} [Field E] [IsTotallyComplex E] [
 
 /-- For a polynomial `P` over a totally complex field, the roots of `P` under the conjugate of an
 embedding `σ` are the complex conjugates of its roots under `σ`, with multiplicity. -/
-lemma roots_map_conjugate {E : Type*} [Field E] [IsTotallyComplex E] (P : E[X]) (σ : E →+* ℂ) :
+lemma roots_map_conjugate {E : Type*} [Field E] (P : E[X]) (σ : E →+* ℂ) :
     (P.map (conjugate σ)).roots = (P.map σ).roots.map star := by
   -- Conjugating the coefficients of a split polynomial conjugates its roots.
   have h_conj : conjugate σ = (starRingEnd ℂ).comp σ := RingHom.ext (conjugate_coe_eq σ)

@@ -1,4 +1,6 @@
-import New.UpperBound.ElementaryDivisors.TwistingData
+module
+
+public import New.UpperBound.ElementaryDivisors.TwistingData
 
 /-!
 # Gauss filtrations, Stepanov's count and the root lemma
@@ -51,6 +53,8 @@ zeros against degree are known in the literature. Related work: Ghate–Jana, Mo
 of GL2(F_q) using calculus, 2025; Imai–Koskivirta, Automorphic vector bundles on the stack of
 G-zips, 2021; Bombieri, Counting points on curves over finite fields, Sém. Bourbaki 430, 1973.
 -/
+
+@[expose] public section
 
 namespace New
 
@@ -411,9 +415,9 @@ lemma swapTransvection_mem_rootSL {T : FrobeniusCycle N W R} (D : T.RootAt k) (r
     D.swapTransvection r ∈ rootSL W D.fst D.snd := by
   refine ⟨mul_mem (mul_mem (fun i j hij ↦ ?_) fun i j hij ↦ ?_) fun i j hij ↦ ?_, Units.ext ?_⟩
   · have h_swap : Equiv.swap D.fst D.snd i = j ↔ i = j := by grind
-    simp [swap, one_apply, h_swap]
+    simp [swap, Matrix.one_apply, h_swap]
   · have h_off : ¬(D.fst = i ∧ D.snd = j) := by grind
-    simp [transvection, one_apply, Matrix.single, h_off]
+    simp [transvection, Matrix.one_apply, Matrix.single, h_off]
   · obtain rfl | h_ne := eq_or_ne i j
     · simp [show i ≠ D.fst by tauto]
     · simp [h_ne]
@@ -455,8 +459,8 @@ lemma polyAction_swapTransvection_X [NeZero N] {T : FrobeniusCycle N W R} (D : T
   have h_entry (b : Fin k) : M b z.1 =
       (if b = z.1 then 1 else 0) + if (b, z.2) = D.varX z.2 then D.sign z * r else 0 := by
     cases h_letter : T.isEven D.letter <;> cases h_z : T.isEven z.2 <;>
-      simp [M, hx, h_letter, h_z, sign, varX, varY, rootVar, transvection, one_apply,
-        Matrix.single, Prod.ext_iff, ← ite_and, and_comm, eq_comm]
+      simp [M, hx, h_letter, h_z, sign, varX, varY, rootVar, transvection, Matrix.one_apply,
+        Matrix.single, Function.swap, Prod.ext_iff, ← ite_and, and_comm, eq_comm]
   rw [swapTransvection, map_mul, AlgHom.mul_apply, h_diag, map_zsmul, h_column, ← swapVar_varX,
     swapVar,
     swapVar]
@@ -900,7 +904,8 @@ lemma HasBoundedIncrements.weight_zeroOrder_mul_card_le [NeZero N]
     exact pow_dvd_coeff_mergedCoeff _ h_cross h_merge_weight (by linarith)
   have Φ_ne : Φ ≠ 0 := by
     refine fun hΦ ↦ h_not_dvd ((dvd_sub_right ?_).1 h_top)
-    simpa [Φ, eq_zero_iff_dvd] using Polynomial.ext_iff.1 hΦ (weight D.poleOrder α)
+    simpa [Φ, eq_zero_iff_dvd] using
+      Finsupp.ext_iff.1 (AddMonoidAlgebra.ext_iff.1 hΦ) (weight D.poleOrder α)
   have Φ_deg : Φ.natDegree ≤ weight D.poleOrder α := by
     refine Polynomial.natDegree_le_iff_coeff_eq_zero.2 fun j hj ↦ ?_
     have h_gap : weight D.poleOrder α * D.slope c < j * D.slope c := by gcongr

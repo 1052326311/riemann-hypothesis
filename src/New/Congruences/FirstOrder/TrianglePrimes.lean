@@ -1,6 +1,8 @@
-import Lib.Cyclotomic.OddSha
-import Lib.GaloisRep.TaylorWiles
-import New.Congruences.FirstOrder.KummerMaps
+module
+
+public import Lib.Cyclotomic.OddSha
+public import Lib.GaloisRep.TaylorWiles
+public import New.Congruences.FirstOrder.KummerMaps
 
 /-!
 # Taylor–Wiles places in a triangle for the even classes, with prescribed Frobenii
@@ -67,6 +69,8 @@ algebras, 1995; Darmon–Diamond–Taylor, Fermat's Last Theorem (2.19), 1995; D
 reducible representations of rank 2, 2026.
 -/
 
+@[expose] public section
+
 open New Patching Function Finset Fintype Filter PadicInt WellFoundedLT OddPart
 
 /-- Let `u` be a unit of `ℤ_ℓ` such that every `u ^ a - 1` with `0 < a < t` divides `ℓ ^ h`, and
@@ -104,7 +108,8 @@ lemma New.Selmer.linearIndependent_of_notMem_span_Iio {F V J : Type} [Field F] [
   | empty => simp
   | insert j s h_lt ih =>
     rw [coe_insert]
-    exact ih.insert fun h ↦ hv j (Submodule.span_mono (Set.image_mono h_lt) h)
+    exact ih.insert fun h ↦ hv j (Submodule.span_mono
+      (Set.image_mono (s := (s : Set J)) (t := Set.Iio j) fun x hx ↦ h_lt x hx) h)
 
 /-- Let `ν > 0`, and let the maps `ψ i` from a group to `ℤ/ℓ^ν` send products to sums. If their
 reductions modulo `ℓ` are linearly independent, then together they take every family of values (by
@@ -135,11 +140,12 @@ lemma New.Selmer.surjective_of_linearIndependent_cast {ℓ ν : ℕ} [Fact ℓ.P
     rw [show v = Ψ a + (ℓ : ZMod (ℓ ^ ν)) • t from funext fun i ↦ by simp [← ht i]]
     exact Submodule.add_mem_sup ⟨a, rfl⟩
       (Submodule.smul_mem_smul (Ideal.mem_span_singleton_self _) Submodule.mem_top)
-  have h_jacobson : 𝔪 ≤ Ideal.jacobson ⊥ :=
-    (Ideal.span_singleton_le_iff_mem _).2
+  have h_jacobson : 𝔪 ≤ Ring.jacobson (ZMod (ℓ ^ ν)) := by
+    rw [← Ideal.jacobson_bot]
+    exact (Ideal.span_singleton_le_iff_mem _).2
       (Ideal.radical_le_jacobson ⟨ν, (Nat.cast_pow ℓ ν).symm.trans (ZMod.natCast_self _)⟩)
   intro v
-  obtain ⟨a, ha⟩ : v ∈ N := Submodule.le_of_le_smul_of_le_jacobson_bot Module.Finite.fg_top
+  obtain ⟨a, ha⟩ : v ∈ N := Submodule.le_of_le_smul_of_le_jacobson Module.Finite.fg_top
     h_jacobson h_sup Submodule.mem_top
   exact ⟨a.toMul, ha⟩
 
