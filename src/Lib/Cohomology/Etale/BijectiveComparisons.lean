@@ -980,12 +980,9 @@ lemma bijectiveUpTo_congr (w : p' ≫ u = v ≫ c.functor.whiskerLeft p)
 lemma isBijective_congr (w : p' ≫ u = v ≫ c.functor.whiskerLeft p)
     (hp_equiv : IsCohomEquiv F (freeAb.map p)) (hp'_equiv : IsCohomEquiv F' (freeAb.map p')) :
     c.IsBijective (freeAbMap u) ↔ c.IsBijective (freeAbMap v) := by
-  calc c.IsBijective (freeAbMap u)
-      ↔ ∀ r : ℕ, BijectiveUpTo (fun n : ℕ ↦ c.pull (freeAbMap u) n) r :=
-        allBijective_iff_forall_bijectiveUpTo
-    _ ↔ ∀ r : ℕ, BijectiveUpTo (fun n : ℕ ↦ c.pull (freeAbMap v) n) r :=
-        forall_congr' fun r ↦ bijectiveUpTo_congr w hp_equiv hp'_equiv
-    _ ↔ c.IsBijective (freeAbMap v) := allBijective_iff_forall_bijectiveUpTo.symm
+  exact forall_congr' fun n ↦
+    bijective_iff_of_comm_sq (fun x ↦ (map_pull_eq_pull_map (freeAb.map_commSq ⟨w⟩).w n x).symm)
+      (hp_equiv n) (hp'_equiv n)
 
 end Comparison
 

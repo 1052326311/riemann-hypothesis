@@ -711,31 +711,24 @@ closure of the image of 𝖴(E). -/
 lemma New.besselU_dense {T : 𝔰.Form E} [IsHermitianUnit T] {T' : 𝔰.Form (𝔸f E)}
     (hT : T.splitGram.map (↑) = T'.splitGram) :
     T'.besselU ≤ (T.besselU.map (U.map (algebraMap E (𝔸f E)) (h := hT))).topologicalClosure := by
-  have : IsHermitianUnit T'.splitGram := by
-    rw [← hT]
-    exact ⟨IsHermitian.map conjTranspose_eq _ fun _ ↦ by simp, isUnit.map (mapMatrix _)⟩
-  set C : Subgroup T'.G :=
-    (T.besselU.map (U.map (algebraMap E (𝔸f E)) (h := hT))).topologicalClosure
-  -- `besselU` is built floor by floor from the groups `floorUnipotent l`, so it is enough that each
-  -- of them lies in the closure.
-  suffices h_floor : ∀ l : ℕ, ∀ x ∈ floorUnipotent l, x ∈ C by
-    rw [← unipotentBelow_eq_besselU (l := 𝔰.ϱ) le_rfl]
-    exact unipotentBelow_induction (C := fun _ x ↦ x ∈ C) (one_mem C)
-      (fun l x hx y hy ↦ mul_mem (h_floor l x hx) hy) 𝔰.ϱ
-  intro l x hx
+  have : IsHermitianUnit T'.splitGram :=
+    hT ▸ ⟨IsHermitian.map conjTranspose_eq _ fun _ ↦ by simp, isUnit.map (mapMatrix _)⟩
+  -- `besselU` is built floor by floor from `floorUnipotent l`.
+  rw [← unipotentBelow_eq_besselU (l := 𝔰.ϱ) le_rfl]
+  refine unipotentBelow_induction (C := fun _ x ↦ x ∈ _) (one_mem _)
+    (fun l x hx _ hy ↦ mul_mem ?_ hy) 𝔰.ϱ
   obtain hl | hl := le_or_gt 𝔰.ϱ l
-  · -- For `ϱ ≤ l` the group `floorUnipotent l` is trivial.
-    simp [eq_one_of_mem_floorGroup_inf hx (.inr hl)]
+  · simp [eq_one_of_mem_floorGroup_inf hx (.inr hl)]
   -- For `l < ϱ`, `x` is a Heisenberg element, and rational parameters are dense.
   let a : Fin 𝔰.ϱ := ⟨l, hl⟩
   obtain ⟨p, rfl⟩ : ∃ p, x = heisenbergElem a p := exists_eq_heisenbergElem_of_mem hx
-  have h_dense : DenseRange fun q : ({i : 𝔰.BesselIndex // a + 1 ≤ floorOf i} → E) × E ↦
-      (fun i ↦ (q.1 i : 𝔸f E), skewPart (q.2 : 𝔸f E)) :=
-    (DenseRange.piMap fun _ ↦ denseRange_algebraMap_finAdele).prodMap denseRange_skewPart_algebraMap
-  refine map_mem_closure (continuous_heisenbergElem_finAdele a) (h_dense p) ?_
+  refine map_mem_closure (continuous_heisenbergElem_finAdele a)
+    (((DenseRange.piMap fun _ ↦ denseRange_algebraMap_finAdele).prodMap
+      denseRange_skewPart_algebraMap) p) ?_
   rintro _ ⟨⟨v, t⟩, rfl⟩
-  obtain ⟨-, h_below⟩ := heisenbergElem_mem_floorUnipotent (T := T) a (v, skewPart t)
-  exact ⟨_, unipotentBelow_le_besselU h_below, map_heisenbergElem_finAdele hT a v t⟩
+  exact ⟨_, unipotentBelow_le_besselU
+    (heisenbergElem_mem_floorUnipotent (T := T) a (v, skewPart t)).2,
+    map_heisenbergElem_finAdele hT a v t⟩
 
 end Density
 
@@ -902,7 +895,7 @@ contains a primitive 5040th root of unity, and let `S` be filling data over `E`.
 Let `γ` be a rational point of the standard unitary group in `n` variables, `|n| ≤ 𝔰.k`, and `g` a
 finite adelic point. If `g⁻¹ γ g` is integral (lies in `stdLevel E n`) and reduces to `1` at every
 place of `S.chosenPlaces i`, then `γ = 1`. -/
-lemma eq_one_of_reduceAt_eq_one [HasPrimitiveRoot5040 E] {n : Type}
+lemma eq_one_of_reduceAt_eq_one {n : Type}
     [Fintype n] [DecidableEq n] (hn : card n ≤ 𝔰.k) (i : Fin 2) {γ : U (stdSpace E n).J}
     {g : Gf E n} (h_int : g⁻¹ * (stdSpace E n).embFin γ * g ∈ stdLevel E n)
     (h_red : ∀ w : S.chosenPlaces i,

@@ -340,7 +340,7 @@ lemma neighbourCoeff_apply_of_notMem {w : FinPlace E} (hw : w ∉ P) (hw_star : 
     simp only [neighbourCoeff, Sum.elim_inl, Sum.elim_inr, Pi.zero_apply, map_zero, map_mul,
       neighbourScale_apply_of_notMem hw hw_star, zero_mul]
 
-/-- Let `P` and its conjugates be the places above the prime `N` (`IsSplitLevel`). Let `δ` be the
+/-- Let `P` and its conjugates be the places above `N` (`IsSplitLevel`). Let `δ` be the
 scaling adele of `IsScalingAtM`, which is `1` above `N`. Then multiplying by `δ` does not change the
 coefficient `neighbourCoeff X X'' P π m` of the isotropic vector that goes with column `m` of
 `neighbourMatrix`. -/
@@ -500,18 +500,18 @@ lemma coe_neighbourUnitary [DecidableEq X] [DecidableEq X''] (hπ : IsSplitSquar
   rfl
 
 omit [Fintype X] [Fintype X''] [WeilData E] in
-/-- If `N` is prime, `P` is a split level for `N` (`IsSplitLevel P N`) and `κ` satisfies
+/-- If `P` is a split level for `N` (`IsSplitLevel P N`) and `κ` satisfies
 `IsScalingAtM N β δ κ`, then each factor `κ i` is `1` at the places of `P`:
 `idem P * κ i = idem P`. -/
-lemma IsScalingAtM.idem_mul_apply [Fact N.Prime] (hκ : IsScalingAtM N β δ κ)
+lemma IsScalingAtM.idem_mul_apply (hκ : IsScalingAtM N β δ κ)
     (hP : IsSplitLevel P N) (i : PairIndex X X'') : idem P * κ i = idem P := by
   rcases hκ.eq_one_or_eq i with h | h <;> simp [h, hκ.idem_mul hP]
 
 omit [Fintype X] [Fintype X''] [WeilData E] in
-/-- If `N` is prime, `P` is a split level for `N` (`IsSplitLevel P N`) and `κ` satisfies
+/-- If `P` is a split level for `N` (`IsSplitLevel P N`) and `κ` satisfies
 `IsScalingAtM N β δ κ`, then each factor `κ i` is `1` at the places conjugate to `P`:
 `star (idem P) * κ i = star (idem P)`. -/
-lemma IsScalingAtM.star_idem_mul_apply [Fact N.Prime] (hκ : IsScalingAtM N β δ κ)
+lemma IsScalingAtM.star_idem_mul_apply (hκ : IsScalingAtM N β δ κ)
     (hP : IsSplitLevel P N) (i : PairIndex X X'') : star (idem P) * κ i = star (idem P) := by
   rcases hκ.eq_one_or_eq i with h | h <;> simp [h, hκ.star_idem_mul hP]
 

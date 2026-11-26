@@ -107,7 +107,7 @@ lemma eventually_forall_apply_add_smul_eq {A n : Type} [SemilocalField A]
 constant along `Q` at the points of `C`. Then for some unit `u` one has `φ x = φ y` whenever
 `x ∈ Q`, `y ∈ C ∩ Q` and `x - y` lies in `u • L`. -/
 lemma exists_unit_forall_apply_eq_of_inv_smul_sub_mem {A n : Type} [SemilocalField A] [StarRing A]
-    [P : IntegralPlace A] [Fintype n] {Q C L : Set (n → A)} (hC : IsCompact C) (hL : IsCompact L)
+    [P : IntegralPlace A] {Q C L : Set (n → A)} (hC : IsCompact C) (hL : IsCompact L)
     {φ : (n → A) → ℂ} (h_loc : ∀ e ∈ C, ∀ᶠ x : n → A in nhds e, x ∈ Q → φ x = φ e) :
     ∃ u : Aˣ, ∀ x ∈ Q, ∀ y ∈ C ∩ Q, u⁻¹ • (x - y) ∈ L → φ x = φ y := by
   -- Units are dense, since almost every element is a unit.

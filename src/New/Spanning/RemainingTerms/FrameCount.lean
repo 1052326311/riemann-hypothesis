@@ -394,7 +394,7 @@ completed by rows of `1`. If `j ≤ k`, column `k` of `S.sharedVectors j γ` con
 coordinates along `e₁, …, e_ϱ` of column `k` of `γ f · adj Y`, which lies in the spans of both the
 frame `f` and `γ f`. If `k < j`, the column is zero. All these entries have norm at most
 `S.b ^ (182 n²)` under the embedding `Φ v` of every infinite place `v`, where `n = ϱ + 1`. -/
-lemma HasCellRank.norm_sharedVectors_le [S.IsAdmissible] [HasPrimitiveRoot5040 E]
+lemma HasCellRank.norm_sharedVectors_le [S.IsAdmissible]
     {j : Fin (𝔰.ϱ + 2)} {γ : S.G E} (h : S.HasCellRank j γ) (h_near : S.IsNear γ)
     (v : InfinitePlace E) (a : Fin 𝔰.ϱ) (k : Fin (𝔰.ϱ + 1)) :
     ‖Φ v (S.sharedVectors j γ a k)‖ ≤ S.b ^ (182 * 𝔰.n ^ 2) := by

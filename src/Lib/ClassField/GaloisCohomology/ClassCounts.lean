@@ -111,11 +111,6 @@ section Normalised
 variable {γ : G} {ζ : R} (hγ : ∀ m : M, ρ γ m = ζ • m) (hζ : IsUnit (ζ - 1))
 include hγ hζ
 
-omit [TopologicalSpace G] [TopologicalSpace M] [DiscreteTopology M] in
-/-- If `γ` acts by a scalar `ζ` with `ζ - 1` a unit, `ρ` has no nonzero invariants. -/
-theorem invariants_eq_bot_of_smul : ρ.invariants = ⊥ := by
-  refine (Submodule.eq_bot_iff _).2 fun m hm ↦ hζ.smul_left_cancel.1 ?_
-  rw [smul_zero, sub_smul, one_smul, ← hγ, hm γ, sub_self]
 
 /-- If `γ` acts by a scalar `ζ` with `ζ - 1` a unit, a coboundary that vanishes at `γ` is zero. -/
 theorem eq_zero_of_mem_B1_of_apply_eq_zero {z : Z1 ρ} (hz : z ∈ B1 ρ) (hzγ : (z : G → M) γ = 0) :
