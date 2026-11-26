@@ -525,12 +525,12 @@ def HodgeTatePair.tensorContractionCocycle :
       · change (F.map (f ≫ g)).hom a ⊗ₜ (C.component (f ≫ g)).hom b =
           (F.map g).hom ((F.map f).hom a) ⊗ₜ (F.map g).hom ((C.component f).hom b) +
             (F.map g).hom ((F.map f).hom a) ⊗ₜ (C.component g).hom ((F.map f).hom b)
-        erw [h_map, h_cocycle]
+        rw [h_map, h_cocycle]
         exact tmul_add _ _ _
       · change (C.component (f ≫ g)).hom a ⊗ₜ (F.map (f ≫ g)).hom b =
           (F.map g).hom ((C.component f).hom a) ⊗ₜ (F.map g).hom ((F.map f).hom b) +
             (C.component g).hom ((F.map f).hom a) ⊗ₜ (F.map g).hom ((F.map f).hom b)
-        erw [h_map, h_cocycle]
+        rw [h_map, h_cocycle]
         exact add_tmul _ _ _
 
 /-- Let `M`, `L` be functors on pairs, `M` with flat values, `x` a class of degree `a` on `M` and
