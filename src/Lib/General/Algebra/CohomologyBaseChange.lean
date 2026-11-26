@@ -119,10 +119,10 @@ noncomputable def HasBaseChange.yonedaEquiv₀ (Φ : C ⥤ ModuleCat S) (A : C) 
     Φ.obj A ≃ₗ[S] H (freeAb.obj (reprBy A)) (moduleCoeff Φ) 0 :=
   AddEquiv.toLinearEquiv
     (show Φ.obj A ≃+ H (freeAb.obj (reprBy A)) (moduleCoeff Φ) 0 from
-      (addEquiv₀.trans ((homReprEquiv A (moduleCoeff Φ)).trans .ulift)).symm) fun s x ↦ by
-    -- A scalar acts on classes by pushing along an endomorphism of the coefficients.
-    rw [smul_eq_push]
-    exact (push_homReprEquiv_symm (CoeffAction.act s : End (moduleCoeff Φ)).asHom A (.up x)).symm
+      (addEquiv₀.trans ((homReprEquiv A (moduleCoeff Φ)).trans .ulift)).symm) fun s x ↦
+    -- A scalar acts on classes by pushing along an endomorphism of the coefficients; this is
+    -- `smul_eq_push`, which holds by definition.
+    (push_homReprEquiv_symm (CoeffAction.act s : End (moduleCoeff Φ)).asHom A (.up x)).symm
 
 /-- For every object A, the map M ⊗_S H^n(ℤ[h_A], Φ) → H^n(ℤ[h_A], M ⊗_S Φ) is bijective in
 every degree n (`AllBijective`), h_A the functor represented by A; no flatness of M is assumed. -/
