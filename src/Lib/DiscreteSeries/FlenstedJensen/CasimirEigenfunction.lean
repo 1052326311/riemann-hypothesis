@@ -75,17 +75,6 @@ open Matrix MeasureTheory Finset ComplexConjugate ComplexOrder DiscreteSeries No
 
 variable {n : Type} [Fintype n] [DecidableEq n] {ε : n → ℤˣ} {l : HCParam ε}
 
-omit [DecidableEq n] in
-/-- For an integer vector `l`, the sum `2ρ = twoRho l ⊤` of all roots that are positive for `l` has
-its entries in the strict order of those of `l`. -/
-theorem twoRho_lt_twoRho {l : n → ℤ} {a b : n} (hab : l a < l b) : twoRho l ⊤ a < twoRho l ⊤ b := by
-  -- both sides are sums of signs of differences of entries of `l`; compare them term by term
-  have h_sum (i : n) : twoRho l ⊤ i =
-      ∑ j : n, ((if l j < l i then 1 else 0) - (if l i < l j then 1 else 0)) := by
-    simp [twoRho, ← sum_boole, sum_sub_distrib]
-  rw [h_sum, h_sum]
-  exact sum_lt_sum (fun j _ ↦ by split_ifs <;> lia) ⟨a, mem_univ a, by split_ifs <;> lia⟩
-
 @[fun_prop]
 theorem DiscreteSeries.analyticAt_matrix_inv {s : Matrix n n ℂ} (hs : s.det ≠ 0) :
     AnalyticAt ℂ (·⁻¹) s := by
