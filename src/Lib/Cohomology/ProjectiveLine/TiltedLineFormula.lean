@@ -1,8 +1,12 @@
 module
 
-public import Mathlib.CategoryTheory.Limits.Shapes.Pullback.IsPullback.Kernels
+import Mathlib.Algebra.Category.Grp.Zero
+import Mathlib.CategoryTheory.Limits.Shapes.Pullback.IsPullback.Kernels
+import Mathlib.RingTheory.Coalgebra.CoassocSimps
 public import Lib.Cohomology.ProjectiveLine.PerfectLine
 public import Lib.Cohomology.ProperBaseChange.Theorem
+public import Lib.PadicComparison.Primitive.PeriodCoefficients
+import Lib.Cohomology.Etale.DenseSubfunctors
 
 /-!
 # Leray–Hirsch bases and the projective line formula for the tilted theory
@@ -1063,7 +1067,7 @@ lemma exists_isTodaCancellation_etaClass [Algebra A ℂ_[ℓ]] :
           (discToTorus g ≫ y.down).hom (single 1 1) = y.down.hom (single (g 1) 1) := by
         change y.down.hom (mapDomain g (single 1 1)) = _
         exact congrArg y.down.hom (AddMonoidAlgebra.mapDomain_single ..)
-      simp only [z₀, z₁, Bool.cond_false, Bool.cond_true, h_coord]
+      simp only [Bool.cond_false, Bool.cond_true, h_coord]
       change v = (F c (0, 0) - F c (0, X')) - (F c (0, 0) - F c (X - 1, 1))
       simpa only [sub_sub_sub_cancel_left, eq_sub_iff_add_eq] using h_frame
 
