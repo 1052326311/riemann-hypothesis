@@ -437,7 +437,7 @@ lemma exists_doubling_bound (h_rank : 2 * card n < card m) : ∃ C : ENNReal, C 
       ‖θ ((S.sum S.neg).hom T) (splitWeil (S.sum S.neg) T (1, x) d)‖ₑ ≤ N x * ‖d‖ₑ := by
     simpa [-theta_apply] using hN x 0 d
   let Z : ENNReal := ∑' δ : U S.J, ‖(graphSplitting S δ⁻¹).lagrangian.zeroTerm T‖ₑ
-  have hZ : Z ≠ ⊤ := tsum_enorm_ne_top_iff_summable_norm.2 <|
+  have hZ : Z ≠ ⊤ := tsum_eNorm_ne_top_iff_summable_norm.2 <|
     (siegel_weil T (graphSplitting S 1) h_rank).1.comp_injective graphSplitting_lagrangian_injective
   refine ⟨(∫⁻ x, N x ∂T.quotMeasure + Z) * ‖doubleDatum (S := S) (T := T)‖ₑ, by finiteness,
     fun a b f f' g g' ↦ ?_⟩
@@ -563,7 +563,7 @@ theorem inner_product_formula (h_rank : 2 * card n < card m) (a b : AutChar E)
     gcongr with p
     calc ∫⁻ γ : S.Γ, ‖Φ (p.1, p.1⁻¹ * (γ * p.2))‖ₑ ∂.count
         = ‖y' p.1‖ₑ * ‖y p.2‖ₑ * ∑' γ : S.Γ, ‖weilMatrixCoeff b f f' (p.1⁻¹ * (γ * p.2))‖ₑ := by
-          simp [lintegral_count, hΦ_unfold, enorm_mul, ENNReal.tsum_mul_left]
+          simp [lintegral_count, hΦ_unfold, eNorm_mul, ENNReal.tsum_mul_left]
       _ ≤ _ := by grw [(h_bound p.2 p.1).2, enorm_mul_height_pow_le hB hB']
   have h_swap : Integrable
       (Function.uncurry fun (p : G E s × G E s) x ↦ conj (y' p.1) * y p.2 * Θ p.2 p.1 x)
@@ -573,7 +573,7 @@ theorem inner_product_formula (h_rank : 2 * card n < card m) (a b : AutChar E)
     gcongr with p
     calc ∫⁻ x, ‖conj (y' p.1) * y p.2 * Θ p.2 p.1 x‖ₑ ∂T.quotMeasure
         = ‖y' p.1‖ₑ * ‖y p.2‖ₑ * ∫⁻ x, ‖Θ p.2 p.1 x‖ₑ ∂T.quotMeasure := by
-          simp [enorm_mul, lintegral_const_mul', ENNReal.mul_eq_top]
+          simp [eNorm_mul, lintegral_const_mul', ENNReal.mul_eq_top]
       _ ≤ _ := by grw [(h_bound p.2 p.1).1, enorm_mul_height_pow_le hB hB']
   have h_fubini (g : G E s) : weilMatrixCoeff b f f' g *
       S.petersson y' (rightRegular ℂ (G E s) ℂ g y) = ∫ g', Φ (g', g) ∂S.quotMeasure := by
