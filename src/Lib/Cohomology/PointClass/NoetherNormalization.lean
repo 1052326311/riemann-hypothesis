@@ -77,7 +77,7 @@ noncomputable abbrev evalForms (v : ι → A) (j : Fin (d + 1)) : A := ((Λ j).v
 @[grind =>]
 lemma aeval_smul_of_isHomogeneous {n : ℕ} (hF : F.IsHomogeneous n) :
     aeval (u • v) F = u ^ n * aeval v F :=
-  eval₂_mul_of_isHomogeneous hF (algebraMap k A) u v
+  hF.eval₂_const_mul (algebraMap k A) v u
 
 /-- If `χ` kills the kernel of `φ` and `φ ∘ v` lies on the cone of `g`, then so does `χ ∘ v`. -/
 lemma IsHomogeneousSolution.of_ker {D : Type} [CommRing D] [Algebra k D] (χ : A →ₐ[k] D)
