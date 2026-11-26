@@ -409,7 +409,7 @@ noncomputable abbrev cosetProdEquiv : (G ⧸ N) × N ≃ G where
   right_inv x := by aesop
 
 instance : DiscreteTopology (Γ.subgroupOf N) :=
-  have h_cont : Continuous (Subtype.val : N → G) := continuous_subtype_val
+  have h_cont : Continuous (Subtype.val : N → G) := continuous_subtypeVal
   .preimage_of_continuous_injective Γ.carrier h_cont Subtype.val_injective
 
 instance : DiscreteTopology ↥(Γ ⊓ N) :=
