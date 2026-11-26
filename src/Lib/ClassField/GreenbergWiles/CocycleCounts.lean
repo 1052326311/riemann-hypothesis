@@ -98,7 +98,7 @@ lemma New.IsLargeLevel.exists_act_torsion_eq_nsmul {G : Type} [Group G] [Topolog
   have hk_ne_zero : NeZero k := of_pos hk
   have hy₂ : y.2 = 0 := by simpa [hk.ne'] using congr_arg Prod.snd hky
   refine ⟨(cyclotomicCharMod Ω (l * k) z).val.val,
-    cyclotomicCharMod_eq_of_dvd ⟨k, rfl⟩ zmod_eq_natCast_val, ?_⟩
+    cyclotomicCharMod_eq_of_dvd ⟨k, rfl⟩ (ZMod.natCast_zmod_val _).symm, ?_⟩
   ext
   · -- The unit is a root of unity of order dividing `l * k`.
     refine smul_eq_pow_cyclotomicCharMod z ?_

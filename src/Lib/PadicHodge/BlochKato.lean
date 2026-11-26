@@ -437,7 +437,8 @@ lemma map_cyclotomicGp_smul [Module ℤ_[p] μ] (f : μ →+ DiscreteUnits (Padi
   -- On `p ^ n`-torsion both sides are multiplication by the cyclotomic character modulo `p ^ n`.
   calc _ = (cyclotomicCharMod (PadicAlgCl p) (p ^ n) g).1.val • f x :=
          map_cyclotomicChar_smul f n h x
-    _ = unitsRep g (f x) := (cyclotomicCharMod_eq_iff_unitsRep.1 zmod_eq_natCast_val (h x)).symm
+    _ = unitsRep g (f x) :=
+      (cyclotomicCharMod_eq_iff_unitsRep.1 (ZMod.natCast_zmod_val _).symm (h x)).symm
 
 variable (h : IsPotentiallyCrystalline ρ) {S : Type} [CommRing S] {V : DiscreteModule S Γ}
   {q : T →+ V} {m : ℕ}
