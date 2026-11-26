@@ -781,7 +781,7 @@ fixed field of `ker χ`, and let `ψ` be a continuous character of the finite id
 homomorphism `μ` on `ker χ` with `μ k = ψ (N z)` whenever the class of `k` is the Artin symbol over
 `L` of `z`, where `N` is the norm from `L` to `K`, is invariant under conjugation by `Γ`: the norm
 does not see the action of `Γ` on `L`. -/
-private lemma map_conjNormal_eq_of_forall_artinMap_eq (χ : QZChar Γ) [Finite (Γ ⧸ ker χ)]
+private lemma map_conjNormal_eq_of_forall_artinMap_eq (χ : QZChar Γ)
     (ψ : QZChar (𝔸f K)ˣ) (μ : ker χ →* Multiplicative QZ)
     (hμ : ∀ (z : (𝔸f (fixedFieldOf (K := K) (Ω := Ω) (ker χ)))ˣ) (k : ker χ),
       artinMap (ker χ) z = k →
