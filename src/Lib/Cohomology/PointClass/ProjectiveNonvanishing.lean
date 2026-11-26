@@ -982,7 +982,7 @@ lemma projSpace.exists_hodgeTateMap_pointClass_line :
       let e : (freeAb.obj (tiltPointsSum pointOrTorus)).obj c := .of u
       change ((oneSub (pointOrTorusTwist epsPow)) ≫
         ((-W) ≫ thickeningOver.whiskerLeft Gm.ofCoord)) c e = (gluing ≫ κ ≫ oneSubMu) c e
-      erw [NatTrans.comp_app_apply, NatTrans.comp_app_apply, NatTrans.comp_app_apply, NatTrans.comp_app_apply]
+      rw [NatTrans.comp_app_apply, NatTrans.comp_app_apply, NatTrans.comp_app_apply, NatTrans.comp_app_apply]
       have h_G_apply (v : (freeAb.obj (tiltPointsSum pointOrTorus)).obj c) :
           ((-W) ≫ thickeningOver.whiskerLeft Gm.ofCoord) c v =
             (thickeningOver.whiskerLeft Gm.ofCoord) c ((-W) c v) :=
@@ -1003,7 +1003,7 @@ lemma projSpace.exists_hodgeTateMap_pointClass_line :
         erw [gluing_apply_torus c t, _root_.map_sub (κ.app c).hom, h_κ c false, h_κ c true,
           h_W_true c t, h_W_twist]
         apply neg_injective
-        erw [neg_sub]
+        rw [neg_sub]
         let one_c : genericCoeff.obj c := ⟨(1 : genericAlg c)⟩
         change G.hom (.of (torusPoint c t)) - G.hom (.of (torusPoint c t')) =
           -((oneSubMu.app c).hom (0 - one_c))
@@ -1015,7 +1015,7 @@ lemma projSpace.exists_hodgeTateMap_pointClass_line :
             (torusPoint c u).val.down 0 =
               teichmullerLift c ((discToTorus coeHom ≫ u.down).hom (.single 1 1)) :=
           congrArg (fun a ↦ a.down 0) (hA c ⟨discToTorus coeHom ≫ u.down⟩)
-        erw [h_coord t', h_coord t]
+        rw [h_coord t', h_coord t]
         exact teichmullerCoordinate_cancel_twist c t.down
     · -- `Gm.ofCoord` commutes with `proj`.
       intro c u
@@ -1023,7 +1023,7 @@ lemma projSpace.exists_hodgeTateMap_pointClass_line :
       let v := ((-W).app c).hom e
       change ((((-W) ≫ whiskerRight proj _) ≫ genericOver.whiskerLeft Gm.ofCoord) c e) =
         ((((-W) ≫ thickeningOver.whiskerLeft Gm.ofCoord) ≫ whiskerRight proj _) c e)
-      erw [NatTrans.comp_app_apply, NatTrans.comp_app_apply]
+      rw [NatTrans.comp_app_apply, NatTrans.comp_app_apply]
       have h_D_apply : ((-W) ≫ whiskerRight proj _) c e =
           (whiskerRight proj (freeAb.obj (unimodular (d := 1)).toFunctor)) c ((-W) c e) :=
         NatTrans.comp_app_apply (-W) (whiskerRight proj _) c e
