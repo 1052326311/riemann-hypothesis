@@ -189,7 +189,7 @@ and let `inclMatrix _ u` be the matrix whose `j`-th column is the basis vector `
 `ϖ • inclMatrix _ u` agree modulo `ϖ²` if and only if `T` reduces to that inclusion matrix in the
 residue field of every chosen place, the place of index `inl i` among the chosen and the twist
 places. -/
-lemma genResidue_smul_eq_inclMatrix_iff (V : DividedSplitting N m a O z) [DecidableEq n]
+lemma genResidue_smul_eq_inclMatrix_iff (V : DividedSplitting N m a O z)
     {k c : Type} [DecidableEq k] (T : Matrix k c (O.levelModulus 2).ResidueRing) (u : c → k) :
     V.genResidue • T.map reduceToChosenModulusSq =
         V.genResidue • inclMatrix O.chosenModulusSq.ResidueRing u ↔
@@ -428,7 +428,7 @@ def DividedSplitting.stackOverGenScalar (V : DividedSplitting N m a O z)
     Matrix (a ⊕ N) N O.chosenModulusSq.ResidueRing :=
   fromRows s (V.genResidue • 1 : Matrix N N O.chosenModulusSq.ResidueRing)
 
-omit [DecidableEq m] [Fintype a] in
+omit [DecidableEq m] [Fintype a] [DecidableEq n] in
 /-- Let `V` split the indices `n` as `N ⊕ m`, with the embedding `V.fixedEmb : r ↪ N`, and let `s`
 be an `a × N` matrix modulo `ϖ²`. Consider the integral unitary `N × N` matrices whose reduction
 fixes the rows `V.stackOverGenScalar s` modulo `ϖ²` and has the columns of the identity off
@@ -471,7 +471,7 @@ lemma mem_congruenceGroup_iff (V : DividedSplitting N m a O z)
     A ∈ V.congruenceGroup ↔ V.genResidue • A.val = V.genResidue • 1 := by
   simp [congruenceGroup, MulAction.mem_stabilizer_iff, Units.smul_def]
 
-omit [DecidableEq N] [DecidableEq m] [Fintype a] in
+omit [DecidableEq N] [DecidableEq m] [Fintype a] [DecidableEq n] in
 /-- The lift of an element of the congruence group (the matrices that are `1` modulo `ϖ`) reduces to
 `1` at every chosen place. -/
 lemma reduceAt_liftMod_congruenceGroup (V : DividedSplitting N m a O z) (Y : V.congruenceGroup)
