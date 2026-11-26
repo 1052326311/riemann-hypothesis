@@ -14,16 +14,14 @@ translations, seesaw identities, negation, passing to a smaller ideal and relabe
 
 ## Main definitions and results
 
-* `New.exists_conj_modKernel_eq_mul_modKernel_neg`, `New.exists_stdKernel_neg_left`: the complex
-  conjugate of a kernel is a kernel for the negated first space, up to a factor of modulus one.
+* `New.exists_conj_modKernel_eq_mul_modKernel_neg`: the complex conjugate of a kernel is a kernel
+  for the negated first space, up to a factor of modulus one.
 * `New.modKernel_mul_stdLevel_left`, `New.modKernel_mul_stdLevel_right`: right translation by the
   lattice stabiliser `New.stdLevel` acts on Ψ through its reduction `New.Modulus.reductionGL`, up to
   a scalar; `New.modDatum_factor`, `New.modKernel_factor`: passing to a smaller ideal.
 * `New.modKernel_block_right`, `New.modKernel_sum_right`, `New.modKernel_sum_left`,
   `New.Rows.modKernelStdSpace_block`: seesaw identities, the kernel of a direct sum at block
-  diagonal elements is a product; `New.stdKernel_sum_right`, `New.stdKernel_sum_left`: the same with
-  standard characters; `New.stdKernel` S T 𝔪 is `New.modKernel` S T (stdChar s) (stdChar s') 𝔪, with
-  s, s′ the signs of S, T.
+  diagonal elements is a product.
 
 Notions from other files:
 * `New.pairWeil`: The representation ω_{a,b}(g, h) = a(det h) b(det g)⁻¹ ω(`onHom` (g, h)); the
