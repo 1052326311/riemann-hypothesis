@@ -543,7 +543,7 @@ def HasConjugateGrowth {ι : Type*} [Fintype ι] (σ : ℂ → ℂ) (Q : MvPolyn
 
 /-- Against `normalizedVolume ι`, which is Lebesgue measure on `ι → ℂ` divided by `π ^ card ι`, the
 Gaussian `exp (-|y|² / a)` has integral `a ^ card ι`. -/
-lemma integral_exp_neg_inv_mul_normalizedVolume {ι : Type} [Fintype ι] [DecidableEq ι] {a : ℝ}
+lemma integral_exp_neg_inv_mul_normalizedVolume {ι : Type} [Fintype ι] {a : ℝ}
     (ha : 0 < a) :
     ∫ y : ι → ℂ, exp (-a⁻¹ * ∑ i : ι, ‖y i‖ ^ 2) ∂normalizedVolume ι = a ^ card ι := by
   rw [normalizedVolume, integral_smul_nnreal_measure,
