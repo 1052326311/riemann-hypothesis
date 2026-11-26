@@ -137,7 +137,7 @@ lemma snd_mem_Z1 [Nonempty X] {p : (X → V) × (G → V)} (hp : p ∈ V.trivial
   obtain ⟨h_cont, h_triv, -⟩ :
       Continuous z ∧ (∀ (g : G) (x : X), V.ρ g (f x) = f (g • x) + z g) ∧ ∀ g ∈ I, z g = 0 :=
     mem_trivialisedCocycles.mp hp
-  show Continuous z ∧ ∀ g k : G, z (g * k) = z g + V.ρ g (z k)
+  change Continuous z ∧ ∀ g k : G, z (g * k) = z g + V.ρ g (z k)
   refine ⟨h_cont, fun g k ↦ ?_⟩
   -- Compute the action of `g * k` on the trivialisation at any point `y` in two ways.
   obtain ⟨y⟩ : Nonempty X := inferInstance
