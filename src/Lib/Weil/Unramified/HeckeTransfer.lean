@@ -1,6 +1,6 @@
 module
 
-public import Lib.ClassField.Avatar.HeckeBaseChange
+public import Lib.ClassField.HeckeCharacter.SplitTameCharacters
 public import Lib.General.Combinatorics
 public import Lib.General.LinearAlgebra.BlockEmbeddings
 public import Lib.Weil.DualPair.FiniteAction

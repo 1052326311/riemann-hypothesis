@@ -4,6 +4,7 @@ public import Lib.Adelic.AutomorphicForms.AutomorphicAsAlgebraic
 public import Lib.ClassField.HeckeCharacter.TameModulus
 public import Lib.GLn.Dual
 public import Lib.General.Algebra.LevelModulus
+public import Lib.Shimura.Uniformisation.HolomorphicFamilies
 public import Lib.Weil.Unramified.HeckeTransfer
 
 /-!

@@ -1,5 +1,6 @@
 module
 
+public import Lib.LocalGL.Green.TauFunctions
 public import Lib.Weil.Periods.DescentVanishing
 public import New.UpperBound.Objects.AuxiliaryPair
 
