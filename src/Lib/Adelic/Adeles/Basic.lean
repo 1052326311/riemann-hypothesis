@@ -2,6 +2,11 @@ module
 
 public import Lib.Base
 public import TauCeti.RingTheory.DedekindDomain.FiniteAdeleRing.Basic
+public import TauCeti.NumberTheory.NumberField.Countable
+public import TauCeti.RingTheory.DedekindDomain.Countable
+import TauCeti.RingTheory.DedekindDomain.AdicValuation.Completion
+public import TauCeti.RingTheory.DedekindDomain.AdicValuation.ResidueField
+public import TauCeti.RingTheory.DedekindDomain.FiniteAdeleRing.BorelSpace
 
 /-!
 # Finite adeles of number fields: topology, idempotents, functoriality and base change
@@ -196,9 +201,20 @@ instance : MeasurableSpace (LocField w) := borel _
 
 instance : BorelSpace (LocField w) := ⟨rfl⟩
 
-instance : MeasurableSpace (𝔸f E) := borel _
+-- The finite adeles `𝔸f E` carry Tau Ceti's Borel σ-algebra, local compactness and Polish
+-- structure (`FiniteAdeleRing.instMeasurableSpace`, `instBorelSpace`, `instLocallyCompactSpace`,
+-- `instPolishSpace`); the last two use the instance `finite_quotient_asIdeal`.
 
-instance : BorelSpace (𝔸f E) := ⟨rfl⟩
+/-- Tau Ceti's Polish structure, as a shortcut: found through `instPolishSpace` inside products
+such as `(n → InfinitePlace E → ℂ) × (n → 𝔸f E)`, the instance term exceeds
+`synthInstance.maxSize`. -/
+instance : PolishSpace (𝔸f E) := inferInstance
+
+/-- Tau Ceti's local compactness, as a shortcut, for the same reason. -/
+instance : LocallyCompactSpace (𝔸f E) := inferInstance
+
+/-- Tau Ceti's second countability, as a shortcut, for the same reason. -/
+instance : SecondCountableTopology (𝔸f E) := inferInstance
 
 /-- The structure of ring with involution on a commutative ring R given by a ring endomorphism
 whose square is the identity. -/
@@ -559,10 +575,8 @@ lemma exists_int_approx (x : LocInt w) (n : ℤ) :
   exact ⟨a, by simpa using v.map_add_lt ha hy⟩
 
 /-- Every element of the residue field at w is the residue of an algebraic integer of E. -/
-lemma algebraMap_ResField_surjective : Function.Surjective (algebraMap (𝓞 E) (ResField w)) := by
-  -- A local integer is congruent to a global one modulo the maximal ideal.
-  rintro ⟨x⟩
-  exact (exists_int_approx w x 0).imp fun a ha ↦ residue_eq_iff_valuation_sub_lt_one.2 ha
+lemma algebraMap_ResField_surjective : Function.Surjective (algebraMap (𝓞 E) (ResField w)) :=
+  residue_algebraMap_adicCompletionIntegers_surjective (K := E) w
 
 /-- The residue field at w has `w.q` elements, the absolute norm of w. -/
 lemma card_ResField : Nat.card (ResField w) = w.q := by
@@ -590,19 +604,10 @@ instance : CharZero (LocField w) := algebraRat.charZero _
 
 deriving instance PolishSpace for LocField
 
-instance (priority := low) : Countable E := (integralBasis E).repr.injective.countable
-
-instance : Countable (FinPlace E) :=
-  -- there are finitely many ideals of each norm
-  .of_preimage_singleton fun n ↦
-    (Ideal.finite_setOfPred_absNorm_eq n).countable.preimage asIdeal_injective
-
 /-! ### The topology of the finite adeles -/
 
 instance : Fact (∀ w : FinPlace E, IsOpen (LocInt w).carrier) :=
   ⟨fun w ↦ isOpen_integer (LocField w)⟩
-
-deriving instance T0Space, LocallyCompactSpace for 𝔸f E
 
 variable (E) in
 /-- `New.Ô E` has the same elements as Tau Ceti's integral finite adeles. -/
@@ -776,17 +781,6 @@ lemma denseRange_algebraMap_finAdele : DenseRange ((↑) : E → 𝔸f E) :=
 /-- Every finite adele is the sum of an element of `E` and an integral finite adele. -/
 lemma exists_sub_mem_Ô (x : 𝔸f E) : ∃ a : E, x - a ∈ Ô E :=
   denseRange_algebraMap_finAdele.exists_mem_open (isOpen_Ô.preimage (by fun_prop)) ⟨x, by simp⟩
-
-attribute [local instance] rightUniformSpace isUniformAddGroup_of_addCommGroup
-  completeSpace_of_weaklyLocallyCompactSpace in
-instance : PolishSpace (𝔸f E) := by
-  -- The countable field `E` is dense, and the neighbourhoods of `0` come from the countable product
-  -- of the local rings of integers; a locally compact group is complete.
-  have : TopologicalSpace.SeparableSpace (𝔸f E) := denseRange_algebraMap_finAdele.separableSpace'
-  have : (nhds (0 : 𝔸f E)).IsCountablyGenerated :=
-    (nhds_zero_eq_map_structureMap _ out).substr (Filter.map.isCountablyGenerated ..)
-  have := IsUniformAddGroup.uniformity_countably_generated (α := 𝔸f E)
-  constructor
 
 variable [IsCMField E]
 
