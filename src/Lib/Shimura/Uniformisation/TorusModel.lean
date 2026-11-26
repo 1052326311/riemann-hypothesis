@@ -329,7 +329,7 @@ lemma exists_unit_on_roots_of_unity (φ : O →+* ℂ) :
     {p : 𝔸f ℚ × 𝔸f ℚ |
       φ (ζ (ψf E t)) = ψf E (t * ι p.fst) ∧ ψf E (t * ι (p.fst * p.snd)) = ψf E t}
   have hC_closed (t : 𝔸f E) : IsClosed (C t) := by
-    apply (isClosed_eq _ (.subtype_val _)).and (isClosed_eq ..) <;> fun_prop
+    apply (isClosed_eq _ (.subtypeVal _)).and (isClosed_eq ..) <;> fun_prop
   have h_fin (U : Finset (𝔸f E)) : ((Ô ℚ : Set _) ×ˢ (Ô ℚ : Set _) ∩ ⋂ t ∈ U, C t).Nonempty := by
     -- All `ψf E t`, `t ∈ U`, are `N`-th roots of unity.
     obtain ⟨N, hN, hU⟩ := exists_forall_mul_mem_Ô fun t : U ↦ (t : 𝔸f E)
@@ -733,7 +733,7 @@ lemma exists_isIsogenyOfMatrix (z : GL D.Index E) (hz : ratConj z ℓ = ℓ')
   -- `β = D.β`, so `h_riem` compares them.
   have h_char : ∀ l ∈ m.uniformisation.lattice, (m'.χ ∘ F) l = (m.χ ^ μ) l := by
     simp_all [multiplier_eq_canonicalMultiplier, canonicalMultiplier, mul_left_comm, hQ.forall, F,
-      ← Complex.exp_nat_mul, ← mulVec_smul, ext_iff₂, riemannForm_pullForm, PeriodMap.intAction]
+      ← Complex.exp_natCast_mul, ← mulVec_smul, ext_iff₂, riemannForm_pullForm, PeriodMap.intAction]
   -- Pull the theta coordinates of `x'` back along `F`.
   have h_pull :
       HasThetaCoords m.uniformisation.lattice (fun v : V ↦ atGeneric m'.uniformisation.expMap (F v))

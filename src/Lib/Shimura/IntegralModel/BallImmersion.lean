@@ -98,7 +98,7 @@ lemma ModuliPoint.isLevelIso_act_of_inv_eq {a a' : ModuliPoint E D.Index ν} {g 
       (a.act g).IsLevelIso K z a' := by
   refine ⟨?_, by simpa [act] using h_refl, fun j ↦ by simp [act, h_P]⟩
   -- The level part `a'.frame⁻¹ * z * (a.frame * g)` is `g⁻¹ * g = 1`.
-  show a'.frame⁻¹ * toFinGL z * (a.frame * g.val) ∈ K
+  change a'.frame⁻¹ * toFinGL z * (a.frame * g.val) ∈ K
   simp [← mul_assoc, ← h_x]
 
 /-- Balls immerse. Let `f` be an analytic family of theta tori over `f.domain`, and `X` a theta

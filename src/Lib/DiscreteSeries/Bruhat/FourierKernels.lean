@@ -366,10 +366,8 @@ lemma IsSolvedIn.exists_blockChart (h : IsSolvedIn blk ρ R M)
     · have h_eq : (inr k : ι ⊕ B) = inl i := h_inj hk
       exact absurd h_eq inr_ne_inl
   choose j hj using h_free
-  have hj_inj : Function.Injective j := fun i i' h_eq ↦ by
-    have h_eq' : inner i = inner i' := by rw [← hj, ← hj, h_eq]
-    have h_index : (inl i : ι ⊕ B) = inl i' := h_inj h_eq'
-    exact inl_injective h_index
+  have hj_inj : Function.Injective j := .of_comp (f := e₀ ∘ inl) <| by
+    simpa [Function.comp_def, hj] using h_inj.comp inl_injective
   obtain ⟨η, _, f, rfl⟩ := exists_equiv_comp_inr_eq hj_inj
   let e : (η ⊕ ι) ⊕ B ≃ κ := (f.sumCongr (.refl B)).trans e₀
   let join (q : (η → A) × (ι → A)) : η₀ → A := (q.1 ⊕ᵥ q.2) ∘ f.symm

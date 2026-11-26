@@ -737,26 +737,15 @@ lemma H.dimension_shift_induction {P : ∀ {F : AbFunctor C} {n : ℕ}, H N F n 
 
 
 lemma mapExactFunctor_mapExactFunctor :
-    (x.mapExactFunctor Φ).mapExactFunctor Θ = x.mapExactFunctor (Φ ⋙ Θ) := by
-  induction x with
-  | h₀ F f => simp [mapExactFunctor_mk₀]
-  | h S hS n x ih => simp [ih, mapExactFunctor_comp, mapExactFunctor_extClass]
+    (x.mapExactFunctor Φ).mapExactFunctor Θ = x.mapExactFunctor (Φ ⋙ Θ) :=
+  (x.comp_mapExactFunctor Φ Θ).symm
 
 /-- For a natural transformation η: Φ → Ψ of exact functors and x in Ext^n(N,F), pushing Φ(x)
 forward along η_F equals pulling Ψ(x) back along η_N, in Ext^n(ΦN,ΨF). -/
 lemma mapExactFunctor_naturality :
     push (Φ.obj N) (η F) n (x.mapExactFunctor Φ) =
-      H.map (Ψ.obj F) (η N) n (x.mapExactFunctor Ψ) := by
-  induction x with
-  | h₀ => simp [H.push, mapExactFunctor_mk₀, H.map]
-  | h S hS n x ih =>
-    -- The connecting classes of `Φ S` and `Ψ S` are compatible with `η` (`h_nat`). After
-    -- unfolding, reassociate the composites and use `h_nat`, then `ih`.
-    have h_nat : (hS.map_of_exact Φ).extClass.comp (mk₀ (η.app S.X₁)) (add_zero 1) =
-        (mk₀ (η.app S.X₃)).comp (hS.map_of_exact Ψ).extClass (zero_add 1) :=
-      extClass_naturality (hS.map_of_exact Φ) (hS.map_of_exact Ψ) (mapNatTrans S η)
-    simp_all [← comp_assoc_of_second_deg_zero, comp_assoc (h₂₃ := rfl), H.push, H.map,
-      mapExactFunctor_comp, mapExactFunctor_extClass]
+      H.map (Ψ.obj F) (η N) n (x.mapExactFunctor Ψ) :=
+  x.mapExactFunctor_comp_mk₀_natTransApp η
 
 namespace H
 
@@ -778,19 +767,15 @@ map. -/
 def mapₗ (F : AbFunctor C) [CoeffAction R F] (α : M ⟶ N) (n : ℕ) : H N F n →ₗ[R] H M F n :=
   { map F α n with map_smul' r := map_push α (CoeffAction.act r : End F).asHom }
 
-lemma mapExactFunctor_restrictAlong_id : x.mapExactFunctor (restrictAlong (𝟭 C)) = x := by
-  induction x with
-  | h₀ F f => simp [mapExactFunctor_mk₀, show (𝟭 C).whiskerLeft f = f from rfl]
-  | h S hS n x ih => simp [ih, mapExactFunctor_comp, mapExactFunctor_extClass]
+lemma mapExactFunctor_restrictAlong_id : x.mapExactFunctor (restrictAlong (𝟭 C)) = x :=
+  x.id_mapExactFunctor
 
 end H
 
 /-- An isomorphism `α : M ⟶ N` induces bijections `Ext^n(N,F) → Ext^n(M,F)` in every degree. -/
-lemma IsCohomEquiv.of_isIso [IsIso α] : IsCohomEquiv F α := by
-  intro n
-  -- pull-back along `inv α` is inverse to pull-back along `α`
-  refine bijective_iff_has_inverse.mpr ⟨map F (inv α) n, fun x ↦ ?_, fun x ↦ ?_⟩ <;>
-    simp [← H.map_comp]
+lemma IsCohomEquiv.of_isIso [IsIso α] : IsCohomEquiv F α := fun n ↦
+  -- pull-back along `α` is the value at `F` of the isomorphism `Ext^n(α, -)`
+  ConcreteCategory.bijective_of_isIso (((Abelian.extFunctor n).map α.op).app F)
 
 /-- If `γ : F ⟶ G` and `γ' : F' ⟶ G'` intertwine the coefficient maps of two comparisons with the
 same functor `c.functor`, then the comparison maps commute with push-forward along `γ` and `γ'`. The

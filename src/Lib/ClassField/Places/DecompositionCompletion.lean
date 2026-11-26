@@ -268,11 +268,8 @@ lemma exists_inducesPlace [NumberField K] {ι : Ω →+* PadicAlgCl p} {A : Valu
     have h_range :
         g ∈ ((U : Subgroup (Gp p)).subtype.comp res.symm.toMonoidHom).range ↔
           g ∈ (U : Subgroup (Gp p)) := by
-      constructor
-      · rintro ⟨σ, rfl⟩
-        exact (res.symm σ).prop
-      · intro hg
-        exact ⟨res ⟨g, hg⟩, by simp⟩
+      rw [MonoidHom.range_comp, MonoidHom.range_eq_top_of_surjective _ res.symm.surjective,
+        ← MonoidHom.range_eq_map, Subgroup.range_subtype]
     have h_fix :
         g ∈ (U : Subgroup (Gp p)) ↔ ∀ x : K, g (ι (algebraMap K Ω x)) = ι (algebraMap K Ω x) := by
       simp [U, ← AlgEquiv.smul_def, forall_mem_adjoin_smul_eq_self_iff, k]
