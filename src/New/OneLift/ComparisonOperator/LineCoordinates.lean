@@ -129,7 +129,7 @@ lemma New.HasWeightNormSqLeIf.prod {p : Prop} {ι : Type*} {s : Finset ι} {κ :
 open Matrix in
 /-- For the weight with one column of height `h < card N` at `τ`, the kernel `weylKernel` at `y`
 (the highest weight polynomial at `yᵀ x`) is the leading `h × h` minor of `yᵀ x` in block `τ`. -/
-lemma New.eval_weylKernel_single_eq_det {N : Type} [Fintype N] [DecidableEq N] (τ : Φ) {h : ℕ}
+lemma New.eval_weylKernel_single_eq_det {N : Type} [Fintype N] (τ : Φ) {h : ℕ}
     (h_lt : h < Fintype.card N) (y x : (Σ _ : Φ, N) × ℕ → ℂ) :
     (weylKernel (fun _ : Φ ↦ N) (Pi.single τ (Pi.single h 1)) y).eval x =
       (of fun a b : Fin h ↦ ∑ u : N, y (⟨τ, u⟩, a) * x (⟨τ, u⟩, b)).det := by
@@ -591,23 +591,6 @@ lemma weylNormSq_comp_eval_stackedDetProdCoords_le (j : D.LiftIndex) (i : D.RowC
   obtain ⟨ξ, hξ, h_norm⟩ := hasWeightNormSqLeIf_stackedDetProd j i Y φ z
   rw [comp_eval_stackedDetProdCoords_eq_of_toPoly_eq j i Y hξ]
   exact h_norm ⟨hY_small, hz_small⟩
-
-/-- Specialise the coordinates `stackedDetProdCoords j i Y` by values `z` for the remaining
-variables and a ring map `φ`. Then `toPoly` of the result is the specialised product of
-determinants. Assume `IsSmallSpecialization j Y φ z`: the images under `φ` of the conjugates of the
-entries of `Y`, and of the values of `z`, are at most `M ^ 4` in size. Then `weylNormSq` of the
-result is at most `(M ^ 9) ^ ((12 D.m + 1) N)`, where `N` is the sum over `τ` of
-`card (DetIndex j τ)`, the total number of determinants. -/
-lemma weylNormSq_stackedDetProdCoords_le (j : D.LiftIndex) (i : D.RowChoice)
-    (Y : Matrix D.FlatIndex D.FlatIndex D.E) (φ : ℂ →+* ℂ)
-    (z : D.Φ × FirstFactorIndex j × AddedIndex j → ℂ) :
-    toPoly (fun _ : D.Φ ↦ FirstFactorIndex j) (untwistedDescentPair j).colsPlus
-        (φ ∘ eval z ∘ stackedDetProdCoords j i Y) =
-      .map (φ.comp (eval z)) (inFirstCols (stackedDetProd (posEquiv j) (constantRows j i Y))) ∧
-    (IsSmallSpecialization j Y φ z → weylNormSq (φ ∘ eval z ∘ stackedDetProdCoords j i Y) ≤
-      ↑(D.M ^ 9) ^ ((12 * D.m + 1) * ∑ τ : D.Φ, card (DetIndex j τ))) :=
-  ⟨toPoly_comp_eval_stackedDetProdCoords j i Y φ z, fun h_small ↦
-    weylNormSq_comp_eval_stackedDetProdCoords_le j i Y h_small.norm_entry_le h_small.norm_value_le⟩
 
 /-- Take the product of the determinants of the constant rows `constantRows j i Y`, some of them
 rows of the matrix `Y` chosen by `i`, stacked over rows of variables (`stackedDetProd`). Read it as

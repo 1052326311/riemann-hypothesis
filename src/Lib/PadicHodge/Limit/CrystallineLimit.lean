@@ -396,7 +396,7 @@ lemma linearIndependent_of_mem_fixedPeriods {c : Chart} (hc : c.IsChartOf (Γ :=
   refine ker_eq_bot.mp (bot_unique
     (le_of_fixed_mem_of_saturated (Γ := Δ) le_top h_sat (fun a ha g ↦ ?_) fun a ha hinv ↦ ?_))
   · -- The relations are stable under `Δ`, as the `y i` are fixed.
-    show toGp g • a ∈ ker φ
+    change toGp g • a ∈ ker φ
     rw [mem_ker, ← eventually_tensorAction_eq hfix a g, mem_ker.mp ha, map_zero]
   -- The coefficients of an invariant relation lie in `W[1/p]`.
   have hcoef (t : n) : ∃ (m : ℕ) (b : WittFq c.f),
@@ -415,7 +415,7 @@ lemma linearIndependent_of_mem_fixedPeriods {c : Chart} (hc : c.IsChartOf (Γ :=
         ← mul_assoc, Finsupp.linearCombination]
     exact periodTensorMap_injective (by rw [h_image, mem_ker.mp ha, smul_zero, map_zero])
   have hb₀ (t : n) : b t = 0 := by
-    simpa [WittVector.p_nonzero] using Fintype.linearIndependent_iff.mp hy_indep _ hrel t
+    simpa [WittVector.p_ne_zero] using Fintype.linearIndependent_iff.mp hy_indep _ hrel t
   ext t
   have hp : (p : Bmax) ≠ 0 := (NeZero.of_faithfulSMul ℚ_[p] Bmax p).out
   simpa [hp, hb₀] using hb t
