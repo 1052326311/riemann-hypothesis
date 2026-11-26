@@ -119,7 +119,7 @@ lemma New.rank_le_card_preimage_of_isotropic {n p : Type*} [Fintype n] [Decidabl
     rcases Int.units_eq_one_or ε with rfl | rfl <;>
       simp [hd, Matrix.mul_add, Matrix.add_mul, h_iso]
   have h_supp (i : n) (hi : d i ≠ 0) : i ∈ s ⁻¹' {ε} := by
-    contrapose! hi
+    contrapose hi
     simp [d, Int.units_ne_iff_eq_neg.1 hi]
   calc X.rank = (ε • Xᴴ * diagonal d * X).rank := by rw [← h_gram, rank_conjTranspose_mul_self]
     _ ≤ (diagonal d).rank := (rank_mul_le_left _ _).trans (rank_mul_le_right _ _)
