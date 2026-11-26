@@ -483,7 +483,7 @@ surjective and invariant under an action `s` of a finite group `Δ` on `W` that 
 on the fibres of `c` on complex points (`specOver R ℂ` is `Spec ℂ` over `Spec R`). Then `c` is a
 Galois covering with group `Δ` in the sense of `New.Variety.IsGaloisCovering`: simple transitivity
 holds for points with values in any field of characteristic 0. -/
-lemma isGaloisCovering_of_complex_points {R : CommRingCat} [IsDomain R] {W Z : Over (Spec R)}
+lemma isGaloisCovering_of_complex_points {R : CommRingCat} {W Z : Over (Spec R)}
     [IsProper W.hom] [IsSeparated Z.hom] {c : W ⟶ Z} {Δ : FiniteGrp}
     {s : Δ →* CategoryTheory.End W} [Countable R] [Algebra R ℂ]
     (hR : ∀ (k : Type) [Field k] [CharZero k] (f : R →+* k), Function.Injective f)
@@ -637,7 +637,7 @@ end ProductOfFields
 
 /-- If `A` is a smooth algebra over a normal domain `P`, then `A` is integrally closed in
 `A ⊗[P] Frac P`. -/
-lemma exists_algebraMap_eq_of_isIntegral_of_smooth {P A : Type} [CommRing P] [IsDomain P]
+lemma exists_algebraMap_eq_of_isIntegral_of_smooth {P A : Type} [CommRing P]
     [IsIntegrallyClosed P] [CommRing A] [Algebra P A] [Algebra.Smooth P A]
     {v : A ⊗[P] FractionRing P} (hv : IsIntegral A v) :
     ∃ x : A, algebraMap A (A ⊗[P] FractionRing P) x = v := by
