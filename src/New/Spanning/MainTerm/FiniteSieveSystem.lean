@@ -246,7 +246,7 @@ scaled orbital integrals of `p` and `q` over the vectors of the top quadric with
 On finitely many sequences `a i` with the same entry `t` at position `ϱ = 𝔰.ϱ`, the number of
 hyperbolic planes, it is a positive semidefinite matrix. -/
 lemma IsFillingData.posSemidef_lastEntryDensity {E : Type} {𝔰 : Shape} [Field E] [CMType E]
-    [WeilData E] {S : Filling E 𝔰} [S.IsAdmissible] {T : Finset (FinPlace E)} [T.StarStable]
+    {S : Filling E 𝔰} {T : Finset (FinPlace E)} [T.StarStable]
     {P : IntegralPlace (LocProd T)}
     {F : PlaceData (Fin (𝔰.k - (6 * 𝔰.ϱ + 13))) (S.latticeMiddle (LocProd T)) (𝔰.ϱ + 1 + 2 * 𝔰.ϱ +
       5)}
