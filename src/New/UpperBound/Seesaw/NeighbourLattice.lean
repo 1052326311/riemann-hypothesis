@@ -432,7 +432,7 @@ norm one that is `1` above `N`, with the denominators bounded by `β` and `β̄`
 integral; and `c - π⁻¹ x_e` and `η̄ c - π⁻¹ x_e''` are integral, with `η = normNegOne` of norm `-1`.
 These are the conditions `IsNeighbourVector`. -/
 lemma isNeighbourVector_col_neighbourMatrix [DecidableEq X] [DecidableEq X'']
-    [Fact N.Prime] (hP : IsSplitLevel P N)
+    (hP : IsSplitLevel P N)
     (hπ : IsSplitSquarefree P (N : E) π) (hκ : IsScalingAtM N β δ κ) (m : PairIndex X X'') :
     IsNeighbourVector π δ (neighbourCoeff X X'' P π m) ((neighbourMatrix X X'' P π).col m) := by
   have h_one (i) : (if i = m then 1 else 0) ∈ Ô E := by split_ifs <;> simp
