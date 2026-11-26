@@ -97,7 +97,7 @@ lemma New.GaloisRep.exists_frame_extension {E : Type} [Field E] [CMBase E] {n W 
       ∀ w : SplitFinPlace E, 𝔑 ∉ (star w.val).asIdeal → ∀ x : GL n (𝔸f E),
         ∃ L : (Gf E n → W) →ₗ[ℂ] W, ∀ (y : GL n E) (g : GL n (LocField (w : FinPlace E))),
         φ (toFinGL y * (x * conjAtSplit w g)) =
-          ξ y (L (rightRegular ℂ (Gf E n) W (ofSplitPlace w.2 g) f)) := by
+          ξ y (L (rightRegular ℂ (Gf E n) W (ofSplitPlace w.property g) f)) := by
   have h_frame (u : Gf E n) : IsSignedFrameFor (invTransposeGL u.val) 1 1 :=
     isSignedFrameFor_one (entryConj u)
   let Q (p : GL n E × Gf E n) : GL n (𝔸f E) ⧸ levelGU n 𝔑 := ⟦toFinGL p.1 * invTransposeGL p.2.val⟧
@@ -174,7 +174,7 @@ lemma New.GaloisRep.exists_central_eigenform {E : Type} [Field E] [CMBase E] {d 
       ∀ w : SplitFinPlace E, 𝔑 ∉ (star w.val).asIdeal → ∃ L : (Gf E n → W) →ₗ[ℂ] GL n (𝔸f E) → W,
         ∀ g : GL n (LocField (w : FinPlace E)),
         rightRegular ℂ (GL n (𝔸f E)) W (conjAtSplit w g) ψ =
-          L (rightRegular ℂ (Gf E n) W (ofSplitPlace w.2 g) f) := by
+          L (rightRegular ℂ (Gf E n) W (ofSplitPlace w.property g) f) := by
   obtain ⟨φ, hφ, hφ_level, hφ_zero, hφ_loc⟩ := exists_frame_extension ξ h_rat h_level
   choose L hL using hφ_loc
   let s : (𝔸f (QuadField d))ˣ →* GL n (𝔸f E) := centralScalar
@@ -525,7 +525,7 @@ private lemma New.GaloisRep.exists_padicRep_of_pel {ℓ : ℕ} {E : Type} {d : �
   let R := Localization.subalgebra E M hM_le
   -- `R` is not a field, as `v` extends to a nonzero proper ideal; so maximal ideals are nonzero
   -- and lie over safe places.
-  have hR_field : ¬IsField R := Ring.not_isField_of_ne_of_ne (Ideal.map_ne_bot_of_ne_bot v.3)
+  have hR_field : ¬IsField R := Ring.not_isField_of_ne_of_ne (Ideal.map_ne_bot_of_ne_bot v.ne_bot)
     ((map_algebraMap_ne_top_iff_disjoint ..).mpr ((hM v).mpr hv_safe))
   have hR (𝔪 : Ideal R) (h𝔪 : 𝔪.IsMaximal) : D.IsGoodAt (𝔪.comap (algebraMap _ R)) :=
     hD_good _ ((hM ⟨_, .comap _, (bot_lt_under_prime M R hM_le 𝔪
@@ -724,7 +724,7 @@ private lemma New.GaloisRep.exists_padicRep_of_cuspidal_type_at_embedding {ℓ :
   -- `star w'` lie outside `S`.
   obtain ⟨hF_good, h𝔑_star_w₀, h𝔑_w₁, h𝔑_star_w₁⟩ :=
     isSafe_and_mem_of_mem_iff h𝔑_mem hN hS hw₀_split hv hw' hw₁ hw₁_far
-  have h_good (w : FinPlace E) : IsSafe 𝔑 w → 𝔑 ∈ w₀.1 ∧ w ∉ S ∧ star w ∉ S :=
+  have h_good (w : FinPlace E) : IsSafe 𝔑 w → 𝔑 ∈ w₀.asIdeal ∧ w ∉ S ∧ star w ∉ S :=
     mem_and_notMem_of_isSafe h𝔑_mem h_cover hS ⟨h𝔑_star_w₀, h𝔑_w₁, h𝔑_star_w₁⟩ w
   -- `t w j` is the eigenvalue of the `j`-th Hecke operator at `w` on `f`.
   have h_eig_safe (w : SafePlace 𝔑) : HasHeckePolyAt f w.val.val w.val.prop (P w.val.val) := by
