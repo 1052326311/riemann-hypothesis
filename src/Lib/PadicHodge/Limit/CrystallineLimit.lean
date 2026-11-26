@@ -4,6 +4,7 @@ public import Lib.GaloisRep.Pseudocharacter.SemisimpleRepresentations
 public import Lib.General.NumberTheory.PadicLimitsValuation
 public import Lib.PadicHodge.Kisin.PeriodMatrixFrame
 public import Lib.PadicHodge.RadiusLemma
+import TauCeti.RingTheory.AdicCompletion.Finite
 
 /-!
 # Uniform period bounds and limits of crystalline lattices with bounded jumps
@@ -465,7 +466,7 @@ lemma separated_and_complete_of_free (M : Type) [AddCommGroup M] [Module Amax M]
     ∀ s : ℕ → M, (∀ {k m : ℕ}, k ≤ m → s k - s m ∈ nsmulRange (p ^ k) M) →
       ∃ x : M, ∀ k : ℕ, s k - x ∈ nsmulRange (p ^ k) M := by
   simpa only [isAdicComplete_iff, isHausdorff_iff, isPrecomplete_iff, SModEq.sub_mem, sub_zero,
-    mem_span_pow_smul_top_iff] using isAdicComplete_of_free (S := Amax) (M := M) (.span {↑p})
+    mem_span_pow_smul_top_iff] using IsAdicComplete.of_finite_projective (R := Amax) (.span {↑p}) M
 
 /-- In a finite free `Amax`-module, an element that lies in `p ^ k M` for every `k` is zero. -/
 lemma eq_zero_of_forall_mem_nsmulRange {M : Type} [AddCommGroup M] [Module Amax M] [Free Amax M]
