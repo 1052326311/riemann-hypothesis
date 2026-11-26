@@ -986,7 +986,7 @@ lemma diagOp_toSmoothForm_typeProjection {P : Parameters} {D : Data P} {ℓ : �
     [PadicIso ℓ] {r n : Type} [Fintype r] [DecidableEq r] [Fintype n] [DecidableEq n]
     {O : DescentPair D.E r n} {B : BaseLevel (stdSpace D.E n) (O.columnCount,
       O.detExp) D.chosenGroupOrder}
-    {J : Type} [Finite J] {L : J → FinPlace D.E}
+    {J : Type} {L : J → FinPlace D.E}
     {c : ∀ i : O.ChosenIndex, (ResField (O.chosenPlace i))[X]}
     (s' : B.Eigensystem L → PadicAlgCl ℓ) (x : B.Eigensystem L) {v : O.FormV}
     (hv : v ∈ (typeProjection O c).range) (hx : IsNonzeroIn v x.val) :
