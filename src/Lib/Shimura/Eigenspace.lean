@@ -1,6 +1,7 @@
 module
 
 public import Lib.Cohomology.WoodsHole
+public import Lib.GaloisRep.Main.Defs
 public import Lib.PadicComparison.CrystallineFrobenius
 public import Lib.PadicHodge.Limit.CrystallineLimit
 public import Lib.Shimura.CongruenceRelation.EichlerShimura
@@ -320,7 +321,7 @@ lemma IsEigenQuotient.exists_sum_baseChange_eq_zero_of_jump_eq_zero [Fintype ι]
       -- the instances are passed by hand, since `ℂ_ℓ` carries another action of `ℚ̄_ℓ`
       obtain ⟨φ, hφ⟩ := @h_univ ℂ_[ℓ] _ _ _ (.of_algHom (γ.extendScalarsOfIsLocalization _ _⁰))
         (fun i ↦ ⟨(f i).val.toAddHom, by simp [Algebra.smul_def]⟩) h_eig
-      exact ⟨⟨φ.1, φ.2⟩, hφ⟩
+      exact ⟨⟨φ.toAddHom, φ.map_smul'⟩, hφ⟩
     have h_mem : φ ∈ hodgeTateMaps (matrixRep r) γ u :=
       mem_hodgeTateMaps_of_span h_span fun ⟨i, x⟩ ↦ by simpa [↓h_equiv, ← hφ] using! (f i).prop x
     ext

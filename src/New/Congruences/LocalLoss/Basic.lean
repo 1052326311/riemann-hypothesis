@@ -493,7 +493,7 @@ variable (ℓ : ℕ) [ThePrime ℓ] {n : Type*} [Fintype n] [DecidableEq n]
 /-- A chosen embedding Ω → ℚ̄_ℓ that induces the chosen place of Ω above v, together with the
 homomorphism to Gal(ℚ̄_ℓ over ℚ_ℓ) from the decomposition group of that place that goes with it in
 the sense of `New.GaloisRep.InducesPlace`. -/
-instance localChart : GaloisRep.PadicPlaceEmbedding E (placeOver v.1) ℓ :=
+instance localChart : GaloisRep.PadicPlaceEmbedding E (placeOver v.val) ℓ :=
   -- Membership of `v` in `placesDividing E ℓ` implies that `ℓ` has valuation less than 1
   -- at `placeOver v.1`. First choose an embedding inducing exactly that place, then use
   -- `exists_inducesPlace` to choose the compatible open embedding of its decomposition group.
@@ -502,7 +502,7 @@ instance localChart : GaloisRep.PadicPlaceEmbedding E (placeOver v.1) ℓ :=
     (exists_inducesPlace E _
       (exists_comap_intQpBar_eq
         (v.1.isPlaceOver_placeOver.valuation_natCast_lt_one_iff.2 v.2)).choose_spec).choose_spec
-  { isOpen_range := ⟨loc.2.1.2⟩, inducesPlace := loc, .. }
+  { isOpen_range := ⟨loc.2.1.isOpen_range⟩, inducesPlace := loc, .. }
 
 variable {ℓ E} (u : Gal(Ω/E) →* Matrix n n O)
 
@@ -624,10 +624,10 @@ lemma eq_of_complexEmbeddingOf_localChart_eq [EmbeddedNumberField E] {v w : plac
     v = w := by
   -- the valuation ring that the chart at a place pulls back lies over that place
   have h_over (v : placesDividing E ℓ) :
-      IsPlaceOver ((intQpBar ℓ).comap (localChart ℓ E v).e) v.1 := by
-    obtain ⟨⟨h_comap : (intQpBar ℓ).comap (localChart ℓ E v).e = placeOver v.1, -⟩, -⟩ :=
+      IsPlaceOver ((intQpBar ℓ).comap (localChart ℓ E v).e) v.val := by
+    obtain ⟨⟨h_comap : (intQpBar ℓ).comap (localChart ℓ E v).e = placeOver v.val, -⟩, -⟩ :=
       (localChart ℓ E v).inducesPlace
-    simpa only [h_comap] using FinPlace.isPlaceOver_placeOver v.1
+    simpa only [h_comap] using FinPlace.isPlaceOver_placeOver v.val
   ext x
   -- `x` lies in the place exactly when its image has norm `< 1`, and `Gp ℓ` acts by isometries.
   have h_norm :

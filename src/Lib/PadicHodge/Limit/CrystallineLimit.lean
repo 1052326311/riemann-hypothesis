@@ -170,9 +170,9 @@ lemma New.Lift.uniform_period_bound {p : ℕ} [ThePrime p] (Γ : Type) [Group Γ
   have h_act_Z : act m Z = C * incl V.val := by
     simpa [← ext_iff, act, m, incl, FrobGal.smul_def] using hV
   -- The new matrix is `α (E ^ h Q) V⁻¹`, over `Amax`; over `BPlus` it equals `(m U) C`.
-  have h_new_matrix : incl ((k.E.1 ^ h • Q).map α * V.val⁻¹) = act m U * C := by
+  have h_new_matrix : incl ((k.E.val ^ h • Q).map α * V.val⁻¹) = act m U * C := by
     -- multiplied by `incl V`, both sides become `m (U Z) = m (E ^ h Q)`
-    have h_mul_V : incl ((k.E.1 ^ h • Q).map α) = act m U * C * incl V.val := by
+    have h_mul_V : incl ((k.E.val ^ h • Q).map α) = act m U * C * incl V.val := by
       rw [mul_assoc, ← h_act_Z, ← _root_.map_mul, hUZ]
       ext i j
       simp only [incl, act, α, RingHom.mapMatrix_apply, map_apply, Matrix.smul_apply, smul_eq_mul,
@@ -180,10 +180,10 @@ lemma New.Lift.uniform_period_bound {p : ℕ} [ThePrime p] (Γ : Type) [Group Γ
         Algebra.smul_def (A := BPlus), smul_algebraMap_eq_algebraMap_smul, _root_.map_mul]
     rw [_root_.map_mul, ← coe_units_inv, h_mul_V, mul_assoc, ← _root_.map_mul, Units.mul_inv,
       _root_.map_one, mul_one]
-  refine ⟨(k.E.1 ^ h • Q).map α * V.val⁻¹, V * L.map α, ?_, fun g ↦ ?_⟩
+  refine ⟨(k.E.val ^ h • Q).map α * V.val⁻¹, V * L.map α, ?_, fun g ↦ ?_⟩
   · -- `α (E ^ h Q) V⁻¹ · V α L = α (E ^ h τ ^ h)`, as `Q L = τ ^ h`
-    calc (k.E.1 ^ h • Q).map α * V.val⁻¹ * (V * L.map α)
-      _ = α (k.E.1 ^ h) • (Q * L).map α := by
+    calc (k.E.val ^ h • Q).map α * V.val⁻¹ * (V * L.map α)
+      _ = α (k.E.val ^ h) • (Q * L).map α := by
           rw [Matrix.map_smul' (hf := _root_.map_mul α), Matrix.smul_mul, Matrix.smul_mul,
             mul_assoc, ← mul_assoc V.val⁻¹, ← coe_units_inv, Units.inv_mul, one_mul,
             ← RingHom.mapMatrix_apply, ← RingHom.mapMatrix_apply, ← _root_.map_mul,
@@ -292,7 +292,7 @@ lemma exists_finite_groupRing_quotient [IsTopologicalGroup G] [Finite κ] {τ : 
   have h_finite : Module.Finite ℤ_[p] Φ.range := by
     let L (s : κ) : Matrix (τ s).Index (τ s).Index (O s) →ₗ[ℤ_[p]]
         Matrix (τ s).Index (τ s).Index (PadicAlgCl p) :=
-      mulLeftRight ℤ_[p] ((P s).val, (P s).inv) ∘ₗ (O s).1.val.toLinearMap.mapMatrix
+      mulLeftRight ℤ_[p] ((P s).val, (P s).inv) ∘ₗ (O s).val.val.toLinearMap.mapMatrix
     refine Finite.of_fg ((fg_pi fun s ↦ fg_range (L s)).of_le (S := Φ.range.toSubmodule) ?_)
     rintro _ ⟨y, rfl⟩ s -
     refine ⟨y.lift _ _ _ (ν s), ?_⟩

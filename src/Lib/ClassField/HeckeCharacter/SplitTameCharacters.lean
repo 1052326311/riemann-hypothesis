@@ -364,8 +364,10 @@ lemma localChar_apply_of_isUnit (k : ℤ) (u : O (F := LocProd 𝔠.ramifiedPlac
       𝔠.tamePart i (residueAt i u) := by
   have h_val : ∀ i : 𝔠.ramifiedPlaces, Valued.v (u.val i) = 1 :=
     isIntegralUnit_iff_v_eq_one.mp (isIntegralUnit_iff_isUnit.mpr hu)
-  -- `erw`: `u.val` is the value of the unit `(hu.map O.subtype).unit` only up to unfolding.
-  erw [ofUnitHom_coe _ (hu.map O.subtype).unit]
+  have h_unit : (↑(hu.map O.subtype).unit : LocProd 𝔠.ramifiedPlaces) = u.val :=
+    (hu.map O.subtype).unit_spec
+  unfold localChar
+  rw [← h_unit, ofUnitHom_coe]
   -- The components of `u` have absolute value one, so the factors `√‖u i‖ ^ k` drop out; it
   -- remains to compare the factors at each `i ∈ S`.
   simp [FinitePlace.norm_def, h_val]

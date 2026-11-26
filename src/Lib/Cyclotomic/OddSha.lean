@@ -131,21 +131,6 @@ private lemma totient_add_le_pow_twenty {N l y c : ℕ} (hNy : N ≤ y) (hly : l
     _ ≤ (y ^ 5) ^ 4 := Nat.pow_le_pow_left hMy 4
     _ = y ^ 20 := by ring
 
-/-- Let `K = ℚ(μ_M)` and `l` a prime. A finite family of integers `m i ≥ 2` whose product divides
-the class number of `K` times the index of the ideles that are `M`-th powers above `l` has at
-most `M ^ 3 + 5 M ^ 2 + M` members, since `2 ^ card ι ≤ ∏ m i`. -/
-private lemma card_le_of_prod_dvd_classNumber_mul_index {M l : ℕ} [NeZero M] [ThePrime l]
-    {ι : Type} [Fintype ι] {m : ι → ℕ} (hm : ∀ i : ι, 2 ≤ m i)
-    (h_dvd : ∏ i : ι, m i ∣
-      classNumber (cycloField M) * (idelesPowAt (placesDividing (cycloField M) l) M).index) :
-    Fintype.card ι ≤ M ^ 3 + 5 * M ^ 2 + M := by
-  refine (Nat.pow_le_pow_iff_right one_lt_two).mp ?_
-  calc 2 ^ Fintype.card ι ≤ ∏ i, m i := Finset.pow_card_le_prod Finset.univ m 2 fun i _ ↦ hm i
-    _ ≤ classNumber (cycloField M) * (idelesPowAt (placesDividing (cycloField M) l) M).index :=
-      Nat.le_of_dvd (Nat.mul_pos (classNumber_pos _)
-        (index_idelesPowAt_ne_zero_and_le M _).left.bot_lt) h_dvd
-    _ ≤ 2 ^ (M ^ 3 + 5 * M ^ 2 + M) := OddPart.classNumber_mul_index_idelesPowAt_le M l
-
 /-- If a place `v` of an intermediate field `K` of `Ω/ℚ` is prime to `l`, then so is some place of
 `E` lying under the chosen valuation subring `placeOver v` of `Ω`. -/
 private lemma exists_notMem_placesDividing_isPlaceOver (E : Type) [Field E]
@@ -200,8 +185,14 @@ lemma New.OddPart.exists_detecting_points_cocycles {N : ℕ} {E : Type} [NeZero 
   refine ⟨.image (Sum.elim (invFun f) (r ∘ b)) .univ,
     fun y hNy hly ↦ Finset.card_image_le.trans ?_, ?_⟩
   · -- There are at most `φ(M)` cosets, and few points of `exists_detecting_points_hom`.
-    have h_card : Fintype.card ι ≤ M ^ 3 + 5 * M ^ 2 + M :=
-      card_le_of_prod_dvd_classNumber_mul_index hm h_dvd
+    have h_card : Fintype.card ι ≤ M ^ 3 + 5 * M ^ 2 + M := by
+      apply (Nat.pow_le_pow_iff_right one_lt_two).mp
+      calc 2 ^ Fintype.card ι ≤ ∏ i, m i :=
+            Finset.pow_card_le_prod Finset.univ m 2 fun i _ ↦ hm i
+        _ ≤ classNumber K * (idelesPowAt (placesDividing K l) M).index :=
+          Nat.le_of_dvd (Nat.mul_pos (classNumber_pos _)
+            (index_idelesPowAt_ne_zero_and_le M (placesDividing K l)).left.bot_lt) h_dvd
+        _ ≤ 2 ^ (M ^ 3 + 5 * M ^ 2 + M) := OddPart.classNumber_mul_index_idelesPowAt_le M l
     calc (Finset.univ : Finset ((ZMod M)ˣ ⊕ ι)).card = φ M + Fintype.card ι := by simp
       _ ≤ y ^ 20 := totient_add_le_pow_twenty hNy hly hM_gt h_card
   intro O _ _ n e z hz h_zero
