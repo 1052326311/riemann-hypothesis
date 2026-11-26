@@ -691,7 +691,8 @@ lemma sum_norm_sq_coeff_of_isCentralProj {G : Type*} [Group G] [Fintype G] {x : 
     congr_arg (fun y ↦ (y.coeff 1).re) hx.1
 
 omit ok in
-/-- Let `S` be filling data over a CM field `E` with Weil data. Let `γ` be in the Bessel
+omit [WeilData E] in
+/-- Let `S` be filling data over a CM field `E`. Let `γ` be in the Bessel
 subgroup and `k = translateByClassReps c c γ`, that is `h_c⁻¹ γ h_c` for the representative `h_c` of
 the class `c`. If `k` lies in the stabilizer `latticeStabilizer` of the lattice and reduces to `1`
 at the chosen places above the level prime `p_j`, then `k` lies in the unipotent subgroup
