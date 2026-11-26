@@ -24,9 +24,14 @@ name: challenge files
 # A Mathlib or toolchain bump passes: it changes `rev`, the packages' revisions and
 # `lean-toolchain`. label-pr.yml labels it `changes-lake`.
 #
-# This runs the base branch's copy of the workflow and nothing from the pull request: it fetches
-# commits and trees, without file contents, and reads the file hashes with git. A pull request
-# cannot switch it off, and it needs no approval to run on a pull request from a fork. (It does
+# GitHub runs the default branch's copy of this workflow for every pull request, whatever branch
+# it is based on, and nothing from the pull request: the job fetches commits and trees, without
+# file contents, and reads the file hashes with git. A pull request cannot switch it off, and it
+# needs no approval to run on a pull request from a fork.
+#
+# The challenge files depend on the branch a pull request is based on. Those of `alpoge`, which
+# holds the work done before `main` was replaced, are the ones listed there. Whether `alpoge` will
+# be kept up is undecided, and it may be phased out; its list then goes with it. (It does
 # not ask GitHub's compare API for the merge base, which times out on a pull request that changes
 # very many files.)
 
@@ -55,10 +60,15 @@ jobs:
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number || inputs.pr_number }}
         run: |
-          frozen="Challenge.lean comparator.json src/Statements.lean"
-
-          base=$(gh api "repos/$REPO/pulls/$PR" --jq .base.sha)
-          head=$(gh api "repos/$REPO/pulls/$PR" --jq .head.sha)
+          read -r base head branch < <(gh api "repos/$REPO/pulls/$PR" --jq '"\(.base.sha) \(.head.sha) \(.base.ref)"')
+          case "$branch" in
+            alpoge)
+              frozen="src/Challenge.lean comparator.json export-targets.txt
+                comparator/FormalConjecturesChallenge.lean comparator/formal-conjectures.json
+                comparator/formal-conjectures-export-targets.txt" ;;
+            *)
+              frozen="Challenge.lean comparator.json src/Statements.lean" ;;
+          esac
           git init -q pr
           git -C pr remote add origin "https://github.com/$REPO"
           # A blobless fetch. Reading a file's contents below downloads that file only.
@@ -66,7 +76,7 @@ jobs:
           # A head that has merged two main commits, neither containing the other, has more than
           # one merge base, and GitHub's merge uses all of them.
           forks=$(git -C pr merge-base --all "$base" "$head")
-          echo "pull request $PR: branched off at ${forks//$'\n'/ }, head $head"
+          echo "pull request $PR, based on $branch: branched off at ${forks//$'\n'/ }, head $head"
 
           # A file's mode, type and blob hash at a commit; nothing if the file is not there. The
           # mode matters: a symlink whose target is the old contents has the old hash. If git
