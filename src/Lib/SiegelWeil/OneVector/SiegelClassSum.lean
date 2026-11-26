@@ -94,8 +94,8 @@ noncomputable def New.SiegelWeil.shearSplitting {E : Type} [Field E] [CMType E] 
   l := (hyperbolicSplitting E Unit).k
   i := 0
   gram_kk := by
-    simp [-hyperbolicSpace_J, mem_maximalRealSubfield_iff_star_eq.1, Matrix.add_mul, Matrix.smul_mul,
-      Matrix.mul_add, Matrix.mul_smul]
+    simp [-hyperbolicSpace_J, mem_maximalRealSubfield_iff_star_eq.1, Matrix.add_mul,
+      Matrix.smul_mul, Matrix.mul_add, Matrix.mul_smul]
   gram_ll := (hyperbolicSplitting E Unit).gram_kk
   gram_lk := by
     rw [Matrix.mul_add, Matrix.mul_smul, (hyperbolicSplitting E Unit).gram_kl,
