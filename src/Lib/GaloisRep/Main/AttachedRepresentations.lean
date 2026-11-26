@@ -16,7 +16,8 @@ trace form, with an open map `j` to the Galois group, is attached to `P` when, a
 elements (the filter `New.mostFrobenii`), its characteristic polynomials approach `ιℓ (P w)`. The
 file shows that the characteristic polynomials are then determined by `P`, so two attached
 representations have the same traces. The attachment condition itself asserts coefficientwise
-approximation on the Frobenius filter, not pointwise equality at every unramified place. It also shows that the representation attached to an
+approximation on the Frobenius filter, not pointwise equality at every unramified place.
+It also shows that the representation attached to an
 eigenform on the definite unitary group of rank one is the avatar of an algebraic Hecke character.
 
 ## Main definitions and results
