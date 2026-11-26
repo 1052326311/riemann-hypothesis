@@ -97,7 +97,7 @@ The citations of 122 other files were not part of this check, nor were further c
 | Granville–Stark, ABC implies no Siegel zeros, 2000 | work found, no place given | `New/Reduction/MainInequality` |
 | Green 1955 | compared, place confirmed | `Lib/LocalGL/Green/CuspidalFunctions` |
 | Green, Polynomial representations of GL_n, 1980 | work found, no place given | `New/UpperBound/ElementaryDivisors/AveragingMap` |
-| Greenberg, Voight, Lattice methods for algebraic modular forms on classical groups (2014) | compared, place confirmed | `Lib/Adelic/Hecke/ClassSums`, `Lib/SiegelWeil/NeighbourLattices`, `New/UpperBound/Size/ArchimedeanSize` |
+| Greenberg, Voight, Lattice methods for algebraic modular forms on classical groups (2014) | compared, place confirmed | `Lib/Adelic/Hecke/ClassSums`, `New/UpperBound/Size/ArchimedeanSize` |
 | Grinberg, An Introduction to Algebraic Combinatorics | compared, place confirmed | `Lib/GLn/Dual` |
 | Gross, Algebraic modular forms, Israel J. Math. 113 (1999) | work found, no place given | `Lib/Weil/CompactLift/DefiniteThetaLift` |
 | Gross, Algebraic modular forms, Israel J. Math. 113 (1999) 61-93 | place confirmed at second hand | `Lib/Adelic/AutomorphicForms/SmoothAlgebraicForms` |
