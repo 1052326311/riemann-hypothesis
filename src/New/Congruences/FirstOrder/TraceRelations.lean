@@ -1,9 +1,11 @@
-import Lib.Cyclotomic.OddSha
-import New.Congruences.FirstOrder.TateTwistCocycles
-import New.Congruences.GaloisRepresentations.RowsAndColumnsFromLabels
-import New.Congruences.LocalLoss.CrystallineDefect
-import New.Congruences.LocalLoss.LocalLattices
-import New.Congruences.LocalLoss.TateDualBound
+module
+
+public import Lib.Cyclotomic.OddSha
+public import New.Congruences.FirstOrder.TateTwistCocycles
+public import New.Congruences.GaloisRepresentations.RowsAndColumnsFromLabels
+public import New.Congruences.LocalLoss.CrystallineDefect
+public import New.Congruences.LocalLoss.LocalLattices
+public import New.Congruences.LocalLoss.TateDualBound
 
 /-!
 # Constants, trace relations, lattices and local defects for Ribet's method
@@ -54,6 +56,8 @@ four-dimensional symplectic representations, 2025; Chang–Diamond, Extensions o
 (φ,Γ)-modules, 2011; T. Liu, Torsion p-adic Galois representations and a conjecture of Fontaine,
 2007.
 -/
+
+@[expose] public section
 
 namespace New.Selmer
 
@@ -422,13 +426,14 @@ lemma exists_blockDiagonal_lattice {ψ : AbsGal D →* PadicAlgCl ℓ} {R : GalR
       have h_all : LinearMap.mulLeftRight O (y none, y none) ∘ₗ
           (Algebra.linearMap O (PadicAlgCl ℓ)).mapMatrix = 0 :=
         LinearMap.ext_on_range h_span fun g ↦ congrFun (hy g) none
-      simpa [mul_apply, single_apply, ite_and] using
+      simpa [Matrix.mul_apply, single_apply, ite_and] using
         congrFun₂ (LinearMap.congr_fun h_all (.single b a 1)) a b
     · -- on a character, `y * y = 0` is an equation between numbers
       let y_e : Matrix Unit Unit (PadicAlgCl ℓ) := y (some e)
       have h_sq_all : y * y = 0 := by simpa using hy 1
       have h_sq : y_e * y_e = 0 := congrFun h_sq_all (some e)
-      have h_entry : y_e () () * y_e () () = 0 := by simpa [mul_apply] using congrFun₂ h_sq () ()
+      have h_entry : y_e () () * y_e () () = 0 := by
+        simpa [Matrix.mul_apply] using congrFun₂ h_sq () ()
       exact mul_self_eq_zero.1 h_entry
   -- both traces are the sum of the traces of the summands
   have h_trace_main (g : AbsGal D) : (ρ g none).trace = ψ g * (R g).val.trace := by
@@ -488,25 +493,25 @@ lemma exists_blockDiagonal_lattices {u : Y → GalRep ℓ D.E n}
 section Model
 
 variable {ψ : AbsGal D →* PadicAlgCl ℓ} {R : GalRep ℓ D.E r} {Q : Finset (FinPlace D.E)}
-  {γ : AbsGal D} {ζ : intQpBar ℓ} {R₀ : AbsGal D →* Matrix r r O} {ψ' : AbsGal D →* O} {ζ' : ↑O}
+  {γ : AbsGal D} {R₀ : AbsGal D →* Matrix r r O} {ψ' : AbsGal D →* O} {ζ' : ↑O}
 
 /-- Let `R₀`, `ψ'`, `ζ'` be a model over `O` (`IsTwistedLattice`): `R₀` is a lattice in `R`, `ψ'`
-and `ζ'` are `ψ` and `ζ` with values in `O`, and `γ` acts on the twisted lattice `ψ' R₀` by the
+is `ψ` with values in `O`, and `γ` acts on the twisted lattice `ψ' R₀` by the
 scalar `ζ'`. Then `ψ' R₀` agrees with `R₀` at every `g` with `ψ g = 1`. -/
-lemma IsTwistedLattice.twistRep_apply_eq_of_eq_one (h_model : IsTwistedLattice ψ R γ ζ R₀ ψ' ζ')
+lemma IsTwistedLattice.twistRep_apply_eq_of_eq_one (h_model : IsTwistedLattice ψ R γ R₀ ψ' ζ')
     {g : AbsGal D} (hg : ψ g = 1) : twistRep (.id O) ψ' R₀ g = R₀ g := by
   ext
   simp [twistRep, h_model.twist_eq, hg]
 
 /-- Let `R₀`, `ψ'`, `ζ'` be a model over `O` (`IsTwistedLattice`): `R₀` is a lattice in `R`, `ψ'`
-and `ζ'` are `ψ` and `ζ` with values in `O`, and the inertial element `γ` acts on the twisted
+is `ψ` with values in `O`, and the inertial element `γ` acts on the twisted
 lattice `ψ' R₀` by the scalar `ζ'`. Let `ψ` come from the norm-one torus with modulus `Q`
 (`IsFromU1`). Let `R` be a main summand (`IsMainSummandLike`): a conjugate self-dual representation
 of twist `t` and empty level, with Hodge–Tate jumps `J` read through the isomorphism `ℂ ≃ ℚ̄_ℓ`
 fixed by `PadicIso ℓ`; only that `R` is unramified outside `ℓ p₀ p₁` (`p₀ p₁ = D.M`) is used. Then
 `ψ' R₀` is unramified outside `ℓ p₀ p₁`, `Q` and `Q̄`. -/
 lemma IsTwistedLattice.twistRep_eq_one_of_mem_inertiaAbove [PadicIso ℓ]
-    (h_model : IsTwistedLattice ψ R γ ζ R₀ ψ' ζ')
+    (h_model : IsTwistedLattice ψ R γ R₀ ψ' ζ')
     (hψ : IsFromU1 (placesDividing D.E ℓ) Q ψ) {J : (D.E →+* ℂ) → Multiset ℤ}
     (h_summand : IsMainSummandLike D t J R) (g : AbsGal D)
     (hg : g ∈ inertiaAbove (placesDividing D.E ℓ ∪ placesAboveM D ∪ .conjClosure Q)ᶜ) :
@@ -792,10 +797,10 @@ lemma eventually_exists_inClass_sum_dualDefect_le {V : DescentPair D.E r n}
           card r * localDefectBound D ℓ := by
   classical
   -- Fix a place `v` above `ℓ`. The lattices `u x` lie in a class of local lattices, and so do the
-  -- summands of `u π`. Then `summand_defect_le_at_place` bounds the defect of each summand at `v`,
-  -- and `sum_index_mul_defectBound_le` sums over the summands and the places.
-  filter_upwards [eventually_all.2 fun v : placesDividing D.E ℓ ↦ summand_defect_le_at_place
-    h_summand.toIsMainSummandWeights (localChart ℓ D.E v).inducesPlace.2]
+  -- summands of `u π`. Apply the defect bound at each `v` and sum over the summands and places.
+  filter_upwards [eventually_all.2 fun v : placesDividing D.E ℓ ↦
+    normLength_dualDefect_le_of_isSummandClass h_summand.toIsMainSummandWeights
+      (localChart ℓ D.E v).inducesPlace.2]
     with O h_place T T₀ u hπ hu_lat hT₀ hTT₀
   -- `L v i`: the summands at `v`; `f`: the splitting of `u π` into its summands
   let G (v : placesDividing D.E ℓ) : Subgroup (AbsGal D) := decompGroup (AbsGal D) (placeOver v.1)
@@ -846,8 +851,9 @@ lemma eventually_exists_inClass_sum_dualDefect_le {V : DescentPair D.E r n}
     have h_rank (j : Option (Fin t)) : finrank O (L v j) = card (SummandCoordIndex r j) :=
       finrank_pi _
     rw [← h_rank]
-    refine h_place v ?_ (h_jump_from v)
-      (hasJumps_localLattice_summandRep h_summand hT₀ (hTT₀ v v.2)) (h_rank none) i (hL v i)
+    have h_jumps := hasJumps_localLattice_summandRep h_summand hT₀ (hTT₀ v v.2)
+    refine h_place v ⟨?_, h_jump_from v, h_jumps none, fun c ↦ h_jumps (some c), h_rank none⟩
+      i (hL v i)
     -- the class is tame above `p₀ p₁` and crystalline elsewhere
     by_cases hv : v.1 ∈ placesAboveM D
     · exact .inl (isTameType_of_mem_placesAboveM hc h_summand.t_le v hv)

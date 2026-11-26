@@ -1,5 +1,7 @@
-import Lib.DiscreteSeries.FlenstedJensen.RightDerivatives
-import Lib.Weil.Fock.PolynomialVectors
+module
+
+public import Lib.DiscreteSeries.FlenstedJensen.RightDerivatives
+public import Lib.Weil.Fock.PolynomialVectors
 
 /-!
 # Harmonic matrix coefficients of the Weil representation and oscillator pairs on matrices
@@ -49,6 +51,8 @@ of U(p,q) and its connection with the generalized unit disk, Pacific J. Math. 12
 Prop. 2.2; G. B. Folland, Harmonic Analysis in Phase Space (1989), ch. 1, 4; H. Reiter, Metaplectic
 Groups and Segal Algebras, LNM 1382 (1989).
 -/
+
+@[expose] public section
 
 /-!
 ## Matrix coefficients between harmonic polynomial vectors
@@ -157,23 +161,17 @@ lemma fockMatrixCoeff_pderiv (hd : ∀ i j : ι, d i ≠ d j → (u : Matrix ι 
     by_cases h_label : d k = d i
     · simp [hQ k h_label hk]
     · simp [hd k i h_label]
-  have h_raise : fockMatrixCoeff u Q (raiseOp ε i P) =
-      ∑ k : ι, (u : Matrix ι ι ℂ) k i * ε k * fockMatrixCoeff u (lowerOp ε k Q) P :=
-    fockMatrixCoeff_raiseOp u P Q i
-  have h_lower : ε i * fockMatrixCoeff u Q (lowerOp ε i P) =
-      ∑ k : ι, star ((u : Matrix ι ι ℂ) k i) * fockMatrixCoeff u (raiseOp ε k Q) P :=
-    fockMatrixCoeff_lowerOp u P Q i
   obtain hi | hi := units_eq_one_or (ε i)
   · have h_left : fockMatrixCoeff u Q (pderiv i P) = ε i * fockMatrixCoeff u Q (lowerOp ε i P) := by
       simp [lowerOp, hi]
-    rw [h_left, h_lower]
+    rw [h_left, fockMatrixCoeff_lowerOp]
     refine sum_congr rfl fun k _ ↦ ?_
     obtain hk | hk := units_eq_one_or (ε k)
     · simp [complexLinearPart_apply, raiseOp, hi, hk]
     · simpa [complexLinearPart_apply, raiseOp, hi, hk] using h_other k
   · have h_left : fockMatrixCoeff u Q (pderiv i P) = -fockMatrixCoeff u Q (raiseOp ε i P) := by
       simp [raiseOp, hi]
-    rw [h_left, h_raise, ← sum_neg_distrib]
+    rw [h_left, fockMatrixCoeff_raiseOp, ← sum_neg_distrib]
     refine sum_congr rfl fun k _ ↦ ?_
     obtain hk | hk := units_eq_one_or (ε k)
     · simpa [complexLinearPart_apply, lowerOp, hi, hk] using h_other k
@@ -413,7 +411,8 @@ lemma isDerivedAction_detTwist {ρ : GlModule R (MvPolynomial C ℂ)}
   -- The matrix of `f (expU (t • Y))` is `c • F (exp (t • c • Y))`, and `c * c = 1`.
   have h_f : HasDerivAt (fun t : ℝ ↦ (f (expU (t • Y)) : Matrix C C ℂ)) (F Y) 0 := by
     have h_curve : HasDerivAt (fun t : ℝ ↦ c • F (NormedSpace.exp (t • c • Y.val))) (F Y) 0 := by
-      refine ((hasDerivAt_exp_smul_const (c • Y.val) 0).map_clm (.mk (c • F))).congr_deriv ?_
+      refine ((hasDerivAt_exp_smul_const (c • Y.val) 0).map_clm
+        (.mk (c • F) (c • F).continuous_of_finiteDimensional)).congr_deriv ?_
       simp [smul_smul]
     simpa [h_exp, smul_comm c] using h_curve
   have h_weil : HasDerivAt (fun t : ℝ ↦ realWeil (f (expU (t • Y))) (polyVector ε' P))
@@ -527,7 +526,9 @@ action of these data, and ⟨v_P, π(z) v_P⟩ > 0 for positive definite z and n
 lemma oscillatorRep_detTwist_inr (γ γ' : ℤ) :
     OscillatorRep (FockDualPair.std ε ε' γ γ')
       (detTwist ((pairHom ε ε').comp (MonoidHom.inr (USign ε') (USign ε))) γ) := by
-  refine ⟨isUnitaryRep_detTwist fun {z} ↦ norm_pairHom_le ε ε' 1 z, ?_,
+  refine ⟨isUnitaryRep_detTwist (fun {z} ↦ norm_pairHom_le ε ε' 1 z) (by
+    rw [continuous_U_iff_matrix]; simp only [MonoidHom.comp_apply, MonoidHom.inr_apply, coe_pairHom]
+    fun_prop [kroneckerMap]), ?_,
     fun P z hP_ne hP hz_pos ↦ ?_⟩
   · -- `Y` acts by `Y ⊗ 1`; compare the two actions on the matrix units.
     refine isDerivedAction_detTwist (kroneckerBilinear.flip 1) 1
@@ -557,7 +558,10 @@ definite z and nonzero P satisfying `IsTermwiseHarmonic` for the exchanged data.
 lemma oscillatorRep_detTwist_inl (γ γ' : ℤ) :
     OscillatorRep (FockDualPair.std ε ε' γ γ').swap
       (detTwist ((pairHom ε ε').comp (MonoidHom.inl (USign ε') (USign ε))) γ') := by
-  refine ⟨isUnitaryRep_detTwist fun {z} ↦ (norm_pairHom_le ε ε' z 1).trans_eq (mul_comm _ _), ?_,
+  refine ⟨isUnitaryRep_detTwist (fun {z} ↦ (norm_pairHom_le ε ε' z 1).trans_eq (mul_comm _ _)) (by
+    rw [continuous_U_iff_matrix]; simp only [MonoidHom.comp_apply, MonoidHom.inl_apply, coe_pairHom,
+      ← Matrix.coe_units_inv]
+    fun_prop [kroneckerMap, Units.continuous_coe_inv]), ?_,
     fun P z hP_ne hP hz_pos ↦ ?_⟩
   · -- `Y` acts by `-(1 ⊗ Yᵀ)`; compare the two actions on the matrix units.
     refine isDerivedAction_detTwist

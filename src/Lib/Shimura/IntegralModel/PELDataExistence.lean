@@ -1,5 +1,7 @@
-import Lib.GaloisRep.Main.QuadraticStep
-import Lib.Shimura.HeckeTower.Model
+module
+
+public import Lib.GaloisRep.Main.QuadraticStep
+public import Lib.Shimura.HeckeTower.Model
 
 /-!
 # Existence of PEL data at levels good at all safe places, with the form ξ and a Lagrangian
@@ -26,6 +28,8 @@ Notions from other files:
 
 Known; see `Lib.Shimura.IntegralModel.TowerExistence` for sources.
 -/
+
+@[expose] public section
 
 namespace New.Variety
 
@@ -156,7 +160,8 @@ lemma exists_star_eq_neg_and_im_pos {E : Type} [Field E] [CMBase E]
     rwa [← algebraMap_mem_Ô, map_mul] at h_int
   · -- Transitivity of the different; the relative different of `E / F` is trivial.
     rw [differentIdeal_eq_differentIdeal_mul_differentIdeal ℤ (𝓞 F) (𝓞 E)]
-    exact mul_mem_mul (by simp [F]) (mem_map_of_mem _ hμ)
+    have hγ_mem : γ ∈ differentIdeal (𝓞 F) (𝓞 E) := by simp [F]
+    exact Ideal.mul_mem_mul hγ_mem (Ideal.mem_map_of_mem (algebraMap (𝓞 F) (𝓞 E)) hμ)
   · -- The terms in `z - star z` agree; what is left follows from `c s + μ a = 1` and `γ ^ 2 = -1`.
     have h_one_E : ((c • (s : F) + algebraMap (𝓞 F) F μ * a : F) : E) = 1 := by
       rw [h_one, OneMemClass.coe_one]
@@ -189,7 +194,7 @@ lemma exists_cmBase_restrict_ne {d : ℕ} {E : Type} [Field E] [NumberField E] [
     grind [mk_embedding, mk_eq_iff]
 
 /-- On integers, the map `𝓞 (QuadField d) → 𝓞 E` induced by the inclusion is the algebra map. -/
-private lemma mapRingHom_algebraMap_eq {d : ℕ} {E : Type} [Field E] [NumberField E]
+private lemma mapRingHom_algebraMap_eq {d : ℕ} {E : Type} [Field E]
     [HasQuadSubfield d E] :
     RingOfIntegers.mapRingHom (algebraMap (QuadField d) E) = algebraMap (𝓞 (QuadField d)) (𝓞 E) :=
   rfl

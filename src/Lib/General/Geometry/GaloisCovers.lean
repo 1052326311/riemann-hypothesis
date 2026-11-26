@@ -1,6 +1,8 @@
-import Lib.General.Geometry.GeometricPoints
-import Lib.LocalGL.Green.TauFunctions
-import Lib.Shimura.Uniformisation.HolomorphicFamilies
+module
+
+public import Lib.General.Geometry.GeometricPoints
+public import Lib.LocalGL.Green.TauFunctions
+public import Lib.Shimura.Uniformisation.HolomorphicFamilies
 
 /-!
 # Complex points over countable rings, Zariski generic members and Galois coverings
@@ -47,6 +49,8 @@ Notions from other files:
 The isomorphisms of fields come from Steinitz's theorem, and the étaleness criterion is that of
 Chase–Harrison–Rosenberg.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -219,7 +223,7 @@ map `φ` (written `specMap φ`) followed by the canonical map to `X`, and this r
 countable. -/
 lemma exists_countable_residue_point {X : Scheme} {R : CommRingCat} (s : X ⟶ Spec R) [Countable R]
     [LocallyOfFiniteType s] {K : Type} [Field K] (t : Spec (CommRingCat.of K) ⟶ X) :
-    ∃ᵉ (z : X) (φ : X.residueField z →+* K),
+    ∃ z : X, ∃ φ : X.residueField z →+* K,
       specMap φ ≫ X.fromSpecResidueField z = t ∧ Countable (X.residueField z) := by
   let z : X := t (closedPoint K)
   refine ⟨z, (X.SpecToEquivOfField K t).2.hom, (X.SpecToEquivOfField K).left_inv t, ?_⟩
@@ -244,7 +248,8 @@ lemma exists_mem_forall_ne_zero_of_analyticOnNhd {P : Type} [FinComplexSpace P] 
     ((hg i).continuousOn.isOpen_inter_preimage hN_open isOpen_ne).isLocallyClosed
   -- Baire: there are countably many `i`, so some `b ∈ N ∩ V` is good for all of them.
   have h_dense : Dense {e : P | ∀ i : ι, (e ∈ closure (Z i)) = (e ∈ Z i)} :=
-    dense_of_mem_residual (eventually_countable_forall.2 hZ)
+    dense_of_mem_residual
+      (eventually_countable_forall.2 fun i ↦ Filter.eventuallyEqSet_iff'.1 (hZ i))
   obtain ⟨b, hb_gen, hbN, hbV⟩ := h_dense.exists_mem_open (hN_open.inter hV) h_nonempty
   refine ⟨b, hbN, hbV, fun i e he hne ↦ ?_⟩
   -- By the identity theorem `g i` is non-zero arbitrarily near `b`, hence at `b`.
@@ -478,7 +483,7 @@ surjective and invariant under an action `s` of a finite group `Δ` on `W` that 
 on the fibres of `c` on complex points (`specOver R ℂ` is `Spec ℂ` over `Spec R`). Then `c` is a
 Galois covering with group `Δ` in the sense of `New.Variety.IsGaloisCovering`: simple transitivity
 holds for points with values in any field of characteristic 0. -/
-lemma isGaloisCovering_of_complex_points {R : CommRingCat} [IsDomain R] {W Z : Over (Spec R)}
+lemma isGaloisCovering_of_complex_points {R : CommRingCat} {W Z : Over (Spec R)}
     [IsProper W.hom] [IsSeparated Z.hom] {c : W ⟶ Z} {Δ : FiniteGrp}
     {s : Δ →* CategoryTheory.End W} [Countable R] [Algebra R ℂ]
     (hR : ∀ (k : Type) [Field k] [CharZero k] (f : R →+* k), Function.Injective f)
@@ -632,7 +637,7 @@ end ProductOfFields
 
 /-- If `A` is a smooth algebra over a normal domain `P`, then `A` is integrally closed in
 `A ⊗[P] Frac P`. -/
-lemma exists_algebraMap_eq_of_isIntegral_of_smooth {P A : Type} [CommRing P] [IsDomain P]
+lemma exists_algebraMap_eq_of_isIntegral_of_smooth {P A : Type} [CommRing P]
     [IsIntegrallyClosed P] [CommRing A] [Algebra P A] [Algebra.Smooth P A]
     {v : A ⊗[P] FractionRing P} (hv : IsIntegral A v) :
     ∃ x : A, algebraMap A (A ⊗[P] FractionRing P) x = v := by
