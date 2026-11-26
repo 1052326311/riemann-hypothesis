@@ -586,7 +586,7 @@ lemma termsOver.eq_and_mem_classUnipotent₀ [S.IsAdmissible] (hγ : γ ∈ S.te
 
 /-- If `γ` is a term over `(c, r, c')`, so that `h_c⁻¹ γ h_c'` is integral, then the products of
 the frame with its image under `γ` are algebraic integers. -/
-lemma isIntegral_frameProducts [S.IsAdmissible] (hγ : γ ∈ S.termsOver c r c')
+lemma isIntegral_frameProducts (hγ : γ ∈ S.termsOver c r c')
     (i j : Fin (𝔰.ϱ + 1)) : IsIntegral ℤ (S.frameProducts γ i j) := by
   -- the adelic entry is that of a product of two integral matrices
   have h_int : (S.latticeMiddle (𝔸f E)).frameGram (S.translateByClassReps c c' γ) i j ∈ Ô E :=
