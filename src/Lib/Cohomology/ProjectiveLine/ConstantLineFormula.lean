@@ -214,8 +214,6 @@ lemma etaOneClass_eq_zero_of_hasUniversalPoints {c : TestOver A}
     (freeAbMap (Y := testOfPoint A projLine ⋙ reprBy c)
       ((elementsProj (g ⋙ ringOf (𝟭 (TestOver A)) ⋙ projLine)).whiskerLeft u)) 2
   let M : TorsionCoeff g := ⟨locConstAlong g, h_torsion, h_descent⟩
-  let one : freeAb (onePointFunctor (projLineAlong g).Elements) ⟶
-      locConstAlong (elementsProj (projLineAlong g) ⋙ g) := oneLocConst
   have h_pull : (P (etaOneClass c)).toTotalH = 0 :=
     comp_id.symm.trans <|
       (comp_pull_etaOneClass_eq_pullbackAlong_oneLocConst (M := M) u).trans <|
@@ -240,7 +238,7 @@ def TestOver.structurePt :
       ⟨of A k, isTest_of_preValuationRing⟩ :=
   sectionMap
     { val B := ⟨⟨CommAlg.homOfRingHom (algebraMap k B.obj) (by tauto)⟩⟩
-      property f := congr(⟨⟨$(by ext; apply f.1.hom.2)⟩⟩) }
+      property f := congr(⟨⟨$(by ext; apply f.hom.hom.commutes')⟩⟩) }
 
 /-- For an algebraically closed field k over A, restriction of scalars from tests over k to tests
 over A compares the point with the functor Hom_A(k, −) in the sense of
