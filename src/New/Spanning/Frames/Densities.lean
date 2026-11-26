@@ -635,7 +635,8 @@ theorem Gauge.integral_weight_mul_floorForm_succ {W : T.G → EuclideanSpace ℂ
           ite_eq_left a.isLt
   refine integrable_and_integral_succ_eq_mul_floorForm Γ hk a.castSucc hφ hφ_le h_fin
     (ae_mem_floorUnipotent.mono fun n hn ↦ ⟨unipotentBelow_le_partialUnitriangularGroup hn.2, hn.1⟩)
-    (ae_isUnit.mono ?_) h_cell (ae_isUnit.mono ?_)
+    (ae_isUnit.mono ?_) h_cell (ae_isUnit.mono ?_) measurable_floorWeyl
+    (P.measurable_modulus.pow_const _)
   · rintro _ ⟨c, rfl⟩
     simp [Ne.lt_top]
   · -- At a unit `c` the integrand is the one of `integrable_and_integral_succ_eq_mul_floorForm`:
