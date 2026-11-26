@@ -461,17 +461,44 @@ lemma degree_rowExpansion_mem_interlacing (hf : f ∈ nabla R c l) :
     .restrictScalars R (Polynomial.aeval (R := Polynomial (MatrixPoly {a // a ≠ x} R)) (.C .X * .X))
   have h_factor : aeval (borelMul c b (Ψ ∘ X)) = (mapAlgHom scale).comp
       (aeval (mapAlgHom (Polynomial.aeval 0) ∘ (borelMul c b (Ψ ∘ X) - Ψ ∘ X) + Ψ ∘ X)) := by
+    -- Multiplying by `b` scales the columns `i` and `i + 1` of the colour of `x` by `s` and `T`,
+    -- and subtracts column `i` from column `i + 1`.
+    have h_mul (Y : m × ℕ → MvPolynomial ℕ P) (y : m) (j : ℕ) : borelMul c b Y (y, j) =
+        Y (y, j) * C (.C .X ^ single (c x, i) 1 (c y, j) * .X ^ single (c x, i + 1) 1 (c y, j)) -
+          if (c x, i + 1) = (c y, j) then Y (y, i) else 0 := by
+      rcases eq_or_ne (i + 1) j with rfl | hj
+      · simp [borelMul, b, mul_sub, sum_sub_distrib, single_apply, ite_and]
+      · simp [borelMul, b, mul_sub, sum_sub_distrib, single_apply, ite_and, hj]
+    -- The values of `Ψ` on the variables of the row `x` and of another row `y`.
+    have hΨx (j : ℕ) : Ψ (X (x, j)) =
+        (C Polynomial.X * X (i + 1)) ^ single i 1 j * X i ^ single (i + 1) 1 j * X j := by
+      simp [Ψ, rowExpansion]
+    have hΨy (y : m) (hy : y ≠ x) (j : ℕ) : Ψ (X (y, j)) = C (θ (X (⟨y, hy⟩, j))) := by
+      simp [Ψ, rowExpansion, hy, algHom]
     refine algHom_ext fun ⟨y, j⟩ ↦ ?_
-    -- Casework on the row `y` and on the column `j` against `i` and `i + 1`; each case is a ring
-    -- identity.
     by_cases hy : y = x
-    · simp +zetaDelta [rowExpansion, ite_and, mul_sub, hy, single_apply, algHom, mul_assoc,
-        borelMul]
-      split_ifs <;> subst_vars <;> simp_all [sub_eq_zero, mul_assoc] <;> ring
-    · simp +zetaDelta [rowExpansion, ite_and, mul_sub, hy, single_apply, algHom, mul_assoc,
-        borelMul]
-      split_ifs <;> subst_vars <;> simp_all
-      ring
+    · -- Row `x`: casework on the column `j` against `i` and `i + 1`; each case is a ring identity.
+      by_cases hj : j = i
+      · simp [h_mul, hΨx, scale, P, hy, hj]
+        ring
+      by_cases hj' : j = i + 1
+      · simp [h_mul, hΨx, scale, P, hy, hj']
+        ring
+      · simp [h_mul, hΨx, scale, P, hy, Ne.symm hj, Ne.symm hj']
+    · -- Another row: the entries are constants `C p`, so this is an identity in `P`. Casework on
+      -- `(c y, j)` against `(c x, i)` and `(c x, i + 1)`.
+      simp only [aeval_X, AlgHom.comp_apply, mapAlgHom_apply, Pi.add_apply, Pi.sub_apply,
+        Function.comp_apply, h_mul, hΨy _ hy, ← apply_ite C, ← C_0, ← C_mul, ← C_sub, ← C_add,
+        map_C]
+      refine congrArg C ?_
+      by_cases hα : (c x, i) = (c y, j)
+      · obtain ⟨hc, rfl⟩ := Prod.mk.inj hα
+        simp [θ, scale, P, hc]
+        ring
+      by_cases hβ : (c x, i + 1) = (c y, j)
+      · obtain ⟨hc, rfl⟩ := Prod.mk.inj hβ
+        simp [θ, scale, P, hc]
+      · simp [θ, scale, P, hα, hβ]
   -- After `T ↦ s T` the coefficient of `T ^ a` is divisible by `s ^ a`.
   have h_scale (p : P) {a k : ℕ} (hk : k < a) : ((scale p).coeff a).coeff k = 0 := by
     simp [P, scale, ← Polynomial.comp_eq_aeval, Polynomial.coeff_mul_X_pow', hk.not_ge]
