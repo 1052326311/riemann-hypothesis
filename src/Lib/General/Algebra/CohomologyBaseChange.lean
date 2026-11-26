@@ -197,9 +197,9 @@ lemma HasBaseChange.devissage [Flat S M] :
   have h_hom (X : ShortComplex (AbFunctor C)) (hX : X.ShortExact) :
       Hom (tensoredSeq M Φ hX) (contravariant hX (moduleCoeff (Φ ⋙ tensorWith T M)))
         base base base :=
-    { comm_f := fun _ x ↦ baseChangeMap_lTensor_precompₗ _ _ x
-      comm_g := fun _ x ↦ baseChangeMap_lTensor_precompₗ _ _ x
-      comm_delta := fun _ x ↦ baseChangeMap_lTensor_precompₗ _ _ x }
+    { comm_f := fun n x ↦ baseChangeMap_lTensor_precompₗ (mk₀ X.g) n.zero_add x
+      comm_g := fun n x ↦ baseChangeMap_lTensor_precompₗ (mk₀ X.f) n.zero_add x
+      comm_delta := fun n x ↦ baseChangeMap_lTensor_precompₗ hX.extClass n.one_add x }
   refine ⟨⟨fun hX ↦ (h_hom _ hX).four_lemma⟩, fun N hN ↦ ?_, fun X hX ↦ (h_hom X hX).five_lemma⟩
   -- For the zero functor both sides are trivial.
   have (F : AbFunctor C) (n : ℕ) : Subsingleton (H N F n) := subsingleton_of_id_eq_zero hN F n
