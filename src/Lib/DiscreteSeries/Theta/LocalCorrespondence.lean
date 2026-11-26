@@ -510,6 +510,7 @@ theorem New.Fischer.perpInDegree_ne_bot {j : ℤ} {G : Submodule ℂ (MvPolynomi
     sup_orthogonal_inf_of_hasOrthogonalProjection inf_le_left
   exact hj (by simpa [h_bot] using h_split)
 
+omit [Fintype ι] in
 /-- Let `Q` be highest of the weight `Λ` of the lowest `K`-type for the rows and harmonic for the
 columns (each `T.swap.fockLaplacian c d` with `ε' c ≠ ε' d` kills `Q`). If `s` times the centred
 parameter `l r - 2γ + card C` of row `r` exceeds `card C - card R`, then `Q` has no variable of sign
