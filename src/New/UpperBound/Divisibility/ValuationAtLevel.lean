@@ -78,7 +78,7 @@ lemma norm_detCharAt_diagN_le {i : ℕ} (hi : i ≤ 2 * D.m) (k j : ℕ) (S : Fi
         ((diagGL fun l : D.X j ↦ if l.isLeft then 1
           else if star (D.inducedPlace τ) ∈ S then .mk0 ↑D.N NeZero.out else 1)⁻¹).val.det := by
       -- `g` is unitary, so `det g` at `τ` is `det g⁻¹` at the conjugate embedding. The rewriting is
-      -- up to the definitions of `G` and of the unitary group, hence `erw`.
+      -- using the determinant formula for the unitary group.
       rw [G.det_snd, ← star_star (det _), adeleExtension_star, ← det_conjTranspose,
         ← U.inv_val_eq_conjTranspose, RingHom.map_det]
       exact congrArg (fun g : GL (D.X j) ℂ_[D.N] ↦ g⁻¹.1.det) (D.map_adeleExtension_diagPoint j S τ)
@@ -93,8 +93,17 @@ lemma norm_detCharAt_diagN_le {i : ℕ} (hi : i ≤ 2 * D.m) (k j : ℕ) (S : Fi
   suffices ‖ιₚ ((D.chainChar ϑ i).baseChange.1 (detOn D.nonInducedPlaces (D.diagPoint j S).1))‖ ≤
       ∏ τ : D.Φ, if star (D.inducedPlace τ) ∈ S then (D.N : ℝ) ^ (2 * D.b) else 1 by
     simpa [detCharAt, -atPlaces_embedGL, -prod_ite_mem] using this
-  erw [D.hasWeight_liftChar.norm_padic_eq_prod ιₚ _ (unitary _).one_mem.2,
-    ← G.detFin_of_mem_supportedOn (s := 1) isConjDisjoint (embedGL_mem_supportedOn _)]
+  have h_detFin :
+      G.det (s := (1 : D.X j → ℤˣ)) (1, D.diagPoint j S) =
+        divStar (detOn D.nonInducedPlaces (D.diagPoint j S).1) :=
+    G.detFin_of_mem_supportedOn isConjDisjoint (embedGL_mem_supportedOn _)
+  change ‖ιₚ ((D.chainChar ϑ i).val
+    (divStar (detOn D.nonInducedPlaces (D.diagPoint j S).1)))‖ ≤ _
+  rw [← h_detFin]
+  have h_arch : (G.det (s := (1 : D.X j → ℤˣ)) (1, D.diagPoint j S) : 𝔸 D.E).fst = 1 := by
+    ext w
+    simp [det_fst]
+  refine (D.hasWeight_liftChar.norm_padic_eq_prod ιₚ _ h_arch).le.trans ?_
   exact prod_le_prod₀ (by simp) fun τ _ ↦ by simpa using h_place τ
 
 /-- Let `K = ℚ(√(-d))` with `d = P.d`, let `E ⊇ K` be the CM field and `N` the level prime of the
