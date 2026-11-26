@@ -449,7 +449,7 @@ lemma IsFillingData.enorm_normDensity_le_mul_lintegral_normFiberMeasure [WeilDat
     exact lintegral_gauss_sum_le_idealZeta
       (le_two_of_pow_le_ofReal (idealZeta_intAdeles_pow_le 𝔰.ϱ h_degree)) h_card _
   · simpa only [one_mulVec, hδβ] using enorm_localDensity_le
-      (P.isDisintegration_normFiberMeasure hF.two_le_card) conjTranspose_one hF.psi_add_star hΨ
+      (P.isDisintegration_normFiberMeasure F.two_le_card) conjTranspose_one hF.psi_add_star hΨ
         h_supp δβ
 
 omit [Fact (↑S.ideleM⁻¹ ∈ integralOff T)] ok in
@@ -952,7 +952,7 @@ theorem IsFillingData.sum_mul_norm_sum_cosetAmplitude_sq_le_lastEntryDensity
       _ = _ := by
         -- almost every point of the sphere lies on the top quadric, where `Ψ_eq` gives `Ψ`
         rw [h_sphere, lintegral_congr_ae
-          ((P.ae_vectorOfLastEntry_mem_lastVectorQuadric piNAt_mul_star hF.two_le_card _).mono
+          ((P.ae_vectorOfLastEntry_mem_lastVectorQuadric piNAt_mul_star F.two_le_card _).mono
             fun _ ↦ Ψ_eq _)]
         rfl
   -- pass to real numbers and cancel the constants
