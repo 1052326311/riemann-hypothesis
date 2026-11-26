@@ -45,7 +45,7 @@ open scoped NNReal ENNReal NNRat
 variable {ℓ : ℕ} [ThePrime ℓ] {E : Type} [Field E] [EmbeddedNumberField E] [NumberField.IsCMField E]
   {S₀ : Finset (FinPlace E)}
   {g₀ : Gal(Ω/E)} {ι κ : Type} {n : ι → Type} [∀ i : ι, Fintype (n i)] [∀ i : ι, DecidableEq (n i)]
-  {O : CoeffRing ℓ} (T : ∀ i : ι, SelmerDatum ℓ S₀ g₀ O.1 (n i))
+  {O : CoeffRing ℓ} (T : ∀ i : ι, SelmerDatum ℓ S₀ g₀ O.val (n i))
   (Y : κ → StickelbergerSystem ℓ S₀ g₀)
 
 open scoped Classical in
