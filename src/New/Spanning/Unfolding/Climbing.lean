@@ -1,5 +1,7 @@
-import Lib.Adelic.QuotientMeasure.UnfoldingInStages
-import New.Spanning.Unfolding.AmplitudeSums
+module
+
+public import Lib.Adelic.QuotientMeasure.UnfoldingInStages
+public import New.Spanning.Unfolding.AmplitudeSums
 
 /-!
 # Residue lifts, lattice charts and common flag vectors: which filling terms contribute
@@ -54,6 +56,8 @@ second moment. Related work: Friedberg, Poincaré series for GL(n), 1987; Y. Liu
 formulae toward Bessel and Fourier–Jacobi periods, 2014; Furusawa–Shalika, Central critical values
 of degree four L-functions for GSp(4), Mem. AMS 782, 2003.
 -/
+
+@[expose] public section
 
 noncomputable section
 

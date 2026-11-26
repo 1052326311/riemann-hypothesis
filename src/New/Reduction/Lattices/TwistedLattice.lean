@@ -1,6 +1,8 @@
-import Lib.General.LinearAlgebra.GramDeterminant
-import New.Reduction.Lattices.Colength
-import New.Reduction.Lattices.Heights
+module
+
+public import Lib.General.LinearAlgebra.GramDeterminant
+public import New.Reduction.Lattices.Colength
+public import New.Reduction.Lattices.Heights
 
 /-!
 # Twisted lattices
@@ -37,6 +39,8 @@ Size-versus-divisibility bounds for a determinant are known in the literature. R
 Algebraic leaves of algebraic foliations over number fields, 2001; Laurent, Linear forms in two
 logarithms and interpolation determinants, 1994.
 -/
+
+@[expose] public section
 
 noncomputable section
 

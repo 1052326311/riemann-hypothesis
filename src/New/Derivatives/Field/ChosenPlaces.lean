@@ -1,4 +1,6 @@
-import New.Reduction.Data.Magnitudes
+module
+
+public import New.Reduction.Data.Magnitudes
 
 /-!
 # Chosen places, characters of given weight, finiteness of pairs and sizes of the different
@@ -46,6 +48,8 @@ Notions from other files:
 * `New.Data.liftWeight`: The number w_j(σ) = κ(σ) + (j + 1/2) Δ, with κ = `New.Data.weight`, the gap
   Δ = `New.Data.gap` and Δ/2 = `New.Data.halfGap`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -427,8 +431,7 @@ instance hasLogBound_deltaE (v : D.Φ) (u : Bool) :
   -- Instance search bounds the product `exp (log A) * towerDeg s * √d` factor by factor. The
   -- sum of the exponents is compared with `10 log x` and `12 log x` by `h_log` and
   -- `D.scale_inequalities`.
-  obtain ⟨h_log_ge, h_log_le⟩ := abs_le.mp h_log
-  exact .of_lower_of_upper (by cases u <;> scale_arith D)
+  exact .of_lower_of_upper (by cases u <;> grind [D.scale_inequalities])
 
 /-- The root discriminant `rd_E = D.rootDisc` of the field `E = D.E` lies in `[x ^ 10, x ^ 12]`. -/
 lemma rootDisc_mem_Icc : D.rootDisc ∈ Set.Icc (D.x ^ 10) (D.x ^ 12) := by

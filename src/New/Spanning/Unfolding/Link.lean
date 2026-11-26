@@ -1,5 +1,7 @@
-import Lib.DiscreteSeries.Bruhat.BigCell
-import New.Spanning.Unfolding.Terms
+module
+
+public import Lib.DiscreteSeries.Bruhat.BigCell
+public import New.Spanning.Unfolding.Terms
 
 /-!
 # Links of isometries, the link isometry Υ_γ, and invariance under `besselU`
@@ -49,6 +51,8 @@ Notions from other files:
   `c` with `c c̄ = 1` such that, for every frame index `a ≥ j` (counted from `0`), the flags of `f`
   and `γ f` share a vector with leading coefficients `c` and `1` at `a`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

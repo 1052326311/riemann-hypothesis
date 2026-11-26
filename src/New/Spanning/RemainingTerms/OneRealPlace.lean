@@ -1,4 +1,6 @@
-import New.Spanning.RemainingTerms.BorderedDeterminant
+module
+
+public import New.Spanning.RemainingTerms.BorderedDeterminant
 
 /-!
 # The weight of Schur's test at one real place
@@ -29,6 +31,8 @@ Notions from other files:
 * `New.RealPlace.differenceX₀_eq_add`: the dependence of `v` on the unipotent element.
 * `New.RealPlace.exists_majorant_volumeRatio_inv_pow`: an integrable majorant of `ν ^ (-(k + i))`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

@@ -1,8 +1,10 @@
-import New.Congruences.FitTwistsExist
-import New.Determinant.AuxiliaryForms.SpanningForms
-import New.OneLift.LiftVolumeHeight
-import New.Reduction.IntegralTargetForms
-import New.UpperBound.Size.ArchimedeanSize
+module
+
+public import New.Congruences.FitTwistsExist
+public import New.Determinant.AuxiliaryForms.SpanningForms
+public import New.OneLift.LiftVolumeHeight
+public import New.Reduction.IntegralTargetForms
+public import New.UpperBound.Size.ArchimedeanSize
 
 /-!
 # Theorem C: integral forms are long
@@ -27,6 +29,8 @@ Notions from other files:
 * `D.HasSmallRatios θ`: the `m`-fold twists `ξ_ι = θ ι` have `Nm Q(ξ_ι)` prime to the prime of `ι`
   and inverse ratios of Hecke values of height at most `x₁`.
 -/
+
+@[expose] public section
 
 namespace New.Data
 

@@ -1,4 +1,6 @@
-import Lib.Base
+module
+
+public import Lib.Base
 
 /-!
 # Absolutely integrally closed rings and their stability properties; Frobenius powers
@@ -18,6 +20,8 @@ import Lib.Base
   absolutely integrally closed ring into a domain, roots in `B` of monic polynomials over `A` lift
   to roots in `A`, so integral elements lie in the image.
 -/
+
+@[expose] public section
 
 open Polynomial IsLocalization
 

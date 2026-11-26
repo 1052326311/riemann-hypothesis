@@ -1,5 +1,7 @@
-import Lib.General.Analysis.HolomorphicIntegrals
-import Lib.Shimura.Uniformisation.HolomorphicFamilies
+module
+
+public import Lib.General.Analysis.HolomorphicIntegrals
+public import Lib.Shimura.Uniformisation.HolomorphicFamilies
 
 /-!
 # Smoothness near an arc from an immersive generic family and a bound on the tangent space
@@ -22,6 +24,8 @@ Notions from other files:
 * `New.PointFn.ofSection`: The function on ring-valued points given by a section s over U: its value
   at t is t*s if t lands in U, and 0 otherwise.
 -/
+
+@[expose] public section
 
 open CategoryTheory AlgebraicGeometry Spec Set IsLocalRing CommRingCat TrivSqZeroExt Algebra Module
   TensorProduct MvPolynomial KaehlerDifferential IsLocalization.Away Localization LinearMap RingHom
