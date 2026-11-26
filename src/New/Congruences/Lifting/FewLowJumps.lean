@@ -919,7 +919,7 @@ counted with multiplicity. Take the `d` in `S.paramLattice` such that at every l
 letter-`i` part `S.constantAt i d` of `1 ⊗ d` lies below an element of the extension without pole
 whose differences with its translates by the group of the chart have the orders
 `fewLowJumpsDepth a η W (b i) (ε i)`. They form a `ℤ_[p]`-submodule of `S.paramLattice` with
-quotient of length at most `11 ∑ i, (n i (a + 1) + r i (W + 1))`. -/
+quotient of length at most `∑ i, (n i (8a + 1) + 3 r i (W + 1))`. -/
 lemma relLength_iInf_comap_deepConstants_le {k : KummerChart Γ} {O : k.Coeffs}
     {S : k.PairingSide O} (hk : k.IsUnramified) (hp : 5 ≤ p) {a η W : ℕ}
     {b n r : k.Letter → ℕ} {ε : k.Letter → ℤˣ} (hb_le : ∀ i : k.Letter, b i + W + η ≤ (p - 3) * a)
@@ -931,20 +931,16 @@ lemma relLength_iInf_comap_deepConstants_le {k : KummerChart Γ} {O : k.Coeffs}
     relLength (⊤ : Submodule ℤ_[p] S.paramLattice)
         (⨅ i : k.Letter, (S.deepConstants i 0 (fewLowJumpsDepth a η W (b i) (ε i))).comap
           (S.constantAt i)) ≤
-      (11 * ∑ i : k.Letter, (n i * (a + 1) + r i * (W + 1)) : ℕ) := by
-  have h_len (i : Letter) :
-      relLength ⊤ ((S.deepConstants i 0 (fewLowJumpsDepth a η W (b i) (ε i))).comap
-          (S.constantAt i)) ≤
-        ↑((2 * a + 1) * n i + (3 * (W + 1) * r (i.stepBack 1) + 6 * a * n (i.stepBack 1))) := by
-    simpa only [relLength_comap, Submodule.map_top] using
-      relLength_constantAt_deepConstants_le hk hp hb_le hb_gt hb_gap h_window hn hr i
+      (∑ i : k.Letter, (n i * (8 * a + 1) + r i * (3 * (W + 1))) : ℕ) := by
   -- `i ↦ i.stepBack 1` permutes the letters
   have h_perm (f : Letter → ℕ) : ∑ i : Letter, f (i.stepBack 1) = ∑ i : Letter, f i := by
     simp [Equiv.sum_comp]
-  grw [relLength_iInf_le, sum_le_sum fun i _ ↦ h_len i]
+  grw [relLength_iInf_le]
+  simp_rw [relLength_comap, Submodule.map_top]
+  grw [sum_le_sum fun i _ ↦ relLength_constantAt_deepConstants_le hk hp hb_le hb_gt hb_gap h_window hn hr i]
   norm_cast
   simp only [sum_add_distrib, ← mul_sum, ← sum_mul, h_perm]
-  lia
+  exact le_of_eq (by ring)
 
 /-- Scaled cup coboundaries for few low jumps. Let `k` be an unramified Kummer chart with constants
 `W(𝔽_{p ^ k.f})`, whose letters are the units of `𝔽_{p ^ k.f}`, and let `p ≥ 5` and `η ≥ 1`. Let
@@ -959,7 +955,7 @@ Hodge–Tate jumps of `Y` at the letters `i`. Suppose that at every letter `i`
 `S.jumpSet i`, counted with multiplicity.
 
 Then there is a `ℤ_[p]`-submodule `V` of `S.paramLattice` such that `S.paramLattice / V` has length
-at most `11 ∑ i, (n i (a + 1) + r i (W + 1))`, and `V` cups to zero. That is, let `T` be a second
+at most `∑ i, (n i (8a + 1) + 3 r i (W + 1))`, and `V` cups to zero. That is, let `T` be a second
 side with each `T.jumpSet i` in the union of `[-η, η]` and the opposite far window
 `-ε i • [b i, b i + W]`, and let `P` be a pairing of the lattices of `T` and `S`. For `c` in
 `T.paramLattice` and `d` in `V`, the cup product under `P` of the cocycles `T.cocycleMap c` and
@@ -977,7 +973,7 @@ lemma exists_relLength_le_and_isScaledCupCoboundary {k : KummerChart Γ} {O : k.
     (hr_all : ∀ i : k.Letter, ∑ u ∈ S.jumpSet i, k.f * S.jumpMultiplicity i u ≤ r i) (hη : 1 ≤ η) :
     ∃ V : Submodule ℤ_[p] S.paramLattice,
       relLength (⊤ : Submodule ℤ_[p] S.paramLattice) V ≤
-        (11 * ∑ i : k.Letter, (n i * (a + 1) + r i * (W + 1)) : ℕ) ∧
+        (∑ i : k.Letter, (n i * (8 * a + 1) + r i * (3 * (W + 1))) : ℕ) ∧
       ∀ (T : k.PairingSide O) (P : T.SidePairing S) (c : T.paramLattice),
         (∀ i : k.Letter, FitsWindows η (-ε i) (b i) W (T.jumpSet i)) →
         ∀ d ∈ V, P.IsScaledCupCoboundary 0 c d := by
