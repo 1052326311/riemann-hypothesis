@@ -447,8 +447,8 @@ lemma z_dvd_sub {y : BPlus} {g : Gp p} (hg : FixesLambda c.f g) (hy : y ∈ c.bi
       (p : BPlus) ^ k * y = ainfToBPlus (algebraMap (WittFq c.f) Ainf w) + ainfToBPlus c.z * x :=
     (c.eventually_exists_pow_mul_eq_add_z_mul hy).exists
   obtain ⟨u, hu⟩ : c.z.val ∣ g • c.z.val := by
-    -- `erw`: `g` acts on `Ainf` as its image in `FrobGal`, the action of `smul_teichmuller`.
-    erw [z_eq_teichmuller, smul_teichmuller]
+    change c.z.val ∣ ((1, g) : FrobGal) • c.z.val
+    rw [z_eq_teichmuller, smul_teichmuller]
     simp [map_dvd, untilt_dvd_iff.mp, valRingCp.dvd_iff_norm_le, untilt_frobGal_smul]
   have h_dvd : ainfToBPlus c.z ∣ g • ((p : BPlus) ^ k * y) - (p : BPlus) ^ k * y := by
     rw [hk]
