@@ -88,7 +88,7 @@ noncomputable def cuspConst (E n : Type) [Field E] [CMType E] [Fintype n] (N : �
 
 lemma one_le_cuspConst (E n : Type) [Field E] [CMType E] [Fintype n] (N : ℕ) :
     1 ≤ cuspConst E n N := by
-  rw [cuspConst, rootDiscr, ← add_assoc]
+  rw [cuspConst, rootDiscr_def, ← add_assoc]
   bound
 
 variable {E n : Type} [Field E] [CMType E] [Fintype n] [DecidableEq n] {s : n → ℤˣ}

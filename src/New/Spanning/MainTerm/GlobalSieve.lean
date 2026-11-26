@@ -1040,9 +1040,6 @@ lemma globalWeight_scaledHead_le [S.IsAdmissible] {A : Finset Eˣ}
       rw [prod_const, card_univ, Fintype.card_fin]
       ring
 
--- Lean v4.37.0-rc1: terms `S.b ^ (c * 𝔰.n ^ k)` (`Shape.n` is an abbrev) in side goals and
--- unification problems exceed the default recursion depth.
-set_option maxRecDepth 4000 in
 omit [T.StarStable] in
 /-- The sum of the weights of the heads of length `i ≤ ϱ` with entries in a finite set `A` of
 numbers integral off `T` is at most `b ^ (130 n⁹ f)`: the number of heads whose products are small
@@ -1128,9 +1125,6 @@ lemma sq_sum_globalWeight_le [S.IsAdmissible] {A : Finset Eˣ}
 
 end
 
--- Lean v4.37.0-rc1: terms `S.b ^ (c * 𝔰.n ^ k)` (`Shape.n` is an abbrev) in unification problems
--- exceed the default recursion depth.
-set_option maxRecDepth 20000 in
 omit [WeilData E] [T.StarStable] in
 /-- The sieve. Let `b = S.b`, `M = S.M` and `N = S.N` be the size parameter, the level and the prime
 of the admissible filling data `S`, let `k`, `ϱ`, `n = ϱ + 1` be the parameters of its shape `𝔰`,

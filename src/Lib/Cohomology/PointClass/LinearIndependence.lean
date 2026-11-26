@@ -300,6 +300,9 @@ lemma New.Variety.exists_etale_projection {k : Type} [Field k] [CharZero k] {R :
     .of_restrict_scalars_finitePresentation k ..
   have h_etaleAt : IsEtaleAt S (⊥ : Ideal c.coordRing) := by
     -- The localisation at `⊥` is the fraction field, which is separable over that of `S`.
+    have : Algebra.IsAlgebraic (FractionRing S) (FractionRing c.coordRing) :=
+      IsFractionRing.comap_isAlgebraic_iff.mp
+        ((IsFractionRing.isAlgebraic_iff' S c.coordRing (FractionRing c.coordRing)).mp h_alg)
     change Algebra.FormallyEtale S (Localization (⊥ : Ideal c.coordRing).primeCompl)
     rw [primeCompl_bot]
     exact .comp S (FractionRing S) (FractionRing c.coordRing)

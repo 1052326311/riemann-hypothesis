@@ -419,7 +419,7 @@ instance : CommRing (Hall k) := by
     have h_sums_sub (W : StableSubspace g) :=
       sum_comap (g := W.endOnSub) W.val.subtype (congrFun rfl)
     have h_sums_quot (W : StableSubspace g) :=
-      sum_comap (g' := W.endOnQuot) W.val.mkQ (by aesop)
+      sum_comap (g := g) (g' := W.endOnQuot) W.val.mkQ (by aesop)
     simp_all [mul_assoc, sum_comm, sum_filter, finsum_eq_sum_of_fintype, sum_mul, mul_sum]
     -- For `U ≤ W`, the quotient of `W` by `U` is the image of `W` in the quotient by `U`.
     congr!

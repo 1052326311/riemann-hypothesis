@@ -452,7 +452,8 @@ def sliceEquiv :
     TotalH (abTensor N (freeAb X)) F ≃+ TotalH (elementsProj X ⋙ N) (elementsProj X ⋙ F) :=
   -- restrict to the points of `X`, then pull back along
   -- `tensorPoint (freeAbMap tautologicalSection)`, the map `n ↦ n ⊗ [tautological point]`
-  AddEquiv.ofBijective ((TotalH.comp _).comp (TotalH.map (restrictAlong (elementsProj X)))) <| by
+  AddEquiv.ofBijective ((TotalH.comp (.homClass (tensorPoint (freeAbMap tautologicalSection)
+      (elementsProj X ⋙ N)))).comp (TotalH.map (restrictAlong (elementsProj X)))) <| by
     -- by dévissage it suffices to treat `N = ℤ[Y]`, `Y` a sum of representable functors
     -- `h_bij`: the comparison is bijective in every degree at `N`
     have h_bij :=

@@ -869,9 +869,8 @@ def liftKernel :
         (D.liftTamePart (ϑ.pow j.succ) j.succ) :=
     D.hasWeight_liftChar
   exact thetaKernel (D.isLiftWeight_columnCount j) (star ↑D.piMBar * P.jetScale D.towerExp)
-    (by
-      convert weight.hasWeight_rankTwist (n := D.X j)
-      grind [lastEntry, card_X])
+    ((weight.hasWeight_rankTwist (n := D.X j)).of_weight_eq (funext fun _ ↦ by
+      grind [lastEntry, card_X]))
     weight.hasWeight_rankTwist (D.levelX j)
 
 /-- Tuples (x_j) of finite adelic matrices with rows X_{j+1} and columns X_j, the translations

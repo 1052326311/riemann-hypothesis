@@ -430,28 +430,47 @@ section
 
 -- The default proof of `l < l'` first clears all hypotheses but `D`, which keeps `grind` fast.
 variable [D.HasLogUpper F l] [D.HasLogLower G l'] [D.HasLogUpper A l] [D.HasLogLower B l']
-  (h_exp : l < l' := by
-    clear_aux_decl
-    clear * - D
-    repeat clear ‹_›
-    scale_arith D)
 
-include D h_exp
+include D
 /-- If `|F| ≤ exp l`, `exp l' ≤ G` and `l < l'`, then `F < G`. -/
-protected lemma lt_of_hasLogBound : F < G :=
+protected lemma lt_of_hasLogBound
+    (h_exp : l < l' := by
+      clear_aux_decl
+      clear * - D
+      repeat clear ‹_›
+      scale_arith D) :
+    F < G :=
   calc F ≤ |F| := le_abs_self F
     _ ≤ exp l := D.hasLogUpper_iff.1 inferInstance
     _ < exp l' := exp_lt_exp.2 h_exp
     _ ≤ G := D.hasLogLower_iff.1 inferInstance
 
 /-- If `|F| ≤ exp l`, `exp l' ≤ G` and `l < l'`, then `F ≤ G`. -/
-protected lemma le_of_hasLogBound : F ≤ G := (D.lt_of_hasLogBound h_exp).le
+protected lemma le_of_hasLogBound
+    (h_exp : l < l' := by
+      clear_aux_decl
+      clear * - D
+      repeat clear ‹_›
+      scale_arith D) :
+    F ≤ G := (D.lt_of_hasLogBound h_exp).le
 
 /-- If natural numbers `A`, `B` satisfy `A ≤ exp l`, `exp l' ≤ B` and `l < l'`, then `A < B`. -/
-lemma nat_lt_of_hasLogBound : A < B := cast_lt.mp (D.lt_of_hasLogBound h_exp)
+lemma nat_lt_of_hasLogBound
+    (h_exp : l < l' := by
+      clear_aux_decl
+      clear * - D
+      repeat clear ‹_›
+      scale_arith D) :
+    A < B := cast_lt.mp (D.lt_of_hasLogBound h_exp)
 
 /-- If natural numbers `A`, `B` satisfy `A ≤ exp l`, `exp l' ≤ B` and `l < l'`, then `A ≤ B`. -/
-lemma nat_le_of_hasLogBound : A ≤ B := (D.nat_lt_of_hasLogBound h_exp).le
+lemma nat_le_of_hasLogBound
+    (h_exp : l < l' := by
+      clear_aux_decl
+      clear * - D
+      repeat clear ‹_›
+      scale_arith D) :
+    A ≤ B := (D.nat_lt_of_hasLogBound h_exp).le
 
 end
 

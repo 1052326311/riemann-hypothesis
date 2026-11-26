@@ -393,9 +393,9 @@ lemma exists_isLeast_two_pow_three_pow {y : ℝ} (hy : 2 ≤ y) :
       (∃ e : ℕ, r = 3 ^ (e + 1)) ∧
       s ≤ 32 * y := by
   obtain ⟨a, hm, hm_pred_lt : ((2 : ℕ) : ℝ) ^ a < exp (y / 2)⟩ :=
-    exists_isLeast_pow (z := exp (y / 2)) one_lt_two (by bound)
+    exists_isLeast_pow (z := exp (y / 2)) one_lt_two (Real.one_lt_exp_iff.2 (by linarith))
   obtain ⟨c, hr, hr_pred_lt : ((3 : ℕ) : ℝ) ^ c < exp (5 * y)⟩ :=
-    exists_isLeast_pow (q := 3) (z := exp (5 * y)) (by simp) (by bound)
+    exists_isLeast_pow (q := 3) (z := exp (5 * y)) (by simp) (Real.one_lt_exp_iff.2 (by linarith))
   refine ⟨2 ^ (a + 1), 3 ^ (c + 1), (a + 1) * 22, hm, hr, by simpa [pow_succ'] using hm_pred_lt.le,
     by simpa [pow_succ'] using hr_pred_lt.le, ⟨a, rfl, rfl⟩, ⟨c, rfl⟩, ?_⟩
   -- `a log 2 < y / 2` and `2 ≤ y`

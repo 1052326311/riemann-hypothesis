@@ -243,15 +243,21 @@ lemma isAnalyticFamily_of_continuousAt_of_differentiableAt [R1Space K] {f : E �
     let param (θ : ℝ) : sphere (e p).1 r :=
       ⟨circleMap (e p).1 r θ, circleMap_mem_sphere (e p).1 hr.le θ⟩
     let ν : Measure (sphere (e p).1 r) := (volume.restrict (.Icc 0 (2 * π))).map param
+    let L : C(sphere (e p).1 r, ℂ) →L[ℂ] ℂ := strongIntegral ν (evalCLM ℂ)
     let avg : C(K × sphere (e p).1 r, ℂ) →L[ℂ] C(K, ℂ) :=
-      contractSndCLM (strongIntegral ν (evalCLM ℂ))
+      ⟨contractSnd (toCLMEquiv.symm L),
+        continuous_of_continuous_uncurry (contractSnd (toCLMEquiv.symm L)) <| by
+          simp_rw [Function.uncurry_def, contractSnd_apply, coe_symm_toCLMEquiv]
+          refine L.continuous.comp (continuous_of_continuous_uncurry _ ?_)
+          simp_rw [Function.uncurry_def, coe_mk]
+          fun_prop⟩
     refine ⟨fun y : E ↦ avg (Ring.inverse (u (e y).1) * H (e y).2),
       (avg.analyticAt _).comp h_integrand, ?_⟩
     filter_upwards [e.continuousAt
       (prod_mem_nhds (ball_mem_nhds (e p).1 hr) (hH_eq.and (closedBall_mem_nhds (e p).2 hr)))] with
       y ⟨hw, hH, hx⟩
     ext k
-    change strongIntegral ν (evalCLM ℂ) ((Ring.inverse (u (e y).1) * H (e y).2).curry k) = f y k
+    simp only [avg, ContinuousLinearMap.coe_mk', contractSnd_apply, coe_symm_toCLMEquiv, L]
     rw [strongIntegral_eval, integral_map (by fun_prop) (by fun_prop)]
     -- What remains is Cauchy's integral formula for `z ↦ f (e.symm (z, (e y).2)) k` at `(e y).1`.
     have h_diff : DifferentiableOn ℂ (fun z : ℂ ↦ f (e.symm (z, (e y).2)) k)

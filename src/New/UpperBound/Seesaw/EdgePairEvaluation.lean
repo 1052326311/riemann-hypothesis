@@ -1168,19 +1168,17 @@ def lastGrading {M : ℕ} (e : D.m = M) : Grading (D.spaceY M) D.N (D.InitIndex 
 /-- The finite evaluation `New.Seesaw.DoubleLiftData.finEval` of the double lift
 Y_{2i} → Y_{2i+1} → Y_{2i+2}: for the middle double lift if i < ϱ, the last double lift if i = ϱ,
 and 0 beyond. -/
-def doubleLiftEvalY (i : ℕ) := by
-  refine if _ : i < D.ϱ then
+def doubleLiftEvalY (i : ℕ) :=
+  if _ : i < D.ϱ then
     (middleDoubleLift (D.gradingY (2 * i)) (D.gradingY (2 * i + 1)) (D.gradingY (2 * i + 2))
-      ⟨?_, ?_, ?_, ?_⟩ ?_ ?_).finEval
+      ⟨by grind, by grind, by grind, by simp [gradingY]⟩ (by simp; grind) (by grind)).finEval
   else if _ : D.ϱ = i then
     -- the last pair, which ends in the space with the trivial grading
-    (lastDoubleLift (D.gradingY (2 * i)) (D.gradingY (2 * i + 1)) (D.lastGrading ?_)
-      ⟨?_, ?_, ?_, ?_⟩ ?_ congr($D.piN_mul_star) ?_).finEval
+    (lastDoubleLift (p := (D.piN : D.E)) (D.gradingY (2 * i)) (D.gradingY (2 * i + 1))
+      (D.lastGrading (M := 2 * i + 2) (by grind))
+      ⟨by grind, by grind, by grind, by simp [gradingY]⟩ (by simp; grind)
+      (by exact_mod_cast D.piN_mul_star) (by grind)).finEval
   else 0
-  -- what is left: lengths of the strings, parity of the ranks, that the constants `genericConst`
-  -- agree, and that the last double lift ends at `D.m`
-  all_goals try simp [gradingY]
-  all_goals grind
 
 /-- The natural number `M ^ (f n²)`, with `M = p₀ p₁`, `f` the number of infinite places of `E` and
 `n = n_m` the rank `D.n D.m`. -/

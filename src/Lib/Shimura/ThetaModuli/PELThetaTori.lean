@@ -248,7 +248,8 @@ variable {E : Type} [Field E] [CMBase E] (D : PEL E)
 /-- For a matrix β over E, the real bilinear form (y, z) ↦ Σ_v 2 Re(Φ_v(ξ)·z_vᴴ Φ_v(β) y_v) on
 (E ⊗ ℝ)ⁿ, with ξ from the datum D: a map
 `RealVectors E D.Index →ₗ[ℝ] RealVectors E D.Index →ₗ[ℝ] ℝ`. -/
-noncomputable def polarisationForm (β : Matrix D.Index D.Index E) := by
+noncomputable def polarisationForm (β : Matrix D.Index D.Index E) :
+    RealVectors E D.Index →ₗ[ℝ] RealVectors E D.Index →ₗ[ℝ] ℝ := by
   apply LinearMap.mk₂ ℝ fun y z : RealVectors E D.Index ↦
     ∑ v, 2 * (Φ v D.ξ * star (z · v) ⬝ᵥ β.map (Φ v) *ᵥ (y · v)).re
   -- Real bilinearity: expand the matrix products into sums and compare term by term.

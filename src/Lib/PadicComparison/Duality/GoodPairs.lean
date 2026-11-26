@@ -334,8 +334,9 @@ lemma isFiniteLerayHirsch_of_prod_projLine
   conv_rhs =>
     erw [map_zero, add_zero, ← TorsionCoeff.sliceEquiv_mulClass,
       ← map_restrictAlong_etaClass (g := 𝟭 _), ← hξ, map_pullbackAlong, map_comp_assoc,
-      map_homClass]
-  refine (TotalH.comp_assoc_of_sq ?_ _).trans (congrArg _ map_pullbackAlong).symm
+      map_homClass, sliceEquiv, AddEquiv.ofBijective_apply, AddMonoidHom.comp_apply,
+      map_pullbackAlong]
+  refine TotalH.comp_assoc_of_sq ?_ _
   -- What remains is a square of morphisms of functors, which commutes on generators.
   rw [← homClass_comp, ← homClass_comp]
   exact congrArg homClass (relFreeAb.hom_ext (U := .whisker ..))

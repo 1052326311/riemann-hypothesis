@@ -127,7 +127,9 @@ variable {E : Type _} [Field E] [CMType E] [WeilData E] {n : Type _} [Fintype n]
 omit [Fintype n] [DecidableEq n] in
 @[fun_prop]
 lemma continuous_realVec :
-    Continuous (realVec : (NumberField.InfinitePlace E × n → ℂ) → n → 𝔸 E) := by continuity
+    Continuous (realVec : (NumberField.InfinitePlace E × n → ℂ) → n → 𝔸 E) := by
+  simp only [realVec, AddMonoidHom.mk'_apply]
+  fun_prop
 
 /-- For f in 𝒮(V), the function Θ_f(y) = θ(ϱ(y)f)·exp(|y|²/2) of a real vector y in Fock
 coordinates, placed in the adelic vectors with finite part zero. -/

@@ -294,7 +294,7 @@ private lemma coeffMap_id : coeffMap (𝟙 Φ) = 𝟙 (moduleCoeff Φ) :=
 
 /-- For a functor Φ to S-modules, the natural map M ⊗ Φ → M' ⊗ Φ induced by an S-linear map
 f: M → M'. -/
-private def tensorCoeffMap (Φ : C ⥤ ModuleCat S) (f : M →ₗ[S] M') :
+def tensorCoeffMap (Φ : C ⥤ ModuleCat S) (f : M →ₗ[S] M') :
     Φ ⋙ tensorWith S M ⟶ Φ ⋙ tensorWith S M' :=
   Φ.whiskerLeft ((curriedTensor (ModuleCat S)).map (↟f))
 

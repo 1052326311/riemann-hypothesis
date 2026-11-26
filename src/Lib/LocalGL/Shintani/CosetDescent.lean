@@ -125,8 +125,8 @@ omit [Finite k₀] in
 lemma descendsTo_comp_reindexGL {n' : Type*} [Fintype n'] [DecidableEq n'] (e : n ≃ n')
     {Ψ : GalSemidirect k k' n' → ℂ} {X : Hall k₀} (hΨ : DescendsTo Ψ X) :
     DescendsTo
-    (Ψ ∘ SemidirectProduct.map (reindexGL e).toMonoidHom (MonoidHom.id Gal(k'/k))
-      (reindexGL_comp_galActionGL e))
+    (Ψ ∘ SemidirectProduct.map (φ₁ := galActionGL k k' n) (φ₂ := galActionGL k k' n')
+      (reindexGL e).toMonoidHom (MonoidHom.id Gal(k'/k)) (by exact reindexGL_comp_galActionGL e))
       X := by
   intro σ hσ s γ hs hγ
   set ρ : GalSemidirect k k' n →* GalSemidirect k k' n' :=

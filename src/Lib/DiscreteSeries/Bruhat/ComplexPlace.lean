@@ -80,9 +80,9 @@ instance complexPlace : Place ℂ := by
   case haar =>
     -- `r ↦ r * I` is a bicontinuous additive isomorphism onto the skew elements
     refine AddEquiv.isAddHaarMeasure_map _ ⟨⟨_, (·.1.im), by
-      norm_num [LeftInverse], ?_⟩, by norm_num [add_mul]⟩
-      ?_ ?_
-    · simp_all [RightInverse, Complex.ext_iff, self_eq_neg, LeftInverse, skewAdjoint.mem_iff]
+      norm_num [LeftInverse], by
+      simp_all [RightInverse, Complex.ext_iff, self_eq_neg, LeftInverse, skewAdjoint.mem_iff]⟩,
+      by norm_num [add_mul]⟩ ?_ ?_
     all_goals
       norm_num
       fun_prop

@@ -244,7 +244,7 @@ def TestOver.structurePt :
     onePointFunctor (TestOver k) ⟶ restrictScalars A k ⋙ reprBy
       ⟨of A k, isTest_of_preValuationRing⟩ :=
   sectionMap
-    { val B := ⟨⟨CommAlg.homOfRingHom _ (by tauto)⟩⟩
+    { val B := ⟨⟨CommAlg.homOfRingHom (algebraMap k B.obj) (by tauto)⟩⟩
       property f := congr(⟨⟨$(by ext; apply f.1.hom.2)⟩⟩) }
 
 /-- For an algebraically closed field k over A, restriction of scalars from tests over k to tests
