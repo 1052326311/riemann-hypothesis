@@ -1,8 +1,14 @@
 module
 
 import TauCeti.LinearAlgebra.Matrix.Determinant.FromBlocks
+public import Mathlib.Analysis.CStarAlgebra.Module.Constructions
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
+import Mathlib.Topology.Algebra.Group.Matrix
+import Mathlib.Topology.Separation.CompletelyRegular
 public import Lib.DiscreteSeries.Bessel.Basic
 public import New.Spanning.MainTerm.SieveSystem
+import Lib.DiscreteSeries.Bruhat.FloorMeasures
 
 /-!
 # Bessel systems at a real place: length and norm bounds, lattice basis, discriminant
