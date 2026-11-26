@@ -88,7 +88,7 @@ end LowestTerm
 
 /-- If each factor `f i` has lowest term `c i * z ^ α i` for the weights `w`, then the product of
 the `f i` has lowest term `(∏ c i) * z ^ (∑ α i)`. -/
-lemma IsLowestTerm.prod {X R ι : Type} [Fintype X] [CommRing R] {w : X → ℕ} {s : Finset ι}
+lemma IsLowestTerm.prod {X R ι : Type} [CommRing R] {w : X → ℕ} {s : Finset ι}
     {f : ι → MvPowerSeries X R} {α : ι → X →₀ ℕ} {c : ι → R}
     (hf : ∀ i ∈ s, IsLowestTerm w (f i) (α i) (c i)) :
     IsLowestTerm w (∏ i ∈ s, f i) (∑ i ∈ s, α i) (∏ i ∈ s, c i) := by
