@@ -401,15 +401,9 @@ lemma eq_map_betaK_pow_iff (hp_ne_two : p ≠ 2) (φ : 𝓞 (QuadField d) →+* 
   have h_frob : φ (sqrtNegDInt d) ^ p = chiK d p * φ (sqrtNegDInt d) := by
     rw [chiK_eq_pow_of_sq_eq_neg hp_ne_two (map_sqrtNegDInt_sq φ), pow_sub_one_mul hp.1.ne_zero]
   have h_iter : φ (sqrtNegDInt d) ^ p ^ n = chiK d p ^ n * φ (sqrtNegDInt d) := by
-    induction n with
-    | zero => simp
-    | succ n ih =>
-      calc
-        φ (sqrtNegDInt d) ^ p ^ (n + 1)
-        _ = (chiK d p ^ n * φ (sqrtNegDInt d) : R) ^ p := by rw [pow_succ, pow_mul, ih]
-        _ = frobenius R p (chiK d p ^ n) * φ (sqrtNegDInt d) ^ p := by rw [mul_pow, frobenius_def]
-        _ = chiK d p ^ (n + 1) * φ (sqrtNegDInt d) := by
-          rw [map_pow, map_intCast, h_frob, ← mul_assoc, ← pow_succ]
+    have h_comm : Function.Commute (· ^ p) ((chiK d p : R) * ·) := fun y ↦ by
+      simp [← frobenius_def]
+    simpa [pow_iterate, mul_left_iterate] using h_comm.iterate_eq_of_map_eq n h_frob
   -- Frobenius is a ring map, and `2` is a unit as `p` is odd.
   have h_add : φ (sqrtNegDInt d) ^ p ^ n = 2 * φ (betaK d) ^ p ^ n - 1 := by
     simp [← iterateFrobenius_def, map_ofNat]
