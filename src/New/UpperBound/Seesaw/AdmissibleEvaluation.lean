@@ -512,6 +512,7 @@ lemma conjTranspose_iFin_mulVec_mem (hP : IsSplitLevel P N) (hπ : IsSplitSquare
   rw [h_scaled, ← mul_assoc]
   exact D.conjTranspose_latticeLift_mulVec_mem hP hκ h_match h_int hy j w hw
 
+omit [Fact N.Prime] in
 /-- Let `P` contain one place of each conjugate pair above the prime `N` (`hP`), let `N = π π̄`
 with `π` a uniformiser at the places of `P` and a unit elsewhere (`hπ`), and let `κ` be scaling
 factors with values `1` or `δ`, trivial above `N`, with denominators bounded by the integral adele
