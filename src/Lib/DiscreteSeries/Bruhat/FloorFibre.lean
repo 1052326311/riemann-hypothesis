@@ -66,7 +66,7 @@ lemma inclMatrix_sumElim_mulVec {α β ι : Type} [Fintype α] [Fintype β] [Dec
 `f` are `c`, Lebesgue measure in the coordinates along `g` is at most the fibre measure of
 `y ↦ y ∘ f` over `c`. -/
 lemma leFibreMeasure_coords {α β ι : Type} [Fintype α] [Fintype β] [Fintype ι] [DecidableEq α]
-    [DecidableEq β] [DecidableEq ι] {f : α → ι} {g : β → ι} (hf : f.Injective)
+    [DecidableEq ι] {f : α → ι} {g : β → ι} (hf : f.Injective)
     (hg : g.Injective) (h_compl : Set.range g = (Set.range f)ᶜ) (c : α → ℂ) :
     LeFibreMeasure volume volume (fun y : ι → ℂ ↦ y ∘ f) c
       (volume.map fun v : β → ℂ ↦ inclMatrix ℂ f *ᵥ c + inclMatrix ℂ g *ᵥ v) := by
