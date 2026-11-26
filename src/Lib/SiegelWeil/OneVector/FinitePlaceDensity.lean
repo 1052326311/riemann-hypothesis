@@ -185,7 +185,7 @@ theorem unitaryLevel_open_compact {J : Matrix ι ι A} :
   refine ⟨(isOpen_intGL isOpen_O).preimage_val.and isOpen_O.matrix.preimage_of_continuous, ?_⟩
   -- At level 1 the group is the trace of the compact `GL(O)` on the closed subgroup `U J`.
   rw [unitaryLevel_one]
-  exact (isCompact_intGL isCompact_O).preimage_val (isClosed_U J)
+  exact (isCompact_intGL isCompact_O).preimage_val (isClosed_unitaryGroupOf J)
 
 /-- The determinant of a matrix in `GL(R)` has modulus `1`. -/
 theorem modulus_det_eq_one {V : GL ι A} (hV : V ∈ intGL ι P.integers) : modulus V.val.det = 1 := by

@@ -80,7 +80,7 @@ theorem exists_U_coe_eq (h_form : xᴴ * J * x = J) : ∃ g : U J, g = x :=
 
 /-- For a hermitian involution J, sending an element of U(J) to its matrix is a closed embedding. -/
 lemma isClosedEmbedding_U : IsClosedEmbedding fun g : U J ↦ (g : Matrix n n ℂ) :=
-  U.isClosedEmbedding_coe isUnit
+  Matrix.unitaryGroupOf.isClosedEmbedding_val isUnit
 
 /-- For a hermitian involution J, a map to U(J) is continuous if and only if it is continuous as a
 map to matrices. -/
@@ -165,7 +165,7 @@ theorem conjTranspose_logDerivU (h_diff : DifferentiableAtU Φ p) (v : V) :
   let g (x : V) : Matrix n n ℂ := Φ x
   let D : Matrix n n ℂ := fderiv ℝ g p v
   have h_const : (fun x : V ↦ star (g x) * J * g x) = fun _ : V ↦ J :=
-    funext fun x ↦ mem_U.1 (Φ x).property
+    funext fun x ↦ mem_unitaryGroupOf_iff.1 (Φ x).property
   have h_product :
       fderiv ℝ (fun x : V ↦ star (g x) * J * g x) p v = (g p)ᴴ * J * D + Dᴴ * J * g p := by
     rw [((h_diff.hasFDerivAt.star.mul_const' J).fun_mul' h_diff.hasFDerivAt).fderiv]
@@ -433,7 +433,8 @@ theorem logDerivU_cayleyChart (h_det : (cayleyDenom J y).det ≠ 0) :
     simp [hd.fderiv, hM_def, nonsing_inv_eq_ringInverse]
   have h_swap : (cayleyChart J y : Matrix n n ℂ)ᴴ * J * M = Mᴴ * J := by
     have hM : M = (2 : ℂ)⁻¹ • ((cayleyChart J y : Matrix n n ℂ) + 1) := by simp [h_coe, hM_def]
-    simp [hM, Matrix.mul_add, Matrix.add_mul, mem_U.1, add_comm]
+    simp [hM, Matrix.mul_add, Matrix.add_mul, ← star_eq_conjTranspose, mem_unitaryGroupOf_iff.1,
+      add_comm]
   calc logDerivU (cayleyChart J) y v
       = (cayleyChart J y : Matrix n n ℂ)ᴴ * J * M * (J⁻¹ * skewOfReal v) * M := by
         simp [logDerivU, h_fderiv, Matrix.mul_assoc]

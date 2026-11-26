@@ -604,7 +604,8 @@ omit [Nonempty n] in
 /-- A point `g` of the finite adelic unitary group `Gf E n` (so `gᴴ g = 1`) is a signed frame for
 the identity form, with `ℓ = 1` at the base place. -/
 lemma isSignedFrameFor_one (g : Gf E n) : IsSignedFrameFor g.val 1 1 :=
-  ⟨⟨1, by simpa [U] using g.property⟩, by simp [PosDef.one]⟩
+  ⟨⟨1, by simpa [star_eq_conjTranspose] using mem_unitaryGroupOf_iff.1 g.property⟩,
+      by simp [PosDef.one]⟩
 
 /-- If `x` is a similitude whose inverse has integral entries (`x ∈ GUPlus E n`) and `x` is a frame
 for the scalar form `c • 1`, then the rational number `c` is an integer. -/
@@ -948,7 +949,7 @@ lemma eq_one_of_reduceAt_eq_one {E : Type} [Field.{0} E] [CMType E] {w : ι → 
   -- have modulus at most `2 * card n`. Comparing norms shows that it is `0`, and then
   -- `tr (γ - 1)ᴴ (γ - 1) = 0`.
   let y : GL n E := γ
-  have h_isom : y.valᴴ * (1 : Matrix n n E) * y.val = 1 := mem_U.1 γ.property
+  have h_isom : y.valᴴ * (1 : Matrix n n E) * y.val = 1 := mem_unitaryGroupOf_iff.1 γ.property
   have h_conj_le (v : InfinitePlace E) : ‖Φ v (y.val - 1).trace‖ ≤ 2 * card n := by
     -- The image of `y` under `Φ v` is unitary, so its entries have modulus at most `1`.
     have h_unitary : y.val.map (Φ v) ∈ unitaryGroup n ℂ := by

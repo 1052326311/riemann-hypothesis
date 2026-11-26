@@ -262,7 +262,7 @@ lemma cartan_decomposition {c : ℂ} {σ : (𝔰.middleGram (1 : ℂ)).G} (hσ :
     simp [apply_eq_one_apply_of_mem_floorGroup hσ, ← hZ, middleGram, frameGram, splitGram,
       Matrix.mul_apply]
   have h_gram : (σ.1.1ᴴ * (𝔰.middleGram (1 : ℂ)).splitGram * σ.1.1) 𝔰.z 𝔰.z =
-      (𝔰.middleGram (1 : ℂ)).splitGram 𝔰.z 𝔰.z := congr_fun₂ σ.2 𝔰.z 𝔰.z
+      (𝔰.middleGram (1 : ℂ)).splitGram 𝔰.z 𝔰.z := congr_fun₂ (mem_unitaryGroupOf_iff.1 σ.2) 𝔰.z 𝔰.z
   have h_col : ∑ i : 𝔰.κ, (‖v i‖ : ℂ) ^ 2 = ‖c‖ ^ 2 - 1 := by
     simpa [apply_eq_one_apply_of_mem_floorGroup hσ, h_entry, add_neg_eq_iff_eq_add, middleGram,
       splitGram,
@@ -313,7 +313,7 @@ lemma star_dotProduct_hyperboloidPoint {Γ : ℝ} {c : ℂ} (hΓ : 0 ≤ Γ + �
       (𝔰.middleGram (1 : ℂ)).splitGram *ᵥ hyperboloidPoint Γ (c, u) = Γ := by
   -- the column of `u` at `k₀` has norm one
   have h_col : ∑ i, (‖u.val.val i 𝔰.k₀‖ : ℂ) ^ 2 = 1 := by
-    simpa [Matrix.mul_apply, conj_mul'] using congr_fun₂ u.2 𝔰.k₀ 𝔰.k₀
+    simpa [Matrix.mul_apply, conj_mul'] using congr_fun₂ (mem_unitaryGroupOf_iff.1 u.2) 𝔰.k₀ 𝔰.k₀
   -- the part in X₀ has squared norm `Γ + ‖c‖²` and the entry at z contributes `-‖c‖²`
   suffices ((√(Γ + ‖c‖ ^ 2) ^ 2 : ℝ) : ℂ) + -(‖c‖ : ℂ) ^ 2 = Γ by
     simpa [apply_ite conj, -map_mul, ← Finset.sum_mul, ← Finset.mul_sum, h_col,

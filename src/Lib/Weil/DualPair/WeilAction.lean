@@ -398,7 +398,8 @@ depends on `y` only through `star y ⬝ᵥ y`. -/
 lemma Fock.realVac_mulVec_of_mem_blockDiagAlg {ι : Type} [Fintype ι] [DecidableEq ι] {ε : ι → ℤˣ}
     {u : USign ε} (hu : (u : Matrix ι ι ℂ) ∈ blockDiagAlg ε) (y : ι → ℂ) :
     realVac ((u : Matrix ι ι ℂ) *ᵥ y) = realVac y := by
-  have h_unitary : (u : Matrix ι ι ℂ)ᴴ * 1 * (u : Matrix ι ι ℂ) = 1 := mem_maxCompactU.2 hu
+  have h_unitary : (u : Matrix ι ι ℂ)ᴴ * 1 * (u : Matrix ι ι ℂ) = 1 :=
+    mem_unitaryGroupOf_iff.1 (Subgroup.mem_subgroupOf.1 (mem_maxCompactU.2 hu))
   rw [mul_one] at h_unitary
   rw [realVac, realVac, star_mulVec, dotProduct_mulVec, vecMul_vecMul, h_unitary, vecMul_one]
 

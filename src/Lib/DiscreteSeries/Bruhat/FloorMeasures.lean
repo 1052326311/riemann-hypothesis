@@ -87,7 +87,7 @@ def _root_.New.Floors.TraceOne.heisenbergElem : U T.splitGram :=
       exists_unitary_eq_eichlerMap (x := Pi.single (inl a) 1) H.conjTranspose_eq (by simp)
         (by simp [v, inclMatrix_val_mulVec]) h_trace
     rw [← he]
-    exact e.2
+    exact mem_unitaryGroupOf_iff.1 e.2
 
 /-- The Heisenberg element ν(v, β) sends w to w + w(e*_a)v + ((β − τh(v, v))w(e*_a) − h(v, w))e_a.
 Here w(e*_a) is the e*_a coordinate of w, and v is the vector of floors at least a + 1, extended by
@@ -145,7 +145,7 @@ lemma mul_heisenbergElem (h : s ∈ floorGroup (a + 1)) :
     simpa using orbitPoint_eq_iff.1 h_point
   have h_coord (w : 𝔰.BesselIndex → A) : (s.val.val *ᵥ w) (eStar a) = w (eStar a) := by
     simpa [h_fix, -mulVec_mulVec] using form_mulVec_mulVec s (Pi.single (inl a) 1) w
-  ext : 2
+  refine Subtype.ext (Units.ext ?_)
   refine ext_iff_mulVec.2 fun w ↦ ?_
   simp [h_block, ← hv, ← mulVec_mulVec, mulVec_add, mulVec_smul, h_fix, h_coord, form_mulVec_mulVec]
 
@@ -172,7 +172,7 @@ lemma heisenbergElem_mul :
     simp [v, inclMatrix_val_mulVec]
   have h_star : star (star v' ⬝ᵥ T.splitGram *ᵥ v) = star v ⬝ᵥ T.splitGram *ᵥ v' :=
     star_dotProduct_mulVec_comm IsHermitianUnit.conjTranspose_eq v' v
-  ext : 2
+  refine Subtype.ext (Units.ext ?_)
   refine ext_iff_mulVec.2 fun w ↦ ?_
   simp [← hv, ← hv', ← mulVec_mulVec, mulVec_add, mulVec_smul, hv_coord, hv'_coord, h_star]
   rw [eq_sub_of_add_eq' (element_add_star (A := A))]
@@ -712,7 +712,7 @@ instance : SFinite (heisenbergMeasure l : Measure T.G) := by
 /-- The unitary group is closed in the space of matrices, with the subspace topology. -/
 lemma isClosedEmbedding_unitary_coe [H : IsHermitianUnit T.splitGram] :
     Topology.IsClosedEmbedding fun g : T.G ↦ (g : GL 𝔰.BesselIndex A).val :=
-  isClosedEmbedding_coe H.2
+  Matrix.unitaryGroupOf.isClosedEmbedding_val H.2
 
 /-- A function with values in the unitary group is measurable if it is measurable as a function
 with values in matrices. -/

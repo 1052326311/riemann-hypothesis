@@ -216,7 +216,8 @@ lemma zeroTerm_lagrangian_eq_theta (f : 𝒮 (S.hom T)) :
 /-- For a rational isometry `γ` of `S`, the splitting of `S` with no hyperbolic planes whose
 complement is `S` itself, mapped in by `γ`. -/
 def isometrySplitting : S.Splitting S Empty := by
-  use 0, 0, γ <;> simp [↓← mem_U, ← ext_iff]
+  use 0, 0, γ <;>
+    simp [show γ.val.valᴴ * _ * _ = _ from mem_unitaryGroupOf_iff.1 γ.2, ← ext_iff]
 
 /-- For a rational isometry `γ` of `S`, the zero term on `Hom(S, T)` of the splitting without planes
 given by `γ` is the Weil operator of `(γ⁻¹, 1)`, where `S.ratEmbed` embeds the rational points. -/

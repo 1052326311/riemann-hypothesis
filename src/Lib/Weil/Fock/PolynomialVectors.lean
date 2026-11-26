@@ -261,7 +261,8 @@ private lemma star_mul_sign_eq_neg_sign_mul_of_hasDerivAt [DecidableEq ι]
   have form_const :
       HasDerivAt (fun t : ℝ ↦ star ((γ t : GL ι ℂ) : Matrix ι ι ℂ) * signMatrix ε *
         ((γ t : GL ι ℂ) : Matrix ι ι ℂ)) (0 : Matrix ι ι ℂ) 0 :=
-    (hasDerivAt_const 0 (signMatrix ε)).congr_of_eventuallyEq (.of_forall fun t ↦ (γ t).prop)
+    (hasDerivAt_const 0 (signMatrix ε)).congr_of_eventuallyEq (.of_forall fun t ↦
+        mem_unitaryGroupOf_iff.1 (γ t).prop)
   have sum_zero :
       star Y * signMatrix ε * ((γ 0 : GL ι ℂ) : Matrix ι ι ℂ) +
         star ((γ 0 : GL ι ℂ) : Matrix ι ι ℂ) * signMatrix ε * Y = 0 :=
