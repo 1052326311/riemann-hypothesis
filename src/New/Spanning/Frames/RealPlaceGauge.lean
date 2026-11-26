@@ -1,5 +1,6 @@
 module
 
+public import TauCeti.Analysis.Matrix.L2OpNorm
 public import Lib.Shimura.ComplexTheta.AppellHumbertData
 public import Lib.DiscreteSeries.Bessel.FrameFibre
 public import Lib.DiscreteSeries.Bruhat.FloorFibre

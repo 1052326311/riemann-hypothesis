@@ -31,8 +31,8 @@ This file proves estimates for complex matrices and computes the complex Gaussia
 
 ## Main definitions and results
 
-* `New.norm_apply_le_l2_opNorm`, `New.l2_opNorm_le_of_apply`: the operator norm bounds the entries,
-  and for an `m × n` matrix it is at most `|m| |n|` times a bound for the entries.
+* `New.l2_opNorm_le_of_apply`: for an `m × n` matrix the operator norm is at most `|m| |n|` times
+  a bound for the entries.
 * `New.ostrowski_taussky`: the Ostrowski–Taussky inequality, in the form
   `|det H| ≤ 2 ^ card n |det Θ|` when `0 ≤ H ≤ Θ + Θᴴ`.
 * `Matrix.IsAccretive`: the matrices `A` with `A + Aᴴ` positive definite. Positive definite matrices
@@ -71,9 +71,6 @@ lemma l2_opNorm_le_of_apply {M : ℝ} (h_apply : ∀ (i : m) (j : n), ‖A i j�
   -- `A` is the sum of `card m * card n` matrices with one entry each.
   grw [A.matrix_eq_sum_single, norm_sum_le, norm_sum_le, l2_opNorm_single.le, h_apply]
   simp [field]
-
-lemma norm_apply_le_l2_opNorm (i : m) (j : n) : ‖A i j‖ ≤ ‖A‖ :=
-  Matrix.norm_apply_le_l2_opNorm A i j
 
 /-- If `H` is positive definite and `Θ + Θᴴ - H` is positive semidefinite, then every eigenvalue
 `l` of `H⁻¹ (Θ + Θ)` has real part at least `1`. -/
