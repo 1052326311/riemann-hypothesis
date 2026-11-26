@@ -303,11 +303,6 @@ lemma max_min_succ_sub_max_min_mem_Icc (x : ℤ) {n c low high : ℤ} (hn : 0 �
       Icc (if x < low then 1 else 0 : ℤ) (if x < high then 1 else 0) := by
   grind
 
-/-- The entry `D.k - 1 + a` of `D.targetParameter τ` is `D.halfGap - D.liftWeight (a + 1) τ`. -/
-lemma targetParameter_sub_one_add (a : ℕ) :
-    D.targetParameter τ (D.k - 1 + a) = D.halfGap - D.liftWeight (a + 1) τ := by
-  grind [targetParameter_eq, D.k_pos]
-
 /-- The base case of `gridParam_interlace`. Let `λ_n = D.targetParameter τ n` be the entries of the
 target parameter and `s = 2 λ_(k-1)`. The number of `n < k` with `x < -2 λ_n - 1`, less the number
 of `n < k - 1` with `x < 2 λ_n`, is `1` if `x < s`, is `0` if `-s - 1 ≤ x`, and is always `0` or
@@ -642,8 +637,6 @@ lemma gap_le_abs_targetParameter_sub {n n' : ℕ} (hne : n + 1 - D.k ≠ n' + 1 
   -- The later entry is `halfGap - w_(a+1)` with `a = n' + 1 - k` positive.
   have h_step : D.liftWeight (n + 1 - D.k + 1) τ + D.gap ≤ D.liftWeight (n' + 1 - D.k + 1) τ :=
     D.liftWeight_succ_add_gap_le τ h_lt
-  have h_centre : D.gap ≤ D.liftWeight (n + 1 - D.k + 1) τ :=
-    D.gap_le_liftWeight_succ τ (n + 1 - D.k)
   have h_sizes : D.k + D.t + 1 ≤ D.halfGap := D.k_add_t_add_one_le_halfGap
   grind [targetParameter_eq]
 

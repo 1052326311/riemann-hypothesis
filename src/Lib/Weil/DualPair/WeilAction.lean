@@ -108,7 +108,7 @@ lemma star_matrixToVec_dotProduct_matrixToVec [Semiring R] [StarRing R] [Fintype
     (x y : Matrix m' m R) :
     star (matrixToVec x) ⬝ᵥ matrixToVec y = trace (xᴴ * y) := by
   -- both sides are `∑ j, ∑ i, star (x i j) * y i j`
-  simp only [dotProduct, trace, diag_apply, mul_apply, conjTranspose_apply, Pi.star_apply,
+  simp only [dotProduct, trace, diag_apply, Pi.star_apply,
     matrixToVec]
   exact Fintype.sum_prod_type_right _
 

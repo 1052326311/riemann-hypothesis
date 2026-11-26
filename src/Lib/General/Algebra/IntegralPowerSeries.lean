@@ -200,6 +200,13 @@ lemma norm_natCast_eq_inv_pow_padicValNat {n : ℕ} (hn : n ≠ 0) :
   simpa [Padic.norm_eq_zpow_neg_valuation, hn, Nat.padicValNat_def] using
     PadicComplex.norm_extends' p n
 
+/-- The `p`-adic norm of a finite product of nonzero natural numbers. -/
+lemma norm_prod_natCast_eq_rpow_neg_sum {X : Type*} [Fintype X] {n : X → ℕ}
+    (hn : ∀ x, n x ≠ 0) :
+    ‖∏ x, (n x : ℂ_[p])‖ = (p : ℝ) ^ (-∑ x, (padicValNat p (n x) : ℝ)) := by
+  simp [norm_natCast_eq_inv_pow_padicValNat, hn, Real.rpow_neg p.cast_nonneg,
+    ← Nat.cast_sum, Finset.prod_pow_eq_pow_sum]
+
 /-- For `p` prime and `n < p ^ K` one has `n / (p - 1) - K ≤ v_p(n!) ≤ n / (p - 1)`, a consequence
 of Legendre's formula. -/
 lemma padicValNat_factorial_mem_Icc {n K : ℕ} (hn : n < p ^ K) :
@@ -208,7 +215,7 @@ lemma padicValNat_factorial_mem_Icc {n K : ℕ} (hn : n < p ^ K) :
   -- are at most `K` digits, each at most `p - 1`.
   have hp1 : 1 < p := hp.out.one_lt
   have legendre : (p - 1) * padicValNat p n ! + (p.digits n).sum = n := by
-    rw [Nat.padicValNat_def, sub_one_mul_padicValNat_factorial,
+    rw [Nat.padicValNat_def, Nat.Prime.sub_one_mul_multiplicity_factorial,
       Nat.sub_add_cancel (digit_sum_le p n)]
     exact hp.out
   have digit_le : ∀ d ∈ p.digits n, d ≤ p - 1 :=

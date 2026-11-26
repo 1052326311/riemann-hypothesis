@@ -179,11 +179,9 @@ polynomial of `M` is a root of `P`. -/
 lemma isRoot_of_isRoot_charpoly {m K : Type*} [Fintype m] [DecidableEq m] [Field K]
     {M : Matrix m m K} {P : Polynomial K} {x : K} (hP : Polynomial.aeval M P = 0)
     (hx : M.charpoly.IsRoot x) : P.IsRoot x := by
-  -- The characteristic polynomial of `aeval M P = 0` is a power of `X`, so that of `M` divides a
-  -- power of `P`.
-  have h_dvd : M.charpoly ∣ P ^ Fintype.card m := by
-    simpa [hP] using charpoly_dvd_charpoly_aeval_comp (Y := M) P
-  exact eq_zero_of_pow_eq_zero (by simpa using hx.dvd h_dvd : P.eval x ^ Fintype.card m = 0)
+  have h_mem : P.eval x ∈ spectrum K (0 : Matrix m m K) := hP ▸
+    spectrum.subset_polynomial_aeval M P ⟨x, Matrix.mem_spectrum_iff_isRoot_charpoly.2 hx, rfl⟩
+  exact (by simpa using Matrix.mem_spectrum_iff_isRoot_charpoly.1 h_mem : P.eval x = 0 ∧ _).1
 
 end New.GaloisRep
 
@@ -236,7 +234,7 @@ lemma GaloisRep.Attached.trace_eq [PadicIso ℓ] {G : Type} [Group G] [Topologic
     (x : H) {y : G} (hxy : j x = j' y) : (ρ x).val.trace = (σ y).val.trace := by
   -- both characteristic polynomials are the limit of `ιℓ (P w)` as the Frobenius tends to `j x`
   have h_char : (ρ x).val.charpoly = (σ y).val.charpoly :=
-    Polynomial.ext fun i ↦ tendsto_nhds_unique (hρ.tendsto_charpoly_coeff x i)
+    AddMonoidAlgebra.ext <| Finsupp.ext fun i ↦ tendsto_nhds_unique (hρ.tendsto_charpoly_coeff x i)
       (by simpa only [hxy] using hσ.tendsto_charpoly_coeff y i)
   simp [h_char, trace_eq_sum_roots_charpoly]
 
@@ -290,7 +288,7 @@ as scalar matrices in `U(1)` (`scalarFin`), is continuous. -/
 lemma New.continuous_scalarFin_divStar :
     Continuous fun x : (𝔸f E)ˣ ↦ scalarFin (Fin 1) (divStar x) :=
   (Matrix.unitaryGroupOf.isClosedEmbedding_val isUnit_one).continuous_iff.2 <|
-    .matrix_diagonal (continuous_pi fun _ ↦ continuous_subtype_val.comp divStar.continuous)
+    .matrix_diagonal (continuous_pi fun _ ↦ continuous_subtypeVal.comp divStar.continuous)
 
 /-- At a split place `w`, the element `x / star x` of `U(1)` for the idele with component `x` at `w`
 and `1` elsewhere is the scalar matrix `x` embedded at `w`. -/

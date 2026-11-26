@@ -533,7 +533,6 @@ theorem IsMatch.lt_or_exists_isMatchedPair (hm : IsMatch T l l') (r : R) (c : C)
   · obtain rfl : d = c := hm.hasGap_column.injective (mul_left_cancel₀ s.ne_zero h_eq)
     exact .inl ⟨((le_abs_self _).trans_eq (abs_sub_comm _ _)).trans_lt r_large, hrd⟩
   · -- The parameter of column `c` is further out than that of `d`, so `c` is matched too.
-    have param_rd : T.centredParam l r = -T.swap.centredParam l' d := hrd.1
     have c_not_free : ¬|T.swap.centredParam l' c| < card C - card R := by grind
     obtain ⟨a, hac⟩ : ∃ a : R, T.IsMatchedPair l l' a c := (hm.right c).resolve_right c_not_free
     have a_above : s * l r < s * l a := by grind

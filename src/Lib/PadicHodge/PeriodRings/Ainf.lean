@@ -122,14 +122,6 @@ instance {G : Type*} [AddCommMonoid G] [Module ℚ≥0 G] : PerfectRing (Multipl
 
 /-! ### The elements ε, τ, μ, ξ -/
 
-/-- The untilt of the reduction modulo `p` of a sequence `y` of successive `p`-th roots in `O_C` is
-the zeroth term of `y`. -/
-private lemma untilt_mapMonoidHom_idealQuotientMk (y : Perfection OC p) :
-    PreTilt.untilt (O := OC) (p := p)
-        (mapMonoidHom p (Ideal.Quotient.mk (Ideal.span {(p : OC)})).toMonoidHom y) =
-      coeffMonoidHom OC p 0 y :=
-  teichmuller₀_mapMonoidHom_idealQuotientMk
-
 /-- Every homomorphism a from the additive group ℚ to the multiplicative monoid of C_p with a(1) = 1
 lifts to the tilt: some homomorphism χ: ℚ → O^♭ has χ(s)^♯ = a(s) for all s. -/
 lemma exists_tilt_lift_of_character (a : Multiplicative ℚ →* ℂ_[p])
@@ -147,11 +139,11 @@ lemma exists_tilt_lift_of_character (a : Multiplicative ℚ →* ℂ_[p])
   refine ⟨(mapMonoidHom p (Ideal.Quotient.mk (Ideal.span {(p : OC)})).toMonoidHom).comp roots,
     fun s ↦ ?_⟩
   -- Untilting the reduction of a compatible sequence returns its zeroth term.
-  show ((PreTilt.untilt (O := OC) (p := p)
+  change ((PreTilt.untilt (O := OC) (p := p)
     (mapMonoidHom p (Ideal.Quotient.mk (Ideal.span {(p : OC)})).toMonoidHom (roots s)) : OC) :
       ℂ_[p]) = a s
-  rw [untilt_mapMonoidHom_idealQuotientMk]
-  simp [roots]
+  exact (congrArg _ (teichmuller₀_mapMonoidHom_idealQuotientMk (x := roots s))).trans
+    (by simp [roots])
 
 /-- The map s ↦ ε^s: a chosen homomorphism from ℚ to the multiplicative monoid of O^♭ with
 (ε^s)^♯ a primitive root of unity of order the denominator of s. -/
@@ -534,7 +526,7 @@ vectors, since `φ` acts on `O^♭` as `x ↦ x ^ p`. -/
 lemma frobEnd_eq_frobenius : frobEnd a = WittVector.frobenius a := by
   ext n
   -- `φ` acts on the Witt coordinates
-  show frobEnd (a.coeff n) = (WittVector.frobenius a).coeff n
+  change frobEnd (a.coeff n) = (WittVector.frobenius a).coeff n
   rw [OFlat.frobEnd_apply, coeff_frobenius_charP]
 
 lemma smul_teichmuller : m • teichmuller p t = teichmuller p (m • t) :=
@@ -555,7 +547,7 @@ lemma iterate_frobEnd_teichmuller (j : ℕ) (x : OFlat) :
 lemma untilt_ofAdd_smul (n : ℕ) (g : Gp p) (t : OFlat) :
     ((Multiplicative.ofAdd n, g) • t).untilt = (g • t.untilt) ^ p ^ n := by
   -- `(n, g)` acts on `O^♭` by the map that `g` induces on the tilt, then by `x ↦ x ^ p ^ n`
-  show (tiltMap (toRingHom (Gp p) OC g) t ^ p ^ n).untilt = _
+  change (tiltMap (toRingHom (Gp p) OC g) t ^ p ^ n).untilt = _
   rw [map_pow, untilt_tiltMap, toRingHom_apply]
 
 lemma untilt_frobGal_smul : (m • t).untilt = (m.2 • t.untilt) ^ p ^ m.1.toAdd := by
@@ -633,7 +625,7 @@ lemma exists_algebraMap_eq_of_frobenius_eq {k : Type*} [CommRing k] [IsDomain k]
   -- coordinate comes from `ZMod p`.
   have h_coeff_mem (n : ℕ) : ∃ z : ZMod p, castHom dvd_rfl k z = a.coeff n := by
     have h_root : a.coeff n ^ p = a.coeff n := by rw [← coeff_frobenius_charP, h_frobenius]
-    exact (GaloisField.splits_zmod_X_pow_sub_X p).mem_range_of_isRoot
+    exact (Polynomial.splits_X_pow_char_sub_X (ZMod p) p).mem_range_of_isRoot
       (Polynomial.X_pow_sub_X_ne_zero (Fact.out : p.Prime).one_lt)
       (by simpa [sub_eq_zero] using h_root)
   choose z hz using h_coeff_mem
@@ -908,12 +900,10 @@ lemma tau_dvd_of_theta_frobEnd (h_theta : ∀ j : ℕ, theta (frobEnd^[j + 1] a)
 /-! ### Primes and adic completeness of `A_inf` -/
 
 /-- `p` is a prime element of `A_inf`, because `A_inf / p = O^♭` is a domain. -/
-lemma Ainf.prime_p : Prime (p : Ainf) := by
+lemma Ainf.prime_p : Prime (p : Ainf) :=
   -- `p ∣ x` means that the constant coefficient of `x` in the domain `O^♭` is zero
-  refine ⟨p_nonzero p OFlat, fun h_unit ↦ ?_,
-    fun x y h_dvd ↦ by simpa [p_dvd_iff, -constantCoeff_apply] using h_dvd⟩
-  -- `p` does not divide `1`, whose constant coefficient is not zero
-  simpa [p_dvd_iff] using isUnit_iff_dvd_one.mp h_unit
+  (span_singleton_prime (p_ne_zero p OFlat)).mp
+    (ker_constantCoeff (k := OFlat) ▸ ker_isPrime constantCoeff)
 
 /-- If `p` does not divide `δ`, every non-unit of `A_inf` lies in the radical of `(p, δ)`. -/
 lemma Ainf.mem_radical_of_not_isUnit (h : ¬IsUnit a) (hδ : ¬↑p ∣ δ) :

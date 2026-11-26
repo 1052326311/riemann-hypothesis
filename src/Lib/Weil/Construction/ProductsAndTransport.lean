@@ -240,7 +240,7 @@ lemma omega_boxProd
   refine weilRep_tmul _ _ _ _ (weilMultiplier_fromBlocks hs h_blocks) (fun x ↦ ?_) f₁ f₂
   -- The action on the joined coordinates is that of `g.adeleMatrix` on
   -- `Sum.elim x.fst x.snd ∘ e.symm`.
-  show g.adeleMatrix *ᵥ ((x.fst ⊕ᵥ x.snd) ∘ e.symm) = ((g₁ • x.fst) ⊕ᵥ (g₂ • x.snd)) ∘ e.symm
+  change g.adeleMatrix *ᵥ ((x.fst ⊕ᵥ x.snd) ∘ e.symm) = ((g₁ • x.fst) ⊕ᵥ (g₂ • x.snd)) ∘ e.symm
   rw [e.eq_comp_symm, ← submatrix_mulVec_equiv, h_blocks, fromBlocks_mulVec]
   simp only [zero_mulVec, add_zero, zero_add, elim_comp_inl, elim_comp_inr]
   rfl
@@ -367,7 +367,7 @@ the Heisenberg bicharacter β up to `σ`, where A keeps the Gaussian and B keeps
 indicator. -/
 @[simp]
 lemma map_vacElem : D.map V₁.vacElem = V.vacElem :=
-  ext (map_integral_and_map_vacuum D.beta_phi D.vacuumFn_apply).2
+  ext (map_integral_and_map_vacuum (adelicHeisenberg E s₁) (adelicHeisenberg E s) D.vacuumFn_apply).2
 
 /-- Let φ be a vacuum-preserving change of coordinates with twist σ. If φ(gx) = g₁φ(x) for all x and
 σ(Δ(g₁)) = c·Δ(g), then (ω(g₁)f)^φ = c·ω(g)(f^φ) for all f in 𝒮(V₁), where f^φ = `D.map f` and
@@ -380,14 +380,14 @@ lemma map_omega {g : G E s} {g₁ : G E s₁}
   -- the value of `ω(g) (D.map f)` at `x`. (`erw`: as in `map_rho`, the lemmas about the Heisenberg
   -- model apply to `𝒮 V` only after unfolding.)
   refine ext fun x ↦ ?_
-  show σ ((V₁.ω g₁ f).val (D.φ x)) = c * (V.ω g (D.map f)).val x
+  change σ ((V₁.ω g₁ f).val (D.φ x)) = c * (V.ω g (D.map f)).val x
   -- write both values at `x` as `weilMultiplier` times an integral
   repeat erw [Space.ω, weilRep, IsVacuum.smul_apply, integrated_apply_eq_integral]
   -- substitute `D.φ` in the integral on the left: `σ (∫ F) = ∫ σ ∘ F ∘ D.φ` for every `F`, and
   -- `σ (e (D.φ x)) = e x` for the vacuum `e`
   have h_val (y : n → 𝔸 E) : (D.map (V := V) f).val y = σ (f.val (D.φ y)) := transport_apply ..
   simp [hc, ← h_phi_mulVec, ← map_sub, beta_phi, mul_assoc, h_val,
-    map_integral_and_map_vacuum D.beta_phi D.vacuumFn_apply]
+    map_integral_and_map_vacuum (adelicHeisenberg E s₁) (adelicHeisenberg E s) D.vacuumFn_apply]
 
 /-- For a change of coordinates with archimedean part A and twist σ, the continuous σ-semilinear
 map from the Fock space of signs s₁ to that of signs s sending v to σ∘v∘A. -/
@@ -403,7 +403,8 @@ lemma map_integrated (v : Model (realHeisenberg (realSigns E s₁))) (f : 𝒮 V
   -- write both values at `x` as integrals over real vectors and substitute `A = D.realEquiv` on the
   -- left: `σ (∫ F) = ∫ σ ∘ F ∘ A` for every `F` (`erw` as in `map_rho`)
   erw [transport_apply, ← valueAt_apply, map_integrated_eq_integral,
-    (map_integral_and_map_vacuum D.beta_realEquiv D.vac_realEquiv).1, ← valueAt_apply,
+    (map_integral_and_map_vacuum (realHeisenberg (realSigns E s₁))
+      (realHeisenberg (realSigns E s)) D.vac_realEquiv).1, ← valueAt_apply,
     map_integrated_eq_integral]
   -- the integrands agree: `D.φ` acts on a real vector `y` by `A`, and `D.map` respects `ϱ`
   congr! 2 with y

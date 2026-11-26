@@ -1,7 +1,6 @@
 module
 
 public import Lib.ClassField.Places.TameInertia
-public import Lib.General.Groups.CongruenceSubgroups
 import TauCeti.NumberTheory.Padics.Complex.TateTwist
 
 /-!

@@ -197,7 +197,7 @@ theorem finiteEquiv_eq_conj_adelicToFin :
   congr 3
   refine Subtype.ext (Units.ext ?_)
   -- It remains to compare the matrices of the finite part in rational coordinates.
-  show V.ratCoordMatrixFin g.2 = (V.ratCoordMatrix g).map Prod.snd
+  change V.ratCoordMatrixFin g.2 = (V.ratCoordMatrix g).map Prod.snd
   exact V.ratCoordMatrixFin_snd g
 
 /-- The isomorphism `New.Filling.Fits.finiteEquiv` is conjugation by an integral matrix x that
@@ -295,10 +295,10 @@ theorem enorm_cutBessel_ratEquiv_mul_le (γ : S.G E) :
   -- A coordinate of a vector is bounded by its norm.
   have h_coord (y : NumberField.InfinitePlace E → 𝔰.G₁) :
       ‖S.besselFn .full y a.2‖ₑ ≤ ∏ v, ‖(S.besselSystem v).besselFn .full (y v)‖ₑ := by
-    simp only [besselFn, enorm_eq_nnnorm, nnnorm_prod]
+    simp only [besselFn, eNorm_eq_nnNorm, nnNorm_prod]
     norm_cast
     gcongr
-    exact nnnorm_apply_le _ _
+    exact nnNorm_apply_le _ _
   simp only [cutBessel_ratEquiv_mul]
   split
   · grw [enorm_toReal_smul_le, h_coord]
@@ -380,7 +380,7 @@ theorem exists_tsum_enorm_cutBessel_le :
         ((Equiv.divLeft δ).symm.tsum_eq _).symm
     _ = ∑' γ : T, ‖X.cutBessel a (X.ratEquiv (γ.val⁻¹ * δ) * g)‖ₑ := by
         refine (tsum_subtype_eq_of_support_subset fun γ hγ ↦ h_over γ (by_contra fun h ↦ ?_)).symm
-        exact hγ (by simp only [h_zero _ h, enorm_zero])
+        exact hγ (by simp only [h_zero _ h, eNorm_zero])
     _ ≤ M := by
         refine le_trans (ENNReal.tsum_le_tsum fun γ ↦ ?_) (hM (S.ratToInf δ * X.realHomeomorph g.1))
         simpa only [map_mul S.ratToInf, map_inv, mul_assoc] using
@@ -439,7 +439,8 @@ omit [S.IsAdmissible] [HasPrimitiveRoot5040 E] in
 private theorem mul_poincareSeries_eq_sum (y : New.G E ε → ℂ) :
     y g * X.poincareSeries φ g =
       ∑ a : S.Classes × S.BesselCoord, φ a * (y g * ∑' γ : V.Γ, X.cutBessel a (γ * g)) := by
-  simp only [poincareSeries, Finset.mul_sum, mul_left_comm]
+  rw [poincareSeries, Finset.mul_sum]
+  exact Finset.sum_congr rfl fun _ _ ↦ mul_left_comm ..
 
 /-- Unfolding, for admissible filling data and a form y on V of any type e (a bounded automorphic
 function): the integral over Γ∖G of y times the Poincaré series of φ is
@@ -509,9 +510,9 @@ theorem exists_levelSpace_tsum_cutBessel_eq :
   have h_group (g : New.G E ε) :
       ∑' γ : V.Γ, X.cutBessel a (γ * g) = ∑' q : S.G E ⧸ S.classUnipotent a.1, F q g := by
     rw [← cosetEquiv.tsum_eq]
-    exact (cosetEquiv.summable_iff.2 (.of_enorm ((hM g).trans_lt ENNReal.coe_lt_top).ne)).tsum_prod
+    exact (cosetEquiv.summable_iff.2 (.of_eNorm ((hM g).trans_lt ENNReal.coe_lt_top).ne)).tsum_prod
   have h_bound (g : New.G E ε) : ∑' q : S.G E ⧸ S.classUnipotent a.1, ‖F q g‖ₑ ≤ M := by
-    grw [← hM g, ← cosetEquiv.tsum_eq, ENNReal.tsum_prod', ← enorm_tsum_le_tsum_enorm]
+    grw [← hM g, ← cosetEquiv.tsum_eq, ENNReal.tsum_prod', ← eNorm_tsum_le_tsum_eNorm]
   have h_fix (q : S.G E ⧸ S.classUnipotent a.1) (g : New.G E ε) :
       realConv (typeKernel l ε) (F q) g = F q g := by
     simpa [F, cosetEquiv, mul_assoc] using

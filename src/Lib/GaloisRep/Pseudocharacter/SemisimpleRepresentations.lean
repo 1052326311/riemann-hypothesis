@@ -77,13 +77,7 @@ the m_i, sending a family of square matrices to the block diagonal matrix. -/
 def blockDiagonalAlgHom {R o : Type*} {m : o → Type} [CommRing R] [DecidableEq o] [Fintype o]
     [∀ i, Fintype (m i)] [∀ i, DecidableEq (m i)] :
     (∀ i : o, Matrix (m i) (m i) R) →ₐ[R] Matrix (Σ i : o, m i) (Σ i : o, m i) R :=
-  AlgHom.mk'
-    { toFun := blockDiagonal'
-      map_one' := by simp
-      map_mul' := by simp [Pi.mul_def]
-      map_zero' := by simp
-      map_add' := by simp }
-    (by simp)
+  AlgHom.mk' (blockDiagonal'RingHom m R) (by simp)
 
 /-- The element of the product of matrix algebras M_{d_i}(k) that is the matrix unit E_ab in
 factor i and zero elsewhere; a, b default to 0. -/
@@ -624,7 +618,7 @@ lemma eventually_exists_isLatticeIn [TopologicalSpace G] [IsTopologicalGroup G] 
   have hZ_closed (m : ∀ p, I p) : IsClosed (Z m) := isClosed_iInter fun p ↦
     -- `O (m p)` is compact, hence closed; `Z m` is an intersection of preimages of it
     .preimage (hs_cont p) <| by
-      simpa using (isCompact_range (X := O (m p)) continuous_subtype_val).isClosed
+      simpa using (isCompact_range (X := O (m p)) continuous_subtypeVal).isClosed
   have hZ_cover : ⋃ m, Z m = univ := by
     refine eq_univ_of_forall fun g ↦ ?_
     choose m hm hg using h_gen g

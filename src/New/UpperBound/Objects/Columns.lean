@@ -314,12 +314,11 @@ lemma pairWeilFinite_schrodingerOpAt [h : IsSplitLevel P N] (g : GL n (LocProd P
   simp [-atPlaces_embedGL, field]
 
 omit h [Fact N.Prime] in
-/-- Let `P` hold one place of each conjugate pair above `N`, all unramified of degree one
-(`IsSplitLevel P N`), and let the base change of `a` be unramified at every place of `P`. Let
+/-- Suppose the base change of `a` is unramified at every place of `P`. Let
 `χ = a.spaceChar i` be this base change divided by the `i`-th power of the splitting character `υ`.
 The character `detCharAt χ k: x ↦ χ (det x) |det x| ^ (-k / 2)` of the invertible matrices at `P` is
 trivial on those that are invertible over the integers, which `inclGL` includes. -/
-lemma detCharAt_inclGL [_h : IsSplitLevel P N] (a : AutChar E)
+lemma detCharAt_inclGL (a : AutChar E)
     (h_unr : ∀ w ∈ P, CharUnramifiedAt a.baseChange.finPart w) (i k : ℕ)
     (g : GL n (O (F := LocProd P))) : detCharAt (a.spaceChar i) k (inclGL g) = 1 := by
   -- The determinant is a unit at each place of `P`, where both characters in `spaceChar` are

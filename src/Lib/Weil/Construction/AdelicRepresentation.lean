@@ -383,9 +383,10 @@ lemma dataInner_vacElem_vacElem : V.dataInner V.vacElem V.vacElem = 1 := by
 `y`. -/
 lemma dataInner_vacElem_rho_vacElem : V.dataInner V.vacElem (V.ϱ y V.vacElem) = vacuumFn y := by
   -- Conjugating swaps the arguments, the reproducing property gives the value of the vacuum
-  -- function at `y`, and that function is real. `erw`: the rewrites must see through `V.dataInner`,
-  -- `V.ϱ` and `V.vacElem`.
-  erw [← conj_modelInner, modelInner_heisenbergOp_vacElem, (adelicSum E s).isVacuum.conj_apply]
+  -- function at `y`, and that function is real.
+  exact (conj_modelInner ..).symm.trans <|
+    (congrArg conj (modelInner_heisenbergOp_vacElem ..)).trans <|
+      (adelicSum E s).isVacuum.conj_apply ..
 
 /-- For a hermitian space `V` over a CM field `E` with Weil data, and `g` in the adelic unitary
 group `G E s`, let `vacElem` be the vacuum vector of `𝒮 V` (a Gaussian times a twisted lattice
@@ -570,7 +571,7 @@ lemma summable_modelInner (f' f : Model (adelicHeisenberg E s)) :
   have h_norm (z x : n → 𝔸 E) :
       ‖modelInner f' (heisenbergOp (z + ContinuousAddMonoidHom.id (n → 𝔸 E) x) IsVacuum.vacElem)‖ₑ =
         ‖f' (id z + x)‖ₑ := by
-    rw [← conj_modelInner, modelInner_heisenbergOp_vacElem, RCLike.enorm_conj]
+    rw [← conj_modelInner, modelInner_heisenbergOp_vacElem, RCLike.eNorm_conj]
     simp only [ContinuousAddMonoidHom.id_toFun, id_eq]
   obtain ⟨B, hB, M, hM⟩ :=
     wiener_bound (modelInner f') h_vac_ne (ContinuousAddMonoidHom.id (n → 𝔸 E)) h_int id h_norm
@@ -581,7 +582,7 @@ lemma summable_modelInner (f' f : Model (adelicHeisenberg E s)) :
   have h_fin : (V.vecAtPoint ⁻¹' B).Finite :=
     isCovolOneLattice_ratVectors.finite_preimage (hB.preimage_smul V.x⁻¹)
   rw [← h_fin.cast_ncard_eq] at h_bound
-  exact .of_enorm (ne_top_of_le_ne_top (by simp [ENNReal.mul_ne_top]) h_bound)
+  exact .of_eNorm (ne_top_of_le_ne_top (by simp [ENNReal.mul_ne_top]) h_bound)
 
 namespace IsRatInvariant
 

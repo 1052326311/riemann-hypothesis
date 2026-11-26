@@ -70,7 +70,7 @@ variable {S} {γ : S.G E}
 products of the frame with its image under `γ`, and `n = ϱ + 1`. -/
 lemma norm_map_termDisc_le (v : NumberField.InfinitePlace E) :
     ‖Φ v (S.termDisc γ)‖ ≤ ‖Φ v (leadingMinor (S.frameProducts γ) ⊤)‖ ^ 2 := by
-  show _ ≤ ‖Φ v (S.frameProducts γ).det‖ ^ 2
+  change _ ≤ ‖Φ v (S.frameProducts γ).det‖ ^ 2
   have h_eq : ‖Φ v (S.termDisc γ)‖ = ‖Φ v (S.frameProducts γ).det‖ ^ 2 -
       (S.N * ‖Φ v (leadingMinor (S.frameProducts γ) 𝔰.top.castSucc)‖) ^ 2 := by
     rw [← Complex.ofReal_inj, ← map_termDisc_eq_norm]
@@ -97,7 +97,7 @@ lemma cellRankSecondMoment_nonneg [S.IsAdmissible] (j : Fin (𝔰.ϱ + 2)) :
 /-- At the top cell rank the orbit bound at `x` is
 `τ² (mainSecondMoment / (pairCountScale M ^ (2 ϱ f k) x ^ k)) ^ (1 / 2)`, where `τ` is `tailScale`,
 `M` is the level and `f` is the number of infinite places. -/
-lemma orbitBound_top [S.IsAdmissible] (x : ℝ) : S.orbitBound ⊤ x = S.tailScale ^ 2 *
+lemma orbitBound_top (x : ℝ) : S.orbitBound ⊤ x = S.tailScale ^ 2 *
     √(S.mainSecondMoment / (S.pairCountScale *
       (S.M ^ (2 * 𝔰.ϱ * numInfPlaces E * 𝔰.k) * x ^ 𝔰.k))) := by
   rw [orbitBound, cellRankSecondMoment, ite_eq_left (by simp), min_eq_left (by simp), mul_pow,

@@ -204,7 +204,7 @@ lemma exists_open_sylow (l : ℕ) [hl : Fact l.Prime] (U : OpenNormalSubgroup G)
   have hU_le : (U : Subgroup G) ≤ P := le_comap_mk' (U : Subgroup G) T.toSubgroup
   refine ⟨⟨P, isOpen_mono hU_le U.toOpenSubgroup.isOpen⟩, hU_le, ?_, fun g hg ↦ ?_⟩
   · simp [P, T.not_dvd_index, T.index_comap, hl.out.coprime_iff_not_dvd]
-  · obtain ⟨k, hk⟩ := T.isPGroup' ⟨g, hg⟩
+  · obtain ⟨k, hk⟩ := T.isPGroup ⟨g, hg⟩
     exact ⟨k, (eq_one_iff _).1 (by simpa [Subtype.ext_iff] using hk)⟩
 
 /-! ### Function modules and multiplicative functions -/

@@ -299,8 +299,6 @@ theorem IsUnimodularHaar.of_freeEntries {S : Subgroup 𝔰.G₁}
   have := hν.sigmaFinite
   obtain ⟨c, rfl⟩ : ∃ c : ℝ≥0∞, ν = c • haar := exists_eq_smul_haar haar h_right
   -- A Gaussian in the coordinates has integral `1`, so `c` is neither `0` nor `∞`.
-  have : (volume (α := (Subtype p → ℂ) × (Fin 𝔰.ϱ → ℝ))).IsAddHaarMeasure :=
-    prod.instIsAddHaarMeasure ..
   have hc : c ≠ 0 ∧ c ≠ ∞ := by
     have h_int := (hν.lintegral_comp (by fun_prop)).trans
       (lintegral_gaussian_eq_one (V := (Subtype p → ℂ) × (Fin 𝔰.ϱ → ℝ)))

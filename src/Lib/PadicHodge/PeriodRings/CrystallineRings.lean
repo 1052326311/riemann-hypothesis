@@ -160,10 +160,10 @@ lemma Amax.exists_lift [IsAdicComplete (span {(p : R)}) R] (f : Ainf →+* R) (x
   let F₀ : AdjoinRoot (C (p : Ainf) * .X - C xi) →+* R := AdjoinRoot.lift f x h_root
   let e : R ≃ₐ[R] AdicCompletion (span {(p : R)}) R := AdicCompletion.ofAlgEquiv (span {(p : R)})
   refine ⟨e.symm.toRingHom.comp (adicMap F₀ (by simp)), fun a ↦ ?_, ?_⟩
-  -- `erw`: the composite is typed through `Amax`, which is the completion only by definition, so a
-  -- plain `rw` finds no type-correct motive.
+  -- The composite is typed through `Amax`, which is the completion only by definition, so its two
+  -- steps are used as equations.
   all_goals
-    erw [RingHom.comp_apply, adicMap_algebraMap]
+    refine (RingHom.comp_apply ..).trans ((congrArg _ (adicMap_algebraMap ..)).trans ?_)
     simp [F₀, e]
 
 /-- The image in `A` of an element of `(p, ξ) ^ n` is divisible by `p ^ n`. -/
@@ -288,7 +288,7 @@ lemma isUnit_smul_of_dvd_mu {a : Ainf} (ha : a ∣ mu) : IsUnit (↑(m • a) : 
       have h_unit : IsUnit (algebraMap _ BPlus (algebraMap _ Amax (frobEnd xi))) :=
         isUnit_of_dvd _ associated_p_frobEnd_xi.symm.dvd
       rw [← h_unit.dvd_mul_left, iterate_succ_apply']
-      show algebraMap Ainf BPlus (frobEnd (frobEnd^[k] (g • a))) ∣
+      change algebraMap Ainf BPlus (frobEnd (frobEnd^[k] (g • a))) ∣
         algebraMap Amax BPlus (algebraMap Ainf Amax (frobEnd xi)) * algebraMap Ainf BPlus mu
       simpa [← xi_mul_tau, Algebra.cast, ← IsScalarTower.algebraMap_apply, -isUnit_map_iff] using
         map_dvd frobEnd ih
@@ -643,6 +643,24 @@ lemma dvd_of_algebraMap_BPlus_dvd {y a : Ainf} (hy_p : ¬(p : Ainf) ∣ y)
 
 /-! ### Approximation by `A_inf` and the kernel of `θ` on `B⁺` -/
 
+/-- Multiplication by a monic polynomial in `ξ / p` detects membership in `Amax` inside
+`B⁺ = Amax[1/p]`. -/
+private lemma amaxImage.mem_of_aeval_mul_mem {f : Ainf[X]} (hf : f.Monic)
+    (h : algebraMap Amax BPlus (aeval xiDivP f) * y ∈ amaxImage) : y ∈ amaxImage := by
+  obtain ⟨c, hc⟩ : ∃ c : Amax, (c : BPlus) = algebraMap Amax BPlus (aeval xiDivP f) * y := h
+  obtain ⟨m, b, hb⟩ := y.exists_p_pow_mul_eq_amax
+  have h_mul : aeval xiDivP f * b = (p : Amax) ^ m * c := by
+    apply injective_Amax_BPlus
+    calc ((aeval xiDivP f * b : Amax) : BPlus)
+          = algebraMap Amax BPlus (aeval xiDivP f) * (p ^ m * y) := by rw [algebraMap.coe_mul, hb]
+      _ = p ^ m * c := by rw [hc]; ring
+      _ = ((p ^ m * c : Amax) : BPlus) := by push_cast; rfl
+  obtain ⟨d, hd⟩ := b.p_pow_dvd_of_dvd_aeval_mul hf m ⟨c, h_mul⟩
+  refine ⟨d, (BPlus.isUnit_p.pow m).mul_left_cancel ?_⟩
+  rw [hb, hd]
+  push_cast
+  rfl
+
 /-- Let `p` be a prime (`ThePrime p`), let `e` in `A_inf` divide `μ = [ε] - 1`, and let `y` be in
 `B⁺ = A[1/p]`, where `A` is the period ring `Amax`. If `e ^ n • y` lies in the image `amaxImage` of
 `A` in `B⁺`, then so does `p ^ (2 * n) * y`. -/
@@ -653,8 +671,6 @@ lemma amaxImage.p_pow_mul_mem_of_dvd_mu {e : Ainf} {n : ℕ} (he_dvd_mu : e ∣ 
   obtain ⟨t, ht⟩ : e ∣ xi * (xi - p) := by
     grw [← xi_mul_tau, tau_dvd_xi_sub_p] at he_dvd_mu
     exact he_dvd_mu
-  obtain ⟨m, b, hb⟩ : ∃ (m : ℕ) (b : Amax), p ^ m * (p ^ (2 * n) * y) = (b : BPlus) :=
-    BPlus.exists_p_pow_mul_eq_amax
   -- With `X = ξ / p` and `g = X (X - 1)` we have `p² g = ξ (ξ - p) = e t`.
   let g : Amax := xiDivP * (xiDivP - 1)
   have h_g : (p : Amax) ^ 2 * g = e * t :=
@@ -663,26 +679,17 @@ lemma amaxImage.p_pow_mul_mem_of_dvd_mu {e : Ainf} {n : ℕ} (he_dvd_mu : e ∣ 
       _ = e * t := by rw [ht, algebraMap.coe_mul]
   have h_g_bplus : (p : BPlus) ^ 2 * g = e * t := by
     simpa [← IsScalarTower.algebraMap_apply] using congrArg (algebraMap Amax BPlus) h_g
-  have h_mul_eq : g ^ n * b = p ^ m * (t ^ n * c) := by
-    apply injective_Amax_BPlus
-    calc ((g ^ n * b : Amax) : BPlus)
-        = g ^ n * (p ^ m * (p ^ (2 * n) * y)) := by simp [hb]
-      _ = p ^ m * ((p ^ 2 * g) ^ n * y) := by ring
-      _ = p ^ m * (t ^ n * (e ^ n * y)) := by
-        rw [h_g_bplus]
-        ring
-      _ = ((p ^ m * (t ^ n * c) : Amax) : BPlus) := by
-        simp [hc, smul_def, ← IsScalarTower.algebraMap_apply]
-  -- A monic polynomial in `X` is regular modulo `pᵐ`; hence `pᵐ ∣ b`, and `pᵐ` cancels in `hb`.
-  have h_dvd : (p : Amax) ^ m ∣ aeval xiDivP ((.X * (.X - C 1)) ^ n : Ainf[X]) * b :=
-    ⟨t ^ n * c, by simpa [g] using h_mul_eq⟩
-  obtain ⟨b', rfl⟩ : (p : Amax) ^ m ∣ b :=
-    b.p_pow_dvd_of_dvd_aeval_mul ((monic_X.mul (monic_X_sub_C 1)).pow n) m h_dvd
-  have h_cancel : (p : BPlus) ^ m * ((b' : Amax) : BPlus) = p ^ m * (p ^ (2 * n) * y) := by
-    rw [hb]
-    push_cast
-    rfl
-  exact ⟨b', (BPlus.isUnit_p.pow m).mul_left_cancel h_cancel⟩
+  let F : Ainf[X] := (X * (X - C 1)) ^ n
+  have h_eval : aeval xiDivP F = g ^ n := by simp [F, g]
+  apply amaxImage.mem_of_aeval_mul_mem (f := F) ((monic_X.mul (monic_X_sub_C 1)).pow n)
+  rw [h_eval]
+  refine ⟨t ^ n * c, ?_⟩
+  change ((t ^ n * c : Amax) : BPlus) = ((g ^ n : Amax) : BPlus) * (p ^ (2 * n) * y)
+  rw [algebraMap.coe_pow]
+  calc ((t ^ n * c : Amax) : BPlus) = t ^ n * (e ^ n * y) := by
+         simp [hc, smul_def, ← IsScalarTower.algebraMap_apply]
+    _ = ((p : BPlus) ^ 2 * g) ^ n * y := by rw [h_g_bplus]; ring
+    _ = _ := by ring
 
 /-- Let `p` be a prime (`ThePrime p`) and `B⁺ = A[1/p]`, where `A` is the period ring `Amax`. For
 `y` in `B⁺` and natural numbers `k`, `n` there are `m`, an element `a` of `A_inf` and an element `w`
@@ -792,28 +799,10 @@ lemma BPlus.eq_zero_of_forall_pow_dvd (a : Ainf)
   have h_int (m : ℕ) : aeval Amax.xiDivP ((.X - C a) ^ m) ∣ c := by
     -- `hw : c = (X - a) ^ m * w` in `B⁺`
     obtain ⟨w, hw⟩ := h_loc m
-    obtain ⟨l, d, hd⟩ := w.exists_p_pow_mul_eq_amax
-    have h_mul_eq : aeval Amax.xiDivP ((.X - C a) ^ m) * d = p.cast ^ l * c := by
-      apply injective_Amax_BPlus
-      calc ((aeval Amax.xiDivP ((.X - C a) ^ m) * d : Amax) : BPlus)
-          = algebraMap Amax BPlus (aeval Amax.xiDivP ((.X - C a) ^ m)) * (p ^ l * w) := by
-            rw [algebraMap.coe_mul, ← hd]
-        _ = p ^ l * c := by
-            rw [hw]
-            ring
-        _ = ((p.cast ^ l * c : Amax) : BPlus) := by
-            push_cast
-            rfl
-    obtain ⟨e, he⟩ : (p : Amax) ^ l ∣ d :=
-      d.p_pow_dvd_of_dvd_aeval_mul ((monic_X_sub_C a).pow m) l ⟨c, h_mul_eq⟩
-    have hw_eq : w = (e : BPlus) := by
-      have h_mul : (p : BPlus) ^ l * w = (p : BPlus) ^ l * e := by
-        rw [hd, he]
-        push_cast
-        rfl
-      exact (BPlus.isUnit_p.pow l).mul_left_cancel h_mul
+    obtain ⟨e, he⟩ : ∃ e : Amax, (e : BPlus) = w :=
+      amaxImage.mem_of_aeval_mul_mem ((monic_X_sub_C a).pow m) ⟨c, by exact hw⟩
     refine ⟨e, injective_Amax_BPlus ?_⟩
-    rw [hw, hw_eq, algebraMap.coe_mul]
+    rw [hw, ← he, algebraMap.coe_mul]
   -- a nonzero polynomial is not divisible by `X - a` to its root multiplicity plus one
   have hFc_ne : F c ≠ 0 := fun h_zero ↦ hc ((hF_ker c).mpr h_zero)
   set r : ℕ := rootMultiplicity (Ideal.Quotient.mk (span {(p : Ainf), xi}) a) (F c) + 1

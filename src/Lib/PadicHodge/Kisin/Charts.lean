@@ -361,7 +361,7 @@ instance : c.maxIdeal.IsMaximal := by
       span {(p : WittFq c.f)} = (maximalIdeal (WittFq c.f)⟦X⟧).map PowerSeries.constantCoeff := by
     rw [map_maximalIdeal_of_surjective _ constantCoeff_surj, (irreducible p).maximalIdeal_eq]
   have h_max : maximalIdeal (WittFq c.f)⟦X⟧ = span {X, C (p : WittFq c.f)} := by
-    simpa using eq_span_insert_X_of_X_mem_of_span_eq X_prime.not_isUnit h_const
+    simpa using eq_span_insert_X_of_X_mem_of_span_eq prime_X.not_isUnit h_const
   have h_map : (maximalIdeal (WittFq c.f)⟦X⟧).map c.seriesEquiv = c.maxIdeal := by
     simp [h_max, pair_comm X, map_span, seriesEquiv_X]
   rw [← h_map]
@@ -686,7 +686,7 @@ lemma eq_zero_of_forall_thetaPhiInv_eq_zero {a : Ainf} (h : ∀ n : ℕ, thetaPh
   -- Modulo `p` the value `thetaPhiInv n b` is the `n`-th component of `b`.
   have h_const : ∀ b ∈ ⨅ n, ker (thetaPhiInv (p := p) n), b.constantCoeff = 0 := by
     refine fun b hb ↦ Perfection.ext fun n ↦ Eq.trans ?_ (map_zero _).symm
-    show PreTilt.coeff n b.constantCoeff = 0
+    change PreTilt.coeff n b.constantCoeff = 0
     rw [← mk_thetaPhiInv_eq_coeff, mem_ker.mp (mem_iInf.mp hb n)]
     exact map_zero _
   -- The ideal is saturated for `p`, and an element vanishing modulo `p` is divisible by it.

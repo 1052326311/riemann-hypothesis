@@ -1,7 +1,6 @@
 module
 
 public import Lib.Cohomology.Hodge.DepthVanishing
-public import Lib.General.Groups.CongruenceSubgroups
 public import Lib.PadicComparison.HodgeTate.ExtCocycles
 
 /-!
@@ -1049,8 +1048,12 @@ lemma IsPointSum.map_eq_sum_pointClass {s : Finset (X (CommAlgCat.of k k))}
     exact ⟨a, g, ha, cut, _, by simpa [h_sum, h_vanish] using local_eq⟩
   obtain rfl := add_eq_of_eq_sub' hy
   -- The case of one point applies to `x`, the induction hypothesis to `y`.
-  have hx_sum : IsPointSum {z} n x := h_isPointSum_of_eq_add s rfl (by simp [V]) (by grind)
-  have hy_sum : IsPointSum s n y := h_isPointSum_of_eq_add {z} (add_comm ..) rfl (by grind)
+  have hx_sum : IsPointSum {z} n x := h_isPointSum_of_eq_add s rfl (by simp [V]) (by
+    ext w
+    simp only [Set.mem_singleton_iff, Set.mem_sdiff, Finset.mem_coe, Finset.mem_insert]
+    exact ⟨fun hw ↦ ⟨Or.inl hw, hw ▸ hz⟩, fun ⟨h, hns⟩ ↦ h.resolve_right hns⟩)
+  have hy_sum : IsPointSum s n y := h_isPointSum_of_eq_add {z} (add_comm ..) rfl (by
+    rw [Finset.coe_insert, Set.insert_sdiff_self_of_notMem (by simpa only [Finset.mem_coe] using hz)])
   simp [V, hz, ← ih hy_sum, ← hx_sum.map_eq_smul_pointClass, π_map]
 
 end PointClass

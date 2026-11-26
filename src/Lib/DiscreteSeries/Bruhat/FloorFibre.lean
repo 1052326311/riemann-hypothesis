@@ -91,12 +91,10 @@ lemma involutive_oppositeIndex : (oppositeIndex (𝔰 := 𝔰)).Involutive :=
 exchanges `e_a` with `e*_a`, consists of the indices whose opposite has property `p`. -/
 lemma range_oppositeIndex_val (p : 𝔰.BesselIndex → Prop) :
     (Set.range fun i : Subtype p ↦ oppositeIndex i.1) =
-      {i : 𝔰.BesselIndex | p (oppositeIndex i)} := by
-  ext i
-  constructor
-  · rintro ⟨j, rfl⟩
-    simpa [involutive_oppositeIndex j.1] using j.2
-  · exact fun hi ↦ ⟨⟨oppositeIndex i, hi⟩, involutive_oppositeIndex i⟩
+      {i : 𝔰.BesselIndex | p (oppositeIndex i)} :=
+  (Set.range_comp oppositeIndex Subtype.val).trans <| by
+    rw [Subtype.range_coe_subtype, involutive_oppositeIndex.image_eq_preimage_symm]
+    rfl
 
 /-- The skew element `i t / 2`, which indexes the quadric `h(v, v) = t` at the place `ℂ`. -/
 noncomputable def skewOfLevel (t : ℝ) : skewAdjoint ℂ :=

@@ -344,7 +344,8 @@ lemma relIndex_latticeStabilizer :
         algebraMap (RingOfIntegers D.E) (Ô D.E) D.piN ∣ r j := by
       by_cases hj : j = D.shape.k₀ <;>
         simp [hj, Ne.symm, r, Submodule.mem_span_singleton, dvd_def, Subtype.ext_iff,
-          Subring.smul_def, piNIdele, mul_comm, eq_comm]
+          Subring.smul_def, piNIdele] <;>
+        exact exists_congr fun _ ↦ and_congr_right' (by rw [mul_comm, eq_comm])
     have h_fix (w : D.piNPlaces) : stdLevel.reduceFamily Subtype.val ⟨x, hx⟩ w ∈ H w ↔
         ∀ j : D.shape.κ, reduceAt w.1 (r j) = 0 := by
       -- The inverse transpose fixes the unit vector iff row `k₀` of the reduction is that vector.
@@ -646,8 +647,8 @@ lemma abs_log_mainSecondMoment_div_identitySecondMoment_sub_le :
   -- the sums of `log i!` and in `log b`.
   simp (disch := intros; first | positivity | omega) only [log_div, log_mul, log_pow, log_sqrt,
     sum_add_distrib, sum_const, Finset.card_range, nsmul_eq_mul, sum_range_id,
-    ← Nat.choose_two_right, card_univ, logLevelTarget, abs_le, ↓sum_Ico_eq_sub, Set.mem_Icc,
-    sum_sub_distrib, ← mul_sum,
+    ← Nat.choose_two_right, card_univ, logLevelTarget, New.Parameters.logLevelMin,
+    abs_le, ↓sum_Ico_eq_sub, Set.mem_Icc, sum_sub_distrib, ← mul_sum,
     sum_singleton, ← sum_mul, ← Nat.cast_sum _ (·), ↓sum_range_sub (log <| mass D.E ·)] at *
   push_cast (disch := apply D.nat_le_of_hasLogBound) [Nat.cast_choose_two, ← add_assoc,
     m_eq_two_mul_varrho_add_two] at *

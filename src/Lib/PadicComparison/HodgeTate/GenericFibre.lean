@@ -401,10 +401,11 @@ lemma proj_mulMu : ∀ t : genericOver.obj c, proj c (mulMu c t) = 0 := by
 lemma mulMu_proj_mul (b : thickeningOver.obj c) :
     ∀ t : genericOver.obj c, mulMu c (proj c b * t) = b * mulMu c t := by
   refine c.thickeningProj_surjective_and_ker_thetaGeneric.left.forall.mpr fun b' ↦ ?_
-  -- `erw`: `b` lives in `thickeningOver.obj c`, and `proj c b` is `c.thickeningProj b` only up to
-  -- unfolding.
-  erw [← map_mul, mulMu_thickeningProj, mulMu_thickeningProj, mul_left_comm]
-  rfl
+  -- `b` lives in `thickeningOver.obj c`, and `proj c b` is `c.thickeningProj b` up to unfolding.
+  refine (congrArg (mulMu c) (map_mul c.thickeningProj b b').symm).trans <|
+    (mulMu_thickeningProj ..).trans ?_
+  rw [mulMu_thickeningProj]
+  exact mul_left_comm ..
 
 /-- `mulMu` commutes with the maps induced by a morphism `f` of tests. -/
 lemma map_mulMu (d : PadicTest) (f : c ⟶ d) :

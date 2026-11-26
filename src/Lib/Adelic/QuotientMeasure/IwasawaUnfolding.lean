@@ -74,12 +74,12 @@ lemma New.integrable_prod_count_of_lintegral_lt_top {X Y : Type*} [MeasurableSpa
     Integrable (fun p : X × Y ↦ k p.2 p.1) (ν.prod count) := by
   have h_meas : Measurable fun p : X × Y ↦ k p.2 p.1 := measurable_from_prod_countable_left hk_meas
   refine ⟨h_meas.aestronglyMeasurable, ?_⟩
-  rw [HasFiniteIntegral, lintegral_prod _ h_meas.enorm.aemeasurable]
+  rw [HasFiniteIntegral, lintegral_prod _ h_meas.eNorm.aemeasurable]
   simpa only [lintegral_count] using h_fin
 
 /-- If the `k y` are measurable and `∑ ‖k y‖` has finite integral, then `∑ k y` is integrable. -/
 lemma New.integrable_tsum_of_lintegral_lt_top {X Y : Type*} [MeasurableSpace X] [Countable Y]
-    {ν : Measure X} [SFinite ν] {k : Y → X → ℂ} (hk_meas : ∀ y : Y, Measurable (k y))
+    {ν : Measure X} {k : Y → X → ℂ} (hk_meas : ∀ y : Y, Measurable (k y))
     (h_fin : ∫⁻ x : X, ∑' y : Y, ‖k y x‖ₑ ∂ν < ∞) :
     Integrable (fun x : X ↦ ∑' y : Y, k y x) ν := by
   let : MeasurableSpace Y := ⊤
@@ -100,8 +100,8 @@ lemma New.hasSum_integral_of_lintegral_tsum_lt_top {k : Y → G → ℂ} {ν : M
   rw [lintegral_tsum (by fun_prop)] at h_fin
   rw [integral_tsum h_meas h_fin.ne]
   have h_le : ∑' y : Y, ‖∫ x, k y x ∂ν‖ₑ ≤ ∑' y : Y, ∫⁻ x, ‖k y x‖ₑ ∂ν :=
-    ENNReal.tsum_le_tsum fun y ↦ enorm_integral_le_lintegral_enorm (k y)
-  exact (Summable.of_enorm (h_le.trans_lt h_fin).ne).hasSum
+    ENNReal.tsum_le_tsum fun y ↦ eNorm_integral_le_lintegral_eNorm (k y)
+  exact (Summable.of_eNorm (h_le.trans_lt h_fin).ne).hasSum
 
 open scoped Classical in
 omit [MeasurableSpace G] [Countable Y] in
@@ -177,8 +177,8 @@ lemma New.lintegral_tsum_enorm_block (hi : Function.Injective i) {Γ S : Subgrou
     (hD : ∀ y : Y, y ∈ D ↔ ∃ γ : Λ, γ • y ∈ C) {k : Y → G → ℂ} (hk_meas : ∀ y : Y, Measurable (k y))
     (hk : ∀ (γ : Λ) (y : Y) (x : G), k (γ • y) (i γ * x) = k y x) :
     ∫⁻ x : G, ∑' y : D, ‖k y x‖ₑ ∂Γ.quotMeasure μ = ∫⁻ x : G, ∑' y : C, ‖k y x‖ₑ ∂S.quotMeasure μ :=
-  lintegral_tsum_block hi hΓ hS hC hD (g := fun y x ↦ ‖k y x‖ₑ) (fun y ↦ (hk_meas y).enorm)
-    fun γ y x ↦ congrArg enorm (hk γ y x)
+  lintegral_tsum_block hi hΓ hS hC hD (g := fun y x ↦ ‖k y x‖ₑ) (fun y ↦ (hk_meas y).eNorm)
+    fun γ y x ↦ congrArg eNorm (hk γ y x)
 
 /-- Unfolding of the integral of a sum over the translates of a block. Let `i` map `Λ`
 isomorphically onto the discrete subgroup `Γ`, let `γ` carry a point of `C` into `C` exactly when
@@ -387,7 +387,7 @@ lemma New.ae_eq_zero_of_integrable_top_smul {X : Type*} [MeasurableSpace X] {q :
   have h_lt : ∞ * ∫⁻ x, ‖F x‖ₑ ∂q < ∞ := by
     simpa [HasFiniteIntegral] using h_int.hasFiniteIntegral
   have h_norm : ∫⁻ x, ‖F x‖ₑ ∂q = 0 := by simpa [mul_lt_top_iff] using h_lt
-  filter_upwards [(lintegral_eq_zero_iff' hF.enorm).1 h_norm] with x hx using by simpa using hx
+  filter_upwards [(lintegral_eq_zero_iff' hF.eNorm).1 h_norm] with x hx using by simpa using hx
 
 /-- Division of an integral formula by a factor `c ∈ (0, ∞]` of the measure. For finite nonzero `V`
 there is `a ≠ 0` such that, if `F` is measurable and integrable for `c • q` with integral `V * I`,
@@ -565,7 +565,7 @@ let the discrete group `Γ` contain every `i (δ d)` and lie in the union of the
 Suppose that conjugation by `i m` multiplies integrals over `N` by `w m`. Then `w m` times the
 integral over `(Γ ∩ N) \ N` (that is, against `quotMeasure lam`) of a sum over `Γ` unfolds to a sum
 over `d` of integrals over `N` against the Haar measure `lam`. -/
-lemma New.ofReal_mul_lintegral_quotMeasure_tsum [IsMulRightInvariant lam]
+lemma New.ofReal_mul_lintegral_quotMeasure_tsum
     (hN : IsClosed (N : Set G))
     (h_conj : ∀ (m : M) (f : G → ℝ≥0∞), Measurable f →
       ∫⁻ n : N, f (i m * n * (i m)⁻¹) ∂lam = ENNReal.ofReal (w m) * ∫⁻ n : N, f n ∂lam)

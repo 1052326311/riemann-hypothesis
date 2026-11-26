@@ -331,9 +331,8 @@ lemma tangentCoords_comp (h_zero_in : LandsIn (0 : mk t ⟶ A).left V) (hy : IsI
     h_zero_in, funext_iff]
 
 /-- The coordinates z(y) − z(0) of a C-point y that is infinitesimal for the square-zero extension
-ψ lie in ker ψ; here z are étale coordinates on V, which contains the zero C-point. -/
-lemma map_tangentCoords_eq_zero (_hz : IsEtaleChart A.hom V z)
-    (h_zero_in : LandsIn (0 : mk t ⟶ A).left V) (hy : IsInfinitesimal ψ y) [hψ : IsSqZeroExt ψ]
+ψ lie in ker ψ; here z are coordinates on V, which contains the zero C-point. -/
+lemma map_tangentCoords_eq_zero (h_zero_in : LandsIn (0 : mk t ⟶ A).left V) (hy : IsInfinitesimal ψ y) [hψ : IsSqZeroExt ψ]
     (k : ι) :
     ψ (tangentCoords z y k) = 0 := by
   -- `ψ ∘ tangentCoords z y` is `tangentCoords z` of the reduction of `y`, which is `0`.
@@ -344,7 +343,7 @@ lemma map_tangentCoords_eq_zero (_hz : IsEtaleChart A.hom V z)
   exact (congrFun h_nat k).symm
 
 /-- A C-point y that is infinitesimal for the square-zero extension ψ and has coordinates
-z(y) − z(0) = 0 is zero; here z are étale coordinates on V, which contains the zero C-point. -/
+z(y) − z(0) = 0 is zero; here z are coordinates on V, which contains the zero C-point. -/
 lemma eq_zero_of_tangentCoords_eq_zero (hz : IsEtaleChart A.hom V z)
     (h_zero_in : LandsIn (0 : mk t ⟶ A).left V) (hy : IsInfinitesimal ψ y) [hψ : IsSqZeroExt ψ]
     (h_dv : tangentCoords z y = 0) : y = 0 :=
@@ -426,8 +425,8 @@ lemma exists_isLieChart {g : ℕ} (hd : SmoothOfRelativeDimension g A.hom) [IsLo
     have h_univ : IsInfinitesimal (ofHom (fstHom B B _).toRingHom) (c • (Y .inl + Y .inr)) :=
       IsInfinitesimal.smul (by rw [IsInfinitesimal, comp_add, hY, hY, add_zero]) c
     have h_ker (v : Fin g ⊕ Fin g → C) : ψ (v ⬝ᵥ L) = 0 := by
-      simp [L, dotProduct, hz.map_tangentCoords_eq_zero h_in hy,
-        hz.map_tangentCoords_eq_zero h_in hy']
+      simp [L, dotProduct, IsEtaleChart.map_tangentCoords_eq_zero h_in hy,
+        IsEtaleChart.map_tangentCoords_eq_zero h_in hy']
     algebraize [φ.hom]
     -- The entries of `L` lie in the square-zero kernel of `ψ`, so sending the basis vectors to them
     -- is a `B`-algebra map `B ⊕ B^{2g} → C`; `q` is the induced map of schemes over `S`.
@@ -442,13 +441,13 @@ lemma exists_isLieChart {g : ℕ} (hd : SmoothOfRelativeDimension g A.hom) [IsLo
     have h_pull (c : Fin g → Fin g ⊕ Fin g) {x : mk (map φ ≫ s) ⟶ A} (hx : IsInfinitesimal ψ x)
         (hL : tangentCoords z x = L ∘ c) : q ≫ Y c = x := by
       refine (hz.existsUnique_tangentCoords_eq h_in hψ (tangentCoords z x)
-          (hz.map_tangentCoords_eq_zero h_in hx)).unique ⟨(hY c).precomp q rfl (φ ≫ ψ) ?_, ?_⟩
+          (IsEtaleChart.map_tangentCoords_eq_zero h_in hx)).unique ⟨(hY c).precomp q rfl (φ ≫ ψ) ?_, ?_⟩
         ⟨hx, rfl⟩
       · exact hom_ext (RingHom.ext fun _ ↦ (map_add _ _ _).trans (add_eq_left.2 (h_ker _)))
       · simp [IsEtaleChart.tangentCoords_comp (z := z) h_in (hY c) q rfl, hY_coords, hL, funext_iff]
     -- The universal coordinates have no `B`-part; pull them back along `q`.
     have h_fst : ∀ k : Fin g, (tangentCoords z (c • Y .inl + c • Y .inr) k).fst = 0 := by
-      simpa using hz.map_tangentCoords_eq_zero h_in h_univ
+      simpa using IsEtaleChart.map_tangentCoords_eq_zero h_in h_univ
     -- `using!`: the two sides agree only after unfolding `Fintype.linearCombination`.
     simpa [b, h_pull .inl hy rfl, h_pull .inr hy' rfl, lift, h_fst, funext_iff, comp_add] using!
       IsEtaleChart.tangentCoords_comp (z := z) h_in h_univ q rfl
