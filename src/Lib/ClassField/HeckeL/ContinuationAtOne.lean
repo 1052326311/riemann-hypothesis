@@ -589,9 +589,7 @@ lemma exists_level_tate_integral (h : IsHeckeOfType ψ n) :
     simp only [mem_Ô, finAdele_mul_apply, finAdele_sub_apply, finAdele_one_apply, map_mul]
   have h_supp (x : (𝔸f K)ˣ) (hx : f x ≠ 0) :
       (∀ w : FinPlace K, w ∉ T → v (x.val w) ≤ 1) ∧ ∀ w : FinPlace K, w ∈ T → v (x.val w) = 1 := by
-    have hx_mem : d.val * (x.val - 1) ∈ Ô K := by
-      by_contra hx_not
-      simp [f, hx_not] at hx
+    obtain ⟨_, hx_mem⟩ := (adelicTent_ne_zero_iff 1 d).mp (ofReal_ne_zero.mp hx)
     refine ⟨fun w _ ↦ mem_Ô.mp (h_level x hx_mem).1 w, fun w hw ↦ ?_⟩
     -- At `w ∈ T`, `1 < v (d w)` and `v (d w) * v (x w - 1) ≤ 1` give `v (x w) = 1`.
     have hd : 1 < v (d.val w) := not_le.mp ((hT w).mp hw)
