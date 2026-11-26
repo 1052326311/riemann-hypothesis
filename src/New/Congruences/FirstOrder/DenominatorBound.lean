@@ -172,8 +172,8 @@ abbrev IsLiftWithTwistedLattice {P : Parameters} {D : Data P} {ℓ : ℕ} [ThePr
   ∃ (wt : (D.E →+* ℂ) → Multiset ℤ) (R : GalRep ℓ D.E r),
     IsMainSummandLike (n := r) D O.rankDiff wt R ∧
     HasLiftTrace ϑ.invAvatar R O.rankDiff (normalisedRep O x.galRep) ∧
-    ∃ (γ : Gal(Ω/D.E)) (y : intQpBar ℓ), HasTwistedLattice ϑ.invAvatar R γ y ∧
-      (x = x₀ → HasDivisibleSelmerLengthLe ϑ.invAvatar R ϑ.Q γ y sel)
+    ∃ γ : Gal(Ω/D.E), HasTwistedLattice ϑ.invAvatar R γ ∧
+      (x = x₀ → HasDivisibleSelmerLengthLe ϑ.invAvatar R ϑ.Q γ sel)
 
 
 /-- The bound `sel + 2 t′ ram + r′ loc + err` for the valuations of the eigenvalues of the operator
@@ -508,7 +508,7 @@ lemma exists_isCommonRibetElement_ellVal_le {P : Parameters} {D : Data P} {ℓ :
       IsCommonRibetElement 𝒥
         (fun (g : AbsGal D) (x : Y) ↦ (1 - (normalisedRep O (sys x).galRep g).val).det) x₀ d ∧
       ellVal (ℓ := ℓ) (D.chosenGroupOrder ^ 2 * d) ≤ liftValuationBound ℓ O ram sel := by
-  choose jumps R hR h_trace γ y h_lattice h_selmer using
+  choose jumps R hR h_trace γ h_lattice h_selmer using
     fun x : sys ⁻¹' 𝓧 ↦ h_lift (sys x) x.prop
   obtain ⟨d, hd, hd_le⟩ :=
     ribet_columns hc hϑ h_le h_tri h_isRepOfType h_quad hR h_trace h_lattice h𝒥 he
@@ -761,7 +761,7 @@ structure IsLiftGenerator {P : Parameters} {D : Data P} {ℓ : ℕ} [ThePrime �
   exists_hasLiftHeckePolynomial : ∃ z : FinPlace D.E → ℕ → ℂ, O.HasLiftHeckePolynomial y z ∧
     ∃ (R : GalRep ℓ D.E r) (V : DescentPair D.E r n),
       IsMainSummand V z R ∧ O.u1Char = V.u1Char * ϑ.toAutChar ∧
-      ∃ (γ : AbsGal D) (s : intQpBar ℓ), HasDivisibleSelmerLengthLe ϑ.invAvatar R ϑ.Q γ s sel
+      ∃ γ : AbsGal D, HasDivisibleSelmerLengthLe ϑ.invAvatar R ϑ.Q γ sel
 
 /-- A lift generator for the bound `sel` on the length of its Selmer group is one for every larger
 bound. -/
@@ -770,8 +770,8 @@ lemma IsLiftGenerator.mono {P : Parameters} {D : Data P} {ℓ : ℕ} [ThePrime �
     {O : DescentPair D.E r n} {E : MonoidAlgebra ℂ (O.ChosenGL r)} {Z : Submodule ℂ O.FormV}
     {sel sel' : ENNReal} {y : O.FormV} (hy : IsLiftGenerator ϑ O E Z sel y) (h_le : sel ≤ sel') :
     IsLiftGenerator ϑ O E Z sel' y := by
-  obtain ⟨z, hz, R, V, hR, hμ, γ, s, h_sel⟩ := hy.exists_hasLiftHeckePolynomial
-  exact ⟨hy.mem, hy.exists_type, z, hz, R, V, hR, hμ, γ, s, h_sel.mono h_le⟩
+  obtain ⟨z, hz, R, V, hR, hμ, γ, h_sel⟩ := hy.exists_hasLiftHeckePolynomial
+  exact ⟨hy.mem, hy.exists_type, z, hz, R, V, hR, hμ, γ, h_sel.mono h_le⟩
 
 /-- A lift (`O.HasLiftHeckePolynomial`: a form whose Hecke polynomials are those of the lift of some
 eigenvalues `z`) is an eigenvector of every Hecke polynomial operator, so the span of a set of lifts
@@ -845,13 +845,13 @@ lemma IsLiftGenerator.exists_isMainSummandLike {P : Parameters} {D : Data P} {�
     ∃ (wt : (D.E →+* ℂ) → Multiset ℤ) (R : GalRep ℓ D.E r),
       IsMainSummandLike (n := r) D O.rankDiff wt R ∧
       HasLiftTrace ϑ.invAvatar R O.rankDiff (normalisedRep O x.galRep) ∧
-      ∃ (γ : AbsGal D) (y : intQpBar ℓ), HasDivisibleSelmerLengthLe ϑ.invAvatar R ϑ.Q γ y sel := by
-  obtain ⟨z, hz, R, V, ⟨⟨τ, hR⟩, h_trace⟩, hμ, γ, y, h_sel⟩ := hv.exists_hasLiftHeckePolynomial
+      ∃ γ : AbsGal D, HasDivisibleSelmerLengthLe ϑ.invAvatar R ϑ.Q γ sel := by
+  obtain ⟨z, hz, R, V, ⟨⟨τ, hR⟩, h_trace⟩, hμ, γ, h_sel⟩ := hv.exists_hasLiftHeckePolynomial
   have h_lift : HasLiftTrace ϑ.invAvatar R O.rankDiff (normalisedRep O x.galRep) :=
     h_trace hμ hz (isEigenform hvx.mem hvx.ne_zero) (attached_galRep hvx.mem hvx.ne_zero)
   -- `V.rankDiff` and `O.rankDiff` are both `card n - card r` by definition.
   have hR_O : IsMainSummandLike D O.rankDiff τ R := hR
-  exact ⟨τ, R, hR_O, h_lift, γ, y, h_sel⟩
+  exact ⟨τ, R, hR_O, h_lift, γ, h_sel⟩
 
 /-- Let `w` be a split place such that neither `w` nor its conjugate lies in `O.places`, the places
 of the level of the pair `O`, and let `ξ` be any complex number. The Hecke polynomial operator at
@@ -971,14 +971,14 @@ lemma IsLiftGenerator.exists_isMainSummandLike_hasTwistedLattice {P : Parameters
     ∃ (wt : (D.E →+* ℂ) → Multiset ℤ) (R : GalRep ℓ D.E r),
       IsMainSummandLike (n := r) D O.rankDiff wt R ∧
       HasLiftTrace ϑ.invAvatar R O.rankDiff (normalisedRep O x.galRep) ∧
-      ∃ (γ : AbsGal D) (y : intQpBar ℓ), HasTwistedLattice ϑ.invAvatar R γ y ∧
-        (x = x₀ → HasDivisibleSelmerLengthLe ϑ.invAvatar R ϑ.Q γ y sel) := by
+      ∃ γ : AbsGal D, HasTwistedLattice ϑ.invAvatar R γ ∧
+        (x = x₀ → HasDivisibleSelmerLengthLe ϑ.invAvatar R ϑ.Q γ sel) := by
   by_cases h_eq : x = x₀
   · subst h_eq
-    obtain ⟨τ, R, hR, h_trace, γ, y, h_sel⟩ := hv₀.exists_isMainSummandLike hx₀
-    exact ⟨τ, R, hR, h_trace, γ, y, h_sel.hasTwistedLattice, fun _ ↦ h_sel⟩
-  · obtain ⟨τ, R, hR, h_trace, γ, y, h_sel⟩ := hv.exists_isMainSummandLike hx
-    exact ⟨τ, R, hR, h_trace, γ, y, h_sel.hasTwistedLattice, fun h ↦ absurd h h_eq⟩
+    obtain ⟨τ, R, hR, h_trace, γ, h_sel⟩ := hv₀.exists_isMainSummandLike hx₀
+    exact ⟨τ, R, hR, h_trace, γ, h_sel.hasTwistedLattice, fun _ ↦ h_sel⟩
+  · obtain ⟨τ, R, hR, h_trace, γ, h_sel⟩ := hv.exists_isMainSummandLike hx
+    exact ⟨τ, R, hR, h_trace, γ, h_sel.hasTwistedLattice, fun h ↦ absurd h h_eq⟩
 
 /-- At each system `x`, `B.diagOp s' ∘ toSmoothForm ∘ typeProjection O c` multiplies a form of `x`
 in the range of `typeProjection O c` by `ιℓ.symm (s' x)`. -/

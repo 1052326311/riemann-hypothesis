@@ -493,25 +493,25 @@ lemma exists_blockDiagonal_lattices {u : Y → GalRep ℓ D.E n}
 section Model
 
 variable {ψ : AbsGal D →* PadicAlgCl ℓ} {R : GalRep ℓ D.E r} {Q : Finset (FinPlace D.E)}
-  {γ : AbsGal D} {ζ : intQpBar ℓ} {R₀ : AbsGal D →* Matrix r r O} {ψ' : AbsGal D →* O} {ζ' : ↑O}
+  {γ : AbsGal D} {R₀ : AbsGal D →* Matrix r r O} {ψ' : AbsGal D →* O} {ζ' : ↑O}
 
 /-- Let `R₀`, `ψ'`, `ζ'` be a model over `O` (`IsTwistedLattice`): `R₀` is a lattice in `R`, `ψ'`
-and `ζ'` are `ψ` and `ζ` with values in `O`, and `γ` acts on the twisted lattice `ψ' R₀` by the
+is `ψ` with values in `O`, and `γ` acts on the twisted lattice `ψ' R₀` by the
 scalar `ζ'`. Then `ψ' R₀` agrees with `R₀` at every `g` with `ψ g = 1`. -/
-lemma IsTwistedLattice.twistRep_apply_eq_of_eq_one (h_model : IsTwistedLattice ψ R γ ζ R₀ ψ' ζ')
+lemma IsTwistedLattice.twistRep_apply_eq_of_eq_one (h_model : IsTwistedLattice ψ R γ R₀ ψ' ζ')
     {g : AbsGal D} (hg : ψ g = 1) : twistRep (.id O) ψ' R₀ g = R₀ g := by
   ext
   simp [twistRep, h_model.twist_eq, hg]
 
 /-- Let `R₀`, `ψ'`, `ζ'` be a model over `O` (`IsTwistedLattice`): `R₀` is a lattice in `R`, `ψ'`
-and `ζ'` are `ψ` and `ζ` with values in `O`, and the inertial element `γ` acts on the twisted
+is `ψ` with values in `O`, and the inertial element `γ` acts on the twisted
 lattice `ψ' R₀` by the scalar `ζ'`. Let `ψ` come from the norm-one torus with modulus `Q`
 (`IsFromU1`). Let `R` be a main summand (`IsMainSummandLike`): a conjugate self-dual representation
 of twist `t` and empty level, with Hodge–Tate jumps `J` read through the isomorphism `ℂ ≃ ℚ̄_ℓ`
 fixed by `PadicIso ℓ`; only that `R` is unramified outside `ℓ p₀ p₁` (`p₀ p₁ = D.M`) is used. Then
 `ψ' R₀` is unramified outside `ℓ p₀ p₁`, `Q` and `Q̄`. -/
 lemma IsTwistedLattice.twistRep_eq_one_of_mem_inertiaAbove [PadicIso ℓ]
-    (h_model : IsTwistedLattice ψ R γ ζ R₀ ψ' ζ')
+    (h_model : IsTwistedLattice ψ R γ R₀ ψ' ζ')
     (hψ : IsFromU1 (placesDividing D.E ℓ) Q ψ) {J : (D.E →+* ℂ) → Multiset ℤ}
     (h_summand : IsMainSummandLike D t J R) (g : AbsGal D)
     (hg : g ∈ inertiaAbove (placesDividing D.E ℓ ∪ placesAboveM D ∪ .conjClosure Q)ᶜ) :
