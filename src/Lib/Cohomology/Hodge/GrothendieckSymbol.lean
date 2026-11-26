@@ -1,5 +1,4 @@
 import Lib.Cohomology.Hodge.DepthVanishing
-import Lib.General.Groups.CongruenceSubgroups
 import Lib.PadicComparison.HodgeTate.ExtCocycles
 
 /-!

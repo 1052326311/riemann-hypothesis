@@ -1,4 +1,4 @@
-import Lib.Adelic.Unitary.Defs
+import Lib.Base
 
 /-!
 # Characters of finite groups: averages, virtual characters and central projections

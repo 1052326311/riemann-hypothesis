@@ -1,4 +1,3 @@
-import New.Determinant.AuxiliaryForms.GridPaths
 import New.OneLift.ComparisonOperator.ExchangeData
 import New.OneLift.HeckeValues.TwistedRatio
 

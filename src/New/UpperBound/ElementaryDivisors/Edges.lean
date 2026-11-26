@@ -1,5 +1,4 @@
 import Lib.General.LinearAlgebra.HermiteForm
-import Lib.LocalGL.Green.HallAlgebra
 import New.UpperBound.ElementaryDivisors.InvariantAverage
 import New.UpperBound.ElementaryDivisors.RootLemma
 

@@ -1,4 +1,3 @@
-import Lib.DiscreteSeries.Holomorphic.MaximalCompactMinors
 import Lib.Weil.MixedModel.NamedData
 import Lib.Weil.MixedModel.RealTheta
 
