@@ -14,7 +14,7 @@ infinite coefficient modules. This file relates the two. Let `π` be a map from 
 * `New.card_eq_card_map_mul_card_inf_B1`, `New.length_eq_length_map_add_length_inf_B1`: a group `W`
   of cocycles has `|W| = |π(W)| · |W ∩ B¹|`, and the same for lengths.
 * `New.card_B1_mul_card_invariants`: `|B¹| · |H⁰| = |M|` for a finite module `M`.
-* `New.inf_B1_eq_bot_of_apply_eq_zero`, `New.card_inf_vanishingAt_eq_card_map`,
+* `New.card_inf_vanishingAt_eq_card_map`,
   `New.length_inf_vanishingAt_eq_length_map`, `New.infVanishingAtEquivMap`: let `γ` act by a
   scalar `ζ` with `ζ - 1` a unit. Then cocycles that vanish at `γ` (`New.vanishingAt`) meet `B¹`
   trivially. In a group `W ⊇ B¹` of cocycles, those that vanish at `γ` are isomorphic to the
@@ -85,7 +85,7 @@ lemma range_coboundaryZ1 (hρ : ∀ m : M, Continuous fun g : G ↦ ρ g m) :
 
 /-- For a finite module `M` on which `G` acts with continuous orbit maps, the coboundaries number
 `|M| / |H⁰|`: `|B¹| · |M^G| = |M|`. -/
-theorem card_B1_mul_card_invariants [Finite M] (hρ : ∀ m : M, Continuous fun g : G ↦ ρ g m) :
+theorem card_B1_mul_card_invariants (hρ : ∀ m : M, Continuous fun g : G ↦ ρ g m) :
     Nat.card (B1 ρ) * Nat.card ρ.invariants = Nat.card M := by
   have h_ker : LinearMap.ker (coboundaryZ1 hρ) = ρ.invariants := by
     ext m
@@ -120,14 +120,6 @@ theorem eq_zero_of_mem_B1_of_apply_eq_zero {z : Z1 ρ} (hz : z ∈ B1 ρ) (hzγ 
     rw [smul_zero, sub_smul, one_smul, ← hγ, hm, hzγ]
   ext g
   simp [← hm, hm0]
-
-/-- If `γ` acts by a scalar `ζ` with `ζ - 1` a unit, a group `W` of cocycles that vanish at `γ`
-meets the coboundaries `B¹` only in `0`. -/
-theorem inf_B1_eq_bot_of_apply_eq_zero {W : AddSubgroup (Z1 ρ)}
-    (hW : ∀ z ∈ W, (z : G → M) γ = 0) : W ⊓ (B1 ρ).toAddSubgroup = ⊥ :=
-  (AddSubgroup.eq_bot_iff_forall _).2 fun z hz ↦
-    eq_zero_of_mem_B1_of_apply_eq_zero hγ hζ (AddSubgroup.mem_inf.1 hz).2
-      (hW z (AddSubgroup.mem_inf.1 hz).1)
 
 /-- If `γ` acts by a scalar `ζ` with `ζ - 1` a unit, every cocycle differs by a coboundary from one
 that vanishes at `γ`. -/

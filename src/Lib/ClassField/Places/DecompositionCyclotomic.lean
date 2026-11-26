@@ -227,15 +227,12 @@ lemma cyclotomicCharMod_eq_one_of_mem_inertiaGroup (hσ : σ ∈ inertiaGroup Γ
     cyclotomicCharMod Ω N σ = 1 :=
   (hσ.mem_ker_cyclotomicCharMod_iff hN).mpr rfl
 
-/-- A residue modulo `N` is the cast of its natural representative. -/
-lemma zmod_eq_natCast_val {g : ZMod N} : g = g.val := by simp
-
 /-- Every additive map from `ZMod N` to the units of `Ω` is equivariant, when `g` acts on `ZMod N`
 through the character. -/
 lemma map_cyclotomicCharMod_mul (μ : ZMod N →+ DiscreteUnits Ω) (g : Γ) (a : ZMod N) :
     μ ((cyclotomicCharMod Ω N g).val * a) = unitsRep g (μ a) := by
-  simp [cyclotomicCharMod_eq_iff_unitsRep.mp (zmod_eq_natCast_val
-    (g := (cyclotomicCharMod Ω N g : ZMod N))), ← map_nsmul, natCast_self]
+  simp [cyclotomicCharMod_eq_iff_unitsRep.mp
+    (ZMod.natCast_zmod_val (cyclotomicCharMod Ω N g : ZMod N)).symm, ← map_nsmul, natCast_self]
 
 variable {l : ℕ} [Fact (Nat.Prime l)] {K : Type*} [Field K] [Algebra K Ω]
 
@@ -265,7 +262,7 @@ lemma map_cyclotomicChar_smul {A B : Type*} [AddCommGroup A] [Module ℤ_[l] A] 
   -- Write the value of `cyclotomicChar` as its residue plus a multiple of `l ^ r`, which `f` kills.
   obtain ⟨c, hc⟩ : (l : ℤ_[l]) ^ r ∣
       (cyclotomicChar Ω l σ).val - (cyclotomicCharMod Ω (l ^ r) σ : ZMod (l ^ r)).val :=
-    (pow_dvd_cyclotomicChar_sub_iff r).mpr zmod_eq_natCast_val
+    (pow_dvd_cyclotomicChar_sub_iff r).mpr (ZMod.natCast_zmod_val _).symm
   rw [eq_add_of_sub_eq hc, add_smul, mul_smul]
   norm_cast
   simp [h_kill]
@@ -304,7 +301,7 @@ lemma cyclotomicCharMod_eq_of_equivariant (h_comm : ∀ x : Ω, j (g • x) = g'
     refine cyclotomicCharMod_eq_iff.mpr fun ζ hζ ↦ j.injective ?_
     have hζ' : j ζ ^ N = 1 := by rw [← map_pow, hζ, map_one]
     rw [h_comm, smul_eq_pow_cyclotomicCharMod (N := N) g' hζ', map_pow]
-  exact ext (h_val_eq.trans zmod_eq_natCast_val.symm)
+  exact ext (h_val_eq.trans (ZMod.natCast_zmod_val _))
 
 /-- Let `Γ`, `Γ'` act on algebraically closed fields `Ω`, `Ω'` of characteristic `0`, and let
 `j : Ω → Ω'` be a ring homomorphism with `j (g • x) = g' • j x` for all `x` (`h_comm`). Then the

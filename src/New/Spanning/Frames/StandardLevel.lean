@@ -260,8 +260,7 @@ lemma IntegralPlace.exists_isIntMatrix_hyperbolicBasis {N : A} (hN : N ∈ P.int
     -- each entry reduces to `hc_norm`, `h_trace` or `hN_star`
     simp [← Matrix.ext_iff, Matrix.mul_apply, C, latticeMiddleGram, diagonal, h_ne,
       Subtype.val_inj, fromBlocks_conjTranspose, conjTranspose_fromRows_eq_fromCols_conjTranspose,
-      conjTranspose_fromCols_eq_fromRows_conjTranspose, mul_add, mul_sum,
-      sum_add_distrib, Matrix.one_apply]
+      conjTranspose_fromCols_eq_fromRows_conjTranspose, Matrix.one_apply]
     grind
   obtain ⟨V, hV, hV_eq⟩ : ∃ V ∈ intGL 𝔰.MiddleIndex P.integers, V.val = latticeMiddleGram 𝔰 N :=
     (isUnimodular_latticeMiddleGram 𝔰 ⟨hN, hN_star⟩).2
@@ -558,7 +557,7 @@ lemma exists_kernel_isDisintegration_coordinateBox_le :
       ∀ (β : skewAdjoint A) (u : Aˣ),
         q β (coordinateBox (Fin F.blockRank) {x : A | u.val * x ∈ P.integers}) ≤
           idealZeta P.integers m * (P.modulus u)⁻¹ ^ (2 * m + 3) :=
-  exists_kernel_isDisintegration_le h.psi_add_star h.idealZeta_le_two
+  exists_kernel_isDisintegration_le h.idealZeta_le_two
     (Fintype.card_fin _) (by lia)
 
 /-- For a large lattice datum `F`, the elements of `F.productDifferences` are integral. These are

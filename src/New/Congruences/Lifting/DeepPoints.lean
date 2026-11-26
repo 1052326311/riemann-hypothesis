@@ -24,7 +24,7 @@ chart is unramified and all jumps of the second side lie in `[-η, 0]`.
 * `New.Lift.KummerChart.PairingSide.SidePairing.isScaledCupCoboundary_of_killsCokernel`: paired
   sides satisfy the cup conditions with exponent `H` when `3 κ + 2 (4 a + 4 η + W) d ≤ H`. The
   hypotheses are these. The cokernels are killed. The jumps lie in opposite windows. At every `i`,
-  `p` divides no nonzero integer within `6 (a + η + W)` of `0`, `b i` or `-b i`. Either no jump lies
+  `p` divides no nonzero integer within `a + max a η + max η W` of `0` or `± b i`. Either no jump lies
   in `[-a, 0)`, or the chart is unramified and all jumps of `S'` lie in `[-η, 0]`.
 
 Notions from other files:
@@ -215,13 +215,13 @@ lemma pointsOver_nonempty_of_near_steps {κ : ℕ} {i : k.Letter} {c : S.paramLa
 /-- Let the chart be unramified (`E = z + p`), let `p ^ κ * E ^ a` kill the cokernel of the side
 `S` at the letter `i` (it lifts each constant at `i` to the extension with standard orders), and let
 the jumps, the elements of `S.jumpSet i`, lie in `[-η, η]` or in `σ • [β, β + W]`. Let `a ≤ t`, and
-let `p` divide no nonzero integer within `n ≥ a + t + η + W` of `0` or `± β`. Then `S` has a point
+let `p` divide no nonzero integer within `n ≥ a + t + max η W` of `0` or `± β`. Then `S` has a point
 over `p ^ κ • c` at `i` with a pole of order at most `t` (its orders `raisedOrdersAtZero (-t)` are
 `-t - u` at the level `0` on the line of a jump `u`) and of depth `plainDepth a t 1 0`, which is
 `a + t - u` at the level `0` and `-u` at the levels above. -/
 lemma pointsOver_nonempty_of_fitsWindows {a κ η W t n β : ℕ} {σ : ℤˣ} {i : k.Letter}
     (hk : k.IsUnramified) (h_kill : S.KillsCokernel i κ a) (hβ_gap : NoMultipleNear p n β)
-    (h_window : FitsWindows η σ β W (S.jumpSet i)) (hat : a ≤ t) (hn : a + t + η + W ≤ n)
+    (h_window : FitsWindows η σ β W (S.jumpSet i)) (hat : a ≤ t) (hn : a + t + max η W ≤ n)
     (c : S.paramLattice.Carrier) : (S.pointsOver c i κ (raisedOrdersAtZero (-t))
       (plainDepth a t 1 0)).Nonempty := by
   have h_steps : ∀ l : ℕ, ∀ u ∈ S.jumpSet (i.stepBack l), ∀ y : ℤ, raisedOrdersAtZero (-a) l u ≤ y →
@@ -310,29 +310,31 @@ lemma pointsOver_stopOrders_nonempty {a η : ℕ} {i : k.Letter} {c' : S'.paramL
 `P.tateDualSide` the side on the Tate dual of their tensor product that carries the pairing. At
 every letter `i` let `p ^ κ * E ^ a`, with `E = z + p` the distinguished element of the chart, kill
 the cokernels of `S` and of `P.tateDualSide`, and let `p` divide no nonzero integer within
-`6 (a + η + W)` of `0` or `± b i`. Let the jumps of `S` lie in `[-η, η]` or in
+`n ≥ a + max a η + max η W` of `0` or `± b i`. Let the jumps of `S` lie in `[-η, η]` or in
 `-ε i • [b i, b i + W]` for a sign `ε i = ±1`, and let the jumps of `S'` lie in `[-η, 0]`. Then for
 `H ≥ 2 κ` the cup product of the cocycles that `S` and `S'` attach to `c` and `p ^ H • c'` is a
 continuous coboundary. -/
-lemma SidePairing.isScaledCupCoboundary_of_jumps_nonpos (P : S.SidePairing S') {a κ η H W : ℕ}
+lemma SidePairing.isScaledCupCoboundary_of_jumps_nonpos (P : S.SidePairing S') {a κ η H W n : ℕ}
     {b : k.Letter → ℕ} {ε : k.Letter → ℤˣ} (hk : k.IsUnramified)
     (h_kill_tateDual : ∀ i : k.Letter, P.tateDualSide.KillsCokernel i κ a)
     (h_kill : ∀ i : k.Letter, S.KillsCokernel i κ a)
-    (hb_gap : ∀ i : k.Letter, NoMultipleNear p (6 * (a + η + W)) (b i))
+    (hb_gap : ∀ i : k.Letter, NoMultipleNear p n (b i))
+    (hn : a + max a η + max η W ≤ n)
     (h_window : ∀ i : k.Letter, FitsWindows η (-ε i) (b i) W (S.jumpSet i))
     (h_nonpos : ∀ i : k.Letter, S'.jumpSet i ⊆ Finset.Icc (-η : ℤ) 0) (hH : 2 * κ ≤ H)
     (c : S.paramLattice.Carrier) (c' : S'.paramLattice.Carrier) :
       P.IsScaledCupCoboundary H c c' := by
-  -- Use the bound `t = a + η` for the poles and the low jumps. The jumps of `S'` lie in `[-t, t]`
+  -- Use the bound `t = max a η` for the poles and the low jumps. The jumps of `S'` lie in `[-t, t]`
   -- and its points have no pole. Where the far window of `S` is negative, `S` provides the stop
   -- (the point at rest while the other side moves by Frobenius); elsewhere `S'` does.
-  set t : ℕ := a + η with ht
-  have h_radius : a + t + η + W ≤ 6 * (t + W) := by omega
-  have h_radius' : a + t + η ≤ 6 * (t + W) := by omega
+  let t := max a η
+  have hat : a ≤ t := le_max_left _ _
+  have hηt : η ≤ t := le_max_right _ _
+  have h_radius : a + t + η ≤ n := (Nat.add_le_add_left (le_max_left η W) _).trans hn
   choose x hx using fun i ↦
-    pointsOver_nonempty_of_fitsWindows hk (h_kill i) (hb_gap i) (h_window i) (by omega) h_radius c
+    pointsOver_nonempty_of_fitsWindows hk (h_kill i) (hb_gap i) (h_window i) hat hn c
   choose x' hx'_no_pole using fun i ↦
-    pointsOver_nonempty_of_jumps_nonpos hk (hb_gap i) h_radius' h_nonpos c' i
+    pointsOver_nonempty_of_jumps_nonpos hk (hb_gap i) h_radius h_nonpos c' i
   have hx' (i : Letter) := mem_pointsOver_of_no_pole t (hx'_no_pole i)
   refine P.isScaledCupCoboundary_of_stops_at_all_letters x x' h_kill_tateDual
     (fun i ↦ mem_standardPoints_of_plainDepth (hx i))
@@ -350,7 +352,7 @@ lemma SidePairing.isScaledCupCoboundary_of_jumps_nonpos (P : S.SidePairing S') {
       fun u hu ↦ le_trans (by omega)
         (neg_le_jump_of_fitsWindows (h_window i) (.inl (neg_eq_iff_eq_neg.2 Pε)) u hu)
     obtain ⟨q', hq'⟩ : (S'.pointsOver c' i 0 (stopOrders t 1) (plainDepth a t 1 t)).Nonempty :=
-      pointsOver_stopOrders_nonempty hk (hb_gap i) h_radius' (by omega) h_nonpos
+      pointsOver_stopOrders_nonempty hk (hb_gap i) h_radius hηt h_nonpos
         (hx'_no_pole (i.stepBack 1))
     have h_safe : P.IsSafeMoveFst κ (FrobGroup.φ ^ 1 • x (i.stepBack 1) - x i) q' :=
       P.isSafeMoveFst_of_neg_le_jumps one_pos (h_kill_tateDual i)
@@ -362,18 +364,19 @@ lemma SidePairing.isScaledCupCoboundary_of_jumps_nonpos (P : S.SidePairing S') {
 /-- Let `P` be a pairing of the lattices of the sides `S` and `S'`, and `P.tateDualSide` the side on
 the Tate dual of their tensor product that carries the pairing. At every letter `i` let
 `p ^ κ * E ^ a`, with `E` the distinguished element of the chart, kill the cokernels of `S`, `S'`
-and `P.tateDualSide`, let `p` divide no nonzero integer within `n = 6 (a + η + W)` of `0` or
+and `P.tateDualSide`, let `p` divide no nonzero integer within `n ≥ a + max a η + max η W` of `0` or
 `± b i`, and let the jumps of `S` and `S'` lie in `[-η, η]` or in the opposite far windows
 `∓ε i • [b i, b i + W]`, where `ε i = ±1`. Suppose that no jump lies in `[-a, 0)`, or that the chart
 is unramified and the jumps of `S'` lie in `[-η, 0]`. Then for
 `H ≥ 3 κ + 2 (4 a + 4 η + W) k.differentBound` the cup product of the cocycles of `c` and
 `p ^ H • c'` is a continuous coboundary. -/
-lemma SidePairing.isScaledCupCoboundary_of_killsCokernel (P : S.SidePairing S') {a κ η H W : ℕ}
+lemma SidePairing.isScaledCupCoboundary_of_killsCokernel (P : S.SidePairing S') {a κ η H W n : ℕ}
     {b : k.Letter → ℕ} {ε : k.Letter → ℤˣ}
     (h_kill_tateDual : ∀ i : k.Letter, P.tateDualSide.KillsCokernel i κ a)
     (h_kill : ∀ i : k.Letter, S.KillsCokernel i κ a)
     (h_kill' : ∀ i : k.Letter, S'.KillsCokernel i κ a)
-    (hb_gap : ∀ i : k.Letter, NoMultipleNear p (6 * (a + η + W)) (b i))
+    (hb_gap : ∀ i : k.Letter, NoMultipleNear p n (b i))
+    (hn : a + max a η + max η W ≤ n)
     (h_window : ∀ i : k.Letter, FitsWindows η (-ε i) (b i) W (S.jumpSet i))
     (h_window' : ∀ i : k.Letter, FitsWindows η (ε i) (b i) W (S'.jumpSet i))
     (h_gap_or_nonpos :
@@ -412,7 +415,7 @@ lemma SidePairing.isScaledCupCoboundary_of_killsCokernel (P : S.SidePairing S') 
       (fun i u hu ↦ h_gap i u (.inl hu)) (fun i u hu ↦ h_gap i u (.inr hu))
       (fun i ↦ steps (b i)) (fun i ↦ h_steps (h_window i)) (fun i ↦ h_steps (h_window' i))
       h_cost hH c c'
-  · exact P.isScaledCupCoboundary_of_jumps_nonpos hk h_kill_tateDual h_kill hb_gap h_window h_nonpos
+  · exact P.isScaledCupCoboundary_of_jumps_nonpos hk h_kill_tateDual h_kill hb_gap hn h_window h_nonpos
       (by omega) c c'
 
 end New.Lift.KummerChart.PairingSide

@@ -694,12 +694,8 @@ lemma hasLevelLifts_of_col_mem (hj : S.HasCellRank j γ) {ρ : Type} [Fintype ρ
         (S.classCoord c * finAdeleMatrix t * w).toRows₁.col b ∈
       S.ideleM • colLattice (Ô E) (isotropicRows (finAdeleMatrix (S.frameProducts γ)))ᴴ) :
     HasLevelLifts c γ (finAdeleMatrix (linkMatrix γ * t) * w) := by
-  obtain ⟨v, -, hv⟩ : ∃ v : Matrix (𝔰.MiddleIndex ⊕ 𝔰.MiddleIndex)
-      (Fin (Module.finrank E (link γ))) E, HasLeftInv v ∧ colSpan v = link γ :=
-    exists_hasLeftInv_colSpan_eq (link γ)
-  obtain ⟨u, hu⟩ : ∃ u : Matrix 𝔰.BesselIndex
-      (IndexNotBelow j ⊕ Fin (Module.finrank E (link γ))) E, IsOrthogonalLift j γ v u :=
-    exists_orthogonal_lift hj hv
+  obtain ⟨v, -, hv⟩ := exists_hasLeftInv_colSpan_eq (link γ)
+  obtain ⟨u, hu⟩ := exists_orthogonal_lift hj hv
   set n : Matrix 𝔰.BesselIndex τ (𝔸f E) := S.classCoord c * finAdeleMatrix t * w with hn
   set P : Matrix (Fin (𝔰.ϱ + 1)) (Fin 𝔰.ϱ) (𝔸f E) :=
     (isotropicRows (finAdeleMatrix (S.frameProducts γ)))ᴴ

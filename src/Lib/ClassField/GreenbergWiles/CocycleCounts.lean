@@ -98,7 +98,7 @@ lemma New.IsLargeLevel.exists_act_torsion_eq_nsmul {G : Type} [Group G] [Topolog
   have hk_ne_zero : NeZero k := of_pos hk
   have hy₂ : y.2 = 0 := by simpa [hk.ne'] using congr_arg Prod.snd hky
   refine ⟨(cyclotomicCharMod Ω (l * k) z).val.val,
-    cyclotomicCharMod_eq_of_dvd ⟨k, rfl⟩ zmod_eq_natCast_val, ?_⟩
+    cyclotomicCharMod_eq_of_dvd ⟨k, rfl⟩ (ZMod.natCast_zmod_val _).symm, ?_⟩
   ext
   · -- The unit is a root of unity of order dividing `l * k`.
     refine smul_eq_pow_cyclotomicCharMod z ?_
@@ -577,16 +577,6 @@ private lemma New.IsLargeLevel.SplitPlaces.card_trivialised_eq_of_map_range_eq_t
         (fun x hx hφ g ↦ hfix x hx hφ g (hx.2 g)) hz]
   exact cast_injective (eq_of_div_eq_one hone)
 
-/-- A trivialised cocycle `p = (trivialisation, cocycle)` is determined by its trivialisation. -/
-private lemma New.DiscreteModule.trivialisedCocycles.fst_injective {R G X : Type} [CommRing R]
-    [Group G] [TopologicalSpace G] [MulAction G X] [Nonempty X] {I : Set G}
-    (W : DiscreteModule R G) :
-    Injective fun p : W.trivialisedCocycles X I ↦ (p : (X → W) × (G → W)).fst := by
-  rintro ⟨⟨f, c⟩, -, h_triv, -⟩ ⟨⟨f', c'⟩, -, h_triv', -⟩ (rfl : f = f')
-  obtain ⟨y⟩ : Nonempty X := inferInstance
-  have h_cocycle (g : G) : c g = c' g := add_left_cancel ((h_triv g y).symm.trans (h_triv' g y))
-  exact Subtype.ext (Prod.ext rfl (funext h_cocycle))
-
 /-- Lifting from an upper bound that projective modules attain. Let `l` be prime, `U` open normal in
 the compact group `G`, and `z` central modulo `U`. Consider the modules `F` that are finite, killed
 by `l`, fixed by `U` and on which `ρ z - 1` is injective. Suppose each has between one and `#F ^ k`
@@ -657,7 +647,12 @@ private lemma New.DiscreteModule.trivialisedCocycles.map_range_eq_top_of_restric
   have h_invert (y : X) : b • B.toSubgroup.index • f y = f y := by
     simpa [add_smul, mul_smul, h_kill] using congrArg (· • f y) hab
   -- The trivialisation determines the cocycle, so only first components need be compared.
-  refine ⟨⟨_, zsmul_mem (sub_mem (corestrict_mem B hI hq) h_const) b⟩, fst_injective W₂ ?_⟩
+  have h_inj : Injective fun p : W₂.trivialisedCocycles X I ↦ p.val.fst := by
+    rintro ⟨⟨f, c⟩, -, h_triv, -⟩ ⟨⟨f', c'⟩, -, h_triv', -⟩ (rfl : f = f')
+    obtain ⟨y⟩ : Nonempty X := inferInstance
+    exact Subtype.ext (Prod.ext rfl (funext fun g ↦
+      add_left_cancel ((h_triv g y).symm.trans (h_triv' g y))))
+  refine ⟨⟨_, zsmul_mem (sub_mem (corestrict_mem B hI hq) h_const) b⟩, h_inj ?_⟩
   simpa [trivialisedCocycles.map, π.isIntertwining, hπq_apply, hfx, hm, index, funext_iff,
     Finset.sum_add_distrib] using h_invert
 

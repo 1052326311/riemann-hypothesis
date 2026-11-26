@@ -520,7 +520,7 @@ variable [DecidableEq X] [DecidableEq X'']
 /-- At a level prime `N` split as `P` and its conjugate, the matrix `γ` commutes with the diagonal
 matrix of the scaling factors `κ`: it differs from `1` only above `N`, where all of these factors
 are `1`. -/
-lemma commute_neighbourMatrix_diagonal [Fact N.Prime] (hP : IsSplitLevel P N)
+lemma commute_neighbourMatrix_diagonal (hP : IsSplitLevel P N)
     (hκ : IsScalingAtM N β δ κ) : Commute (neighbourMatrix X X'' P π) (diagonal κ) := by
   have h_scale (i : PairIndex X X'') : neighbourScale P π * κ i = neighbourScale P π := by
     grind [neighbourScale, hκ.idem_mul_apply hP i, hκ.star_idem_mul_apply hP i]

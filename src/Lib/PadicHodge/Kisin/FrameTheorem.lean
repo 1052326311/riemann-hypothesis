@@ -422,7 +422,7 @@ private lemma sum_map_smul_eq_zero_of_sum_smul_eq_zero (F : Frame L) (f : Ainf �
     rintro μ ⟨hμ, -⟩
     have h_rel : ∑ i, phiInvToBdR 0 (c i) * μ (v i) ∈ (⊥ : Submodule BPlus BdR) := by
       simpa [smul_def', phiInvToBdR] using congrArg μ hc
-    have h_zero : ∑ i, algebraMap Ainf BdR (f (c i)).1 * μ (v i) = 0 := by
+    have h_zero : ∑ i, algebraMap Ainf BdR (f (c i)).val * μ (v i) = 0 := by
       simpa [phiInvToBdR] using
         sum_phiInvToBdR_map_mul_mem_of_mem_valueField f _ c (fun i ↦ hv_val i μ hμ) (W := ⊥) h_rel
     simp [ht, smul_def', h_zero]
@@ -440,12 +440,6 @@ private lemma exists_smul_comb_eq_of_dvd (F : Frame L) (w : Ainf)
   obtain ⟨u, rfl⟩ : (fun _ : Fin (finrank ℤ_[p] L.Carrier) ↦ w) ∣ t := pi_dvd_iff.mpr hw
   exact ⟨u, (map_smul (F.comb 0) w u).symm⟩
 
-/-- Applying `φ ^ m` to `F.comb 0 t` gives the combination of the `φ ^ m • F.n i` with the
-coefficients `φ ^ m • t i`. -/
-private lemma comb_phi_pow_smul (F : Frame L) (m : ℕ) (t : Fin (finrank ℤ_[p] L.Carrier) → Ainf) :
-    F.comb m (fun i : Fin (finrank ℤ_[p] L.Carrier) ↦ φ ^ m • t i) = φ ^ m • F.comb 0 t := by
-  simp [comb, smul_iterate, smul_sum, Fintype.linearCombination_apply, frobGroup_smul_smul]
-
 /-- The test for `τ`: if every crystalline form sends `φ ^ (m + 1) • F.comb 0 t` into `hodgeFil 1`,
 for every `m`, then `τ` divides every coefficient `t i`. -/
 private lemma tau_dvd_of_forall_crysForms (F : Frame L) (t : Fin (finrank ℤ_[p] L.Carrier) → Ainf)
@@ -456,7 +450,9 @@ private lemma tau_dvd_of_forall_crysForms (F : Frame L) (t : Fin (finrank ℤ_[p
   refine tau_dvd_of_theta_frobEnd fun m ↦ ?_
   have h_forms : ∀ μ ∈ L.crysForms, μ (F.comb (m + 1) fun j ↦ φ ^ (m + 1) • t j) ∈
       (hodgeFil 1).restrictScalars BPlus := by
-    simpa [F.comb_phi_pow_smul] using ht m
+    simpa [comb, smul_iterate, smul_sum, Fintype.linearCombination_apply, frobGroup_smul_smul,
+      pow_succ, mul_smul]
+      using ht m
   have h_fil : phiInvToBdR 0 (k.frobE (m + 1) ^ (L.jumpBound + L.jumpBound) * φ ^ (m + 1) • t i) ∈
       hodgeFil 1 :=
     F.phiInvToBdR_frobE_pow_mul_mem_of_forall_crysForms (m + 1) _ _ h_forms i

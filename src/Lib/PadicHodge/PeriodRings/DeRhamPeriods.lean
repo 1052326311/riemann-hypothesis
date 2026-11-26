@@ -103,7 +103,7 @@ lemma mu_sq_dvd_smul_mu_sub (g : Gp p) : mu ^ 2 ∣ g • mu - (cyclotomicGp g :
     rw [cyclotomicGp,
       cyclotomicChar_eq_of_equivariant p (j := algebraMap _ ℂ_[p])
         fun x ↦ (UniformSpace.Completion.algEquiv_smul_coe g x).symm]
-    exact (pow_dvd_cyclotomicChar_sub_iff m).mpr zmod_eq_natCast_val
+    exact (pow_dvd_cyclotomicChar_sub_iff m).mpr (ZMod.natCast_zmod_val _).symm
   have h_lin : (p : Ainf) ^ m ∣ (cyclotomicGp g : ℤ_[p]) • mu - a * mu := by
     simpa [sub_mul, Algebra.smul_def] using (map_dvd (algebraMap _ Ainf) h_chi).mul_right mu
   -- Binomial expansion: `(1 + μ) ^ a = 1 + a μ + μ² x`.
