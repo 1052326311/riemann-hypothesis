@@ -112,7 +112,7 @@ lemma mul_jetSize_sub_mainPrimeSum_sub_le {P : Parameters} (D : Data P) :
   set G : ℝ := log (D.M * D.rootDisc / (2 * Real.pi))
   -- The lower end of the window for `log N`.
   have level : D.m * (w + G) - (G + 15 / 2 * D.logB) ≤ log D.N := by
-    grw [← D.log_N_mem_Icc_logLevelTarget.1, logLevelTarget]
+    grw [← D.log_N_mem_Icc_logLevelTarget.1, logLevelTarget, New.Parameters.logLevelMin]
     linarith
   have h_stirling : D.m * (1 + log D.a / 2) ≤ D.a * D.logB := D.le_of_hasLogBound
   have h_size : G ≤ 23 * D.logB := le_of_abs_le D.abs_log_M_mul_rootDisc_le
