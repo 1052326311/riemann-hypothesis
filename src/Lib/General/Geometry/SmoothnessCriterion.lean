@@ -113,6 +113,7 @@ lemma New.Variety.isUnramifiedAt_of_span_differentials {R A B k : Type*} {ι : S
   exact ne_zero_of_surjective (baseChange_surjective k (map_surjective R A B)) pr_zero
 
 /-- A polynomial ring in finitely many variables over a normal domain is normal. -/
+@[stacks 030A "for finitely many variables"]
 lemma New.Variety.isIntegrallyClosed_mvPolynomial_fin {R : Type*} [CommRing R] [IsDomain R]
     [IsIntegrallyClosed R] (n : ℕ) : IsIntegrallyClosed (MvPolynomial (Fin n) R) := by
   induction n with
