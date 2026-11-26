@@ -879,8 +879,7 @@ lemma span_isLiftGenerator_mem_invtSubmodule_typeProjection {P : Parameters} {D 
   refine span_le.2 fun v hv ↦ ?_
   change typeProjection O c v ∈ span ℂ {y : O.FormV | IsLiftGenerator ϑ O E Z sel y}
   obtain h_zero | ⟨h_range, -⟩ := IsLiftGenerator.typeProjection_eq_zero_or_mem_range hv c
-  · rw [h_zero]
-    exact zero_mem _
+  · simp [h_zero]
   · rw [typeProjection_eq_self_of_mem_range h_range]
     exact subset_span hv
 
@@ -1264,11 +1263,7 @@ theorem exists_operator_det_clearingBound {P : Parameters} {D : Data P} {ℓ : �
   · have h_bot : Z ≤ ⊥ := h_span.trans (span_eq_bot.2 h_gen).le
     have h_rank : finrank ℂ Z = 0 := Submodule.finrank_eq_zero.2 (eq_bot_iff.2 h_bot)
     have h_zero (z : Z) : (z : O.FormV) = 0 := (mem_bot ℂ).1 (h_bot z.prop)
-    refine ⟨1, by simp [h_rank], fun y' _ _ ↦ ?_, fun y y' _ _ _ ↦ ?_⟩
-    · rw [h_zero]
-      exact zero_mem _
-    · rw [h_zero, inner_zero_right, map_zero, norm_zero]
-      exact zero_le_one
+    refine ⟨1, by simp [h_rank], fun y' _ _ ↦ ?_, fun y y' _ _ _ ↦ ?_⟩ <;> simp [h_zero]
   obtain ⟨v, hv, -⟩ := h_gen
   obtain ⟨c, -, hc, -⟩ := IsLiftGenerator.exists_type hv
   have h_rank_pos : 1 ≤ card r := hc.odd.1.pos
