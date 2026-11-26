@@ -786,7 +786,7 @@ instance : (volume (α := U J)).IsHaarMeasure := by
       exact continuous_cayleyDenom.matrix_det.isOpen_support.measure_pos _
         ⟨0, by simp [cayleyDenom]⟩
     · exact fun y (hy : (cayleyDenom J y).det ≠ 0) ↦ by simp [hy, det_ne_zero]
-    all_goals measurability
+    measurability
   obtain ⟨s, -, -, hs_pos, hs_fin⟩ := exists_subset_measure_lt_top .univ h_pos
   rw [haarMeasure_unique volume Classical.ofNonempty] at hs_pos hs_fin ⊢
   refine IsHaarMeasure.smul _ (fun h_zero ↦ by simp [h_zero] at hs_pos) fun h_top ↦ ?_
