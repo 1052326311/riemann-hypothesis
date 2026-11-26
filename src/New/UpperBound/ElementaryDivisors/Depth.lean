@@ -857,12 +857,7 @@ lemma New.FrobeniusCycle.sum_deepIndicator_div_le (T : FrobeniusCycle N W K) {r 
           2 * r * ((N / 2 : ℕ) / T.P) := by
         simp only [Fintype.sum_prod_type, h_row]
         simp [apply_ite, sum_ite, Fin.card_filter_val_lt, hk]
-    _ ≤ k * (N / 2 / T.P ^ (2 * r)) + 2 * r * (N / 2 / T.P) :=
-        add_le_add
-          (mul_le_mul h_card (div_le_div_of_nonneg_right hN_half (pow_nonneg hP_nonneg _))
-            (div_nonneg (Nat.cast_nonneg _) (pow_nonneg hP_nonneg _)) (Nat.cast_nonneg _))
-          (mul_le_mul_of_nonneg_left (div_le_div_of_nonneg_right hN_half hP_nonneg)
-            (mul_nonneg zero_le_two (Nat.cast_nonneg _)))
+    _ ≤ k * (N / 2 / T.P ^ (2 * r)) + 2 * r * (N / 2 / T.P) := by gcongr
     _ = N * (k / T.P ^ (2 * r) / 2 + r / T.P) := by ring
     _ ≤ N * (k / T.P ^ (2 * r) + r ^ 2 / T.P) :=
         mul_le_mul_of_nonneg_left
