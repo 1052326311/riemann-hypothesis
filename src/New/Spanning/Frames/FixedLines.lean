@@ -186,7 +186,7 @@ completions at `T`. The form `(S.latticeMiddle A).splitGram` over a ring `A` con
 hyperbolic planes and the Gram matrix `S.latticeMiddle A` of X₀ ⊕ Ez in the lattice basis. Taking
 components at `T` (`S.toPlaces T`) maps the integral elements `S.latticeStabilizer` of the finite
 adelic unitary group of `S` onto `unitaryLevel P.integers 1`. -/
-theorem range_toPlaces_latticeStabilizer [WeilData E] {S : Filling E 𝔰} {T : Finset (FinPlace E)}
+theorem range_toPlaces_latticeStabilizer {S : Filling E 𝔰} {T : Finset (FinPlace E)}
     [fT : T.StarStable] [P : IntegralPlace (LocProd T)] :
     ((S.toPlaces T).comp S.latticeStabilizer.subtype).range =
       unitaryLevel P.integers 1 (S.latticeMiddle (LocProd T)).splitGram := by
