@@ -170,6 +170,7 @@ lemma isPullback_fst_comp_add {S : Scheme.{0}} {A B Z : Over S} [AddObj A] [AddO
 
 /-- Flatness of morphisms of schemes descends along fpqc covers, that is, along surjective, flat
 and quasi-compact morphisms. -/
+@[stacks 02L2 "descent along a surjective, flat and quasi-compact morphism"]
 lemma flat_descendsAlong_fpqc :
     DescendsAlong (@AlgebraicGeometry.Flat : MorphismProperty Scheme.{0})
       (@Surjective ⊓ @AlgebraicGeometry.Flat ⊓ @QuasiCompact) := by

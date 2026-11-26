@@ -159,6 +159,7 @@ lemma eq_of_forall_pow_dvd_sub (π : R) [IsHausdorff (span {π}) R]
   IsHausdorff.eq_iff_smodEq.2 fun n ↦ smodEq_span_pow_iff_dvd.2 (h_dvd n)
 
 /-- In a ring that is complete for `(π)`, an element congruent to a unit modulo `π` is a unit. -/
+@[stacks 05GI "(1), for a ring complete for a principal ideal"]
 lemma isUnit_of_dvd_sub [IsAdicComplete (span {π}) R] (hy : IsUnit y) (h_dvd : π ∣ x - y) :
     IsUnit x := by
   -- `x - y` lies in the Jacobson radical, so `(x - y) * y⁻¹ + 1 = x * y⁻¹` is a unit

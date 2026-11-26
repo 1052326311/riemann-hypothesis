@@ -735,7 +735,6 @@ lemma H.dimension_shift_induction {P : ∀ {F : AbFunctor C} {n : ℕ}, H N F n 
       x.covariant_sequence_exact₁ N hS (eq_zero_of_injective _) rfl
     exact h S hS n y (ih y)
 
-set_option backward.isDefEq.respectTransparency false
 
 lemma mapExactFunctor_mapExactFunctor :
     (x.mapExactFunctor Φ).mapExactFunctor Θ = x.mapExactFunctor (Φ ⋙ Θ) := by
