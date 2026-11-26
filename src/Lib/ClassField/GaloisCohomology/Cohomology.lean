@@ -156,7 +156,6 @@ def π₁ : Z1 A.ρ →ₗ[R] A.H 1 where
     refine (cocyclesMap1_apply Γ A.V Γ A.V (ContinuousMonoidHom.id Γ) _ _ _ _ g).trans ?_
     rfl
 
-lemma π₁_apply (z : Z1 A.ρ) : A.π₁ z = A.classMap z := rfl
 
 lemma π₁_surjective : Function.Surjective A.π₁ := A.classMap_surjective
 
@@ -278,7 +277,6 @@ def π₂ : Z2 A.ρ →ₗ[R] A.H 2 where
     refine (cocyclesMap2_apply Γ A.V Γ A.V (ContinuousMonoidHom.id Γ) _ _ _ _ g h).trans ?_
     rfl
 
-lemma π₂_apply (z : Z2 A.ρ) : A.π₂ z = A.classMap₂ z := rfl
 
 lemma π₂_surjective : Function.Surjective A.π₂ := by
   refine (explicitH2AddEquivContinuousCohomology Γ A).surjective.comp <|
