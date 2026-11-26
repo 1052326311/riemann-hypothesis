@@ -56,7 +56,7 @@ let `N` be at most the number of infinite places, and let `D.m ≤ T.frobExp * N
 `a = D.a` and `θ = 1 / (m ^ 2 f)` for the numerical parameters `m = D.m`, `f = D.f` of the data, the
 size conditions `IsLargeDegree` then hold: `0 < r`, `2 r ≤ k`, `0 < θ ≤ 1`, `a ^ 4 ≤ q` and
 `(N k log q / θ) ^ 5 P ^ (3 r) ≤ a`. -/
-theorem isLargeDegree_of_le_card {P : Parameters} (D : Data P) {N : ℕ} [NeZero N] {W O : Type}
+theorem isLargeDegree_of_le_card {P : Parameters} (D : Data P) {N : ℕ} {W O : Type}
     [CommRing W] [IsLocalRing W] [CommRing O] (T : FrobeniusCycle N W O) (h13 : 13 ≤ T.p)
     (hp : T.p < D.x₁) (hfrobExp_pos : 0 < T.frobExp)
     (hfrobExp_le : T.frobExp ≤ D.ceilLogLifts T.p)
