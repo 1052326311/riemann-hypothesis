@@ -112,7 +112,7 @@ lemma arrowProduct_integrated_polyVector (P : MvPolynomial (NumberField.Infinite
           (rename (fun (v, j, i) ↦ (v, Sum.inl i, j)) P *
             rename (fun (v, i, j) ↦ (v, Sum.inr i, j)) Q))
         (arrowTensor (Φ ⊗ₜ Φ')) := by
-  simp [arrowProduct, flipPoly, pairSign, rename_eq_aeval, bind₁_bind₁, aeval_bind₁, map_integrated,
+  simp [arrowProduct, flipPoly, pairSign, rename_eq_aeval, aeval_bind₁, map_integrated,
     realMap_flipCoords_polyVector, boxProd_integrated, realBoxProd_polyVector]
   -- the two descriptions of the renamed variables of `P` and `Q` agree by definition
   rfl
@@ -199,7 +199,7 @@ lemma integral_theta_tripleWeil_eq_lift_comp {κ : NumberField.InfinitePlace E �
     rw [← h_eq, hJ, integral_prod _ (hF _)]
     simp [F, integral_const_mul]
   refine isClosed_property denseRange_polyVector
-    (Λ.range.closed_of_finiteDimensional.preimage_of_continuous (f := J)) fun R ↦ ?_
+    (Λ.range.isClosed_of_finiteDimensional.preimage_of_continuous (f := J)) fun R ↦ ?_
   -- `R` is a sum of products of a polynomial on `Hom(X, X')` and one on `Hom(X', X'')`.
   let inl : NumberField.InfinitePlace E × X' × X → NumberField.InfinitePlace E × (X ⊕ X'') × X' :=
     fun (v, j, i) ↦ (v, Sum.inl i, j)
