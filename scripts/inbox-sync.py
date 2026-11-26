@@ -58,11 +58,17 @@ _labels = _rest.load("batch-labels.py")
 INBOX = "inbox"
 # The inbox label of each branch that pull requests are based on. A pull request based on any
 # other branch is in no inbox.
-INBOXES = {"main": INBOX, "alpoge": "alpoge-inbox"}
+MAIN = "main"
+INBOXES = {MAIN: INBOX, "alpoge": "alpoge-inbox"}
 # On every open pull request based on `alpoge`, whose future is undecided (see above).
 ALPOGE = "alpoge"
 # Labels that this script keeps up to date. Someone adding or removing one has not responded.
 OWN = set(INBOXES.values()) | {ALPOGE}
+# A sweep changes the labels of at most about this many pull requests, those based on `main` first,
+# and leaves the rest to the next sweep. The workflows share an allowance of REST requests an hour,
+# and one sweep could otherwise spend it, such as the first, which labels some 1,200 pull requests
+# `alpoge`.
+CHANGES = 100
 # Handed back to the author. Taking it off hands the pull request back to the maintainers.
 WAITING = _labels.WAITING
 # Labels that mean a maintainer has already decided what happens next.
@@ -330,6 +336,9 @@ def sync(gh, number=None, log=None):
             log.append(f"there is no `{name}` label yet, so a real run would stop here")
 
     def change(pr, action, name):
+        nonlocal budget
+        if budget is not None:
+            budget -= 1
         if action == "add":
             check_label(name)
         gh.label(pr["number"], action == "add", name)
@@ -342,9 +351,15 @@ def sync(gh, number=None, log=None):
         if found is None:
             raise Refused(f"There is no pull request #{number} in {gh.repo}.")
         pulls = [found]
+    budget = CHANGES if number is None else None
+    deferred = 0
+    pulls.sort(key=lambda pr: pr["base"] != MAIN)
     for i, pr in enumerate(pulls):
         try:
             action, why = decide(gh, pr) if pr["inbox"] else (None, unavailable(pr))
+            if budget is not None and budget <= 0:
+                deferred += bool(action or tidy(pr))
+                continue
             if (action or tidy(pr)) and number is None:
                 # The sweep read this pull request a while ago. A response, a close, a label put
                 # back or a pull request marked ready since then would otherwise be missed.
@@ -364,6 +379,8 @@ def sync(gh, number=None, log=None):
             # One pull request that cannot be read or labelled should not hold up the rest.
             gh.failed = True
             log.append(f"#{pr['number']}: skipped, because {error}")
+    if deferred:
+        log.append(f"{deferred} more pull requests need their labels changed: the next sweep carries on")
     if number is None:
         # A closed pull request whose `closed` run failed would keep the label for good otherwise.
         for name in INBOXES.values():

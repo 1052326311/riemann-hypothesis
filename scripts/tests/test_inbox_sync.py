@@ -198,7 +198,8 @@ class Sweep(unittest.TestCase):
     def test_pull_requests_on_alpoge_have_an_inbox_of_their_own(self):
         gh = Fake([node(1, base="alpoge"), node(2), node(3, base="alpoge", labels=["alpoge"])])
         log = sweep(gh)
-        self.assertEqual(gh.writes, [("add", 1, "alpoge-inbox"), ("add", 1, "alpoge"), ("add", 2),
+        # The pull requests on `main` come first.
+        self.assertEqual(gh.writes, [("add", 2), ("add", 1, "alpoge-inbox"), ("add", 1, "alpoge"),
                                      ("add", 3, "alpoge-inbox")])
         self.assertIn("#1: put in the `alpoge-inbox` inbox, because it is waiting for a response", log)
         self.assertIn("#1: labelled `alpoge`, because it is based on `alpoge`", log)
@@ -231,6 +232,18 @@ class Sweep(unittest.TestCase):
         self.assertEqual(gh.writes, [("remove", 1), ("remove", 2, "alpoge-inbox")])
         self.assertEqual(inbox.sync(Fake([node(3, base="feature")]), 3),
                          ["#3: left as it was, because it is based on `feature`, which has no inbox"])
+
+    def test_a_sweep_changes_a_limited_number_of_pull_requests_those_on_main_first(self):
+        gh = Fake([node(1, base="alpoge"), node(2, base="alpoge"), node(3), node(4)])
+        with mock.patch.object(inbox, "CHANGES", 3):
+            log = sweep(gh)
+        # #1 needs two changes, which take the sweep past its limit; #2 waits for the next sweep.
+        self.assertEqual(gh.writes, [("add", 3), ("add", 4), ("add", 1, "alpoge-inbox"), ("add", 1, "alpoge")])
+        self.assertIn("1 more pull requests need their labels changed: the next sweep carries on", log)
+        # A run for one pull request has no limit.
+        with mock.patch.object(inbox, "CHANGES", 0):
+            inbox.sync(gh, 2)
+        self.assertEqual(gh.writes[-2:], [("add", 2, "alpoge-inbox"), ("add", 2, "alpoge")])
 
     def test_closed_pull_requests_leave_every_inbox_but_keep_alpoge(self):
         gh = Fake([node(1, base="alpoge", labels=["alpoge", "alpoge-inbox"], state="CLOSED")])
