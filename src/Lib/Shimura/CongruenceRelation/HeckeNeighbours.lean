@@ -181,7 +181,7 @@ lemma torsionClass_inv_mulVec_eq_of_mem_levelTorsion
   -- At every place `u`, the two vectors differ by an integral vector: the matrix is integral and
   -- acts trivially at the places dividing the level.
   simp only [PEL.levelTorsion, mem_torsionBy_iff, smul_torsionClass_eq_zero_iff] at hv
-  refine torsionClass_eq_iff.mpr fun i ↦ Subring.mem_iInf.mpr fun u ↦ ?_
+  refine torsionClass_eq_iff.mpr fun i ↦ mem_Ô.mpr fun (u : FinPlace E) ↦ ?_
   by_cases h𝔑 : D.level ∈ u.asIdeal
   · -- At a place dividing the level the matrix acts trivially, since `w` is safe.
     have hu_ne : u ≠ w.val := by grind [IsSafe]
