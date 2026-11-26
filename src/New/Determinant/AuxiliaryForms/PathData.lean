@@ -178,10 +178,6 @@ lemma gridChar_true :
       D.liftChar (ϑ.pow (l + 1)) (l + 1) * WeilData.upsilonU1 ^ (card n / 2) :=
   rfl
 
-lemma gridChar_false :
-    gridChar ϑ false l n =
-      D.liftChar .one (l + 1) * WeilData.upsilonU1 ^ ((card n + 1) / 2) :=
-  rfl
 
 /-- The tame part of `gridChar`: that of `liftChar` with the twist `ϑ ^ (l + 1)` if `c`, and with
 the trivial twist otherwise. -/
