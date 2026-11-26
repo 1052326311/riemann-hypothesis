@@ -93,8 +93,7 @@ def smulRingHom (n : ℕ) : R →+* AddMonoid.End (A.H n) where
       (ContinuousMonoidHom.id Γ) n
     ext x
     simp only [h, TauCeti.ContinuousCohomology.coeffMap_def]
-    erw [h0]
-    rfl
+    exact congrArg (fun f ↦ f.hom x) h0
   map_add' r s := by
     have h : A.smulMor (r + s) = A.smulMor r + A.smulMor s :=
       TopRep.hom_ext (DFunLike.ext _ _ fun m ↦ add_smul r s (m : A.V))
@@ -102,8 +101,7 @@ def smulRingHom (n : ℕ) : R →+* AddMonoid.End (A.H n) where
       (ContinuousMonoidHom.id Γ) (A.smulMor r) (A.smulMor s) n
     ext x
     simp only [h, TauCeti.ContinuousCohomology.coeffMap_def]
-    erw [h2]
-    rfl
+    exact congrArg (fun f ↦ f.hom x) h2
 
 -- This belongs in Tau Ceti: the `R`-module structure on the cohomology of a discrete `R`-module.
 instance (n : ℕ) : Module R (A.H n) := Module.compHom (A.H n) (A.smulRingHom n)
@@ -154,9 +152,9 @@ def π₁ : Z1 A.ρ →ₗ[R] A.H 1 where
     refine congrArg _ ?_
     simp only [H1pi, QuotientAddGroup.mk'_apply, explicitCoeff1_mk]
     refine congrArg _ (Subtype.ext ?_)
-    erw [coe_cocyclesMap1]
     ext g
-    erw [cochainsMap1_apply]
+    symm
+    refine (cocyclesMap1_apply Γ A.V Γ A.V (ContinuousMonoidHom.id Γ) _ _ _ _ g).trans ?_
     rfl
 
 lemma π₁_apply (z : Z1 A.ρ) : A.π₁ z = A.classMap z := rfl
@@ -278,9 +276,9 @@ def π₂ : Z2 A.ρ →ₗ[R] A.H 2 where
     refine congrArg _ ?_
     simp only [QuotientAddGroup.mk'_apply, explicitCoeff2_mk]
     refine congrArg _ (Subtype.ext ?_)
-    erw [coe_cocyclesMap2]
     ext ⟨g, h⟩
-    erw [cochainsMap2_apply]
+    symm
+    refine (cocyclesMap2_apply Γ A.V Γ A.V (ContinuousMonoidHom.id Γ) _ _ _ _ g h).trans ?_
     rfl
 
 lemma π₂_apply (z : Z2 A.ρ) : A.π₂ z = A.classMap₂ z := rfl
