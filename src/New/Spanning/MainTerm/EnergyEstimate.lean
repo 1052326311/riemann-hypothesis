@@ -242,8 +242,7 @@ lemma scaledSiegelConst_mul_decayConst_le [S.IsAdmissible] :
     generalize x⁻¹ ^ 𝔰.n ^ 7 = y
     simp only [x, Q, D, Shape.openCellConst, Shape.scaledVolumeRatio, sphereDensity, one_pow,
       mul_pow, div_pow]
-    field_simp [(volU_pos _).ne']
-    ring
+    field [(volU_pos _).ne']
   -- Those factors are at most `b ^ n⁹`: `2 / s²` is at most `b`, `s / s^(2ϱ)` at most `1` and
   -- `x⁻¹` at most a power of `b`.
   have h_factor : (2 / s ^ 2) ^ (𝔰.n + 2 * 𝔰.ϱ ^ 2) * (s / s ^ (2 * 𝔰.ϱ)) /
@@ -643,8 +642,8 @@ theorem linkSecondMoment_isOpenElement_le [S.IsAdmissible] (Sg : Finset (S.chose
   -- `S.entrySet`. These entries are units off the set `T` of places, and the inverses of the level
   -- and of `N` are integral there.
   obtain ⟨T, _, hT₀, hT_M, hT_basis, hT_N⟩ := S.exists_places_integralOff S.entrySet
-  simp_rw [linkSecondMoment, ← ENNReal.tsum_prod]
-  refine (tsum_subtype_support _).ge.trans (ENNReal.summable.tsum_le_of_sum_le fun F ↦ ?_)
+  simp_rw [linkSecondMoment, ← tsum_prod]
+  refine (tsum_subtype_support _).ge.trans (CompleteLattice.summable.tsum_le_of_sum_le fun F ↦ ?_)
   -- a block `j` has two classes, a reduction and a link
   let block (j : F) : S.Classes × S.Classes × {s | s ∈ S.fixer Sg D ∧ S.IsOpenElement s} ×
       Submodule E (𝔰.MiddleIndex ⊕ 𝔰.MiddleIndex → E) := j.val.val

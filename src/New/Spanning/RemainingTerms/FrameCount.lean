@@ -224,7 +224,7 @@ lemma norm_coeff_le_norm_sum_frameVector {y : 𝔰.G₁} (h_box : y ∈ frameBox
     rw [mulVec_mulVec, adjugate_mul, det_eq_one_of_unitriangular (frameMatrix_unitriangular hu),
       one_smul, one_mulVec]
   have h_exponent : 1 + ((2 + (7 * 𝔰.n + 37 * 𝔰.n)) * 𝔰.ϱ + 7 * 𝔰.n) ≤ 46 * 𝔰.n ^ 2 := by
-    nlinarith [S.ten_pow_five_le_varrho, (rfl : 𝔰.n = 𝔰.ϱ + 1)]
+    nlinarith only [S.ten_pow_five_le_varrho, (rfl : 𝔰.n = 𝔰.ϱ + 1)]
   calc ‖x a‖ ≤ ∑ i, ‖T.adjugate a i‖ * ‖(T *ᵥ x) i‖ := by
         rw [h_cramer]
         exact norm_sum_le_of_le _ fun i _ ↦ norm_mul_le _ _
@@ -498,7 +498,6 @@ lemma skewSolution_mul (h_gram : μᴴ * P = -(Pᴴ * μ)) (h_solve : μ * α * 
 lemma isIntMatrix_skewSolution {O : Subring R} [IsStarStable O] (hP : IsIntMatrix O P)
     (hμ : IsIntMatrix O μ) (hα : IsIntMatrix O α) (hδ : δ ∈ O) :
     IsIntMatrix O (skewSolution P μ α δ) := by
-  classical
   have hμα : IsIntMatrix O (μ * α) := hμ.mul hα
   have h_third : IsIntMatrix O (αᴴ * (Pᴴ * μ) * α) :=
     (hα.conjTranspose.mul (hP.conjTranspose.mul hμ)).mul hα

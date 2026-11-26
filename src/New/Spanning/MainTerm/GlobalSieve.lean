@@ -848,7 +848,7 @@ lemma boundsDecay_prod [S.IsAdmissible] :
     simp only [B, ← pow_mul, ← pow_succ']
     gcongr
     grw [← Nat.pow_le_pow_right 𝔰.ϱ.succ_pos (by norm_num : 2 ≤ 9)]
-    nlinarith [S.ten_pow_five_le_varrho]
+    nlinarith only [S.ten_pow_five_le_varrho]
   have h_sum : ∑ y ∈ X,
       (∏ v, dampedPower (𝔰.k - 𝔰.n ^ 7) ‖c v / S.frameScaleSq v a * Φ v y‖⁻¹) *
         (√(genIndex (ratToPlaces T y)) ^ (𝔰.k - 𝔰.n ^ 7) / denomIndex O (ratToPlaces T y) ^ 3) ≤
@@ -1010,7 +1010,6 @@ parameter, `n = ϱ + 1`, and `f` is the number of infinite places. -/
 lemma globalWeight_scaledHead_le [S.IsAdmissible] {A : Finset Eˣ}
     (hA : ∀ t ∈ A, (t : E) ∈ ratIntegralOff T) {i : ℕ} (hi : i ≤ 𝔰.ϱ) (p : Fin i → A) :
     S.globalWeight T i (S.scaledHead T p 1) ≤ S.b ^ (120 * 𝔰.n ^ 8 * numInfPlaces E * i) := by
-  classical
   have hb : 1 ≤ S.b := S.one_le_b
   by_cases hp : S.globalWeight T i (S.scaledHead T p 1) = 0
   · exact hp.trans_le (by positivity)
@@ -1048,7 +1047,6 @@ lemma sum_globalWeight_le [S.IsAdmissible] {A : Finset Eˣ}
     (hA : ∀ t ∈ A, (t : E) ∈ ratIntegralOff T) {i : ℕ} (hi : i ≤ 𝔰.ϱ) :
     ∑ p : Fin i → A, S.globalWeight T i (S.scaledHead T p 1) ≤
       S.b ^ (130 * 𝔰.n ^ 9 * numInfPlaces E) := by
-  classical
   have hb : 1 ≤ S.b := S.one_le_b
   let P : Finset (Fin i → A) := {p | S.globalWeight T i (S.scaledHead T p 1) ≠ 0}
   have h_card : (#P : ℝ) ≤ (1 + 2 * S.b ^ (120 * 𝔰.n ^ 2)) ^ (i * numInfPlaces E * 2) := by
@@ -1059,7 +1057,7 @@ lemma sum_globalWeight_le [S.IsAdmissible] {A : Finset Eˣ}
       headProduct_injective.injOn
   have h_base : 1 + 2 * S.b ^ (120 * 𝔰.n ^ 2) ≤ S.b ^ (120 * 𝔰.n ^ 2 + 1) := by
     rw [pow_succ S.b]
-    nlinarith [S.thousand_le_b, one_le_pow₀ hb (n := 120 * 𝔰.n ^ 2)]
+    nlinarith only [S.thousand_le_b, one_le_pow₀ hb (n := 120 * 𝔰.n ^ 2)]
   calc
     _ = ∑ p ∈ P, S.globalWeight T i (S.scaledHead T p 1) := (sum_filter_ne_zero univ).symm
     _ ≤ #P * S.b ^ (120 * 𝔰.n ^ 8 * numInfPlaces E * i) := by

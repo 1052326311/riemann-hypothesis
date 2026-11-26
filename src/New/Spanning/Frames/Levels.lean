@@ -407,14 +407,17 @@ lemma measurePreserving_orbitPoint {F : PlaceData ι T m} (b : Fin 𝔰.n) :
       ∫⁻ t : A, modulus t ^ d * ∫⁻ u : V, ∫⁻ β : skewAdjoint A,
         Φ (orbitPoint a.castSucc ((floorWeyl a t : T.G)⁻¹ * heisenbergElem a (u, β)))
           ∂P.skewMeasure := by
-    -- `fun_prop` has to unfold the measurable space that `volume` carries
-    simp (disch := with_unfolding_all fun_prop) [floorMeasure, heisenbergMeasure, lintegral_map,
-      mconv, lintegral_prod, lintegral_withDensity_eq_lintegral_mul, hd, V]
+    simp (disch := fun_prop) [floorMeasure, heisenbergMeasure, lintegral_map,
+      mconv, lintegral_prod, hd, V]
+    rw [weylLaw, lintegral_map (by fun_prop) (by fun_prop),
+      lintegral_withDensity_eq_lintegral_mul _ (by fun_prop) (by fun_prop)]
+    rfl
   have h_quadric : ∫⁻ v, Φ v ∂F.floorQuadricMeasure a.castSucc =
       ∫⁻ t : A, ∫⁻ u : V, ∫⁻ β : skewAdjoint A, Φ (χ t u β) ∂P.skewMeasure := by
     rw [floorQuadricMeasure_castSucc_eq_map]
-    simp (disch := with_unfolding_all fun_prop)
+    simp (disch := fun_prop)
       [lintegral_map, lintegral_prod, volume_eq_prod, χ, V]
+    rw [lintegral_prod _ (by fun_prop)]
   rw [h_floor, h_quadric]
   refine lintegral_congr_of_ae_imp ae_isUnit ?_
   rintro _ ⟨t, rfl⟩
@@ -730,13 +733,10 @@ lemma partialGroupMeasure_zero_eq {F : PlaceData ι T m} :
 lemma floorMeasure_ne_zero {F : PlaceData ι T m} (l : ℕ) : F.floorMeasure l ≠ 0 := by
   obtain hl | rfl | hl : l < 𝔰.n ∨ l = 𝔰.n ∨ 𝔰.n < l := lt_trichotomy l 𝔰.n
   · -- the measure maps onto a non-zero quadric measure
-    have h_map : (F.floorMeasure l).map (orbitPoint ⟨l, hl⟩) = F.floorQuadricMeasure ⟨l, hl⟩ :=
-      (measurePreserving_orbitPoint ⟨l, hl⟩).map_eq
+    have h_map := measurePreserving_orbitPoint (F := F) ⟨l, hl⟩
     have h_quadric : F.floorQuadricMeasure ⟨l, hl⟩ ≠ 0 := by
       simp (disch := fun_prop) [NeZero.ne]
-    intro h_zero
-    rw [h_zero, Measure.map_zero] at h_map
-    exact h_quadric h_map.symm
+    exact (Measure.map_ne_zero_iff h_map.aemeasurable).1 (h_map.map_eq ▸ h_quadric)
   · rw [floorMeasure_top]
     exact NeZero.ne F.measureH
   · have h_dirac : F.floorMeasure l = dirac 1 := by grind [floorMeasure]

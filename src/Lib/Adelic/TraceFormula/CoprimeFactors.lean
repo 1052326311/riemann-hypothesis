@@ -2,6 +2,7 @@ module
 
 public import Lib.Adelic.TraceFormula.FibreIntegral
 public import Lib.General.LinearAlgebra.Eigenvalues
+public import TauCeti.LinearAlgebra.Trace.Idempotent
 
 /-!
 # Coprime factors
@@ -353,7 +354,7 @@ lemma trace_aeval_eq_natDegree (huv : u * A + v * B = 1) (hy : y.charpoly = A * 
 projection `(v B)(y)` onto the kernel of `A(y)` has rank `deg A`. -/
 lemma rank_aeval_eq_natDegree [CharZero F] (huv : u * A + v * B = 1) (hy : y.charpoly = A * B) :
     (aeval y (v * B)).rank = A.natDegree := by
-  rw [← Nat.cast_inj (R := F), ← trace_eq_rank_of_isIdempotentElem
+  rw [← Nat.cast_inj (R := F), ← IsIdempotentElem.trace_eq_rank
     (isIdempotentElem_aeval_of_charpoly_eq huv hy), trace_aeval_eq_natDegree huv hy]
 
 /-- If `A B` is a characteristic polynomial and neither factor is a unit, some proper non-empty set
@@ -536,7 +537,6 @@ lemma exists_testFunction_eq_indicator_of_isCompact {V : Set (GL n (LocField w))
     ∃ Ψ : TestFunction (GL n (LocField w) × Gf E n), ∀ (g : GL n (LocField w)) (y : Gf E n),
       Ψ.1 (g, y) = V.indicator 1 g * φ.1 (ofSplitPlace hw g * y * (ofSplitPlace hw g)⁻¹) := by
   obtain ⟨hφ_const, hφ_compact, -⟩ := φ.2
-  have h_cont : Continuous (ofSplitPlace (n := n) hw) := continuous_ofSplitPlace hw
   have hV_const : IsLocallyConstant (V.indicator (1 : GL n (LocField w) → ℂ)) :=
     (LocallyConstant.indicator 1 ⟨hV_compact.isClosed, hV_open⟩).isLocallyConstant
   have h_shear : Continuous fun z : GL n (LocField w) × Gf E n ↦

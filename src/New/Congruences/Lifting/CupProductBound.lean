@@ -402,8 +402,7 @@ lemma Pairing.nsmul_modPairing_eq_coboundary {e₁ e₂ e₃ r : ℕ} {c : S.par
   have h_eq : p ^ (e₁ + e₂ + e₃) • P.modPairing ((S.cocycleMap c).1 g)
       (S'.ρ g ((S'.cocycleMap c').1 h)) = charRep _ χ g.1 (κ h) - κ (g * h) + κ g := by
     refine eq_of_sub_eq_zero (TateTwist.eq_zero_of_mk_one_mem_smallPart ?_)
-    rw [h_diff]
-    exact add_mem h_small h_δ
+    simpa only [h_diff] using add_mem h_small h_δ
   rw [hr, mul_comm (p ^ (e₁ + e₂ + e₃)) r, mul_smul, h_eq]
 
 /-- The pairing lemma. Let `x`, `w` lie over `p ^ e₁ • c` and `x'`, `w'` over `p ^ e₂ • c'`. Call a
@@ -467,8 +466,7 @@ lemma Pairing.IsScaledCupCoboundary.of_isSafePath {e₁ e₂ e₃ : ℕ} {c : S.
         smul_sub, wittFst_smul, extensionRep, smul_wittPairing]
       abel
     have hf_small : f (inr h.1) ∈ smallPart P.exponent := by
-      rw [h_f]
-      exact sub_mem hy' hB
+      simpa only [h_f] using sub_mem hy' hB
     have h_small : DiagTensor.mk 1 (κ h) ∈ smallPart P.exponent := by
       simpa using sub_mem hf_small (hκ h)
     simp [TateTwist.eq_zero_of_mk_one_mem_smallPart h_small]
@@ -684,8 +682,8 @@ lemma liftIdeal_le_of_p_pow_mem {S : PairingSide O} {l : ℕ} {i : Letter} {c : 
       S.liftIdeal 0 l i ⊔ span {(p : Ainf)} • span {(p : Ainf) ^ c} := by
     simp [liftIdeal, sup_comm, span_singleton_mul_span_singleton, pow_succ']
   rw [h_split] at h_mem ⊢
-  exact sup_le le_rfl (smul_le_of_le_smul_of_le_jacobson_bot (fg_span_singleton _)
-    (IsAdicComplete.le_jacobson_bot _) (by simpa using h_mem))
+  exact sup_le le_rfl (smul_le_of_le_smul_of_le_jacobson (fg_span_singleton _)
+    (IsAdicComplete.le_jacobson _) (by simpa using h_mem))
 
 /-- Nakayama at one letter: if `p ^ κ` lies in `S.liftIdeal (p ^ (κ + 1)) 0 i`, then `p ^ κ` kills
 the cokernel at `i`. -/
