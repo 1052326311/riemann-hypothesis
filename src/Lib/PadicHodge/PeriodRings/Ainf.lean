@@ -1,8 +1,16 @@
 module
 
-public import Lib.PadicHodge.PeriodRings.AxTheorem
-public import TauCeti.RingTheory.Perfectoid.Cyclotomic
+public import TauCeti.RingTheory.Perfectoid.Cyclotomic.Basic
 public import TauCeti.RingTheory.Perfectoid.Padic
+public import Mathlib.Algebra.CharP.Pi
+public import Mathlib.Algebra.Order.Star.Rat
+public import Mathlib.FieldTheory.IsAlgClosed.Classification
+public import Mathlib.RingTheory.Algebraic.Cardinality
+public import Mathlib.RingTheory.PiTensorProduct
+public import Mathlib.RingTheory.PicardGroup
+public import Mathlib.RingTheory.WittVector.Compare
+public import Mathlib.Topology.Algebra.Module.Cardinality
+public import Lib.PadicHodge.PeriodRings.AxTheorem
 
 /-!
 # The ring A_inf, the elements ε, μ, τ, ξ, the kernel of θ and adic completeness
@@ -581,10 +589,9 @@ instance : FaithfulSMul ℤ_[p] (WittVector p k) := by
 
 /-- Let c ∈ A_inf with θ(c) = 0, and let c₀ ∈ O^♭ be its reduction modulo p. If c₀^♯ divides p
 in the integers of C_p, then c generates the kernel of θ. -/
-lemma theta_eq_zero_iff_dvd_of_untilt_dvd {c a : Ainf} (hc : theta c = 0)
-    (hc_dvd : (constantCoeff c).untilt ∣ (p : OC)) :
-    theta a = 0 ↔ c ∣ a := by
-  refine ⟨fun ha ↦ ?_, fun ⟨b, hb⟩ ↦ by simp [hb, hc]⟩
+lemma dvd_of_theta_eq_zero_of_untilt_dvd {c a : Ainf} (hc : theta c = 0)
+    (hc_dvd : (constantCoeff c).untilt ∣ (p : OC)) (ha : theta a = 0) :
+    c ∣ a := by
   -- Apply `dvd_of_mem_of_constantCoeff_dvd` to the ideal `ker θ`, saturated for `p` as `p ≠ 0` in
   -- the domain `OC`.
   have h_sat : ∀ x : Ainf, (p : Ainf) * x ∈ ker theta → x ∈ ker theta := by simp [ne p]

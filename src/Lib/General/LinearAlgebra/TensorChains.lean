@@ -1,8 +1,12 @@
 module
 
-public import Lib.Base
 import TauCeti.LinearAlgebra.Matrix.GeneralLinearGroup.NonzeroVectors
 import TauCeti.LinearAlgebra.TensorProduct.Separation
+public import Mathlib.Algebra.Module.StablyFree.Basic
+public import Mathlib.LinearAlgebra.Matrix.Swap
+public import Mathlib.Tactic.Basify
+public import Std.Internal.Order.Automation
+public import Lib.Speed
 
 /-!
 # Chains of linear maps, tensor products of their data, and separation by forms
@@ -76,7 +80,8 @@ lemma New.exists_GL_smul_single {v : n → R} (hv : ∃ j : n, IsUnit (v j)) (i 
 `Nat.card F ^ Fintype.card n - 1`. For finite `F`, this counts the nonzero vectors. -/
 lemma New.index_stabilizer_GL_vector {F : Type*} [Field F] {u : n → F} (hu : u ≠ 0) :
     (stabilizer (GL n F) u).index = Nat.card F ^ Fintype.card n - 1 := by
-  rw [← SubMulAction.stabilizer_of_subMul (⟨u, TauCeti.mem_nonzeroVectors.2 hu⟩ : TauCeti.nonzeroVectors n F),
+  rw [← SubMulAction.stabilizer_of_subMul
+      (⟨u, TauCeti.mem_nonzeroVectors.2 hu⟩ : TauCeti.nonzeroVectors n F),
     index_stabilizer_of_transitive, TauCeti.natCard_nonzeroVectors,
     Nat.card_eq_fintype_card (α := n)]
 

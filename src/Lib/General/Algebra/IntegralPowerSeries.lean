@@ -1,8 +1,10 @@
 module
 
+public import TauCeti.RingTheory.MvPowerSeries.Derivative
+public import Mathlib.Analysis.SpecialFunctions.RegularizedHypergeometric
+public import Mathlib.RingTheory.PowerSeries.Exp
 public import Lib.GLn.SchurModule.Basic
 public import Lib.General.Algebra.AdicCompletion
-public import TauCeti.RingTheory.MvPowerSeries.Derivative
 
 /-!
 # Integral power series over ℂ_p: jets, the chain rule and the exponential
@@ -63,7 +65,8 @@ open MvPowerSeries PowerSeries
 namespace New
 
 /-- The linear form ∑ c_i z_i, as a power series in the variables z_i. -/
-noncomputable def linearSeries {ι R : Type*} [Fintype ι] [CommSemiring R] (c : ι → R) : MvPowerSeries ι R :=
+noncomputable def linearSeries {ι R : Type*} [Fintype ι] [CommSemiring R] (c : ι → R) :
+    MvPowerSeries ι R :=
   ∑ i : ι, c i • MvPowerSeries.X i
 
 variable {σ : Type*} {R S : Type*} [CommRing R] [CommRing S] {p : ℕ} [Fact p.Prime]

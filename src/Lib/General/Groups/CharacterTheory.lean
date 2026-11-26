@@ -1,9 +1,31 @@
 module
 
-public import Lib.Base
 public import TauCeti.RepresentationTheory.CharacterTable.CentralCharacter
 public import TauCeti.RepresentationTheory.CharacterTable.Completeness
 import TauCeti.RepresentationTheory.CharacterTable.Values
+public import Aesop.BuiltinRules
+public import Aesop.Frontend.Tactic
+public import Aesop.Main
+public import Mathlib.Algebra.Category.ModuleCat.Projective
+public import Mathlib.Algebra.Module.StablyFree.Basic
+public import Mathlib.Algebra.Order.PUnit
+public import Mathlib.Analysis.CStarAlgebra.Classes
+public import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
+public import Mathlib.RingTheory.Coalgebra.CoassocSimps
+public import Mathlib.RingTheory.Coalgebra.IsFrobenius
+public import Mathlib.RingTheory.Etale.Weakly
+public import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
+public import Mathlib.RingTheory.HopfAlgebra.Basic
+public import Mathlib.RingTheory.SimpleRing.Principal
+public import Mathlib.RingTheory.TotallySplit
+public import Mathlib.RingTheory.WittVector.IsPoly
+public import Mathlib.Tactic.Basify
+public import Mathlib.Tactic.ENatToNat
+public import Mathlib.Tactic.Polynomial.Basic
+public import Mathlib.Tactic.ReduceModChar
+public import Std.Internal.Order.Automation
+public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.Speed
 
 /-!
 # Characters of finite groups: averages, virtual characters and central projections
@@ -463,7 +485,8 @@ lemma exists_isExpansionFamily : ∃ (n : ℕ) (χ : Fin n → G → ℂ), IsExp
   let χ : Fin (Fintype.card (ConjClasses G)) → G → ℂ := fun i ↦ (ρ (e.symm i)).character
   have hχ (i) : IsChar (χ i) := ⟨.of (ρ (e.symm i)), rfl⟩
   have h_translate (φ : G → ℂ) (hφ : IsClassFunction φ) (i) :
-      ∃ c : ℂ, ∀ y : G, classInner (χ i) (fun x ↦ φ (x * y)) = (Nat.card G : ℂ)⁻¹ * (c * χ i y) := by
+      ∃ c : ℂ, ∀ y : G, classInner (χ i) (fun x ↦ φ (x * y)) =
+          (Nat.card G : ℂ)⁻¹ * (c * χ i y) := by
     have hφ_inv : IsClassFunction (fun t : G ↦ φ t⁻¹) := fun g x ↦ by
       simpa [mul_assoc] using hφ g⁻¹ x
     let z : Subalgebra.center ℂ ℂ[G] :=
@@ -501,7 +524,8 @@ lemma exists_isExpansionFamily : ∃ (n : ℕ) (χ : Fin n → G → ℂ), IsExp
     ring
   · let Φ : TauCeti.ClassFunction ℂ G := ⟨φ, TauCeti.ClassFunction.mem_iff.2 hφ⟩
     have h_pair (i : Fin (Fintype.card (ConjClasses G))) :
-        TauCeti.ClassFunction.characterPairing (TauCeti.ClassFunction.ofCharacter (ρ (e.symm i))) Φ =
+        TauCeti.ClassFunction.characterPairing
+            (TauCeti.ClassFunction.ofCharacter (ρ (e.symm i))) Φ =
           classInner (χ i) φ := by
       rw [TauCeti.ClassFunction.characterPairing_apply, classInner, finMean,
         finsum_eq_sum_of_fintype, div_eq_inv_mul]

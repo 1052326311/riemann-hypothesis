@@ -1,11 +1,12 @@
 module
 
+public import Lib.Adelic.AutomorphicForms.PAdicGauge
 public import Lib.General.LinearAlgebra.BlockEmbeddings
 public import Lib.Shimura.HeckeTower.HeckeData
 public import Lib.Weil.CompactLift.ThetaKernelDefs
 public import New.Reduction.Data.Sizes
 public import New.UpperBound.Objects.LabelsAndIndexTypes
-public import New.UpperBound.Objects.LiftLawsModuloN
+public import Lib.General.LinearAlgebra.TensorChains
 
 /-!
 # Chains of theta lifts, jointly invariant combinations, and free levels

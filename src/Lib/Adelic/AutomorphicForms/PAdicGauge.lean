@@ -1,5 +1,6 @@
 module
 
+public import Mathlib.Topology.MetricSpace.Ultra.Pi
 public import Lib.Adelic.AutomorphicForms.HeckeEigenforms
 public import Lib.General.LinearAlgebra.MatrixNormBounds
 public import Lib.PadicComparison.Descent.TestCategory
@@ -170,10 +171,6 @@ lemma weylGauge_sum_le {α : Type*} {s : Finset α} {C : ℝ} {f : α → WeylIn
 bounded by `c` at `d`: for every `g`, the gauge of `φ g` at `g * d` is at most `c`. -/
 def GaugeLe (c : ℝ) (φ : AlgForm (E := E) n κ e) : Prop :=
   ∀ g : Gf E n, weylGauge κ e (g * d) (φ.val g) ≤ c
-
-/-- The valuation ring O_ι ⊂ ℂ of complex numbers whose image under ι : ℂ → ℂ_p has absolute
-value at most 1. -/
-noncomputable abbrev embValRing : ValuationSubring ℂ := (valuation.comap ιₚ).valuationSubring
 
 /-- The O_ι-module of forms φ in S that are integral at d: the value φ(g) has gauge at most 1 at
 gd for every g. -/

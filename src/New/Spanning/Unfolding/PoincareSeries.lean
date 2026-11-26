@@ -31,8 +31,6 @@ by classes and indices.
   `New.Filling.stdPrincipalLevel`, linear in φ.
 * `New.Filling.Fits.sourceFormCoords`: algebraic forms of level `S.sourceLevel` as vectors of the
   Euclidean space on classes times indices.
-* `New.Filling.Fits.finrank_levelSpace_eq_sourceDim`: the dimension of the space of these forms is
-  the number of classes times the dimension of the weight, and it is positive.
 
 Notions from other files:
 * `New.Filling.besselFn`: W_i(y), the product over the infinite places v of the i_v-th coordinate of
@@ -549,25 +547,17 @@ on the adelic group the Poincaré series `X.poincareSeries φ`. -/
 theorem coe_poincareMap (X : S.Fits V l kw Y η) [S.IsAdmissible]
     (φ : EuclideanSpace ℂ (S.Classes × S.BesselCoord)) :
     ⇑(X.poincareMap φ : V.Form (typeKernel l ε)) = X.poincareSeries φ := by
-  -- The series of each `X.cutBessel a` is a form `y a`, and `X.poincareMap φ = ∑_a φ_a y a`.
-  let y (a : S.Classes × S.BesselCoord) :
-      levelSpace (V.formRep (typeKernel l ε)) S.stdPrincipalLevel :=
-    (X.exists_levelSpace_tsum_cutBessel_eq a).choose
-  have hy (a : S.Classes × S.BesselCoord) (g : New.G E ε) :
-      ∑' γ : V.Γ, X.cutBessel a (γ * g) = (y a : V.Form (typeKernel l ε)) g :=
-    (X.exists_levelSpace_tsum_cutBessel_eq a).choose_spec g
-  have h_sum : X.poincareMap φ = ∑ a : S.Classes × S.BesselCoord, φ a • y a := by
-    simp [poincareMap, y]
   funext g
-  -- Evaluation at `g` is linear.
+  -- Evaluation at `g` is linear on the level space.
   let ev : levelSpace (V.formRep (typeKernel l ε)) S.stdPrincipalLevel →ₗ[ℂ] ℂ :=
     { toFun z := (z : V.Form (typeKernel l ε)) g
       map_add' _ _ := rfl
       map_smul' _ _ := rfl }
-  calc ev (X.poincareMap φ)
-      = ∑ a : S.Classes × S.BesselCoord, φ a * ev (y a) := by
-        simp only [h_sum, map_sum, map_smul, smul_eq_mul]
-    _ = X.poincareSeries φ g := sum_congr rfl fun a _ ↦ congrArg (φ a * ·) (hy a g).symm
+  change ev (X.poincareMap φ) = X.poincareSeries φ g
+  rw [show ev (X.poincareMap φ) =
+      ∑ a, φ a * ev (X.exists_levelSpace_tsum_cutBessel_eq a).choose by simp [poincareMap]]
+  exact sum_congr rfl fun a _ ↦
+    congrArg (φ a * ·) ((X.exists_levelSpace_tsum_cutBessel_eq a).choose_spec g).symm
 
 omit [S.IsAdmissible] [HasPrimitiveRoot5040 E] in
 /-- The homeomorphism `X.realHomeomorph` from G_∞ onto ∏_v `𝔰.G₁` preserves the volumes. -/
@@ -971,30 +961,6 @@ def sourceFormCoords (h : S.Fits V l kw Y η) :
     S.classAut_eq_bot Quot.out_eq ≪≫ₗ LinearEquiv.piCongrRight
     (fun _ ↦ h.weylBesselEquiv) ≪≫ₗ LinearEquiv.symm
       (WithLp.linearEquiv .. ≪≫ₗ LinearEquiv.curry ..)
-
-/-- If V fits the filling data S with weight kw, then `S.sourceDim` is the number of classes times
-the dimension of the representation of weight kw. -/
-lemma sourceDim_eq_card_mul_finrank (X : S.Fits V l kw Y η) :
-    S.sourceDim = Fintype.card S.Classes * Module.finrank ℂ (WeylIndex 𝔰.κ kw → ℂ) := by
-  rw [X.weylBesselEquiv.finrank_eq, Module.finrank_fintype_fun_eq_card, sourceDim]
-
-/-- Let E be a CM field, and let V, with grading Y, fit the filling data S: among other conditions,
-the Bessel system of S at each infinite place v has type (l v, kw v), and η is central. Let X₀ be
-the hermitian space on `𝔰.κ` with the standard definite form. The space of algebraic forms on U(X₀)
-of weight (kw, 0) and level `S.sourceLevel` has dimension `S.sourceDim`. This equals the number of
-double cosets `S.Classes` of U(X₀) at that level times the dimension of `WeylIndex 𝔰.κ kw → ℂ`, the
-representation of weight kw, and it is positive. -/
-theorem finrank_levelSpace_eq_sourceDim {ε : 𝔰.BesselIndex → ℤˣ}
-    {l : NumberField.InfinitePlace E → HCParam ε} {kw : NumberField.InfinitePlace E → ℕ → ℕ}
-    {V : Space E 𝔰.BesselIndex ε} {Y : Grading V S.N 𝔰.κ (2 * 𝔰.ϱ + 1)} {η : Gf E 𝔰.κ}
-    [DiscreteSeries.UnitarySignFrame 𝔰 ε] (X : S.Fits V l kw Y η) :
-    Module.finrank ℂ (levelSpace (algFormRep kw 0) S.sourceLevel) = S.sourceDim ∧
-    S.sourceDim = Fintype.card S.Classes * Module.finrank ℂ (WeylIndex 𝔰.κ kw → ℂ) ∧
-    0 < S.sourceDim := by
-  refine ⟨?_, X.sourceDim_eq_card_mul_finrank, Nat.mul_pos Fintype.card_pos Fintype.card_pos⟩
-  -- The level is free, so a form has one arbitrary value at each class.
-  rw [X.sourceDim_eq_card_mul_finrank, Fintype.card_eq_nat_card]
-  exact finrank_levelSpace_smoothFormRep S.classAut_eq_bot
 
 end New.Filling.Fits
 

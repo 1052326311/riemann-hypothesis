@@ -158,13 +158,13 @@ lemma lattice_eq_iff : V.lattice x = V.lattice x' ↔ x⁻¹ * x' ∈ stdLevel E
   refine ⟨fun h ↦ lattice_le_iff.1 h.ge, fun h ↦ le_antisymm ?_ (lattice_le_iff.2 h)⟩
   simpa [lattice_le_iff] using inv_mem h
 
-/-- The conjugate `x⁻¹ g x` lies in the group `stdLevel E ι` of integral unitary matrices if and
-only if `g`, acting through its matrix `V.ratCoordMatrixFin g` in rational coordinates, maps the
-lattice of `x` into itself. -/
-lemma conj_mem_stdLevel_iff :
-    x⁻¹ * (g * x) ∈ stdLevel E ι ↔ ∀ y ∈ V.lattice x, V.ratCoordMatrixFin g *ᵥ y ∈ V.lattice x := by
-  rw [← lattice_le_iff (V := V)]
-  refine ⟨fun h y hy ↦ h (mulVec_mem_lattice_mul.2 hy), fun h z hz ↦ ?_⟩
+/-- If `g`, acting through its matrix `V.ratCoordMatrixFin g` in rational coordinates, maps the
+lattice of `x` into itself, then the conjugate `x⁻¹ g x` lies in the group `stdLevel E ι` of
+integral unitary matrices. -/
+lemma conj_mem_stdLevel_of_mapsTo_lattice
+    (h : ∀ y ∈ V.lattice x, V.ratCoordMatrixFin g *ᵥ y ∈ V.lattice x) :
+    x⁻¹ * (g * x) ∈ stdLevel E ι := by
+  refine (lattice_le_iff (V := V)).1 fun z hz ↦ ?_
   obtain ⟨y, rfl⟩ : ∃ y, V.ratCoordMatrixFin g *ᵥ y = z :=
     ⟨V.ratCoordMatrixFin g⁻¹ *ᵥ z, by simp [ratCoordMatrixFin, Gf.coe_inv, mul_assoc]⟩
   exact h y (mulVec_mem_lattice_mul.1 hz)
@@ -408,7 +408,8 @@ lemma exists_inclXFin_eq_of_mulVec_eq {g : Gf E ι}
   have h_blocks : M = gradedBlocks Y.indexEquiv Y.indexEquiv A 1 := by
     ext1 i j
     obtain ⟨i' | i', rfl⟩ := Y.indexEquiv.surjective i <;>
-      obtain ⟨j' | j', rfl⟩ := Y.indexEquiv.surjective j <;> simp [A, h_row, h_col, Matrix.one_apply]
+      obtain ⟨j' | j', rfl⟩ := Y.indexEquiv.surjective j <;>
+      simp [A, h_row, h_col, Matrix.one_apply]
   have hA : Aᴴ * 1 * A = 1 := by
     have h_isom := Space.ratCoordMatrixFin_isometry (V := V) g
     rw [show V.ratCoordMatrixFin g = _ from h_blocks, Y.gram_eq] at h_isom

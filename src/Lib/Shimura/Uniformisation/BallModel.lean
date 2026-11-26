@@ -1,5 +1,7 @@
 module
 
+public import Mathlib.Algebra.Order.Ring.Opposite
+public import Mathlib.Topology.Algebra.Algebra.Rat
 public import Lib.Shimura.ThetaModuli.PELThetaTori
 public import Lib.Shimura.Transfer.MarkedPairs
 
@@ -533,14 +535,6 @@ lemma _root_.Set.Nonempty.exists_retraction {α : Type*} {S : Set α} (hS : S.No
   obtain ⟨b₀, hb₀⟩ := hS
   exact ⟨fun b ↦ if b ∈ S then b else b₀, fun b ↦ by grind, fun b hb ↦ ite_eq_left hb⟩
 
-/-- A real linear map `P` from (E ⊗ ℝ)ⁿ to the fibre `New.Variety.BallFibre` is injective if a form
-`A` has Re A(w, P w) > 0 for every w ≠ 0. -/
-private lemma injective_of_re_pos {P : RealVectors E D.Index →ₗ[ℝ] BallFibre E D.Index}
-    {A : RealVectors E D.Index →L[ℝ] BallFibre E D.Index →L[ℂ] ℂ}
-    (hA : ∀ w ≠ 0, 0 < (A w (P w)).re) : Function.Injective P := by
-  refine (injective_iff_map_eq_zero P).2 fun w hw ↦ by_contra fun hw_ne ↦ ?_
-  simpa [hw] using hA w hw_ne
-
 /-- If a form `A` has Re A(w, P w) > 0 for every w ≠ 0 and the real isomorphism `Q` agrees with
 `P`, then the form B = A ∘ Q⁻¹ on the fibre has Re B(u, u) > 0 for every u ≠ 0. -/
 private lemma re_comp_symm_apply_self_pos {P : RealVectors E D.Index →ₗ[ℝ] BallFibre E D.Index}
@@ -614,7 +608,9 @@ lemma exists_analyticFamily_positiveBall (e : (D.Index → ℂ) ≃L[ℂ] ℂ ×
     ballPeriod E e H (1, r b)
   have hP_pos (b : BallBase D.Index) : ∀ w ≠ 0, 0 < (A w (P b w)).re := A_pos _ (hr b)
   -- By positivity of `A` the map `P b` is injective, so it is an isomorphism by dimension.
-  have P_inj (b : BallBase D.Index) : Function.Injective (P b) := injective_of_re_pos (hP_pos b)
+  have P_inj (b : BallBase D.Index) : Function.Injective (P b) := by
+    refine (injective_iff_map_eq_zero (P b)).2 fun w hw ↦ by_contra fun hw_ne ↦ ?_
+    simpa [hw] using hP_pos b w hw_ne
   let Q (b : BallBase D.Index) : RealVectors E D.Index ≃L[ℝ] BallFibre E D.Index :=
     ((P b).linearEquivOfInjective (P_inj b) finrank_realVectors_eq_finrank_ballFibre)
       |>.toContinuousLinearEquiv
@@ -783,10 +779,18 @@ def AnalyticFamily.heckeTranslate (f : AnalyticFamily D) (γ : GUPlus E D.Index)
   have h_similitude : ∃ c : ℚ, 0 < c ∧ IsFrameFor ((c : E) • 1) γ.val :=
     (mem_GUPlus_iff.1 γ.prop).left
   choose c hc hγ using h_similitude
-  have h_pos (b : BallBase D.Index) (u : BallFibre E D.Index) (hu : u ≠ 0) :
-      0 < ((c • (f.torus b).automorphyForm) u u).re := by
-    rw [_root_.smul_apply, _root_.smul_apply, re_qsmul]
+  -- Stated for any `B : RealComplexForm _` equal to the new form, so that the fields below match
+  -- them by `rfl`: unifying the `LatticeForm`s for the frames `f.frame` and `f.frame * γ` is slow.
+  have h_pos (b : BallBase D.Index) (B : RealComplexForm (BallFibre E D.Index))
+      (hB : B = c • (f.torus b).automorphyForm) (u : BallFibre E D.Index) (hu : u ≠ 0) :
+      0 < (B u u).re := by
+    rw [hB, _root_.smul_apply, _root_.smul_apply, re_qsmul]
     exact smul_pos hc (f.re_pos b u hu)
+  have h_symm (b : BallBase D.Index) (B : RealComplexForm (BallFibre E D.Index))
+      (hB : B = c • (f.torus b).automorphyForm) (u v : BallFibre E D.Index) :
+      (B u v).re = (B v u).re := by
+    rw [hB, _root_.smul_apply, _root_.smul_apply, _root_.smul_apply, _root_.smul_apply, re_qsmul,
+      re_qsmul, (f.torus b).re_symm]
   exact
     { domain := f.domain
       isConnected := f.isConnected
@@ -800,14 +804,14 @@ def AnalyticFamily.heckeTranslate (f : AnalyticFamily D) (γ : GUPlus E D.Index)
           automorphyForm := c • x.automorphyForm
           isFrameFor := x.isFrameFor.mul_iff.2 hγ
           isPeriodMap := x.isPeriodMap
-          re_symm := by simp only [_root_.smul_apply, re_qsmul, x.re_symm, implies_true]
+          re_symm := h_symm b _ rfl
           riemannForm_eq := by
             simp only [map_rat_smul, LinearMap.smul_apply, x.riemannForm_eq, polarisationForm,
               mul_re, PEL.xi_im_pos_and_re_eq_zero, zero_mul, zero_sub, mul_neg, sum_neg_distrib,
               mk₂_apply, smul_neg, Rat.smul_def, mul_sum, mul_left_comm, map_mul, implies_true,
               map_smul', map_ratCast, smul_mulVec, dotProduct_smul, smul_eq_mul, ratCast_re,
               ratCast_im, mul_im, zero_add, sub_zero]
-          isPosRiemann := isPosRiemann_of_re_pos (h_pos b)
+          isPosRiemann := isPosRiemann_of_re_pos (h_pos b _ rfl)
           reflection := x.reflection
           adjoint a u v := by
             simpa only [ThetaTori.PeriodMap.intAction, RingHom.coe_comp, Function.comp_apply,
@@ -817,7 +821,7 @@ def AnalyticFamily.heckeTranslate (f : AnalyticFamily D) (γ : GUPlus E D.Index)
       analyticAt := f.analyticAt
       eq_zero_of_linear := f.eq_zero_of_linear
       form_const := by simp only [f.form_const 0, _root_.smul_apply, implies_true, and_self]
-      re_pos := h_pos }
+      re_pos b := h_pos b _ rfl }
 
 /-- Let `f` be an analytic family whose frame `f.frame` has the sign condition for the matrix `β`
 and some complex matrix `ℓ` (only `β` is used afterwards) (`hβ`), let `H = Φ_{v₀}(β)` be negative
