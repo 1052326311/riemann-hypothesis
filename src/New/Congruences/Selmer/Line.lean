@@ -125,7 +125,7 @@ def twistedSelmer {O O' n : Type} [CommRing O] [PadicIntegerRing O ℓ] [CommRin
 `ψ` with values in a discrete valuation ring `O'` over `O` (by the map `e`): the cocycles in
 `T ψ ⊗ Frac(O') / O'` that vanish at `γ_* = T.γ`, are unramified outside `S ∪ Q ∪ Q̄`,
 where `S = T.places`, and satisfy the local conditions of `T`. -/
-def divisibleSelmer {O O' n : Type} [CommRing O] [PadicIntegerRing O ℓ] [CommRing O'] [DVR O']
+def divisibleSelmer {O O' n : Type} [CommRing O] [PadicIntegerRing O ℓ] [CommRing O']
     [Fintype n] [DecidableEq n] (T : SelmerDatum ℓ S₀ g₀ O n) (Q : Finset (FinPlace E))
     (e : O →+* O') (ψ : Gal(Ω/E) →* O') : Submodule O' (Gal(Ω/E) → n → DivisibleQuot O') :=
   selmerModule (twistRep e ψ T.ρ) (unionWithConj T.places Q) (mapRel e '' T.classRelations)
