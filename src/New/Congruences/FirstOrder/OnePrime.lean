@@ -343,9 +343,8 @@ lemma exists_map_pow_mul_family_eq_mul_norm {ρ : (∀ j : J, Γ j) →* R} {N :
           N (S.erase j) = N' * ∑ k : Γ j, ρ (Pi.mulSingle j k) ∧ N S = N' * der j := by
         simpa only [insert_erase hj] using h_factor j (S.erase j) (notMem_erase j S)
       obtain ⟨Z, hZ, hZ_zero⟩ := h_der j g
-      obtain ⟨Y, hY⟩ : ∃ Y : R, σ (δ ^ e * N (S.erase j)) = σ (Y * ∑ g, ρ g) :=
-        (ih (S.erase j) (erase_ssubset hj) (i := e) (by grind [card_erase_of_mem])).imp
-          fun Y ↦ And.left
+      obtain ⟨Y, hY, -⟩ := ih (S.erase j) (erase_ssubset hj) (i := e)
+        (by grind [card_erase_of_mem])
       -- `δ'` moves to the right of `N (S.erase j)` first: `Y` need not commute with it.
       have h_move : δ' * δ ^ e * N (S.erase j) = δ ^ e * N (S.erase j) * δ' := by
         rw [mul_assoc, ((hδ'δ.pow_right e).mul_right (hδ'N _)).eq]
@@ -359,8 +358,7 @@ lemma exists_map_pow_mul_family_eq_mul_norm {ρ : (∀ j : J, Γ j) →* R} {N :
             simp only [mul_assoc]
         _ = 0 := by rw [hZ_zero, mul_zero, map_zero]
     · -- The norm at `j` is a factor of `N S`.
-      obtain ⟨N', h_S⟩ : ∃ N' : R, N S = N' * ∑ k : Γ j, ρ (Pi.mulSingle j k) :=
-        (h_factor j S hj).imp fun N' ↦ And.left
+      obtain ⟨N', h_S, -⟩ := h_factor j S hj
       have norm_inv : (∑ k : Γ j, ρ (Pi.mulSingle j k)) * ρ (Pi.mulSingle j g) =
           ∑ k : Γ j, ρ (Pi.mulSingle j k) :=
         sum_monoidHom_mul (ρ.comp (MonoidHom.mulSingle Γ j)) g
