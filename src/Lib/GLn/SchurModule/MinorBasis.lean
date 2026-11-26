@@ -818,14 +818,8 @@ lemma exists_isStdMinorFamily {Φ J m : Type} [Fintype m] [Fintype J] (c : m →
   · exact exists_isStdMinorFamily_of_isEmpty c τ h
   -- For each `γ`, the heights `k γ` give the weight lowered by `γ` (`h_weight`), and `lift γ`
   -- borders the fillings that avoid `y` (`h_lift`, `h_monomial`), by `exists_bordering`.
-  have h_border : ∀ γ : interlacing ((columnWeight τ h).curry (c y)), ∃ k : J → ℕ,
-      columnWeight τ h = γ.val.mapDomain (fun i : ℕ ↦ (c y, i)) + columnWeight τ k ∧
-      ∀ I : ColouredTableau (c ∘ (↑) : {a : m // a ≠ y} → Φ) τ k, ∃ K : ColouredTableau c τ h,
-        (∀ (R : Type) [CommRing R],
-          HasLeadingTerm (rowExpansion y (minorProduct R K)) γ (minorProduct R I)) ∧
-        ∀ z : m → ℂ, ∏ j : J, ∏ s : Fin (h j), z (K j s) =
-          z y ^ Finsupp.degree γ.val * ∏ j : J, ∏ s : Fin (k j), z (I j s) :=
-    fun γ ↦ exists_bordering h γ.prop
+  have h_border (γ : interlacing ((columnWeight τ h).curry (c y))) :=
+    exists_bordering h γ.prop
   choose k h_weight lift h_lift h_monomial using h_border
   -- The induction hypothesis: standard families `I γ` for the other rows.
   have h_fewer : Nat.card {a : m // a ≠ y} < n :=
@@ -860,12 +854,10 @@ lemma exists_isStdMinorFamily {Φ J m : Type} [Fintype m] [Fintype J] (c : m →
     -- For each `γ` use the identity for the other rows, enumerated by `e` with `y` left out.
     let e' : Fin N ≃ {a : m // a ≠ y} :=
       .optionSubtype _ ⟨(finSuccEquiv' (e.symm y)).symm.trans e, e.apply_symm_apply y⟩
-    have h_rest : (∑ i : ι γ, ∏ j : J, ∏ s : Fin (k γ j), x (I γ i j s)) *
-        alternant (fun i : Fin N ↦ x (e' i)) 0 =
-          alternant (fun i : Fin N ↦ x (e' i)) fun n : ℕ ↦ columnWeight τ (k γ) (c y, n) :=
-      (hI γ).character (c y) N e' fun a ↦ x a
+    have h_rest := (hI γ).character (c y) N e' fun a ↦ x a
     -- `e'` is `e` composed with the embedding that skips the index of `y`.
-    have h_e' : (fun i : Fin N ↦ x (e' i)) = (x ∘ e) ∘ (e.symm y).succAbove := by
+    have h_e' : (fun a : {a : m // a ≠ y} ↦ x a) ∘ e' =
+        (x ∘ e) ∘ (e.symm y).succAbove := by
       simp [funext_iff, e', finSuccEquiv'_symm_some]
     rw [h_e'] at h_rest
     -- The weight lowered by `γ` is that of `k γ` (`h_weight γ`), and a lift adds `x y ^ |γ|` to the
