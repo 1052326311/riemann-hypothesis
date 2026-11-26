@@ -604,7 +604,7 @@ private lemma labelChar_map_evalGL_galActionGL {P : k[X]} {m : ℕ}
     (labelChar T (P.map (algebraMap k k'))).evalGL (galActionGL k k' (Fin m) σ g) =
       (labelChar T (P.map (algebraMap k k'))).evalGL g := by
   have hσP : (P.map (algebraMap k k')).map σ = P.map (algebraMap k k') :=
-    Polynomial.ext fun _ ↦ by simp
+    AddMonoidAlgebra.ext <| Finsupp.ext fun _ ↦ by simp
   change (labelChar T (P.map (algebraMap k k'))).evalGL (g.map σ) = _
   rw [evalGL_labelChar_map T σ hL', hσP]
 
