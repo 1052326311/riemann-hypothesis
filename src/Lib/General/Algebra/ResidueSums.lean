@@ -1,6 +1,6 @@
 module
 
-public import Lib.DiscreteSeries.FlenstedJensen.Defs
+public import Lib.Base
 
 /-!
 # Sums of residues at simple real poles
