@@ -122,14 +122,6 @@ instance {G : Type*} [AddCommMonoid G] [Module ℚ≥0 G] : PerfectRing (Multipl
 
 /-! ### The elements ε, τ, μ, ξ -/
 
-/-- The untilt of the reduction modulo `p` of a sequence `y` of successive `p`-th roots in `O_C` is
-the zeroth term of `y`. -/
-private lemma untilt_mapMonoidHom_idealQuotientMk (y : Perfection OC p) :
-    PreTilt.untilt (O := OC) (p := p)
-        (mapMonoidHom p (Ideal.Quotient.mk (Ideal.span {(p : OC)})).toMonoidHom y) =
-      coeffMonoidHom OC p 0 y :=
-  teichmuller₀_mapMonoidHom_idealQuotientMk
-
 /-- Every homomorphism a from the additive group ℚ to the multiplicative monoid of C_p with a(1) = 1
 lifts to the tilt: some homomorphism χ: ℚ → O^♭ has χ(s)^♯ = a(s) for all s. -/
 lemma exists_tilt_lift_of_character (a : Multiplicative ℚ →* ℂ_[p])
@@ -150,8 +142,8 @@ lemma exists_tilt_lift_of_character (a : Multiplicative ℚ →* ℂ_[p])
   change ((PreTilt.untilt (O := OC) (p := p)
     (mapMonoidHom p (Ideal.Quotient.mk (Ideal.span {(p : OC)})).toMonoidHom (roots s)) : OC) :
       ℂ_[p]) = a s
-  rw [untilt_mapMonoidHom_idealQuotientMk]
-  simp [roots]
+  exact (congrArg _ (teichmuller₀_mapMonoidHom_idealQuotientMk (x := roots s))).trans
+    (by simp [roots])
 
 /-- The map s ↦ ε^s: a chosen homomorphism from ℚ to the multiplicative monoid of O^♭ with
 (ε^s)^♯ a primitive root of unity of order the denominator of s. -/
