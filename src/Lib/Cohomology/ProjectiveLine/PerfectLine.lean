@@ -243,12 +243,6 @@ lemma oneSub_comp_gluing :
       charTwist_comp_discToTorus_assoc]
     exact sub_sub_sub_comm ..
 
-/-- In `O^♭[ℚ]`, the monomial of the absolute value `mabs s` is `T^t` for the rational
-`t = s.nnabs`. -/
-private lemma of_mabs_eq_single_nnabs (s : Multiplicative ℚ) :
-    of OFlat ℚ (mabs s) = single ((s.nnabs : ℚ≥0) : ℚ) (1 : OFlat) :=
-  rfl
-
 /-- The gluing map is a monomorphism: on each test it has a retraction. -/
 instance : Mono gluing := by
   -- Two maps out of the ring of the torus that agree on `T ^ |s|` agree on `T ^ s`: the exponents
@@ -256,8 +250,7 @@ instance : Mono gluing := by
   have h_epi : Epi (discToTorus coeHom) := by
     refine ⟨fun x y h_comp ↦ hom_ext (algHom_ext' (MonoidHom.ext fun s ↦ ?_) (by ext))⟩
     refine mabs_mem_iff (H := MonoidHom.eqLocus ..).mp ?_
-    change x (of OFlat ℚ (mabs s)) = y (of OFlat ℚ (mabs s))
-    rw [of_mabs_eq_single_nnabs]
+    change x (single s.nnabs (1 : OFlat)) = y (single s.nnabs (1 : OFlat))
     simpa using congrArg (fun φ ↦ φ (single s.nnabs (1 : OFlat))) h_comp
   -- On each test `gluing` has a retraction: a point of the disc `false` goes to the point `∗`; a
   -- point of the disc `true` goes to `∗ - t` if it comes from a point `t` of the torus (unique by
