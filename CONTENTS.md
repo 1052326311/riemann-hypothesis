@@ -1127,6 +1127,9 @@ The heads of these files give an overview of a theory: `Lib/ClassField/Global/Ar
 **OneVector**: Siegel's formula for representation numbers
 
 - `Lib/SiegelWeil/OneVector/FinitePlaceDensity` (489): Local measure bounds and local densities at a finite place
+- `Lib/SiegelWeil/OneVector/ResidueClasses` (42): Classes modulo a lattice at a finite place
+- `Lib/SiegelWeil/OneVector/ClassGaussSums` (172): Gauss sums of classes modulo a lattice at a finite place
+- `Lib/SiegelWeil/OneVector/SemilocalDensityBounds` (156): Bounds for local densities at finitely many finite places
 - `Lib/SiegelWeil/OneVector/StandardQuadrics` (114): The quadrics of the standard form at a finite place
 - `Lib/SiegelWeil/OneVector/SiegelClassSum` (649): Siegel–Weil for one vector, Siegel's class sum formula and the ratio of masses
 
