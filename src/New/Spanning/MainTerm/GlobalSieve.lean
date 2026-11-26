@@ -948,7 +948,7 @@ chosen complex embedding inducing `v`, and let `c j v` be the product of the sca
 entries. There the factor is `max 1 ‖c j v * Φ v δ‖⁻¹ ^ n⁶` if `‖c j v * Φ v δ‖ ≤ b ^ (60 n²)`, and
 `0` otherwise. At `T` the factor is `[O : δ O] ^ (n⁶ / 2)` if `ratToPlaces T δ` lies in `O`, and `0`
 otherwise. Here `O` is the ring of integers of the product of the completions at `T`. -/
-lemma globalWeight_scaledHead [S.IsAdmissible] {A : Finset Eˣ} {i : ℕ} (p : Fin i → A) :
+lemma globalWeight_scaledHead {A : Finset Eˣ} {i : ℕ} (p : Fin i → A) :
     let c (j : Fin i) (v : InfinitePlace E) : ℂ := ∏ a ∈ range (j + 1), S.frameScaleSq v a
     S.globalWeight T i (S.scaledHead T p 1) = ∏ j : Fin i,
       (∏ v : InfinitePlace E,
