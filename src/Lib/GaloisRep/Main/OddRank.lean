@@ -93,10 +93,10 @@ variable {ℓ : ℕ} [ThePrime ℓ] [PadicIso ℓ]
 /-- The subgroup Gal(Ω/L) ∩ ker χ of Gal(Ω/E), where L = `New.QZChar.stepField` χ: the elements
 killed by χ and by its symmetrisation. -/
 noncomputable abbrev QZChar.stepKer (χ : QZChar Gal(Ω/E)) : Subgroup Gal(Ω/E) :=
-  ker (symmetrise χ) ⊓ ker χ
+  ker (symmetrize χ) ⊓ ker χ
 
 lemma QZChar.isOpen_stepKer (χ : QZChar Gal(Ω/E)) : (stepKer χ).IsOpen :=
-  (isOpen_ker (symmetrise χ)).inter (isOpen_ker χ)
+  (isOpen_ker (symmetrize χ)).inter (isOpen_ker χ)
 
 lemma QZChar.stepKer_le_fixingSubgroup (χ : QZChar Gal(Ω/E)) :
     stepKer χ ≤ (stepField χ).fixingSubgroup :=
@@ -330,7 +330,7 @@ lemma New.GaloisRep.isStepUnramifiedAt_of_decompGroup_le {E : Type} [Field E]
     [EmbeddedNumberField E] [CMType E]
     {χ : QZChar Gal(Ω/E)} (h_step : IsStep (stepField χ) (ideleChar χ))
     {x : FinPlace E} {A : ClosurePlace} (hA : IsPlaceOver A x)
-    (h_dec : decompGroup Gal(Ω/E) A ≤ QZChar.ker (symmetrise χ))
+    (h_dec : decompGroup Gal(Ω/E) A ≤ QZChar.ker (symmetrize χ))
     (h_inertia : inertiaGroup Gal(Ω/E) A ≤ QZChar.ker χ) :
     IsStepUnramifiedAt (stepField χ) (ideleChar χ) x := by
   rintro v rfl
