@@ -319,11 +319,8 @@ lemma ker_factors_of_torsionPoint {A : Over (Spec (.of V))} [IsAbelianScheme A]
     hx_gen.isGroupBaseChange.pointEquiv (T := Over.mk (𝟙 _))
   have h_inj : Function.Injective (hx_gen.isGroupBaseChange.pullSection ∘ₗ e.torsionPoint) :=
     p.symm.injective.comp (bijective_restrict_genericPt.injective.comp e.injective)
-  obtain ⟨m, hm, hms⟩ := hs_tors.exists_nsmul_eq_zero
-  have h_tors : m • p.symm s = 0 :=
-    calc m • p.symm s = p.symm (m • s) := (map_nsmul p.symm m s).symm
-      _ = p.symm 0 := congrArg p.symm hms
-      _ = 0 := map_zero p.symm
+  obtain ⟨m, hm, h_tors⟩ :=
+    (p.symm.toAddEquiv.toAddMonoidHom.isOfFinAddOrder hs_tors).exists_nsmul_eq_zero
   obtain ⟨t, ht⟩ := x_gen.exists_apply_eq_of_torsion h_inj (p.symm s) ⟨m, hm.ne', h_tors⟩
   -- `p.symm` is injective, so `s` is the section `e.torsionPoint t` read over `ℂ`
   obtain rfl : toUnit _ ≫ e.torsionPoint t = s := p.symm.injective ht
