@@ -122,13 +122,6 @@ lemma ae_topFloorMeasure_mem_floorGroup (F : PlaceData ι T m) : ∀ᵐ x : T.G 
   x ∈ floorGroup 𝔰.ϱ :=
   F.topFloorMeasure_mem_and_map_eq.left
 
-/-- The map `orbitPoint 𝔰.top`, σ ↦ σ⁻¹ f_ϱ with f_ϱ = z the last frame vector, carries
-`F.topFloorMeasure`, the measure of the top floor that is part of the place data `F`, to
-`F.floorQuadricMeasure 𝔰.top`, the measure on the top quadric. -/
-lemma map_orbitPoint_topFloorMeasure (F : PlaceData ι T m) :
-    F.topFloorMeasure.map (orbitPoint 𝔰.top) = F.floorQuadricMeasure 𝔰.top :=
-  F.topFloorMeasure_mem_and_map_eq.right
-
 /-- The measure `F.measureH` is carried by H = `besselH`, the fixer of the hyperbolic pairs and the
 last frame vector. -/
 lemma ae_measureH_mem_besselH (F : PlaceData ι T m) : ∀ᵐ x : T.G ∂F.measureH, x ∈ besselH :=
@@ -392,7 +385,7 @@ vectors of floor below b to the measure `F.floorQuadricMeasure b` on the quadric
 in the span of the other basis vectors. -/
 lemma measurePreserving_orbitPoint {F : PlaceData ι T m} (b : Fin 𝔰.n) :
     MeasurePreserving (orbitPoint b) (F.floorMeasure b) (F.floorQuadricMeasure b) := by
-  refine ⟨by fun_prop, b.lastCases (by simp [floorMeasure, map_orbitPoint_topFloorMeasure]) fun a ↦
+  refine ⟨by fun_prop, b.lastCases (by simp [floorMeasure, F.topFloorMeasure_mem_and_map_eq.right]) fun a ↦
                ?_⟩
   -- Below floor ϱ, integrate a test function `Φ` in the flat chart `χ` of the quadric. A chart
   -- point is the value of `orbitPoint` at a point of the big cell, the inverse of `floorWeyl a t`
