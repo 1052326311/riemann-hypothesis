@@ -513,8 +513,8 @@ open Matrix Fintype Finset Real MvPolynomial MeasureTheory Space Fock NumberFiel
 `card n'` (`New.FitsRanks`: no column has height strictly between them), then the row lengths
 `diagramWeight` of the diagram formed by the columns of height below `card n'`, summed over all
 places and the first `card n` rows, add up to the number of boxes of that diagram. -/
-lemma FitsRanks.sum_diagramWeight_eq_boxes {n n' Φ : Type} [Fintype n] [DecidableEq n] [Fintype n']
-    [DecidableEq n'] [Fintype Φ] {κ : Φ → ℕ → ℕ}
+lemma FitsRanks.sum_diagramWeight_eq_boxes {n n' Φ : Type} [Fintype n] [Fintype n']
+    [Fintype Φ] {κ : Φ → ℕ → ℕ}
     (hκ : FitsRanks (fun _ : Φ ↦ n) (fun _ : Φ ↦ n') κ) :
     ∑ x : Φ × Fin (Fintype.card n), diagramWeight (rankAt fun _ : Φ ↦ n') κ (x.1, x.2) =
       boxes κ (Fintype.card n') := by
