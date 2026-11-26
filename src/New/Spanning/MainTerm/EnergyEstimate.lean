@@ -369,7 +369,7 @@ groups and `(S.besselSystem v).Index` indexes a basis of the value space of the 
 product is `S.normalizingConst kPred`, with `kPred = 𝔰.k - 1`, times the square root of (∏ (‖t‖² -
 N²))^(𝔰.k - 1). By the product formula the powers of `p` cancel; the constant collects
 √`openCellConst`, the powers of the squared scales and the numbers of indices. -/
-lemma gramScalar_mul_headDensity [WeilData E]
+lemma gramScalar_mul_headDensity
     [S.IsAdmissible] {T : Finset (FinPlace E)} [T.StarStable] {P : Floors.IntegralPlace (LocProd T)}
     {G : Floors.PlaceData (Fin (𝔰.k - (6 * 𝔰.ϱ + 13))) (S.latticeMiddle (LocProd T))
       (𝔰.ϱ + 1 + 2 * 𝔰.ϱ + 5)} {kPred : ℕ} (hk : 𝔰.k = kPred + 1)
