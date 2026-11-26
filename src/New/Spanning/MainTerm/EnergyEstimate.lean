@@ -1,8 +1,8 @@
 module
 
+public import New.Reduction.Data.AdmissibleData
 public import New.Spanning.MainTerm.FiniteSieveSystem
 public import New.Spanning.RemainingTerms.Size
-public import New.UpperBound.Objects.LabelsAndIndexTypes
 
 /-!
 # Main-term bound for the second moment over open reductions fixing given vectors

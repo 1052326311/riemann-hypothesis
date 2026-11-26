@@ -4,7 +4,6 @@ public import Lib.Shimura.ComplexTheta.AppellHumbertData
 public import Lib.DiscreteSeries.Bessel.FrameFibre
 public import Lib.DiscreteSeries.Bruhat.FloorFibre
 public import Lib.DiscreteSeries.Bruhat.SphereFibres
-public import Lib.Weil.Construction.HeisenbergModel
 public import New.Spanning.Bessel.Basic
 public import New.Spanning.Frames.Correlations
 

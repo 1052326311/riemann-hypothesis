@@ -1,6 +1,5 @@
 module
 
-public import Lib.Adelic.Unitary.Defs
 public import Lib.General.Analysis.FiniteFourier
 public import Lib.General.LinearAlgebra.IntegralLattices
 

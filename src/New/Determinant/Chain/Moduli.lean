@@ -1,6 +1,5 @@
 module
 
-public import New.Determinant.AuxiliaryForms.GridPaths
 public import New.OneLift.ComparisonOperator.ExchangeData
 public import New.OneLift.HeckeValues.TwistedRatio
 

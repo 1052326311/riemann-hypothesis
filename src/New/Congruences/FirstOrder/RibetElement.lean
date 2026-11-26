@@ -390,8 +390,7 @@ lemma ribet_columns {ν : ℕ} {w : K → FinPlace D.E} {τ φ : K → AbsGal D}
   have hχδ (k : W × Bool) (e : Fin V.rankDiff) : χ e (withConjInv δ k) = 1 := by
     simp [χ, (hq.cyclotomicInv_withConjInv_eq_one_and_dvd O k).1]
   -- the trace ideal over `O` for the doubled families, whose factors are `1` modulo `ℓ ^ ν`
-  have h𝒥' : IsTraceIdeal (S := restrictToCoeffRing S O) 𝒥 (fun x : Y ↦ u' x) (ℓ ^ ν)
-      (withConjInv τ) (withConjInv φ) Prod.fst H' := h𝒥.of_isLatticeIn hw h_dual hu' hH'
+  have h𝒥' := h𝒥.of_isLatticeIn hw h_dual hu' hH'
   have hH'_dvd (e : Fin V.rankDiff) (k : K × Bool) :
       (ℓ ^ ν : ↑O) ∣ (H' k.1).eval (χ e (withConjInv φ k)) - 1 :=
     hw.dvd_eval_cyclotomicInv_sub_one (hH'_one k.1) e k
@@ -405,7 +404,7 @@ lemma ribet_columns {ν : ℕ} {w : K → FinPlace D.E} {τ φ : K → AbsGal D}
     hasTriangleCost_of_isCharacterCocycle h_tri hu'_cont hq hq_cover hu'_unr e
       (h_tw π).mem_inertiaAbove (h_detect e) hZ
   obtain ⟨d, ⟨h_mem, h_zero, f, hf_mem, hf_low, hf_top⟩, hd_le⟩ :=
-    exists_isCommonRibetElement_addVal_le u' 𝒥 (S := restrictToCoeffRing S O) ϵ' π T
+    exists_isCommonRibetElement_addVal_le u' _ ϵ' π T
       (hξ₀ := by simp [χ]) (hu_block := h_block) (hρ_span := hT_span π)
       (hργ := fun x ↦ (h_tw x).apply_eq_smul) (hy_unit := fun x ↦ (h_tw x).isUnit_sub_one)
       (hξγ := hχγ) (hp := NeZero.ne _) (h𝒥 := h𝒥') (hε := hH'_dvd) (a := g₀) (hC_dvd := h_sep)

@@ -383,9 +383,10 @@ lemma dataInner_vacElem_vacElem : V.dataInner V.vacElem V.vacElem = 1 := by
 `y`. -/
 lemma dataInner_vacElem_rho_vacElem : V.dataInner V.vacElem (V.ϱ y V.vacElem) = vacuumFn y := by
   -- Conjugating swaps the arguments, the reproducing property gives the value of the vacuum
-  -- function at `y`, and that function is real. `erw`: the rewrites must see through `V.dataInner`,
-  -- `V.ϱ` and `V.vacElem`.
-  erw [← conj_modelInner, modelInner_heisenbergOp_vacElem, (adelicSum E s).isVacuum.conj_apply]
+  -- function at `y`, and that function is real.
+  exact (conj_modelInner ..).symm.trans <|
+    (congrArg conj (modelInner_heisenbergOp_vacElem ..)).trans <|
+      (adelicSum E s).isVacuum.conj_apply ..
 
 /-- For a hermitian space `V` over a CM field `E` with Weil data, and `g` in the adelic unitary
 group `G E s`, let `vacElem` be the vacuum vector of `𝒮 V` (a Gaussian times a twisted lattice

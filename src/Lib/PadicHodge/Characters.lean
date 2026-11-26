@@ -407,7 +407,7 @@ lemma jump_twist [OverGp (decompGroup Gal(Ω/E) A) ℓ] {γ : PadicAlgCl ℓ →
       ∃ x : Fin 1 → PadicAlgCl ℓ, f x ≠ 0 := by
     -- `jump` is the rank of the space `hodgeTateMaps`, so that space has a nonzero element.
     obtain ⟨f, hf_ne, -⟩ := finrank_eq_one_iff'.1 hμ
-    exact ⟨f, f.property, by simpa [Subtype.ext_iff, DFunLike.ext_iff] using hf_ne⟩
+    exact ⟨f, f.property, not_forall.mp fun h ↦ hf_ne (Subtype.ext (LinearMap.ext h))⟩
   have h_period : ∀ᶠ t : decompGroup Gal(Ω/E) A in nearOne _,
       γ (μ t.val).val * f x = (χ t ^ (-u)).val • toGp t • f x := by
     filter_upwards [hf x] with t ht

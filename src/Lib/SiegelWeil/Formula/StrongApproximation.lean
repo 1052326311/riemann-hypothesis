@@ -1,6 +1,5 @@
 module
 
-public import Lib.SiegelWeil.Formula.LagrangianZeroTerms
 public import Lib.SiegelWeil.SingularForms.UnimodularCoefficients
 
 /-!

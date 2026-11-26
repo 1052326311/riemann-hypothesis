@@ -1,6 +1,5 @@
 module
 
-public import Lib.Adelic.Unitary.ComponentsAndBlockSums
 public import Lib.General.LinearAlgebra.Eigenvalues
 public import Lib.LocalGL.Iwahori.ParahoricStructure
 public import Lib.Shimura.Uniformisation.HolomorphicFamilies
