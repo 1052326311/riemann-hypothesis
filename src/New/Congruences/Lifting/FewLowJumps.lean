@@ -602,15 +602,15 @@ lemma sum_cost_zero_le {k : KummerChart Γ} (hk : k.IsUnramified) {N m : ℕ} (h
 
 /-- Let the Kummer chart `k` of the prime `p ≥ 5` be unramified, so that the cost `k.cost 0 y` of
 the step `y` at the level `0` is `v_p(y)`, with `v_p(0) = 0`. Let `β + W + η ≤ (p - 3) a`, let `p`
-divide no nonzero integer within `6 (a + η + W)` of `0` or `± β`, and let `t` be the least multiple
-of `p` that is at least `β + W + a + η`. For `u` in `[-η, η]` or in `-[β, β + W]`, the steps `y`
+divide no nonzero integer within `6 (a + η + W)` of `0` or `± β`, and let `t` be a multiple
+of `p` below `β + W + a + η + p`. For `u` in `[-η, η]` or in `-[β, β + W]`, the steps `y`
 with `2a + η - u ≤ y < t` cost at most `a + 1` together, and nothing if `u` is not in
 `[-η, η]`. -/
 lemma sum_cost_zero_Ico_multiple_le {k : KummerChart Γ} (hk : k.IsUnramified) (hp : 5 ≤ p)
     {a η W β : ℕ} {u t : ℤ}
     (h_top : β + W + η ≤ (p - 3) * a) (h_gap : NoMultipleNear p (6 * (a + η + W)) (β : ℤ))
     (hu : (-η ≤ u ∧ u ≤ η) ∨ (β ≤ -u ∧ -u ≤ β + W)) (ht_dvd : (p : ℤ) ∣ t)
-    (_ht_ge : β + W + a + η ≤ t) (ht_lt : t < β + W + a + η + p) :
+    (ht_lt : t < β + W + a + η + p) :
     ∑ y ∈ Ico (2 * a + η - u) t, k.cost 0 y ≤ if u ∈ Icc (-η : ℤ) η then a + 1 else 0 := by
   split_ifs with h_low
   · -- the steps lie in `[0, t]`, and `t ≤ (p - 1) (a + 1)`
@@ -687,7 +687,7 @@ lemma relLength_deepConstants_negativeWindowDepth_le {k : KummerChart Γ} {O : k
       0 + if u ∈ Icc (-η : ℤ) η then a + 1 else 0 := fun u hu ↦ by
     simpa [d, raisedOrdersAtZero] using sum_cost_zero_Ico_multiple_le hk hp (hb_le i) (hb_gap i)
       (h_win u hu)
-      (dvd_mul_left _ q) hq_ge hq_lt
+      (dvd_mul_left _ q) hq_lt
   have h_level_zero : relLength (S.deepConstants i 0 (raisedOrdersAtZero (2 * a + η)))
       (S.deepConstants i 0 d) ≤ ↑(0 * r i + (a + 1) * n i) := by
     refine relLength_deepConstants_le d hk hn hr 0 0 (a + 1) (fun v y hy ↦ ?_)
