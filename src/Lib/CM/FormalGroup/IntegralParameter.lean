@@ -2,6 +2,7 @@ module
 
 public import Lib.CM.Integrality.TorsionValues
 public import TauCeti.RingTheory.PowerSeries.Substitution
+public import TauCeti.RingTheory.PowerSeries.Rescale
 
 /-!
 # Integral series rings 𝔬[[T]], congruence parts of power series, a functional equation
@@ -84,15 +85,6 @@ structure IsSeriesGenerator (A : Subring ℂ_[p]⟦X⟧) (T : ℂ_[p]⟦X⟧) : 
   coeff_one : coeff 1 T = 1
   /-- The elements of `A` are the series `g(T)` with `g` integral. -/
   mem_iff (f : ℂ_[p]⟦X⟧) : f ∈ A ↔ ∃ g : (valRingCp p)⟦X⟧, f = subst T (seriesToCp g)
-
-@[simp]
-lemma constantCoeff_rescale {a : ℂ_[p]} {f : ℂ_[p]⟦X⟧} :
-    (rescale a f).constantCoeff = f.constantCoeff := by simp [rescale]
-
-@[simp]
-lemma rescale_smul {a c : ℂ_[p]} {f : ℂ_[p]⟦X⟧} : rescale a (c • f) = c • rescale a f := by
-  ext n
-  simp [mul_left_comm]
 
 /-- The series `f(T)` and `f` have the same constant term, if `T(0) = 0`. -/
 @[simp]

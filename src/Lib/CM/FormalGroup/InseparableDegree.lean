@@ -169,7 +169,7 @@ lemma reducedOrder_rescale {α : ℂ} (hα : α ∈ quadInt d) {f : ℂ_[p]⟦X�
   have hy₀ := C.constantCoeff_taylorVia_translatedY (p := p)
   rw [rescale_subst hy₀, reducedOrder_subst_translatedY, insepDegree,
     C.reducedOrder_subst (C.rescale_translatedY_mem_of_mem_quadInt hα)
-      (constantCoeff_rescale.trans hy₀)]
+      ((constantCoeff_rescale ..).trans hy₀)]
 
 /-- The inseparable degree is multiplicative on the ring of integers `quadInt d`. -/
 lemma insepDegree_mul {α β : ℂ} (hα : α ∈ quadInt d) (hβ : β ∈ quadInt d) :

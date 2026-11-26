@@ -1,6 +1,7 @@
 module
 
 public import Lib.Adelic.Unitary.GramMatrix
+import TauCeti.LinearAlgebra.Matrix.Nonsingular.Inverse
 
 /-!
 # Closed matrix embedding of adelic unitary groups, discrete rational points, weak approximation
@@ -172,12 +173,6 @@ lemma _root_.New.cayleyTransform_mul_eq_neg {K : Type*} [Field K] {A B J : Matri
   calc _ = (1 + B)⁻¹ * ((1 - B) * J * (1 + A)) * (1 + A)⁻¹ := by
         simp [cayleyTransform_eq_inv_mul, ← Matrix.mul_assoc, hA]
     _ = -(J * cayleyTransform A) := by simp [h_cross, cayleyTransform, Matrix.mul_assoc, hB]
-
-/-- Inversion of matrices commutes with maps of fields. -/
-lemma _root_.New.map_nonsing_inv {K L : Type*} [Field K] [Field L] (φ : K →+* L)
-    (A : Matrix n n K) : A⁻¹.map φ = (A.map φ)⁻¹ := by
-  have h_adj : A.adjugate.map φ = (A.map φ).adjugate := φ.map_adjugate A
-  simp [inv_def, map_smul' φ _ _ φ.map_mul, φ.map_det, h_adj]
 
 /-- The Cayley transform commutes with maps of fields. -/
 lemma _root_.New.cayleyTransform_map {K L : Type*} [Field K] [Field L] (φ : K →+* L)

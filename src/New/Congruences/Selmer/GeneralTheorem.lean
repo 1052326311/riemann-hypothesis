@@ -249,7 +249,7 @@ lemma ellVal_twist_tameGenerator_sub_one_le
     ‖(ζ v - 1).val‖ = ‖X.twist hζ γ ^ a - 1‖ := by
       rw [← ha, h_value, AddSubgroupClass.coe_sub, OneMemClass.coe_one]
     _ ≤ ‖X.twist hζ γ - 1‖ :=
-      Period.norm_pow_sub_one_le_norm_sub_one h_fin.norm_eq_one.le a
+      TauCeti.norm_pow_sub_one_le_norm_sub_one h_fin.norm_eq_one.le a
 
 open scoped Classical in
 /-- Let `X` be twist polynomials, with a set `X.auxPrimes` of at most `s₀ / 2` auxiliary primes and

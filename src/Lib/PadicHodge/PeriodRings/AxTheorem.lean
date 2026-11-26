@@ -3,6 +3,7 @@ module
 public import Lib.ClassField.Places.ProfiniteGalois
 public import Lib.General.Algebra.AbsIntegrallyClosed
 public import Lib.General.Algebra.AdicCompletion
+public import TauCeti.Analysis.Normed.Ring.Ultra
 public import TauCeti.NumberTheory.Padics.Complex.FixedPoints
 
 import TauCeti.RingTheory.RootsOfUnity.Ultrametric
@@ -303,12 +304,6 @@ namespace New.Period
 
 variable {p : ℕ} [Fact p.Prime]
   {F : Type*} [NormedField F] [IsUltrametricDist F] {ζ : F}
-
-/-- In an ultrametric normed field, if `‖ζ‖ ≤ 1` then `‖ζ ^ a - 1‖ ≤ ‖ζ - 1‖` for every `a`. -/
-lemma norm_pow_sub_one_le_norm_sub_one (hζ_norm : ‖ζ‖ ≤ 1) (a : ℕ) : ‖ζ ^ a - 1‖ ≤ ‖ζ - 1‖ :=
-  -- `ζ - 1` divides `ζ ^ a - 1` in the ring of elements of norm at most one
-  (Valuation.integer.integers NormedField.valuation).le_of_dvd
-    (sub_one_dvd_pow_sub_one ⟨ζ, hζ_norm⟩ a)
 
 /-- If `ζ` is a primitive `p ^ (m + 1)`-th root of unity in an ultrametric normed field `F`, then
 `‖ζ - 1‖ ^ φ (p ^ (m + 1)) = ‖p‖`, where `φ (p ^ (m + 1)) = p ^ m (p - 1)`. -/
