@@ -996,12 +996,12 @@ lemma OddPart.exists_detecting_points_hom [IsTotallyComplex K] (m : ℕ)
       abelianLift (χ f) a = 1 := by
     have h_conj (c : Γ) (hc : IsComplexConj c) : (χ f).val c = 0 :=
       (hc.false_of_isTotallyComplex (K := K)).elim
-    have h_decomp (w : FinPlace K) (_hw : w ∈ S) (g : Γ) (_hg : g ∈ decompGroup Γ (placeOver w)) :
+    have h_decomp (g : Γ) :
         m • (χ f).val g = 0 := by simp [χ, ← map_nsmul, hx.nsmul_eq_zero]
     have h_inertia (w : FinPlace K) (hw : w ∉ S) (g : Γ) (hg : g ∈ inertiaGroup Γ (placeOver w)) :
         (χ f).val g = 0 := by simp [χ, hx.unramified w hw g hg]
     have h_le : H ≤ (abelianLift (χ f)).ker := map_le_iff_le_comap.mpr
-      (sup_le_ker_abelianLift_artinMap S m (χ f) h_conj h_decomp h_inertia)
+      (sup_le_ker_abelianLift_artinMap S m (χ f) h_conj (fun _ _ g _ ↦ h_decomp g) h_inertia)
     exact h_le ((QuotientGroup.eq_one_iff a).mp (ε.map_eq_one_iff.mp ha))
   refine ⟨fun i ↦ eq_zero_of_forall_hom_eq_zero fun f ↦ ?_,
     fun h_zero ↦ funext fun g ↦ eq_zero_of_forall_hom_eq_zero fun f ↦ ?_⟩

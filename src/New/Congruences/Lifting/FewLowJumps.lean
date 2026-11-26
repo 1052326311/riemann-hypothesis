@@ -728,7 +728,6 @@ lemma relLength_deepConstants_negativeWindowDepth_le {k : KummerChart Γ} {O : k
   have h_anti : AntitoneOn (negativeWindowDepth a η W (b i) 1) (S.jumpSet m) := fun u hu v hv h_le ↦
     by
     have hu_win := low_or_far_of_fitsWindows (h_window m) hu
-    have hv_win := low_or_far_of_fitsWindows (h_window m) hv
     simp only [negativeWindowDepth, one_ne_zero, ite_false, ite_true, abs_le]
     lia
   have h_level_one : relLength (S.deepConstants i 0 d)

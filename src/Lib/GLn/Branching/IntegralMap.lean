@@ -204,7 +204,7 @@ private lemma map_branchKernel {S T : Type} [CommRing S] [CommRing T] (φ : S �
     fromBlocks_apply₂₂, one_apply_eq, zero_add, apply_ite, map_eval, Function.comp_def, map_add,
     map_sum, map_zero, map_highestPoly]
 
-omit [∀ τ : Φ, DecidableEq (N τ)] [∀ τ : Φ, DecidableEq (n τ)] in
+omit [DecidableEq Φ] [∀ τ : Φ, DecidableEq (N τ)] [∀ τ : Φ, DecidableEq (n τ)] in
 /-- In `y`, `branchKernel` is a semi-invariant of the upper triangular group: replacing `y` by
 `borelMul Sigma.fst b y` multiplies it by the diagonal entries of `b` to the powers given by the
 weights of `γ` and `κ'`. -/
