@@ -70,7 +70,7 @@ bijective. -/
 abbrev IsDerivedComplete : Prop := Bijective (shiftDiff X π)
 
 /-- A π-adically complete module is derived π-complete. -/
-@[stacks 091T "(1) implies the first half of (2), for a principal ideal"]
+@[stacks 091R "(1), for a principal ideal"]
 lemma IsDerivedComplete.of_isAdicComplete (h_complete : IsAdicComplete (span {π}) X) :
     IsDerivedComplete π X :=
   ⟨out, out⟩
