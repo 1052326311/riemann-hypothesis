@@ -330,8 +330,9 @@ lemma IsTraceNondeg.hasSemiprimeSpan (h : IsTraceNondeg r) :
   -- If `x * r g * x = 0`, then `x * r g` has square zero, so its trace is zero.
   refine fun x hx h_zero ↦ h x hx fun g ↦ ?_
   have h_sandwich : x * (r g).val * x = 0 := h_zero g
-  have h_nilpotent : IsNilpotent (x * (r g).val) :=
-    ⟨2, by rw [sq, ← mul_assoc, h_sandwich, zero_mul]⟩
+  have h_square_zero : (x * (r g).val) ^ 2 = 0 := by
+    rw [sq, ← mul_assoc, h_sandwich, zero_mul]
+  have h_nilpotent : IsNilpotent (x * (r g).val) := ⟨2, h_square_zero⟩
   exact (Matrix.isNilpotent_trace_of_isNilpotent h_nilpotent).eq_zero
 
 /-- Clifford's theorem for the trace form. Let `k` be algebraically closed of characteristic zero.
@@ -368,8 +369,9 @@ lemma IsTraceNondeg.exists_conj_of_trace_eq [CharZero k]
   let F₂ : PiMatrix k d →ₐ[k] Matrix n n k := φ.comp ((AlgHom.snd k (Matrix n n k) B).comp F)
   have F₁_s (g : G) : F₁ (s g) = r g := congrArg Prod.fst (hF g)
   have F₂_s (g : G) : F₂ (s g) = φ (ρ g) := congrArg (fun z ↦ φ z.2) (hF g)
-  -- The traces agree on the spanning family `s`, hence everywhere; an idempotent has its rank as
-  -- trace.
+  -- Equal traces on the spanning family give equal traces on each matrix factor's
+  -- matrix-unit idempotent. In characteristic zero these traces recover the ranks,
+  -- which are the multiplicities used to construct the intertwiner.
   have trace_eq (y : PiMatrix k d) : (F₁ y).trace = (F₂ y).trace := by
     have h_lin :
         traceLinearMap n k k ∘ₗ F₁.toLinearMap = traceLinearMap n k k ∘ₗ F₂.toLinearMap :=
