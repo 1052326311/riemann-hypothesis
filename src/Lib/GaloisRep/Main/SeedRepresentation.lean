@@ -197,7 +197,7 @@ lemma New.GaloisRep.exists_central_eigenform {E : Type} [Field E] [CMBase E] {d 
     · intro y z
       simp [ρ, hφ_rat, mul_assoc]
     · refine fun z hz ↦ hφ_zero _ fun h_frame ↦ hz ?_
-      simpa [s, ratConj] using h_frame.mul 1 (inv_mem (centralScalar_mem_GU x).left)
+      simpa [s, ratConj] using h_frame.mul 1 (inv_mem (mem_GU_centralScalar x))
     · simp +contextual [ρ, funext_iff, h_central, ← mul_assoc, hφ_level]
   have : Module.Finite ℂ (Variety.definiteForms 𝔑 ξ) := finite_definiteForms ξ h_neat
   have : Module.Finite ℂ (cyclicSpan ρ φ) := .of_fg (.of_le .of_finite h_le)
@@ -398,7 +398,7 @@ lemma New.GaloisRep.centralChar_mem_algHeckeChars_and_charUnramifiedAt {E : Type
       ω.toHomUnits x = 1 := Units.ext (hω_eq (hψ_level ⟨centralScalar x, hx⟩))
   refine ⟨⟨?_, fun x ↦ hω_eq (funext fun y ↦ ?_)⟩, fun w hw x hx ↦ hω_level _ ?_⟩
   · -- The kernel contains the ideles whose central scalar has level `𝔑`, an open subgroup.
-    refine isOpen_mono (fun x hx ↦ hω_level x ⟨(centralScalar_mem_GU x).left, mem_comap.mp hx⟩)
+    refine isOpen_mono (fun x hx ↦ hω_level x ⟨mem_GU_centralScalar x, mem_comap.mp hx⟩)
       ((Variety.isOpen_congruenceGL_span h𝔑).preimage (.of_coeHom_comp <| .matrix_diagonal ?_))
     simp [starRingEnd_apply]
     fun_prop
@@ -412,7 +412,7 @@ lemma New.GaloisRep.centralChar_mem_algHeckeChars_and_charUnramifiedAt {E : Type
       _ = _ := by simp [z, hξ_centre]
   · -- The norm of a local unit at `w` gives an integral scalar, trivial at the places of `𝔑`.
     obtain ⟨-, -, hw_conj⟩ := hw
-    refine mem_levelGU_of_map_evalAt_eq (centralScalar_mem_GU _).left ?_ fun u hu ↦
+    refine mem_levelGU_of_map_evalAt_eq (mem_GU_centralScalar _) ?_ fun u hu ↦
       ⟨1, by simpa using evalAt_centralScalar_of_ne (hw_conj u · hu) x⟩
     have h_unit : locIdele w x ∈ (Ô E).units :=
       idelesUnitOff_empty.le (locIdele_mem_idelesUnitOff hx)
