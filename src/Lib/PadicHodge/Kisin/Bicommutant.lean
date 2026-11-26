@@ -376,7 +376,7 @@ lemma exists_bicommutant_mul_phi_E_eq_one : ∃ u ∈ c.bicommutant, u * ainfToB
     associated_p_frobEnd_xi.trans ((c.associated_E_xi.map frobEnd).map (algebraMap Ainf Amax)).symm
   have h_unit : IsUnit (ainfToBPlus (c.φ c.E)) := by
     -- `ainfToBPlus` is the composite of the maps `Ainf → Amax → BPlus`.
-    show IsUnit (algebraMap Amax BPlus (algebraMap Ainf Amax (frobEnd c.E.val)))
+    change IsUnit (algebraMap Amax BPlus (algebraMap Ainf Amax (frobEnd c.E.val)))
     exact (h_assoc.map (algebraMap Amax BPlus)).isUnit (by rw [map_natCast]; exact isUnit_p)
   -- The inverse lies in `c.bicommutant`, as `φ E` and the product `1` do.
   refine ⟨↑h_unit.unit⁻¹, c.mem_bicommutant_of_mul (ainfToBPlus_mem_bicommutant (c.φ c.E))
