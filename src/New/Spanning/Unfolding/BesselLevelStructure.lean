@@ -861,12 +861,12 @@ lemma eq_and_mem_classUnipotent_of_besselS [hS : S.IsAdmissible] {c d : S.Classe
     eq_and_eq_one_of_doubleCoset_rep Quotient.out_eq h_free η h_level
   exact ⟨rfl, by simpa using hu, by simpa [translateByClassReps] using hγ_level⟩
 
-/-- Let `S` be admissible (`S.IsAdmissible`), `c` a class in `S.Classes` with representative `h_c`,
-and `u` in `𝖴(𝔸_f)`. There is a rational `u₀ ∈ 𝖴` such that
+/-- Let `c` be a class in `S.Classes` with representative `h_c`, and let `u` belong to `𝖴(𝔸_f)`.
+There is a rational `u₀ ∈ 𝖴` such that
 `S.translateByClassReps c c u₀ = h_c⁻¹ u₀ h_c` lies in `u K(M)`, with `K(M) = S.principalLevel`.
 Moreover `S.unipotentChar`, the character u ↦ ψ_f(−σ(u)/(Mϖ)), takes the same value at
 `S.ratToFin u₀` and at `u`. -/
-lemma exists_rat_approx_unipotentChar_eq [_hS : S.IsAdmissible] (c : S.Classes) {u : S.GFin}
+lemma exists_rat_approx_unipotentChar_eq (c : S.Classes) {u : S.GFin}
     (hu : u ∈ besselU) :
     ∃ u₀ : S.G E, u₀ ∈ besselU ∧
       u⁻¹ * S.translateByClassReps c c u₀ ∈ S.principalLevel ∧
