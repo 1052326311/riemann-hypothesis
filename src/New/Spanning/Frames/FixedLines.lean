@@ -750,7 +750,8 @@ lemma IsFillingData.exists_massIntegral_pi_eq (h : S.IsFillingData T F)
       _ = ‖t.toReal‖ₑ ^ 2 * ∫⁻ z, ∏ i : ι, f i (z i) ∂F.groupMeasure.map (S.toFibers T blk) := by
         rw [lintegral_const_mul' _ _ (by simp), h_emb.lintegral_map]
       _ = ‖t.toReal‖ₑ ^ 2 * t * ∏ i : ι, (F' i).massIntegral (Y i) := by
-        rw [ht, lintegral_smul_measure, lintegral_pi_prod _ (by fun_prop), smul_eq_mul, mul_assoc]
+        rw [ht, lintegral_smul_measure, TauCeti.lintegral_fintype_prod_eq_prod _ (by fun_prop),
+          smul_eq_mul, mul_assoc]
         simp only [PlaceData.massIntegral, f]
   · rw [coe_comap, coe_pi, ← h_emb.map_apply, ht, Measure.smul_apply, Measure.pi_pi, smul_eq_mul]
 
