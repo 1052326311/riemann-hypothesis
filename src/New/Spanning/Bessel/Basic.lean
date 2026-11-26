@@ -679,7 +679,7 @@ lemma gram_besselLatticeBasis (p : Rˣ) (N : R) (hN : p * star ↑p = N) :
   simp [besselLatticeBasis, Shape.Form.splitGram, Floors.hyperbolicGram, fromBlocks_conjTranspose,
     fromBlocks_multiply, fromBlocks_mul_fromRows, fromCols_mul_fromBlocks]
   ext (i | i) (j | j)
-  all_goals simp [Shape.middleGram, latticeMiddleGram, diagonal, fromBlocks_conjTranspose,
+  all_goals simp [Shape.middleGram, latticeMiddleGram, diagonal,
     fromBlocks_multiply, Matrix.mul_apply]
   all_goals grind [p.mul_inv, star_star, star_mul, star_one, star_zero]
 
