@@ -811,12 +811,7 @@ lemma _root_.New.Variety.finrank_tangent_le_card_index_sub_one [IsAlgClosed k]
     simpa only [hρ, coe_comp, Function.comp_apply, ↓algebraMap_eq_inl', algebraMap_self,
       RingHomCompTriple.comp_apply, mk_left] using
       x.exists_tangent_log (b := b) (by simp [hρ, hb])
-  have h_lifts : ∀ ⦃C : Type⦄ [CommRing C] [Algebra k C] [IsLocalRing C]
-      (y : specOver k C ⟶ x₀.groupScheme),
-      ∃ Z : Over.mk (specMap (sqZeroMap (ofId k C))) ⟶ x.groupScheme,
-        toSqZeroSpec C ≫ Z = hp.isGroupBaseChange.pointEquiv y :=
-    exists_point_lift hp
-  choose Y hY using h_lifts
+  choose Y hY using exists_point_lift hp
   have c_Y_infinitesimal {C : Type} [CommRing C] [Algebra k C] [IsLocalRing C]
       (y : placeTorsion x₀ C) : IsInfinitesimal (ofHom (fstHom C C _).1) (c • Y y.1) := by
     -- `c` lies in `𝔭`, which kills `y`
