@@ -744,17 +744,8 @@ lemma mapExactFunctor_mapExactFunctor :
 forward along η_F equals pulling Ψ(x) back along η_N, in Ext^n(ΦN,ΨF). -/
 lemma mapExactFunctor_naturality :
     push (Φ.obj N) (η F) n (x.mapExactFunctor Φ) =
-      H.map (Ψ.obj F) (η N) n (x.mapExactFunctor Ψ) := by
-  induction x with
-  | h₀ => simp [H.push, mapExactFunctor_mk₀, H.map]
-  | h S hS n x ih =>
-    -- The connecting classes of `Φ S` and `Ψ S` are compatible with `η` (`h_nat`). After
-    -- unfolding, reassociate the composites and use `h_nat`, then `ih`.
-    have h_nat : (hS.map_of_exact Φ).extClass.comp (mk₀ (η.app S.X₁)) (add_zero 1) =
-        (mk₀ (η.app S.X₃)).comp (hS.map_of_exact Ψ).extClass (zero_add 1) :=
-      extClass_naturality (hS.map_of_exact Φ) (hS.map_of_exact Ψ) (mapNatTrans S η)
-    simp_all [← comp_assoc_of_second_deg_zero, comp_assoc (h₂₃ := rfl), H.push, H.map,
-      mapExactFunctor_comp, mapExactFunctor_extClass]
+      H.map (Ψ.obj F) (η N) n (x.mapExactFunctor Ψ) :=
+  x.mapExactFunctor_comp_mk₀_natTransApp η
 
 namespace H
 
