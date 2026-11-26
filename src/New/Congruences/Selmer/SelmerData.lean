@@ -99,7 +99,7 @@ end Terms
 
 /-- A Selmer datum for the set `S₀` of places and the element `g₀`: an action `ρ` on the lattice
 `T = O ^ n`, a set `S = places` of places outside which `T` is unramified, a module `Z_w` of local
-cocycles for each `w ∣ ℓ`, and an element `γ_*` that acts by a scalar. The set `S` lies in `S₀`, and
+maps for each `w ∣ ℓ`, and an element `γ_*` that acts by a scalar. The set `S` lies in `S₀`, and
 `g₀` enters only through the local terms `v(det(ρ g - 1))` for `g = g₀, g₀^{-c}`, which are
 finite. -/
 structure SelmerDatum (S₀ : Finset (FinPlace E)) (g₀ : Gal(Ω/E)) (O : Type) [CommRing O]
@@ -122,9 +122,6 @@ structure SelmerDatum (S₀ : Finset (FinPlace E)) (g₀ : Gal(Ω/E)) (O : Type)
   Z (w : placesDividing E ℓ) : Submodule O (decompGroup Gal(Ω/E) (placeOver w.1) → n → O)
   /-- `Z_w` is finitely generated. -/
   finite_Z (w : placesDividing E ℓ) : Module.Finite O (Z w)
-  /-- The members of `Z_w` are cocycles. -/
-  apply_mul_of_mem_Z (w : placesDividing E ℓ) : ∀ z ∈ Z w,
-    ∀ g h : decompGroup Gal(Ω/E) (placeOver w.1), z (g * h) = z g + ρ g • z h
   /-- `Z_w` contains the coboundaries. -/
   coboundary_mem_Z (w : placesDividing E ℓ) (b : n → O) :
     (fun g : decompGroup Gal(Ω/E) (placeOver w.1) ↦ ρ g • b - b) ∈ Z w

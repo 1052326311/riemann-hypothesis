@@ -622,8 +622,6 @@ structure IsEdgeCondition {N k n : ℕ} {W O : Type} [NeZero N] [CommRing W] [Is
     (Av : Matrix (Exponents N k n) (Exponents N k n) O) : Prop where
   /-- The conditions hold for the forms in the halfway lattices of all edges from the origin. -/
   allEdgesForms_le : T.allEdgesForms k n r ≤ C
-  /-- The conditions are congruences modulo `w ^ c`: multiples of `w ^ c` satisfy them. -/
-  pow_smul_mem : ∀ h : Exponents N k n → O, T.sqrtPrime ^ c • h ∈ C
   /-- The values of `Av` satisfy the conditions. -/
   average_mem : ∀ h : Exponents N k n → O, Av *ᵥ h ∈ C
   /-- Against the forms in the halfway lattices of all edges from the origin of the dual edge, `Av`
@@ -679,7 +677,7 @@ and `ρ(gᵀ)` are adjoint for `(h, h') ↦ h' ⬝ᵥ (b * h)`, with `b * b' = p
 `c₀ = T.multinomialExponent k` (`hb`). Put `c = T.congruencePrecision k = 5 N c₀`, and let
 `M = T.allEdgesForms k n r` be the module of forms that lie in the halfway lattices of all edges
 from a lattice. Then there are
-* a module `C` of forms that contains `M` and the multiples of `w ^ c`,
+* a module `C` of forms that contains `M`,
 * a matrix `Av` with values in `C` that, paired against `M`, is multiplication by `p ^ (N c₀)`
   modulo `w ^ c`,
 * a space `S` over the residue field of `O` that contains the reductions of the `h` with
@@ -717,7 +715,6 @@ theorem exists_isEdgeCondition (hp : ¬IsUnit (T.p : O)) {r : ℕ} {θ : ℝ}
         h_large.proportion_le_one h_large.mul_defectThreshold_le_mul_degree
   exact ⟨C, S, Av,
     { allEdgesForms_le := T.allEdgesForms_le_defectConditions ha.le c
-      pow_smul_mem := fun h g _ β _ ↦ by simp [mulVec_smul, Ideal.mem_span_singleton]
       average_mem := h_mem
       pow_dvd_pairing_average := h_pairing
       residue_mem := fun h h_cond ↦ T.residue_mem_translatesIn

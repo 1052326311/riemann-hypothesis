@@ -19,7 +19,7 @@ prime `ℓ` and isomorphism `ι : ℂ ≃ ℚ̄_ℓ` (`New.PrimePadicIso`).
   pairs.
 * `New.Data.denominatorBudget`: the bound for the sums over primes of the logarithmic denominator
   bounds.
-* `New.Data.IsNegligible`: numbers `e ℓ ≥ 0` with `∑ e ℓ log ℓ ≤ x ^ C` over every finite set of
+* `New.Data.IsNegligible`: numbers `e ℓ` with `∑ e ℓ log ℓ ≤ x ^ C` over every finite set of
   primes.
 * `New.Data.HasSmallRatios`: families of twists `θ ι` with modulus prime to `ℓ` whose powers have
   ratios of L-values of small height.
@@ -202,12 +202,10 @@ structure IsDenominatorBound (θ : PrimePadicIso → D.MFoldTwist) (j : D.LiftIn
   `θ ι` with `β = γ ℓ`. -/
   hasDenominatorsLe (ι : PrimePadicIso) : D.HasDenominatorsLe ι.2 ((θ ι).powTwist j) j (γ ι.1)
 
-/-- Reals `e ℓ ≥ 0`, one for each `ℓ`, are negligible, with the exponent `C`, if
+/-- Reals `e ℓ`, one for each `ℓ`, are negligible, with the exponent `C`, if
 `∑ e ℓ log ℓ ≤ x ^ C`, the sum taken over any finite set of primes. Here `x = D.x` is the length of
 the prime sum, the smallest scale of the data. -/
 structure IsNegligible (C : ℕ) (e : ℕ → ℝ) : Prop where
-  /-- The numbers `e ℓ` are nonnegative. -/
-  nonneg (ℓ : ℕ) : 0 ≤ e ℓ
   /-- The sum of `e ℓ log ℓ` over a finite set of primes is at most `x ^ C`. -/
   sum_mul_log_le (T : Finset ℕ) (hT : ∀ ℓ ∈ T, ℓ.Prime) : ∑ ℓ ∈ T, e ℓ * Real.log ℓ ≤ D.x ^ C
 

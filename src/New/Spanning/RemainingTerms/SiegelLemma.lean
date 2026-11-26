@@ -80,8 +80,6 @@ they form a basis of `L`. `colSpan` is the span of the columns, and `HasLeftInv`
 a left inverse. -/
 structure IsKernelExtension (A : Matrix σ P k) (x : Matrix P σ k) (L : Submodule k (P → k)) {s : ℕ}
     (y : Matrix P (Fin s) k) : Prop where
-  /-- The number of columns of `y` is the dimension of `L ⊓ ker A`. -/
-  finrank_eq : finrank k ↥(L ⊓ A.mulVecLin.ker) = s
   /-- The columns of `x` and `y` together are independent. -/
   hasLeftInv : HasLeftInv (fromCols x y)
   /-- The columns of `x` and `y` together span `L`. -/
@@ -113,7 +111,6 @@ lemma exists_isKernelExtension {A : Matrix σ P k} {x : Matrix P σ k} (h_det : 
   have h_left : fromRows C (l - l * x * C) * fromCols x y = 1 := by
     simp [*]
   refine ⟨_, y, {
-    finrank_eq := rfl
     hasLeftInv := ⟨_, h_left⟩
     colSpan_fromCols := le_antisymm ?_ fun v hv ↦ ?_
     colSpan_le := hyL
