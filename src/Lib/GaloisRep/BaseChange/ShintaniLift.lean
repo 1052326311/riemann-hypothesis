@@ -389,13 +389,10 @@ lemma exists_baseChange_hasLabel [HasPrimitiveRoot5040 E'] {κ : Weight E}
   refine ⟨_, x.val.prop, P, h_eig, h_same, h_label_iff.mpr fun h_zero ↦ h_eig.1 ?_⟩
   -- The group algebra element `a` of `conj (S ⟨·, φ⟩)` acts as zero in every representation whose
   -- character is orthogonal to `S ∘ inl`. So `a = c * b * a`, with `b` the element of
-  -- `conj (S ∘ inl) = conj Ξ'.evalGL` (third part of
-  -- `isIrreducibleChar_and_mem_virtualChars_and_exists_mul`). If `b` killed `x = a y`, then
-  -- `x = 0`.
-  obtain ⟨-, -, h_absorb⟩ :=
-    isIrreducibleChar_and_mem_virtualChars_and_exists_mul ℤ (hS_char.comp inl).star.isClassFunction
-  obtain ⟨c, hc⟩ := h_absorb _ fun _ hV ↦
-    hS_char.star.asAlgebraHom_groupAlgElem_eq_zero inl (inr φ)
+  -- `conj (S ∘ inl) = conj Ξ'.evalGL` (`IsClassFunction.exists_eq_mul_groupAlgElem_mul`). If `b`
+  -- killed `x = a y`, then `x = 0`.
+  obtain ⟨c, hc⟩ := (hS_char.comp inl).star.isClassFunction.exists_eq_mul_groupAlgElem_mul _
+    fun _ hV ↦ hS_char.star.asAlgebraHom_groupAlgElem_eq_zero inl (inr φ)
       ((hS_char.comp inl).asAlgebraHom_groupAlgElem_eq_zero_iff.1 hV)
   rw [← DescendsTo.iff_comp_inl_eq_evalGL.1 h_lift'] at h_zero
   simpa [x, ← mk_eq_inl_mul_inr, h_zero] using

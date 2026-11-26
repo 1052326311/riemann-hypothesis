@@ -844,7 +844,7 @@ lemma New.SiegelWeil.exists_zeroTerm_transferPoint_eq (hw : w.IsSplit) (L : Lagr
   have cancel : (υ.val δ : ℂ) =
       (υ.atUniformizer w ^ Fintype.card m) ^ Module.finrank (ResField w) U := by
     -- `υ` is unramified at `w`, and the determinant of `basicCosetRep U` has order `dim U`.
-    obtain ⟨⟨-, h_order⟩, -⟩ := basicCosetRep_mem_and_residueKer_eq U
+    obtain ⟨-, h_order⟩ := basicCosetRep_mem_basicDoubleCoset U
     simp [δ, κ, transferPoint, ← coe_singleton, detOn_eq_prod, det_kronecker, h_order,
       (charUnramifiedAt_upsilon _).apply_locFullIdele, atUniformizer, finPart, _root_.zpow_mul]
   have h_chi : (υ.val δ : ℂ) * starRingEnd ℂ (chiAdelic δ) = (√(ideleAbs δ))⁻¹ := by
