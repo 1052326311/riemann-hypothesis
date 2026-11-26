@@ -778,12 +778,12 @@ lemma Comparison.IsBijective.isBijectiveOn_of_compatibleRoots {n : ℕ} {U : Com
   | succ n ih =>
     -- `Y` is the functor of points of `U` with a root system of `t 0`, with its action of `ℕ`. It
     -- is a line over `U` on both sides, because its fibres over points are.
-    let Y : TimesBNat (CommAlg OC) ⥤ Type 1 := fibreProd compatibleRoots.atOne (whiskerLeft _ (t 0))
-    let a : Y ⟶ TimesBNat.fst _ ⋙ U := fibreProd.snd ..
+    let Y : TimesBNat (CommAlg OC) ⥤ Type 1 := fiberProd compatibleRoots.atOne (whiskerLeft _ (t 0))
+    let a : Y ⟶ TimesBNat.fst _ ⋙ U := fiberProd.snd ..
     have h_line {D : Type 1} [Category D] {G : AbFunctor D} {χ : D ⥤ CommAlg OC}
         (h : CompatibleRootsAreLines G χ) : IsLine G ((χ.prod _).whiskerLeft a) :=
-      isBijective_of_fibres (χ.whiskerLeft (t 0))
-        (isPullback_fibreProd.map (Variety.restrictAlong _)) fun B y ↦ h _ _ (h_unit 0 _ _)
+      isBijective_of_fibers (χ.whiskerLeft (t 0))
+        (isPullback_fiberProd.map (Variety.restrictAlong _)) fun B y ↦ h _ _ (h_unit 0 _ _)
     -- With the action forgotten, `Y` carries the `n` other units and is covered by `ih`.
     have hY : c.IsBijectiveOn η (incl _ ⋙ Y) := by
       refine ih ((incl _).whiskerLeft a ≫ t ·.succ) ⟨(_, _), h_root 0⟩ _
