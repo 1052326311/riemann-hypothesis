@@ -220,7 +220,6 @@ times a unit of `Amax`. -/
 lemma associated_mu_mul_p_tPeriodAmax : Associated (mu * p : Amax) tPeriodAmax :=
   exists_tPeriod.choose_spec.1
 
-
 /-- For every `g` in the absolute Galois group G_p of Q_p, `g` acts on the chosen period
 `tPeriodAmax` in `Amax` by multiplication by χ(`g`) ∈ ℤ_p, where χ = `cyclotomicGp` is the p-adic
 cyclotomic character. -/

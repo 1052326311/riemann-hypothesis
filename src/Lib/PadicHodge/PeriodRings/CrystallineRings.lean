@@ -95,7 +95,6 @@ instance [Algebra R Amax] : IsAdicComplete (span {(p : R)}) Amax :=
 /-- The image of the period ring A in B^+ = A[1/p], as an A_inf-subalgebra. -/
 def amaxImage : Subalgebra Ainf BPlus := (toAlgHom Ainf Amax BPlus).range
 
-
 /-- The element X = ξ/p of the period ring A: the image of the variable of A_inf[X]/(pX − ξ). -/
 def Amax.xiDivP : Amax := .of _ _ (root _)
 
