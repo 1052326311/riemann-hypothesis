@@ -58,7 +58,7 @@ lemma norm_det_sq_le_exp (Y : Matrix n n ℂ) :
         simp [hY.det_eq_prod_eigenvalues, abs_of_nonneg (nonneg _)]
     _ ≤ ∏ i, Real.exp (hY.eigenvalues i - 1) :=
         prod_le_prod₀ (fun i _ ↦ nonneg i) fun i _ ↦ by
-          linarith [Real.add_one_le_exp (hY.eigenvalues i - 1)]
+          linarith only [Real.add_one_le_exp (hY.eigenvalues i - 1)]
     _ = Real.exp (Yᴴ * Y - 1).trace.re := by rw [trace_eq, Real.exp_sum]
 
 /-- The principal minor of `X` on the indices satisfying `p` is `det (1 + P (X - 1))`, where `P` is

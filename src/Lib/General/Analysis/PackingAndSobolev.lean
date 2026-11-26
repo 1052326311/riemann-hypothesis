@@ -94,7 +94,7 @@ lemma tsum_inv_pow_le_of_separated (hm : 0 < m) (hf : Pairwise fun i j : I ↦ m
     Summable (fun i : I ↦ ‖f i‖⁻¹ ^ n) ∧ ∑' i : I, ‖f i‖⁻¹ ^ n ≤ (5 / m) ^ n := by
   -- Take `u i = ‖f i‖ / m`, `R = m`, `A = n` and `c = 1 + n / 2` in `tsum_le_of_separated`.
   have hc : (n : ℝ) ≤ (1 + n * 2⁻¹) * (n - finrank ℝ V) := by
-    nlinarith [show (finrank ℝ V : ℝ) + 2 ≤ n from mod_cast hn]
+    nlinarith only [show (finrank ℝ V : ℝ) + 2 ≤ n from mod_cast hn]
   obtain ⟨h_summable, h_le⟩ := tsum_le_of_separated (u := fun i ↦ m⁻¹ * ‖f i‖) hm hm.le hf
     (fun i ↦ (one_le_inv_mul₀ hm).2 (hf_ge i)) (fun i ↦ by simp [field]) (mod_cast by lia) hc
   have h_scale (i : I) : (m⁻¹ * ‖f i‖) ^ (-(n : ℝ)) = m ^ n * ‖f i‖⁻¹ ^ n := by
