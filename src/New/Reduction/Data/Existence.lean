@@ -239,7 +239,7 @@ lemma Parameters.exists_large_isSparse (P : Parameters) {s n H L : ℕ}
     have h_order : 2 ^ s ≤ (ℓ + 1) * (2 * i) :=
       two_pow_le_of_pow_eq_one (q := ℓ) hℓ.one_lt (by omega) (by simpa using h_pow)
     have h_small : (ℓ + 1) * (2 * i) ≤ (L + 1) * (2 * l₀ s) := Nat.mul_le_mul (by omega) (by omega)
-    nlinarith only [h_order, h_small, hL]
+    linarith only [h_order, h_small, hL]
 
 /-- **A large sparse set of places.** The infinite places `P.Φ s` of `E = P.E s` form the group
 `(ℤ/q₁)ˣ`. Let `0 < n`, `1 ≤ W ≤ 2 ^ s ≤ W ^ n`, `(2 l₀) ^ n ≤ W`, `3 l₀ n 2 ^ n ≤ W ^ 3` and
