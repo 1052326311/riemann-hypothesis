@@ -247,25 +247,19 @@ lemma isFiniteLerayHirsch_iff_of_locally_bijective (u : E ⟶ Y)
     (h_surj : IsZariskiLocallyTop (ringOf (𝟭 (TestOver A))) (Subfunctor.range u ⊔ U))
     (h_inj : IsZariskiLocallyTop (ringOf (𝟭 (TestOver A))) (sameClassLocus u U)) :
     D.IsFiniteLerayHirsch (relFreeAb (U.preimage u)) ↔ D.IsFiniteLerayHirsch (relFreeAb U) := by
-  -- Under Zariski descent what holds near every closed point holds on a dense subfunctor, so it
-  -- suffices that the kernel and the cokernel of `relFreeAb.map u` are locally zero.
-  refine D.isFiniteLerayHirsch_iff_of_isCohomEquiv (relFreeAb.map u le_rfl) fun g' h_zar ↦ ?_
-  refine LocalIso.isCohomEquiv ⟨fun c ↦ Quot.ind ?_, fun c ↦ ?_⟩
-  · -- The kernel is spanned by differences of points with equal image and by points over `U`.
-    refine relFreeAb.mem_of_map_eq_zero u (relFreeAb.π _) _ (fun x y hxy ↦ ?_) fun x hx ↦ ?_
-    · exact (h_zar (h_inj.whisker g')).of_preimage_le (pointMap ⟨(x, y), hxy⟩)
-        fun c' z ↦ sub_eq_zero.mpr
-    · -- A point over `U` has class zero.
-      rw [show (relFreeAb.π (U.preimage u)).app (g'.obj c) (FreeAddCommGroup.of x) = 0 from
-        relFreeAb.mk_eq_zero hx]
-      exact zero_mem _
-  · -- Locally a generator `y` lies in the image of `u`, or it lies in `U` and its class is zero.
-    refine relFreeAb.mem_of_mk_mem (U := U.whisker g') (.comap _ (locallyZero ..)) fun y ↦
-      (h_zar (h_surj.whisker g')).of_preimage_le (pointMap y) ?_
-    rintro c' f (⟨x, hx⟩ | hU)
-    · exact (QuotientAddGroup.eq_zero_iff _).mpr
-        ⟨relFreeAb.mk (U.preimage u) x, congrArg (relFreeAb.mk U) hx⟩
-    · exact (QuotientAddGroup.eq_zero_iff _).mpr ⟨0, (relFreeAb.mk_eq_zero hU).symm⟩
+  -- Under Zariski descent it suffices that the kernel and cokernel of `relFreeAb.map u` are
+  -- locally zero.
+  exact D.isFiniteLerayHirsch_iff_of_isCohomEquiv (relFreeAb.map u le_rfl) fun g' h_zar ↦
+    LocalIso.isCohomEquiv ⟨fun _ ↦ Quot.ind <| relFreeAb.mem_of_map_eq_zero u (relFreeAb.π _) _
+      (fun x y hxy ↦ (h_zar (h_inj.whisker g')).of_preimage_le (pointMap ⟨(x, y), hxy⟩)
+        fun _ _ ↦ sub_eq_zero.mpr)
+      fun x hx ↦ (show (relFreeAb.π (U.preimage u)).app _ _ = 0 from
+        relFreeAb.mk_eq_zero hx).symm ▸ zero_mem _,
+    fun _ ↦ relFreeAb.mem_of_mk_mem (U := U.whisker g') (.comap _ (locallyZero ..)) fun y ↦
+      (h_zar (h_surj.whisker g')).of_preimage_le (pointMap y) fun _ _ h ↦
+        (QuotientAddGroup.eq_zero_iff _).mpr <| Or.elim h
+          (fun ⟨x, hx⟩ ↦ ⟨relFreeAb.mk (U.preimage u) x, congrArg (relFreeAb.mk U) hx⟩)
+          fun hU ↦ ⟨0, (relFreeAb.mk_eq_zero hU).symm⟩⟩
 
 -- Unsealed, `Ext` is unfolded when the two forms of the restricted Tate module are compared.
 seal Abelian.Ext in
