@@ -599,7 +599,7 @@ every index from `j` on, the flags of the frame `e_1, …, e_ϱ, z_N` and of its
 a vector with leading coefficients `ζ` and `1`. Then `flagSpan γ j`, the span of the images under
 `γ` of the first `j` frame vectors, meets the span `colSpan (frameImage 1)` of the frame only in
 `0`. -/
-lemma CharsAgree.disjoint_flagSpan_coe {j : Fin (𝔰.ϱ + 2)} [HasPrimitiveRoot5040 E]
+lemma CharsAgree.disjoint_flagSpan_coe {j : Fin (𝔰.ϱ + 2)}
     (h_agree : S.CharsAgree γ) (h_least : IsLeast {i : ℕ | NormOnePairOccursFrom i γ} j.val) :
     Disjoint (flagSpan (γ : Matrix 𝔰.BesselIndex 𝔰.BesselIndex E) j) (colSpan (frameImage 1)) := by
   refine Submodule.disjoint_def.2 fun w hw hw' ↦ ?_

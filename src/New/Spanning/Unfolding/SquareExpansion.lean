@@ -302,7 +302,7 @@ lemma amplitudeSum_besselS_eq_zero {side : FullOrCut} {s : S.ResidueGL}
 
 /-- The complement of the Bessel subgroup is stable under multiplication by the unipotent group
 `besselU` on both sides. -/
-lemma isStable_compl_besselS [HasPrimitiveRoot5040 E] :
+lemma isStable_compl_besselS :
     S.IsStable ((S.ratMiddle E).besselS : Set (S.G E))ᶜ :=
   fun u hu u' hu' γ ↦ (S.isStable_besselS u hu u' hu' γ).not
 
@@ -601,7 +601,7 @@ theorem sqrt_secondMoment_compl_besselS_le [HasPrimitiveRoot5040 E] [S.IsAdmissi
 `t` of `reducedImage besselS`, the reduction of the Bessel subgroup. Then the product of the norms
 `p_i` of these places and their conjugates is at most `meetNorm s`, the product of the norms of the
 places at which `s` meets, as `s` meets at each of them. -/
-lemma prod_levelPrime_le_meetNorm_of_eq [HasPrimitiveRoot5040 E] [S.IsAdmissible]
+lemma prod_levelPrime_le_meetNorm_of_eq
     {s t : S.ResidueGL} (ht : t ∈ S.reducedImage besselS) {i : Fin 2} (hs : s i = t i) :
     ∏ _ : S.chosenPlaces i × Bool, S.levelPrime i ≤ S.meetNorm s := by
   classical

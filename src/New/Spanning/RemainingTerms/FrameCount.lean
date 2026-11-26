@@ -340,7 +340,7 @@ noncomputable def sharedVectors (S : Filling E 𝔰) (j : Fin (𝔰.ϱ + 2)) (γ
 /-- Let `γ` have cell rank `j` (`S.HasCellRank j γ`). Let `k ≥ j`. Then column `k` of `γ f · adj Y`
 lies in the span of the frame `f = frameImage 1`. Here `γ f = frameImage γ`, and `Y` is the first
 `j` rows of the matrix of products `S.frameProducts γ`, completed by rows of the identity matrix. -/
-lemma HasCellRank.exists_frameImage_one_mulVec_eq {S : Filling E 𝔰} [HasPrimitiveRoot5040 E]
+lemma HasCellRank.exists_frameImage_one_mulVec_eq {S : Filling E 𝔰}
     {j : Fin (𝔰.ϱ + 2)} {γ : S.G E} (h : S.HasCellRank j γ) {k : Fin (𝔰.ϱ + 1)}
     (hk : j.val ≤ k.val) :
     ∃ w : Fin (𝔰.ϱ + 1) → E,
@@ -520,7 +520,7 @@ variable {S : Filling E 𝔰} {j : Fin (𝔰.ϱ + 2)} {Z : Matrix (Fin (𝔰.ϱ 
 
 /-- The elements of `E` that are integral at every finite place, the preimage of the ring `Ô E` of
 integral finite adeles, form a subring stable under conjugation. -/
-lemma isStarStable_comap_Ô [HasPrimitiveRoot5040 E] :
+lemma isStarStable_comap_Ô :
     IsStarStable ((Ô E).comap (algebraMap E (𝔸f E))) :=
   ⟨fun hx ↦ by simpa using star_mem_Ô hx⟩
 
@@ -532,7 +532,7 @@ lemma frameModulus_ne_zero (h_minor : leadingMinor Z j ≠ 0) : S.frameModulus j
 
 /-- If the entries of `Z` are algebraic integers, then its first `j` rows completed by rows of `1`
 have entries that are integral at every finite place. -/
-lemma isIntMatrix_paddedLeading [HasPrimitiveRoot5040 E] {𝔰 : Shape} {j : Fin (𝔰.ϱ + 2)}
+lemma isIntMatrix_paddedLeading {𝔰 : Shape} {j : Fin (𝔰.ϱ + 2)}
     {Z : Matrix (Fin (𝔰.ϱ + 1)) (Fin (𝔰.ϱ + 1)) E}
     (hZ : ∀ a b : Fin (𝔰.ϱ + 1), IsIntegral ℤ (Z a b)) :
     IsIntMatrix ((Ô E).comap (algebraMap E (𝔸f E))) (paddedLeading j Z) := by
@@ -654,7 +654,7 @@ a skew-hermitian matrix over `E` that is integral at every finite place, and let
 `ϱ` rows of `S.frameProducts γ`. Then an element of `S.classUnipotent₀ c`, the unipotent group of
 level `M` fixing the standard frame `f`, adds `M σ P` to the first block of rows of
 `γ f = frameImage γ`. Here `M = S.M` is the product of the two level primes. -/
-lemma exists_frameImage_mul_eq_add_fromRows [HasPrimitiveRoot5040 E] [S.IsAdmissible]
+lemma exists_frameImage_mul_eq_add_fromRows [HasPrimitiveRoot5040 E]
     (c : S.Classes) (γ : S.G E) {σ : Matrix (Fin 𝔰.ϱ) (Fin 𝔰.ϱ) E} (h_skew : σᴴ = -σ)
     (h_int : IsIntMatrix (Ô E) (finAdeleMatrix σ)) :
     ∃ r ∈ S.classUnipotent₀ c, frameImage (r * γ).val.val =

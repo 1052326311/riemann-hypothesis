@@ -452,7 +452,7 @@ lemma mem_besselS_of_frameImage_eq_one (h_fix : frameImage s.val.val = frameImag
 /-- For admissible data with size parameter `b`, the powers `b ^ e` with `e ≤ 10 ^ 5 n ^ 9 f` are at
 most `τ = S.tailScale = b ^ (k f / 4)`. Here `n = ϱ + 1` is the number of frame vectors, `k` is the
 rank of `X₀` and `f` is the number of infinite places. -/
-lemma pow_le_tailScale [S.IsAdmissible] {e : ℕ} (he : e ≤ 10 ^ 5 * 𝔰.n ^ 9 * numInfPlaces E) :
+lemma pow_le_tailScale {e : ℕ} (he : e ≤ 10 ^ 5 * 𝔰.n ^ 9 * numInfPlaces E) :
     S.b ^ e ≤ S.tailScale := by
   -- compare the exponents
   have h_exponent : (e : ℝ) ≤ 𝔰.k * numInfPlaces E / 4 := by
@@ -464,7 +464,7 @@ lemma pow_le_tailScale [S.IsAdmissible] {e : ℕ} (he : e ≤ 10 ^ 5 * 𝔰.n ^ 
 
 /-- For admissible data, the fourth power of `tailScale` `τ = b ^ (k f / 4)` is `b ^ (k f)`, where
 `k = 𝔰.k` and `f = numInfPlaces E` is the number of infinite places of `E`. -/
-lemma tailScale_pow_four [S.IsAdmissible] :
+lemma tailScale_pow_four :
     S.tailScale ^ 4 = S.b ^ (𝔰.k * numInfPlaces E) := by
   rw [tailScale, ← rpow_mul_natCast (by linarith [S.thousand_le_b]), ← rpow_natCast]
   push_cast
@@ -554,7 +554,7 @@ lemma IsNear.norm_map_leadingMinor_sq_le [S.IsAdmissible] (l : Fin (𝔰.ϱ + 1 
 with the same frame image `frameImage γ = frameImage u`, then `r⁻¹ * r'` lies in
 `S.reducedImage besselS`, the reduced image of the Bessel subgroup. So `r` and `r'` lie in one left
 coset of it. -/
-lemma termsOver.inv_mul_mem_reducedImage [S.IsAdmissible] (hγ : γ ∈ S.termsOver c r c')
+lemma termsOver.inv_mul_mem_reducedImage (hγ : γ ∈ S.termsOver c r c')
     {r' : S.ResidueGL} {d : S.Classes} (hu : u ∈ S.termsOver c r' d)
     (h_same_frame : frameImage γ.val.val = frameImage u.val.val) :
     r⁻¹ * r' ∈ S.reducedImage besselS := by
@@ -586,7 +586,7 @@ lemma termsOver.eq_and_mem_classUnipotent₀ [S.IsAdmissible] (hγ : γ ∈ S.te
 
 /-- If `γ` is a term over `(c, r, c')`, so that `h_c⁻¹ γ h_c'` is integral, then the products of
 the frame with its image under `γ` are algebraic integers. -/
-lemma isIntegral_frameProducts [S.IsAdmissible] (hγ : γ ∈ S.termsOver c r c')
+lemma isIntegral_frameProducts (hγ : γ ∈ S.termsOver c r c')
     (i j : Fin (𝔰.ϱ + 1)) : IsIntegral ℤ (S.frameProducts γ i j) := by
   -- the adelic entry is that of a product of two integral matrices
   have h_int : (S.latticeMiddle (𝔸f E)).frameGram (S.translateByClassReps c c' γ) i j ∈ Ô E :=
