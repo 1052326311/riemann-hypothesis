@@ -181,7 +181,8 @@ lemma oneSub_comp_gluing :
   rintro _ ⟨⟨_ | _⟩, t⟩
   · simp [pointOrTorusTwist, evalZero_comp, discTwist_comp_evalZero]
   · -- On a point of the torus both sides are the same four terms, grouped in two ways.
-    simp [pointOrTorusTwist, discTwist, charTwist_comp_discToTorus_assoc, sub_sub_sub_comm]
+    simp [pointOrTorusTwist, discTwist, charTwist_comp_discToTorus_assoc]
+    exact sub_sub_sub_comm ..
 
 /-- In `O^♭[ℚ]`, the monomial of the absolute value `mabs s` is `T^t` for the rational
 `t = s.nnabs`. -/
