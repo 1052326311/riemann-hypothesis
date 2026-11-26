@@ -23,7 +23,7 @@ of `Ω`: finite type, good, Hodge–Tate jumps, and polynomials killing an eleme
   `New.GaloisRep.JumpsRelAt` (Hodge–Tate jumps) and `New.GaloisRep.PolyKillsAt` (a polynomial kills
   an element) behave when a representation is multiplied by a character. It collects the four
   lemmas `IsFiniteTypeAt.twist`, `IsGoodAt.twist`, `JumpsRelAt.twist` and `PolyKillsAt.twist`.
-* `New.Period.isPotentiallyCrystalline_of_unramified_char`: take a continuous `p`-adic character `ν`
+* Take a continuous `p`-adic character `ν`
   of an open subgroup of `G_p`, trivial on inertia near `1`. An algebra on which `ν` acts by scalars
   is potentially crystalline (`IsPotentiallyCrystalline.of_unramified_char`) with the jumps of the
   trivial action (`jump_eq_jump_one_of_unramified_char`). Weil elements act on its Weil–Deligne
