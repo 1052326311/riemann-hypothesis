@@ -182,9 +182,12 @@ lemma finHeisenbergOp_arrowProduct (y : (ι ⊕ ι'') × ι' → 𝔸f E) :
     grind [-stdLattice.two_mul_half]
   -- The action passes through the product and the flip; it remains to compare the scalars.
   simp [finHeisenbergOp, arrowProduct, rho_boxProd, ← CoordChange.map_rho, ← mul_smul]
-  erw [CoordChange.apply_finVec]
-  rw [h_scalar]
-  rfl -- The vectors agree by the definitions of `finEquiv` and `finVec`.
+  have h_vec : (flipCoords star_normNegOne_mul_self rfl (t := ε) (s := ε')).φ
+      (finVec y ∘ (Equiv.sumProdDistrib ι ι'' ι').symm ∘ Sum.inl) =
+      finVec (fun q : ι' × ι ↦ ((normNegOne : (Ô E)ˣ) : 𝔸f E) * star (y (Sum.inl q.2, q.1))) :=
+    CoordChange.apply_finVec _ (fun q : ι × ι' ↦ y (Sum.inl q.1, q.2))
+  rw [h_vec, h_scalar]
+  rfl -- The second-block vectors agree by the definition of `finVec`.
 
 @[simp]
 lemma arrowProduct_vacElem :
