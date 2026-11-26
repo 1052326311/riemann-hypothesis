@@ -279,7 +279,7 @@ lemma dataInner_traceChar {𝔪 : Modulus E} (t : Matrix n n' 𝔪.ResidueRing)
   · rw [modDatum, modDatum, rho_integrated_realCoord, dataInner_integrated, h_char,
       𝔪.schrodingerOp_char_eq_translate_projOn, rho_swap, map_smul]
     -- ↓ rewrites operators on integrated vectors before their arguments are simplified.
-    simp [y, zf, finVec, ↓← rho_integrated, vacuumFn]
+    simp [y, zf, finVec, ↓← rho_integrated]
   by_cases hz : ∀ i, finCoord z i ∈ Ô E
   · -- The phase of `ϱ zf` past `ϱ y` is the lift of `traceChar t` at `α⁻¹ z_f`.
     have h_beta : ((adelicHeisenberg E (homSigns s s')).β zf y : ℂ) ^ 2 =
@@ -573,7 +573,7 @@ theorem exists_norm_modKernel_sub_fockInner_le [Nonempty n] [Nonempty n']
           (len y)⁻¹ ^ (2 * q) := by
     calc _ ≤ ‖fockInner v (realHeisenbergOp (realCoord (x y)) (realWeil σ v))‖ := by
           rw [term_eq]
-          split_ifs <;> simp [w, σ, χ, realPairWeil, prod_mul_distrib, norm_coe]
+          split_ifs <;> simp [w, σ, realPairWeil, prod_mul_distrib, norm_coe]
       _ ≤ _ := norm_fockInner_realHeisenbergOp_le σ hv hQ le_rfl (hm_pos.trans_le (h_far y))
   have h_zero : term 0 = fockInner v w := by
     simp [term_eq, x, χ, finCoord, ← ZeroMemClass.zero_def, realCoord.eq_unfold, ← Pi.zero_def]

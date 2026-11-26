@@ -224,7 +224,7 @@ lemma leastValLE_six_zero_of_inert (D : Data P) {w : J → D.E} {c : J → ℕ}
           (New.Φ x.1 (D.resolutionVectors w i x.2) * dagger (D.resolutionVectors w i) y)) := by
         simp [a, resolutionForms_eq_smul, daggerForms, mul_sum, mul_assoc, mul_left_comm]
     _ = if x = y then D.taylorScale else 0 := by
-        simp [D.isResolution_resolutionVectors hw x y, apply_ite ιₚ]
+        simp [D.isResolution_resolutionVectors hw x y]
 
 /-- Let `D` be admissible data for the parameters `P` and `p` a prime that is inert in `K = ℚ(√-d)`.
 For a tight frame `w` of length `M = D.M` with multiplicities `c`, the theta product

@@ -202,7 +202,7 @@ lemma exists_norm_mul_lastPathPairing_le_one : ∃ N ≠ (0 : ℕ),
       (fun τ ↦ (U.block (D.gridDiagEquiv D.m) (g⁻¹, u')).1.map (f τ)) *ᵥ ιₚ ∘ v
   have hw' : ∀ i, ‖w' i‖ ≤ 1 := (pi_norm_le_iff_of_nonneg one_pos.le).1 hv'
   have hw : ∀ i, ‖w i‖ ≤ 1 := by
-    simpa [w, u', weylGauge, lastPathBlockPoint, ← map_inv, pi_norm_le_iff_of_nonneg] using hv
+    simpa [u', weylGauge, lastPathBlockPoint, ← map_inv, pi_norm_le_iff_of_nonneg] using hv
   -- Elements of norm at most `1` form a subring, which contains the entries of `w'` and `w`.
   have h_int : ‖w' ⬝ᵥ D.lastPathBranching.map (↑) *ᵥ w‖ ≤ 1 :=
     NormedField.valuation.integer.sum_mem fun i _ ↦
