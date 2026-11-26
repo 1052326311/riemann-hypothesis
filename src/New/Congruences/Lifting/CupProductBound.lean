@@ -274,9 +274,7 @@ lemma Pairing.isCupCoboundary_of_eq_coboundary [TopologicalSpace Γ]
     exact congrArg (Quotient.mk _) h_kill
   have h_zero : cls = 0 :=
     (nsmul_eq_zero_iff_of_coprime (k.index_coprime.pow_right _)).1 ⟨h_index, h_pow⟩
-  have h_B2 : zmodPowToUnits P.exponent ∘ b ∈ B2 (unitsRep.comp toGp) := by
-    exact Submodule.mem_comap.1 ((Submodule.Quotient.mk_eq_zero _).1 h_zero)
-  exact h_B2
+  exact Submodule.mem_comap.1 ((Submodule.Quotient.mk_eq_zero _).1 h_zero)
 
 /-- `smul_comm` oriented for `simp`: an element of `FrobGroup Γ` moves inside any commuting
 scalar `a`. -/
