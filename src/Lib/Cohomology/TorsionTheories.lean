@@ -1,6 +1,5 @@
 module
 
-public import Lib.Adelic.Unitary.Defs
 public import Lib.Cohomology.Etale.RelativeChains
 public import Lib.Cohomology.LerayHirsch
 public import Lib.General.Algebra.CohomologyBaseChange

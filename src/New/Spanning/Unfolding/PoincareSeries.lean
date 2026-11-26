@@ -439,7 +439,8 @@ omit [S.IsAdmissible] [HasPrimitiveRoot5040 E] in
 private theorem mul_poincareSeries_eq_sum (y : New.G E ε → ℂ) :
     y g * X.poincareSeries φ g =
       ∑ a : S.Classes × S.BesselCoord, φ a * (y g * ∑' γ : V.Γ, X.cutBessel a (γ * g)) := by
-  simp only [poincareSeries, Finset.mul_sum, mul_left_comm]
+  rw [poincareSeries, Finset.mul_sum]
+  exact Finset.sum_congr rfl fun _ _ ↦ mul_left_comm ..
 
 /-- Unfolding, for admissible filling data and a form y on V of any type e (a bounded automorphic
 function): the integral over Γ∖G of y times the Poincaré series of φ is

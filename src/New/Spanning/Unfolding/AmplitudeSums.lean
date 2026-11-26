@@ -174,7 +174,7 @@ lemma lintegral_classCutoff_mul_prod [HasPrimitiveRoot5040 E] [S.IsAdmissible]
         ∫⁻ x, ∏ v, w v (x v) ∂(.pi fun _ : InfinitePlace E ↦ besselQuotMeasure) := by
       simp only [lintegral_classCutoff_eq_unipotentCovolume]
       exact lintegral_const_mul' _ _ ofReal_ne_top
-    _ = _ := by simp (disch := measurability) [lintegral_pi_prod]
+    _ = _ := by simp (disch := measurability) [TauCeti.lintegral_fintype_prod_eq_prod]
 
 /-- Summation by layers. Let `u ≥ 1` and `K ≥ 0`. If the points with `u p ≤ R` have total weight at
 most `(K R ^ e) ^ d` for all `R ≥ 1`, then the weighted sum of `u p ^ (-i)` is at most `2 K ^ d` as

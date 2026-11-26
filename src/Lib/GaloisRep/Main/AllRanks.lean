@@ -102,12 +102,6 @@ open New NumberField Matrix Polynomial Filter Fintype Finset AlgHeckeChar AutCha
   Units
 open scoped Classical
 
-/-- The character of the finite ideles of an algebraic Hecke character `ω = (θ, n)`: its first
-component `θ`. -/
-abbrev New.AlgHeckeChar.heckeChar {E : Type} [Field E] [NumberField E] (ω : AlgHeckeChar E) :
-    (𝔸f E)ˣ →* ℂˣ :=
-  ω.val.1
-
 /-- Let `E` be a CM field with Weil data, including a splitting character `υ`, and let `e` assign an
 integer to each infinite place. Then there are two characters `μ 0`, `μ 1` of `U(1)(𝔸)` (norm-one
 adeles, trivial on `E`) with trivial tame part and weights `c 0`, `c 1` such that: (a) `c i ≤ e` at
@@ -123,8 +117,8 @@ lemma New.AutChar.exists_pair_heckeCoeff_ne {E : Type} [Field E] [CMType E] [Wei
       (∀ {i : Fin 2} (v : InfinitePlace E), c i v ≤ e v) ∧
       -- (b)
       ∀ {w : FinPlace E} {k j j' : ℤ}, w.IsSplit →
-        heckeCoeff ((h 0).toAlgebraic k j).heckeChar ∅ w ≠
-          heckeCoeff ((h 1).toAlgebraic k j').heckeChar ∅ w := by
+        heckeCoeff ((h 0).toAlgebraic k j).character ∅ w ≠
+          heckeCoeff ((h 1).toAlgebraic k j').character ∅ w := by
   -- The weights are multiples of the number of roots of unity, so that the characters exist; they
   -- differ by this number at one infinite place.
   let c (i : Fin 2) (v : InfinitePlace E) : ℤ :=

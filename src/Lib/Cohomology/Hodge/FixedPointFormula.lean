@@ -1,6 +1,5 @@
 module
 
-public import Lib.Adelic.Unitary.Defs
 public import Lib.Cohomology.Hodge.DiagonalClass
 public import Lib.Cohomology.Hodge.Kunneth
 public import Lib.General.Algebra.MultivariatePolynomials

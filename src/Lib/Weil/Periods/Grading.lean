@@ -143,8 +143,8 @@ of V, acting on X and fixing the string vectors. -/
 def inclX : G E (1 : X → ℤˣ) →* G E ε :=
   ((U.reindex Y.indexEquiv (by
         -- The Gram matrix in the adeles is block diagonal with the standard form on X; the block of
-        -- the string is given explicitly. The rewrite has to unfold `gradedGram`, hence `erw`.
-        erw [Y.gram_eq, ← submatrix_map]
+        -- the string is given explicitly.
+        rw [Y.gram_eq, gradedGram, gradedBlocks, ← submatrix_map]
         aesop (add simp fromBlocks_map))).trans V.toRatCoords.symm).toMonoidHom.comp
     ((U.sum (J' := (of fun a b : Fin s ↦
         if a = b.rev then (if a = b then -N else 1) else 0).map toAdele) rfl).comp

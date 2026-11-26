@@ -192,8 +192,8 @@ lemma differentiableAt_sectionMatrix_uncurry {Z W : 𝔰.FrameMatrix} (hZ : Z �
   have h_diag := differentiable_diagLast_apply (𝔰 := 𝔰)
   refine differentiableAt_pi.2 fun i ↦ differentiableAt_pi.2 fun j ↦ ?_
   simp only [uncurry_def, sectionMatrix, sectionFrame, sectionCoeff, invCorner,
-    nonsing_inv_eq_ringInverse, Matrix.mul_apply, Matrix.add_apply, Matrix.sub_apply]
-    at h_slit hs_ne ⊢
+    nonsing_inv_eq_ringInverse] at h_slit hs_ne ⊢
+  dsimp only [Matrix.mul_apply, Matrix.add_apply, Matrix.sub_apply]
   fun_prop (disch := assumption)
 
 /-- The matrix `sectionMatrix Y Yᴴ` of the section γ_Y (`gramSection`) is a real differentiable
@@ -447,7 +447,7 @@ lemma IsBoundedInCell.gramDiscReal_div_two_le {Z : 𝔰.FrameMatrix} {T : ℝ} {
   calc gramDiscReal Z / 2 ≤ (9 / 8 * ‖Y.det‖) ^ 2 * oneSubNormSqInvCorner Z / 2 := by
         grw [gramDiscReal_eq_norm_det_sq_mul (RealPlace.mem_openCell.1 hZ.mem_openCell).1, h_det]
     _ ≤ ‖Y.det‖ ^ 2 * (7 / 8 * oneSubNormSqInvCorner Z) := by
-        nlinarith [mul_nonneg (sq_nonneg ‖Y.det‖) hνZ_pos.le]
+        linarith [mul_nonneg (sq_nonneg ‖Y.det‖) hνZ_pos.le]
     _ ≤ gramDiscReal Y := by grw [hν_ratio, gramDiscReal_eq_norm_det_sq_mul hY_unit.ne_zero]
 
 end Perturbation
