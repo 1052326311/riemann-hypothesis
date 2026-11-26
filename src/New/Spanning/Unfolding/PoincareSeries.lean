@@ -136,8 +136,7 @@ seal Finset.sum in
 group. -/
 theorem adelicEquiv_ratEquiv (γ : S.G E) : X.adelicEquiv (X.ratEquiv γ) = S.ratToAdelic γ := by
   -- The conjugations by the point of `V` in `X.adelicEquiv` and in `X.ratEquiv` cancel.
-  erw [V.toRatCoords.trans_apply, V.toRatCoords.apply_symm_apply]
-  rfl
+  exact X.adelicEquiv.apply_symm_apply (S.ratToAdelic γ)
 
 /-- Let the hermitian space V fit the filling data S, and let x_v be the component of the point
 `V.x` at an infinite place v. Then x_vᴴ J x_v is the diagonal matrix of the signs ε, where J is the
@@ -179,7 +178,7 @@ theorem realHomeomorph_mul (g' : New.G E ε) :
   let x : GL 𝔰.BesselIndex ℂ := (S.basisScaleGL v)⁻¹ * GeneralLinearGroup.map (evalInf v) V.x
   change x * p.matrix⁻¹ * (p.matrix * (g * g').1 v * p.matrix⁻¹) =
     S.adelicToInf (X.adelicEquiv g) v * (x * p.matrix⁻¹ * (p.matrix * g'.1 v * p.matrix⁻¹))
-  simp [x, adelicToInf, adelicEquiv, U.map, U.conj, Space.toRatCoords, mul_assoc, h_comp]
+  simp [x, adelicToInf, adelicEquiv, U.map, Space.toRatCoords, mul_assoc, h_comp]
 
 /-- The isomorphism from the standard finite adelic unitary group onto that of S in the lattice
 basis: conjugate by the finite point of V, change to the lattice basis, then conjugate by the
@@ -758,9 +757,10 @@ theorem petersson_poincare {S : Filling E 𝔰} {V : Space E 𝔰.BesselIndex ε
         rw [X.coe_poincareMap]
         simp [poincareSeries, ← ((Equiv.inv (S.G E)).trans X.ratEquiv.toEquiv).tsum_eq]
       _ = _ := by
-        rw [← tsum_subtype_eq_of_support_subset (s := Set.univ ∩ S.termsOver c s c')]
-        · exact tsum_congr fun γ ↦ by rw [h_term, ite_eq_left γ.property.2]
-        · exact fun γ hγ ↦ ⟨trivial, by_contra fun h ↦ hγ ((h_term γ).trans (ite_eq_right h))⟩
+        rw [_root_.tsum_subtype (Set.univ ∩ S.termsOver c s c') (fun γ : S.G E ↦
+          (S.classCutoff c' ((S.ratToInf γ)⁻¹ * X.realHomeomorph x)).toReal •
+            S.besselFn .full ((S.ratToInf γ)⁻¹ * X.realHomeomorph x) i')]
+        simp only [h_term, Set.univ_inter, Set.indicator]
   calc
     _ = ∫ g : New.G E ε, star (z g) * X.poincareSeries (.single (c, i) 1) g ∂V.Γ.quotMeasure := by
       rw [← X.coe_poincareMap]

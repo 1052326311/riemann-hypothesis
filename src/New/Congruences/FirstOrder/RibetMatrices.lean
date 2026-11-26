@@ -518,7 +518,7 @@ lemma exists_mem_tiedRows_polyActionAtZero_eq {r ι : Type} [Fintype r] [Decidab
       _ = A := by rw [hc₁, one_smul]
   refine ⟨(MonoidAlgebra.single γ (1 : MvPolynomial J O) - 1) • normaliserRow z γ a c₁,
     sub_one_smul_normaliserRow_mem_tiedRows u hz γ a c₁ γ, fun j ↦ ?_⟩
-  simp [normaliserRow, polyActionAtZero_single, hργ, h_one, mul_add, sub_mul, map_smul, sub_smul]
+  simp [normaliserRow, polyActionAtZero_single, hργ, h_one, mul_add, sub_mul, map_smul]
 
 /-- Let `u x` (`x : Y`) be matrix representations of the group `G` over `O`, with
 `u x g - 1 = ∑ z g i (u x (gen i) - 1)` for all `g` and `x` (`AreCoordinates`). Let the matrices

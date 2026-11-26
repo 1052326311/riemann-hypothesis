@@ -244,12 +244,12 @@ lemma _root_.New.IsValuationPair.exists_square_colLattice_eq (hR : IsValuationPa
   -- Column operations over `R` on `(0 | Y)` clear the columns of the second block.
   let X : Matrix m (m ⊕ n) A := fromCols 0 Y
   obtain ⟨V, hV, h_clear⟩ : ∃ V ∈ intGL (m ⊕ n) R,
-      ∀ᵉ (a : m) (j ∉ Set.range (Function.Embedding.inl : m ↪ m ⊕ n)), (X * V.val) a j = 0 :=
+      ∀ a : m, ∀ j ∉ Set.range (Function.Embedding.inl : m ↪ m ⊕ n), (X * V.val) a j = 0 :=
     hR.exists_mul_clear_cols X .inl
   let D : Matrix m m A := (X * V.1).toCols₁
   have hD : Y * V.1.toBlocks₂₁ = D := by
     ext i j
-    simp [D, X, toCols₁, toBlocks₂₁, Matrix.mul_apply]
+    simp [D, X, toBlocks₂₁, Matrix.mul_apply]
   have hY : D * V⁻¹.1.toBlocks₁₂ = Y := by
     ext i j
     have h_cancel : (X * V.1 * V⁻¹.1) i (.inr j) = Y i j := by simp [X, Matrix.mul_assoc]

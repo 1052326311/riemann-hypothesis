@@ -412,7 +412,7 @@ lemma New.GaloisRep.jump_eq_zero_of_jump_eq_zero_of_trace_eq_one {ℓ : ℕ} [Th
     have term_eq (i : Fin b) (c : Fin (d i)) (x : Fin (∑ i, d i)) :
         I i c x *ᵥ f' (piMatrixUnit i c) *ᵥ Pi.single x 1 =
           f' (piMatrixUnit i) x x • f (piMatrixUnit i c c) *ᵥ v := by
-      simp [I, -mulVec_single, intertwiner_mul_piMatrixUnit, mul_vecMulVec, vecMulVec_mul,
+      simp [I, -mulVec_single, intertwiner_mul_map_piMatrixUnit, mul_vecMulVec, vecMulVec_mul,
         vecMulVec_mulVec, ← map_mul, ← Pi.single_mul]
     simp [-mulVec_single, term_eq, ← Finset.sum_smul,
       fun i ↦ show ∑ x, f' (piMatrixUnit i) x x = 1 from f'_trace i, ← sum_mulVec, ← map_sum,
@@ -529,11 +529,11 @@ lemma New.Period.aeval_cocharacter_eq_zero {p : ℕ} [ThePrime p] {n : Type _} [
   obtain ⟨V, hV⟩ := NonarchimedeanGroup.is_nonarchimedean _ h
   -- `u ν` is the weight of the monomial `ν`; `W` consists of the vectors that vanish at the
   -- translates by all `g` in the open subgroup `V`, and `W'` of those that vanish at `T ^ κ * x`.
-  let u (ν : F.support) : ℤ := ∑ i, ν.1 i * κ i
+  let u (ν : F.support) : ℤ := ∑ i, ν.val i * κ i
   let W : Submodule ℂ_[p] (F.support → ℂ_[p]) := (of fun (ν : F.support) (g : V) ↦
-    ∏ i, ((cyclotomicGp g ^ (-κ i)).val • (g : Gp p) • x i) ^ ν.1 i).vecMulLinear.ker
+    ∏ i, ((cyclotomicGp g ^ (-κ i)).val • (g : Gp p) • x i) ^ ν.val i).vecMulLinear.ker
   let W' : Submodule ℂ_[p] (F.support → ℂ_[p]) := (Fintype.linearCombination ℂ_[p]
-    fun ν : F.support ↦ ∏ i, (T (κ i) * C (x i)) ^ ν.1 i).ker
+    fun ν : F.support ↦ ∏ i, (T (κ i) * C (x i)) ^ ν.val i).ker
   refine le_of_hodgeTate_stable le_rfl u W W'
     (fun a ha ↦ ?_) (fun v ν hv _ h_supp _ _ ↦ ?_) (funext fun g ↦ hV g.prop)
   · -- Stability: for `k ∈ V`, apply `k` to the equation of `W` at `k⁻¹ * g`.

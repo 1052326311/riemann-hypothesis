@@ -1,6 +1,7 @@
 module
 
 public import Lib.CM.GoodReduction
+import TauCeti.Analysis.SpecialFunctions.Elliptic.LatticeClassification
 
 /-!
 # Galois conjugates of CM curves: conjugate sections, isogenies and translates of θ
@@ -234,7 +235,7 @@ lemma exists_conjugate_section (ha₁ : C'.a₁ = σ C.a₁) (z : ℂ) :
     refine ⟨C.differentiable_monomialSection j, C'.monomialSection j, C'.monomialSection_mem j,
       taylorAtZero_monomialSection σ ha₁ j, ?_⟩
     simp [monomialSection, hθ, hσ, hG, pow_add, mul_pow, pow_mul', field]
-  | zero => exact ⟨by fun_prop, 0, by simp, by simp [Pi.zero_def, taylorVia]⟩
+  | zero => exact ⟨by fun_prop, 0, by simp, by simp [Pi.zero_def]⟩
   | add f₁ f₂ _ _ ih₁ ih₂ =>
     obtain ⟨hf₁_diff, g₁, hg₁, hg₁_ser, hg₁_val⟩ := ih₁
     obtain ⟨hf₂_diff, g₂, hg₂, hg₂_ser, hg₂_val⟩ := ih₂
@@ -392,7 +393,7 @@ lemma exists_galConjugate_of_g₂_g₃ (L : PeriodPair) (hg₂ : L.g₂ = σ C.g
 The proof takes the lattice with the invariants `σ g₂`, `σ g₃`. -/
 lemma exists_galConjugate : ∃ C' : CMLattice d, C'.a₁ = σ C.a₁ := by
   obtain ⟨L, hg₂, hg₃⟩ : ∃ L : PeriodPair, L.g₂ = σ C.g₂ ∧ L.g₃ = σ C.g₃ :=
-    exists_lattice_of_g₂_g₃
+    PeriodPair.exists_g₂_g₃_eq
       (by simpa [map_ofNat] using σ.injective.ne (weierstrass_disc_ne_zero C.periodPair))
   obtain ⟨C', -, h_a₁⟩ := C.exists_galConjugate_of_g₂_g₃ σ L hg₂ hg₃
   exact ⟨C', h_a₁⟩

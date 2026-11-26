@@ -149,7 +149,7 @@ structure AnalyticFamily (D : PEL E) where
   /-- The parameter domain, an open subset of ℂⁿ⁻¹. -/
   domain : TopologicalSpace.Opens (BallBase D.Index)
   /-- The domain is non-empty and connected. -/
-  isConnected : IsConnected domain.1
+  isConnected : IsConnected domain.carrier
   /-- The adelic frame g, the same for all members of the family. -/
   frame : GL D.Index (𝔸f E)
   /-- The reflection J_b attached to the parameter b. -/
@@ -783,6 +783,10 @@ def AnalyticFamily.heckeTranslate (f : AnalyticFamily D) (γ : GUPlus E D.Index)
   have h_similitude : ∃ c : ℚ, 0 < c ∧ IsFrameFor ((c : E) • 1) γ.val :=
     (mem_GUPlus_iff.1 γ.prop).left
   choose c hc hγ using h_similitude
+  have h_pos (b : BallBase D.Index) (u : BallFibre E D.Index) (hu : u ≠ 0) :
+      0 < ((c • (f.torus b).automorphyForm) u u).re := by
+    rw [_root_.smul_apply, _root_.smul_apply, re_qsmul]
+    exact smul_pos hc (f.re_pos b u hu)
   exact
     { domain := f.domain
       isConnected := f.isConnected
@@ -803,9 +807,7 @@ def AnalyticFamily.heckeTranslate (f : AnalyticFamily D) (γ : GUPlus E D.Index)
               mk₂_apply, smul_neg, Rat.smul_def, mul_sum, mul_left_comm, map_mul, implies_true,
               map_smul', map_ratCast, smul_mulVec, dotProduct_smul, smul_eq_mul, ratCast_re,
               ratCast_im, mul_im, zero_add, sub_zero]
-          isPosRiemann := isPosRiemann_of_re_pos fun u hu ↦ by
-            rw [_root_.smul_apply, _root_.smul_apply, re_qsmul]
-            exact smul_pos hc (f.re_pos b u hu)
+          isPosRiemann := isPosRiemann_of_re_pos (h_pos b)
           reflection := x.reflection
           adjoint a u v := by
             simpa only [ThetaTori.PeriodMap.intAction, RingHom.coe_comp, Function.comp_apply,
@@ -815,9 +817,7 @@ def AnalyticFamily.heckeTranslate (f : AnalyticFamily D) (γ : GUPlus E D.Index)
       analyticAt := f.analyticAt
       eq_zero_of_linear := f.eq_zero_of_linear
       form_const := by simp only [f.form_const 0, _root_.smul_apply, implies_true, and_self]
-      re_pos b u hu := by
-        rw [_root_.smul_apply, _root_.smul_apply, re_qsmul]
-        exact smul_pos hc (f.re_pos b u hu) }
+      re_pos := h_pos }
 
 /-- Let `f` be an analytic family whose frame `f.frame` has the sign condition for the matrix `β`
 and some complex matrix `ℓ` (only `β` is used afterwards) (`hβ`), let `H = Φ_{v₀}(β)` be negative

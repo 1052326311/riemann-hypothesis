@@ -48,13 +48,6 @@ Known; see `Lib.GaloisRep.Main.OddRank` for sources.
 
 open NumberField Matrix New Variety Period IsLocalization RingHom Subgroup Gf
 
-/-- `conjAtSplit w g` is the inverse transpose of the unitary element `ofSplitPlace w g`. -/
-private lemma New.GaloisRep.invTransposeGL_ofSplitPlace_eq_conjAtSplit {E : Type} [Field E]
-    [CMBase E] {n : Type} [Fintype n] [DecidableEq n] {w : SplitFinPlace E}
-    (g : GL n (LocField (w : FinPlace E))) :
-    invTransposeGL (ofSplitPlace w.prop g).val = conjAtSplit w g :=
-  rfl
-
 /-- Moving a coset representative at a split place. Let the cosets modulo the level `levelGU n 𝔑`
 of `toFinGL y₀ * invTransposeGL u₀` and of `x` agree, and let `𝔑 ∉ star w` for the split place `w`.
 Then for some `c` at `w` and all `y : GL n E` and `g` at `w`, the cosets of
@@ -79,7 +72,7 @@ private lemma New.GaloisRep.exists_forall_mk_eq_mk_mul_conjAtSplit {E : Type} [F
   refine ⟨c, fun y g ↦ QuotientGroup.eq.mpr ?_⟩
   have h_elt : (toFinGL (y * y₀) * invTransposeGL (u₀ * ofSplitPlace w.prop (c * g)).val)⁻¹ *
       (toFinGL y * (x * conjAtSplit w g)) = (conjAtSplit w c)⁻¹ * κ := by
-    simpa [mul_assoc, κ, invTransposeGL_ofSplitPlace_eq_conjAtSplit] using
+    simpa [mul_assoc, κ] using!
       (h_comm g).symm.inv_mul_cancel
   rw [h_elt]
   exact mul_mem (inv_mem h_loc) h_mem
@@ -104,7 +97,7 @@ lemma New.GaloisRep.exists_frame_extension {E : Type} [Field E] [CMBase E] {n W 
       ∀ w : SplitFinPlace E, 𝔑 ∉ (star w.val).asIdeal → ∀ x : GL n (𝔸f E),
         ∃ L : (Gf E n → W) →ₗ[ℂ] W, ∀ (y : GL n E) (g : GL n (LocField (w : FinPlace E))),
         φ (toFinGL y * (x * conjAtSplit w g)) =
-          ξ y (L (rightRegular ℂ (Gf E n) W (ofSplitPlace w.2 g) f)) := by
+          ξ y (L (rightRegular ℂ (Gf E n) W (ofSplitPlace w.property g) f)) := by
   have h_frame (u : Gf E n) : IsSignedFrameFor (invTransposeGL u.val) 1 1 :=
     isSignedFrameFor_one (entryConj u)
   let Q (p : GL n E × Gf E n) : GL n (𝔸f E) ⧸ levelGU n 𝔑 := ⟦toFinGL p.1 * invTransposeGL p.2.val⟧
@@ -181,7 +174,7 @@ lemma New.GaloisRep.exists_central_eigenform {E : Type} [Field E] [CMBase E] {d 
       ∀ w : SplitFinPlace E, 𝔑 ∉ (star w.val).asIdeal → ∃ L : (Gf E n → W) →ₗ[ℂ] GL n (𝔸f E) → W,
         ∀ g : GL n (LocField (w : FinPlace E)),
         rightRegular ℂ (GL n (𝔸f E)) W (conjAtSplit w g) ψ =
-          L (rightRegular ℂ (Gf E n) W (ofSplitPlace w.2 g) f) := by
+          L (rightRegular ℂ (Gf E n) W (ofSplitPlace w.property g) f) := by
   obtain ⟨φ, hφ, hφ_level, hφ_zero, hφ_loc⟩ := exists_frame_extension ξ h_rat h_level
   choose L hL using hφ_loc
   let s : (𝔸f (QuadField d))ˣ →* GL n (𝔸f E) := centralScalar
@@ -204,7 +197,7 @@ lemma New.GaloisRep.exists_central_eigenform {E : Type} [Field E] [CMBase E] {d 
     · intro y z
       simp [ρ, hφ_rat, mul_assoc]
     · refine fun z hz ↦ hφ_zero _ fun h_frame ↦ hz ?_
-      simpa [s, ratConj] using h_frame.mul 1 (inv_mem (centralScalar_mem_GU x).left)
+      simpa [s, ratConj] using h_frame.mul 1 (inv_mem (mem_GU_centralScalar x))
     · simp +contextual [ρ, funext_iff, h_central, ← mul_assoc, hφ_level]
   have : Module.Finite ℂ (Variety.definiteForms 𝔑 ξ) := finite_definiteForms ξ h_neat
   have : Module.Finite ℂ (cyclicSpan ρ φ) := .of_fg (.of_le .of_finite h_le)
@@ -405,7 +398,7 @@ lemma New.GaloisRep.centralChar_mem_algHeckeChars_and_charUnramifiedAt {E : Type
       ω.toHomUnits x = 1 := Units.ext (hω_eq (hψ_level ⟨centralScalar x, hx⟩))
   refine ⟨⟨?_, fun x ↦ hω_eq (funext fun y ↦ ?_)⟩, fun w hw x hx ↦ hω_level _ ?_⟩
   · -- The kernel contains the ideles whose central scalar has level `𝔑`, an open subgroup.
-    refine isOpen_mono (fun x hx ↦ hω_level x ⟨(centralScalar_mem_GU x).left, mem_comap.mp hx⟩)
+    refine isOpen_mono (fun x hx ↦ hω_level x ⟨mem_GU_centralScalar x, mem_comap.mp hx⟩)
       ((Variety.isOpen_congruenceGL_span h𝔑).preimage (.of_coeHom_comp <| .matrix_diagonal ?_))
     simp [starRingEnd_apply]
     fun_prop
@@ -419,7 +412,7 @@ lemma New.GaloisRep.centralChar_mem_algHeckeChars_and_charUnramifiedAt {E : Type
       _ = _ := by simp [z, hξ_centre]
   · -- The norm of a local unit at `w` gives an integral scalar, trivial at the places of `𝔑`.
     obtain ⟨-, -, hw_conj⟩ := hw
-    refine mem_levelGU_of_map_evalAt_eq (centralScalar_mem_GU _).left ?_ fun u hu ↦
+    refine mem_levelGU_of_map_evalAt_eq (mem_GU_centralScalar _) ?_ fun u hu ↦
       ⟨1, by simpa using evalAt_centralScalar_of_ne (hw_conj u · hu) x⟩
     have h_unit : locIdele w x ∈ (Ô E).units :=
       idelesUnitOff_empty.le (locIdele_mem_idelesUnitOff hx)
@@ -532,7 +525,7 @@ private lemma New.GaloisRep.exists_padicRep_of_pel {ℓ : ℕ} {E : Type} {d : �
   let R := Localization.subalgebra E M hM_le
   -- `R` is not a field, as `v` extends to a nonzero proper ideal; so maximal ideals are nonzero
   -- and lie over safe places.
-  have hR_field : ¬IsField R := Ring.not_isField_of_ne_of_ne (Ideal.map_ne_bot_of_ne_bot v.3)
+  have hR_field : ¬IsField R := Ring.not_isField_of_ne_of_ne (Ideal.map_ne_bot_of_ne_bot v.ne_bot)
     ((map_algebraMap_ne_top_iff_disjoint ..).mpr ((hM v).mpr hv_safe))
   have hR (𝔪 : Ideal R) (h𝔪 : 𝔪.IsMaximal) : D.IsGoodAt (𝔪.comap (algebraMap _ R)) :=
     hD_good _ ((hM ⟨_, .comap _, (bot_lt_under_prime M R hM_le 𝔪
@@ -731,7 +724,7 @@ private lemma New.GaloisRep.exists_padicRep_of_cuspidal_type_at_embedding {ℓ :
   -- `star w'` lie outside `S`.
   obtain ⟨hF_good, h𝔑_star_w₀, h𝔑_w₁, h𝔑_star_w₁⟩ :=
     isSafe_and_mem_of_mem_iff h𝔑_mem hN hS hw₀_split hv hw' hw₁ hw₁_far
-  have h_good (w : FinPlace E) : IsSafe 𝔑 w → 𝔑 ∈ w₀.1 ∧ w ∉ S ∧ star w ∉ S :=
+  have h_good (w : FinPlace E) : IsSafe 𝔑 w → 𝔑 ∈ w₀.asIdeal ∧ w ∉ S ∧ star w ∉ S :=
     mem_and_notMem_of_isSafe h𝔑_mem h_cover hS ⟨h𝔑_star_w₀, h𝔑_w₁, h𝔑_star_w₁⟩ w
   -- `t w j` is the eigenvalue of the `j`-th Hecke operator at `w` on `f`.
   have h_eig_safe (w : SafePlace 𝔑) : HasHeckePolyAt f w.val.val w.val.prop (P w.val.val) := by
@@ -806,7 +799,7 @@ private lemma New.GaloisRep.exists_padicRep_of_cuspidal_type_at_embedding {ℓ :
   -- At an embedding inducing `w` the type of the twist is `μ`, which cancels the shift in `J`.
   simp +contextual [J, h_s₀, hμ, hv₀, AlgHeckeChar.baseChange, apply_ite, algebraMap_toAlgebra,
     Pi.single_apply]
-  grind
+  lia
 
 /-- A weak form of a case of the theorem on Galois representations attached to cohomological
 cuspidal forms, in odd rank `a`. Let `f` be a form of weight `κ` on the definite unitary group,

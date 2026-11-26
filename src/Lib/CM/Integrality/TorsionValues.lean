@@ -311,7 +311,7 @@ lemma torsionValue_sigma_two_mul_sq (u : ℂ) :
 
 /-- For a prime `d ≡ 7 (mod 8)`, doubling acts on `w(u) = (θ[u]², σ[u]²)` through `doublingForms`,
 the quartic forms `(w₀² - w₁²)²` and `w₀ w₁ (4 w₀² + a₁² w₀ w₁ + 4 w₁²)`. -/
-lemma squarePair_two_mul [PrimeSevenModEight d] (u : ℂ) :
+lemma squarePair_two_mul (u : ℂ) :
     C.squarePair (2 * u) = doublingForms (ιₚ C.a₁) (C.squarePair u) := by
   ext
   · simp only [squarePair, doublingForms, C.torsionValue_theta_two_mul u, map_sub, map_pow,
@@ -322,7 +322,7 @@ lemma squarePair_two_mul [PrimeSevenModEight d] (u : ℂ) :
 /-- For a prime `d ≡ 7 (mod 8)` the pair `w(2 ^ j u)` is the `j`-th iterate of the map
 `doublingForms (ιₚ C.a₁)`, whose two quartic forms are given in `squarePair_two_mul`, at
 `w(u) = (θ[u]², σ[u]²)`. -/
-lemma squarePair_two_pow_mul [PrimeSevenModEight d] (u : ℂ) (j : ℕ) :
+lemma squarePair_two_pow_mul (u : ℂ) (j : ℕ) :
     C.squarePair (2 ^ j * u) = (doublingForms (ιₚ C.a₁))^[j] (C.squarePair u) := by
   induction j with
   | zero => simp

@@ -546,7 +546,7 @@ lemma norm_constantCoeff_le_of_mem_multiSeriesRing (hH : H ∈ C.multiSeriesRing
     ‖constantCoeff H‖ ≤ 1 := by
   obtain ⟨G, rfl⟩ := C.mem_multiSeriesRing_iff.1 hH
   rw [constantCoeff_subst_translatedY_subst, constantCoeff_map]
-  exact (constantCoeff G).2
+  exact (constantCoeff G).property
 
 /-- An element of `𝒪[[y(μ_i z)]]` whose constant term has norm one is a unit of that ring. -/
 lemma exists_mul_eq_one_of_mem_multiSeriesRing (hH : H ∈ C.multiSeriesRing μ)

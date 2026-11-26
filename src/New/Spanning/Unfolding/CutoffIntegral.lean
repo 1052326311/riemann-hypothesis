@@ -211,7 +211,7 @@ lemma exists_classBasis_eq_fromBlocks {E : Type} [Field E] [CMType E] [HasPrimit
 conjugates into the principal congruence subgroup of level `S.M`. Then the row of γ − 1 at e_a,
 divided by `S.M`, has integral coordinates in the basis `classBasis c` of the lattice of `c`. -/
 lemma classUnipotent_sub_one_div_M_row_integral {E : Type} [Field E] [CMType E]
-    [HasPrimitiveRoot5040 E] {𝔰 : Shape} {S : Filling E 𝔰} {c : S.Classes} [S.IsAdmissible]
+    [HasPrimitiveRoot5040 E] {𝔰 : Shape} {S : Filling E 𝔰} {c : S.Classes}
     (γ : S.classUnipotent c) (a : Fin 𝔰.ϱ) (j : 𝔰.BesselIndex) :
     (finAdeleMatrix ((S.M : E)⁻¹ • ((γ : Matrix 𝔰.BesselIndex 𝔰.BesselIndex E) - 1)) (inl a) ᵥ*
       (classBasis c).val) j ∈ Ô E := by

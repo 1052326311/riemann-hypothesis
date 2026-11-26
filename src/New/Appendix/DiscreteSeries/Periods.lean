@@ -1,6 +1,5 @@
 module
 
-public import Lib.General.LinearAlgebra.BlockEmbeddings
 public import New.Appendix.DiscreteSeries.GaussianShape
 public import New.Appendix.DiscreteSeries.Localization
 

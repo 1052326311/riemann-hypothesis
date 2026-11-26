@@ -689,7 +689,7 @@ lemma hasSum_besselOrbitalIntegral_cosetAmplitude [WeilData E]
         Subtype.ext_iff, exists_and_left, exists_and_right]
       simp
     obtain ⟨⟨v, hv, v_unique⟩, v', hv', v'_unique⟩ :=
-      h_rep _ (inv_mem u.2) _ (inv_mem u'.2) (by simpa [f] using h_over)
+      h_rep _ (inv_mem u.2) _ (inv_mem u'.2) (by simpa using h_over)
     rw [tsum_eq_single (v, v'), indicator_of_mem ((h_iff (v, v')).2 ⟨hv, hv'⟩), Pi.one_apply]
     refine fun z hz ↦ indicator_of_notMem (fun h_mem ↦ hz ?_) _
     exact Prod.ext (v_unique _ ((h_iff z).1 h_mem).1) (v'_unique _ ((h_iff z).1 h_mem).2)
@@ -743,7 +743,7 @@ the group of block upper unitriangular isometries, and put `K(M) = F.congruenceS
 `T` with the cosets of `𝖴 ∩ K(M)` in 𝖴 at `T`. This is stated by a list `r` of rational
 representatives, one for each coset at `T`. -/
 lemma IsFillingData.exists_injective_mem_besselU_and_isIntegralOff [hF : S.IsFillingData T F]
-    [hM_inv : Fact (S.ideleM⁻¹.val ∈ integralOff T)] [S.IsAdmissible] (c : S.Classes) :
+    [hM_inv : Fact (S.ideleM⁻¹.val ∈ integralOff T)] (c : S.Classes) :
     ∃ r : F.UnipotentCosets → S.G E,
       Injective r ∧
       (∀ w : F.UnipotentCosets, r w ∈ besselU) ∧
