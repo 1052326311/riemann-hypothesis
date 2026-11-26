@@ -1,7 +1,12 @@
 module
 
-public import TauCeti.Analysis.Real.Sqrt
-public import New.Spanning.RemainingTerms.Sum
+import Mathlib.Algebra.Order.Star.Int
+import Mathlib.Algebra.Order.Star.Real
+import TauCeti.Analysis.Real.Sqrt
+public import New.Spanning.RemainingTerms.Size
+public import New.Spanning.Unfolding.Climbing
+import Lib.Adelic.Unitary.CongruenceLevels
+import New.Spanning.RemainingTerms.Sum
 
 /-!
 # The expansion of the squares and the second moment near the Bessel subgroup
@@ -303,10 +308,10 @@ lemma isStable_compl_besselS :
     S.IsStable ((S.ratMiddle E).besselS : Set (S.G E))ᶜ :=
   fun u hu u' hu' γ ↦ (S.isStable_besselS u hu u' hu' γ).not
 
-/-- Let `E` contain a primitive `5040`-th root of unity. An integral `ζ ∈ E`
+/-- An integral `ζ ∈ E`
 with `ζ ζ̄ = 1` that is `1` modulo every place of
 `chosenPlaces i`, the finite places of norm `p_i = levelPrime i` chosen in `S`, is `1`. -/
-lemma eq_one_of_reduceAt_scalar_eq_one [HasPrimitiveRoot5040 E] {ζ : E}
+lemma eq_one_of_reduceAt_scalar_eq_one {ζ : E}
     (hζ : ζ * star ζ = 1) (h_int : (ζ : 𝔸f E) ∈ Ô E) (i : Fin 2)
     (h_residue : ∀ w : S.chosenPlaces i, New.reduceAt (w : FinPlace E) ⟨ζ, h_int⟩ = 1) : ζ = 1 := by
   -- View `ζ` as an isometry `z` of the standard lattice of rank one and apply freeness to it.

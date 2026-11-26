@@ -1,13 +1,21 @@
 module
 
-public import Mathlib.Algebra.Azumaya.Basic
-public import Mathlib.Algebra.Central.End
-public import Mathlib.Algebra.Module.ZLattice.Summable
-public import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
-public import Mathlib.RingTheory.Etale.Weakly
-public import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
-public import Lib.General.Analysis.HolomorphicIntegrals
+import Mathlib.Algebra.Azumaya.Basic
+import Mathlib.Algebra.Central.End
+import Mathlib.Algebra.Module.StablyFree.Basic
+import Mathlib.Algebra.Module.ZLattice.Summable
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected
+import Mathlib.Analysis.Convex.Contractible
+import Mathlib.RingTheory.Etale.Weakly
+import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
+import Mathlib.RingTheory.PiTensorProduct
+import Mathlib.RingTheory.RegularLocalRing.Defs
+import Mathlib.RingTheory.SimpleRing.Principal
+import Mathlib.RingTheory.TotallySplit
+import Mathlib.Tactic.Linter.Style
 public import Lib.Shimura.ComplexTheta.AppellHumbertData
+import Lib.General.Analysis.HolomorphicIntegrals
 
 /-!
 # Theta functions on complex tori: dimension formula, base points, multipliers
@@ -619,10 +627,10 @@ lemma IsAppellHumbert.schur_lemma {Q : End ℂ (B.thetaSpace χ)}
 vector of the dual lattice into `L`. -/
 lemma IsAppellHumbert.exists_nsmul_mem_of_mem_dualLattice :
     ∃ N ≠ (0 : ℕ), ∀ a ∈ B.dualLattice, N • a ∈ L := by
-  -- Take for `N` the index of `L` in its dual, which is the square of a positive dimension.
-  refine ⟨L.toAddSubgroup.relIndex B.dualLattice.toAddSubgroup, ?_,
+  -- The index is the cardinality of the finite quotient of the dual lattice.
+  exact ⟨L.toAddSubgroup.relIndex B.dualLattice.toAddSubgroup,
+    Nat.card_ne_zero.mpr ⟨inferInstance, hB.finite_dualLattice_quotient⟩,
     fun a ha ↦ L.toAddSubgroup.nsmul_relIndex_mem ha⟩
-  simpa [← hB.finrank_thetaSpace_sq] using hB.finrank_thetaSpace_pos.ne'
 
 end New
 

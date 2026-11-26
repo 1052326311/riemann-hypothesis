@@ -1,33 +1,32 @@
 module
 
-public import Aesop.Frontend.Tactic
-public import Aesop.Main
 public import Mathlib.Algebra.Category.FGModuleCat.Basic
-public import Mathlib.Algebra.Category.Grp.AB
 public import Mathlib.Algebra.Category.Grp.Adjunctions
 public import Mathlib.Algebra.Category.Grp.FiniteGrp
-public import Mathlib.Algebra.Category.Grp.Zero
-public import Mathlib.Algebra.Divisibility.Prod
-public import Mathlib.Algebra.Homology.DerivedCategory.Ext.EnoughInjectives
 public import Mathlib.Algebra.Homology.DerivedCategory.Ext.Map
 public import Mathlib.Algebra.TrivSqZeroExt.Ideal
 public import Mathlib.AlgebraicGeometry.Group.Affine
 public import Mathlib.AlgebraicGeometry.Morphisms.UnderlyingMap
-public import Mathlib.CategoryTheory.Abelian.Exact
 public import Mathlib.CategoryTheory.Abelian.FunctorCategory
-public import Mathlib.CategoryTheory.Abelian.GrothendieckAxioms.FunctorCategory
-public import Mathlib.CategoryTheory.Abelian.GrothendieckCategory.EnoughInjectives
-public import Mathlib.CategoryTheory.Functor.ReflectsIso.Exact
-public import Mathlib.CategoryTheory.Generator.Presheaf
-public import Mathlib.CategoryTheory.Limits.FunctorCategory.Filtered
 public import Mathlib.CategoryTheory.Linear.FunctorCategory
 public import Mathlib.Combinatorics.Quiver.ReflQuiver
-public import Mathlib.RingTheory.Henselian
-public import Mathlib.RingTheory.LocalProperties.Reduced
-public import Mathlib.RingTheory.SimpleRing.Principal
-public import Mathlib.RingTheory.Valuation.LocalSubring
-public import Mathlib.Tactic.ENatToNat
 public import Mathlib.Topology.LocallyConstant.Algebra
+public import Mathlib.Algebra.Category.Grp.Abelian
+public import Mathlib.CategoryTheory.Abelian.GrothendieckCategory.Basic
+import Mathlib.Algebra.Category.Grp.AB
+import Mathlib.Algebra.Category.Grp.Zero
+import Mathlib.Algebra.Divisibility.Prod
+import Mathlib.Algebra.Homology.DerivedCategory.Ext.EnoughInjectives
+import Mathlib.CategoryTheory.Abelian.Exact
+import Mathlib.CategoryTheory.Abelian.GrothendieckAxioms.FunctorCategory
+import Mathlib.CategoryTheory.Abelian.GrothendieckCategory.EnoughInjectives
+import Mathlib.CategoryTheory.Functor.ReflectsIso.Exact
+import Mathlib.CategoryTheory.Generator.Presheaf
+import Mathlib.CategoryTheory.Limits.FunctorCategory.Filtered
+import Mathlib.RingTheory.Henselian
+import Mathlib.RingTheory.LocalProperties.Reduced
+import Mathlib.RingTheory.SimpleRing.Principal
+import Mathlib.RingTheory.Valuation.LocalSubring
 public import Lib.General.Algebra.AbsIntegrallyClosed
 
 /-!
@@ -227,16 +226,16 @@ def cechFunctor (m : ℕ) : Arrow (C ⥤ Type 1) ⥤ C ⥤ Type 1 :=
   toArrowFunctor ⋙ (whiskeringRight C (Arrow (Type 1)) (Type 1)) (cech Arrow.leftToRight m)
 
 /-- For u: W → Y and p: E → Y, the fibre product of W and E over Y. -/
-def fibreProd : C ⥤ Type 1 :=
+def fiberProd : C ⥤ Type 1 :=
   CategoryTheory.Functor.mk (fun A ↦ {x : W A × E A // u A x.1 = p A x.2}) fun f ↦
     ↾fun x ↦ ⟨(W.map f x.val.1, E.map f x.val.2), by aesop⟩
 
 /-- The first projection from the fibre product of W and E over Y to W. -/
-def fibreProd.fst : fibreProd u p ⟶ W where
+def fiberProd.fst : fiberProd u p ⟶ W where
   app _ := ↾fun x ↦ x.val.1
 
 /-- The second projection from the fibre product of W and E over Y to E. -/
-def fibreProd.snd : fibreProd u p ⟶ E where
+def fiberProd.snd : fiberProd u p ⟶ E where
   app _ := ↾fun x ↦ x.val.2
 
 /-- The map h_A → Y corresponding to a point y of Y(A) by the Yoneda lemma. -/
@@ -485,7 +484,7 @@ def unitPoints : Subfunctor X :=
   Subfunctor.mk (fun _ ↦ {x | ∀ a ∈ I, IsUnit (baseRingMap s x a)}) (by simp_all [IsUnit.map])
 
 /-- For s: X → h_R and a ring map φ: R → B, the base change X_B = X ×_{h_R} h_B. -/
-abbrev baseChangeOf : CommRingCat ⥤ Type 1 := fibreProd s (reprMap φ)
+abbrev baseChangeOf : CommRingCat ⥤ Type 1 := fiberProd s (reprMap φ)
 
 end New.Variety
 

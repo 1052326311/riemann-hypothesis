@@ -1,9 +1,13 @@
 module
 
-public import Mathlib.AlgebraicGeometry.Morphisms.LocalFlatDescent
-public import Lib.General.Geometry.SerreTheorem
+import Mathlib.AlgebraicGeometry.Modules.Sheaf
+import Mathlib.AlgebraicGeometry.Morphisms.LocalFlatDescent
+import Mathlib.CategoryTheory.EffectiveEpi.Comp
 public import Lib.Shimura.ThetaNormality.RiemannRelation
 public import Lib.Shimura.Uniformisation.TorusModel
+public import Lib.Adelic.Hecke.ClassSums
+import Lib.General.Geometry.SerreTheorem
+import Lib.Shimura.AbelianScheme.Pairings
 
 /-!
 # Linear systems and theta families from dense complex points carrying theta tori
@@ -942,7 +946,7 @@ noncomputable def Variety.fibrePointMap {E : Type} [Field E] {S : Scheme}
   ((isGroupBaseChange_counit (O := 𝓞 E) (A := A) η).pointEquiv (T := 𝟙_ _)).symm.toLinearMap
 
 /-- The point of the fibre given by `fibrePointMap A η u` is the pair of `u` and the point `η`. -/
-lemma Variety.fibrePointMap_left {E : Type} [Field E] [CMBase E] {S : Scheme}
+lemma Variety.fibrePointMap_left {E : Type} [Field E] {S : Scheme}
     {η : Spec (CommRingCat.of ℂ) ⟶ S} (A : Over S) [AddObj A] [ModuleObj (𝓞 E) A]
     (u : Over.mk η ⟶ A) :
     (fibrePointMap (E := E) A η u).left = (lift u (𝟙 (Over.mk η))).left :=

@@ -1,8 +1,15 @@
 module
 
-public import Mathlib.Order.Interval.Finset.Box
-public import Lib.ClassField.GreenbergWiles.SelmerLevels
+import Mathlib.Order.Interval.Finset.Box
+import Mathlib.RingTheory.ZMod.UnitsCyclic
+import Mathlib.Tactic.Linter.Style
 public import Lib.Cyclotomic.Stickelberger
+public import Lib.General.NumberTheory.ImaginaryQuadraticField
+import Lib.Adelic.Adeles.LocalFactors
+import Lib.ClassField.GreenbergWiles.SelmerLevels
+import Lib.ClassField.Places.TameInertia
+import Lib.Cyclotomic.Voronoi
+import Lib.General.NumberTheory.FrobeniusOrbits
 
 /-!
 # Kolyvagin's derivative cocycles from Gauss sums, for one set of primes
@@ -749,7 +756,7 @@ private lemma cyclotomicPowDirichlet_sub_one_smul_sum_eq_zero_of_isJacobiFamily
       B.valuation (l ^ n • (y x - floorDiff c x • r)).toMul.val = 1 := by
     have h_ord : l ^ n • ordRat ℚ B (y x) = floorDiff c x := by simpa using hJ.ordRat_eq hx
     apply hv.ordRat_eq_zero_iff.mp
-    simp [smul_sub, smul_comm, h_ord, hv.ordRat_ofBase, hv.isUniformiser_iff.mp unif, hr]
+    simp [smul_sub, smul_comm, h_ord, hv.ordRat_ofBase, hv.isUniformizer_iff.mp unif, hr]
   have hτ_cyc : τ ∈ cycloGalGroup (N * l ^ n) := decompGroup_le_cycloGalGroup hpB hp_one hτ.left
   have hl : B.valuation (l ^ n : ℕ) = 1 :=
     (hp_one.of_dvd (dvd_mul_left _ _)).coprime_of_modEq_one.valuation_eq_one hpB
