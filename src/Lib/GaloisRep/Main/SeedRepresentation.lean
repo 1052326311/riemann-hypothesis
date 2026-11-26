@@ -281,8 +281,7 @@ private lemma New.GaloisRep.card_eq_and_eventually_charpoly_eq_of_hasNoSmallRela
       (T⁻¹.val * (r g).val.map (algebraMap ..)).uncurry = fun i : Fin b × Fin b ↦
         (cyclotomicGp (j g) ^ (-k i.1)).val • j g • T⁻¹.val.uncurry i := by
     refine hT.mono fun g hg ↦ funext fun i ↦ ?_
-    -- `erw`: `Function.uncurry` here takes a matrix, read as a function of two indices
-    erw [← inv_mul_apply_of_isHodgeTateFrame hg]
+    refine Eq.trans ?_ (inv_mul_apply_of_isHodgeTateFrame hg i.1 i.2)
     simp [Matrix.mul_apply, Function.uncurry]
   -- So the cocharacter with weights `k` lies in the Zariski closure of the image of `r`, and
   -- `card_eq_and_charpoly_eq` gives the rank of `r` and its characteristic polynomials.
