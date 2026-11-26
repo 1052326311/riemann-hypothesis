@@ -431,34 +431,26 @@ theorem Gauge.formMajorant_zero_sq_le_of_hasDeepVector (hk : F.IsCut W) (hx : x 
     F.formMajorant 0 1 1 W x ^ 2 ≤ (σ ^ F.volumeExponent) ^ 2 * Γ.weightedSquareProduct 0 1 1 W
       x := by
   let k : T.G → T.G → ℂ := frameCorrelation W 1
-  -- At floor `0` every point is near, as soon as the box is not empty. So a point is active if
-  -- its correlation is not zero.
-  have h_near {z : T.G} (y : T.G) (hy : W y ≠ 0) : F.IsNear 0 z := by
-    obtain ⟨u, -, hu_box⟩ : ∃ u ∈ T.besselU, u * y ∈ F.boxSet := hk.exists_mul_mem_box hy
-    exact ⟨u * y * z⁻¹, by simp, by simpa using hu_box⟩
-  have h_deep_orbit (y : T.G) (_ : y ∈ floorGroup 0) (hy : k (y * 1) (y * (1 * x)) ≠ 0) :
-      ∃ a : Fin 𝔰.ϱ, 0 ≤ a.val ∧ σ⁻¹ ≤ F.depth a (y * 1) x := by
-    have h_pair : ⟪W y, W (y * x)⟫_ℂ ≠ 0 := by simpa [k] using hy
-    have h_ne : W y ≠ 0 := fun h ↦ h_pair (by simp [h])
-    simpa using h_deep y ⟨h_pair, h_near y h_ne, h_near y h_ne⟩
+  -- At floor `0` every point is near as soon as the box is nonempty.
+  have h_near {y z : T.G} (hy : W y ≠ 0) : F.IsNear 0 z :=
+    let ⟨u, _, hu⟩ := hk.exists_mul_mem_box hy
+    ⟨u * y * z⁻¹, by simp, by simpa using hu⟩
   -- The gain for one pivot; the weight of length `0` is `1`.
   have h_pivot_le : F.pivotL1Norm 0 k 1 x ^ 2 ≤
       σ ^ F.volumeExponent * Γ.floorsConst * F.weightedSquareSum k x 0 1 := by
-    have ker : F.IsPairingKernel 0 k 1 := Γ.isPairingKernel_frameCorrelation_one hk 0
-    simpa [depthWeight] using Γ.pivotL1Norm_sq_le_of_deep (l := 0) (g := 1) ker hx h_deep_orbit
+    simpa [depthWeight] using Γ.pivotL1Norm_sq_le_of_deep (l := 0) (g := 1)
+      (Γ.isPairingKernel_frameCorrelation_one hk 0) hx fun y _ hy ↦ by
+        have h_pair : ⟪W y, W (y * x)⟫_ℂ ≠ 0 := by simpa [k] using hy
+        have h_ne : W y ≠ 0 := fun h ↦ h_pair (by simp [h])
+        simpa using h_deep y ⟨h_pair, h_near h_ne, h_near h_ne⟩
   have h_norm : Γ.weightedSquareProduct 0 1 1 W x =
       Γ.floorsConst ^ 3 * F.weightedSquareSum k x 0 1 ^ 2 := by
     simp [k, descConv, weylRatio, Gauge.weightedSquareProduct, PlaceData.weightedSquareIntegral,
       mul_assoc, sq]
-  have h_const : Γ.floorsConst ^ 2 ≤ Γ.floorsConst ^ 3 :=
-    pow_le_pow_right₀ (one_le_pow₀ Γ.one_le_loss) (by norm_num)
-  calc F.formMajorant 0 1 1 W x ^ 2
-      = (F.pivotL1Norm 0 k 1 x ^ 2) ^ 2 := by rw [formMajorant_zero_eq]
-    _ ≤ (σ ^ F.volumeExponent * Γ.floorsConst * F.weightedSquareSum k x 0 1) ^ 2 := by
-        grw [h_pivot_le]
-    _ = (σ ^ F.volumeExponent) ^ 2 *
-          (Γ.floorsConst ^ 2 * F.weightedSquareSum k x 0 1 ^ 2) := by ring
-    _ ≤ _ := by grw [h_norm, h_const]
+  rw [formMajorant_zero_eq, h_norm]
+  grw [h_pivot_le]
+  rw [mul_pow, mul_pow, mul_assoc]
+  grw [pow_le_pow_right₀ (one_le_pow₀ Γ.one_le_loss) (show 2 ≤ 3 by norm_num)]
 
 /-- Let `W` be a cut Bessel function, `p` a head of length j ≤ ϱ, `q` a second sequence of units,
 `x` a position and `F.groupMeasure` a Haar measure. Let ψ be the additive character of the place,
