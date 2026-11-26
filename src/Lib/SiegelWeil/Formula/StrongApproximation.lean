@@ -45,7 +45,7 @@ of the parabolic subgroup fixing the isotropic line, then the values of `D` on t
 
 Source: M. Kneser, Starke Approximation in algebraischen Gruppen I, J. reine angew. Math. 218
 (1965); G. Shimura, Arithmetic of unitary groups, Ann. of Math. 79 (1964); survey A. Rapinchuk, MSRI
-Publ. 61 (2013).
+Publ. 61 (2014).
 -/
 
 section EqualRankConstant

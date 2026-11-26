@@ -41,7 +41,7 @@ case: highest vectors, such as products of leading minors, that are killed by ea
 second derivative ∂²/∂x_{ca}∂x_{cb} with a, b of opposite signs have matrix coefficients that extend
 holomorphically with an explicit weight. This hypothesis is stronger than pluriharmonic in the sense
 of Kashiwara–Vergne, where only the sums over c must vanish. Source: M. Kashiwara, M. Vergne, On the
-Segal–Shale–Weil representations and harmonic polynomials, Invent. Math. 44 (1978) 1–48, III 6.3,
+Segal–Shale–Weil representations and harmonic polynomials, Invent. Math. 44 (1978) 1–47, III 6.3,
 7.2; M. G. Davidson, The harmonic representation of U(p,q) and its connection with the generalized
 unit disk, Pacific J. Math. 129 (1987) 33–55.
 
