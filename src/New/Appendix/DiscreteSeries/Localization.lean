@@ -259,7 +259,8 @@ lemma exists_unitary_sub_one_eq_inclMatrix {u : Matrix X X ℂ} {Y : Type} [Fint
   calc (1 + Q * (u - 1) * Qᴴ)ᴴ * signMatrix ε * (1 + Q * (u - 1) * Qᴴ)
       = signMatrix ε + Q * (uᴴ - 1) * (Qᴴ * signMatrix ε) + signMatrix ε * Q * (u - 1) * Qᴴ +
           Q * (uᴴ - 1) * (Qᴴ * (signMatrix ε * Q)) * (u - 1) * Qᴴ := by
-        simp [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, add_assoc, add_left_comm]
+        simp [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc]
+        abel
     _ = signMatrix ε + Q * ((uᴴ - 1) + (u - 1) + (uᴴ - 1) * (u - 1)) * Qᴴ := by
         simp [hQ_sgn, hQ_sgn', hQ_iso, Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, add_assoc]
     _ = signMatrix ε := by simp [h_expand, hu]
