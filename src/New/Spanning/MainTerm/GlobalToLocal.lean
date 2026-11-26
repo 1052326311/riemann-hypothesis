@@ -743,7 +743,7 @@ the group of block upper unitriangular isometries, and put `K(M) = F.congruenceS
 `T` with the cosets of `𝖴 ∩ K(M)` in 𝖴 at `T`. This is stated by a list `r` of rational
 representatives, one for each coset at `T`. -/
 lemma IsFillingData.exists_injective_mem_besselU_and_isIntegralOff [hF : S.IsFillingData T F]
-    [hM_inv : Fact (S.ideleM⁻¹.val ∈ integralOff T)] [S.IsAdmissible] (c : S.Classes) :
+    [hM_inv : Fact (S.ideleM⁻¹.val ∈ integralOff T)] (c : S.Classes) :
     ∃ r : F.UnipotentCosets → S.G E,
       Injective r ∧
       (∀ w : F.UnipotentCosets, r w ∈ besselU) ∧
