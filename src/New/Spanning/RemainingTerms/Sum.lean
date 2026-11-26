@@ -150,12 +150,11 @@ lemma IsNearPairOverAgreeingBlock.mem_boundedDiscNearPairs {E : Type} [Field E] 
     (Submodule.finrank_le _).trans (by simp)
   ⟨hq, Nat.add_sub_cancel' h_rank, hq.corank_le_and_pairDiscriminant_le.right⟩
 
-/-- Let `S` be data of the filling theorem that satisfy the standing hypotheses `S.IsAdmissible`.
-Let `c`, `c'` be classes and `γ` a rational point of cell rank `j = S.cellRank γ` whose gauge
+/-- Let `S` be data of the filling theorem and let `c`, `c'` be classes and `γ` a rational point of cell rank `j = S.cellRank γ` whose gauge
 `G = S.levelGauge j c c' γ` is positive. If the constant `S.cellRankSecondMoment j` is at most `D`,
 then the square of the size `S.termSize c c' γ` is at most `τ⁴ D / (n_p G ^ k)`. -/
 lemma termSize_sq_le {E : Type} [Field E] [CMType E] {𝔰 : Shape} {S : Filling E 𝔰}
-    [S.IsAdmissible] {c c' : S.Classes} {γ : S.G E} {D : ℝ}
+    {c c' : S.Classes} {γ : S.G E} {D : ℝ}
     (h_gauge_pos : 0 < S.levelGauge (S.cellRank γ) c c' γ)
     (hD : S.cellRankSecondMoment (S.cellRank γ) ≤ D) :
     S.termSize c c' γ ^ 2 ≤
