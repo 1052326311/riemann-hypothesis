@@ -311,7 +311,6 @@ instance : IsScalarTower ℤ_[p] (PadicAlgCl p) BdRPlus := to₁₃₄ _ ℚ_[p]
 This is Fontaine's result that the period t is a uniformiser of B_dR^+, in the form that t and ξ
 agree up to a unit. -/
 lemma BdRPlus.associated_xi_tPeriod : Associated (xi : BdRPlus) tPeriod := by
-  classical
   -- `tPeriod` is associated to `μ * p = ξ * τ * p`, and `τ`, `p` are units of `BdRPlus` since
   -- `thetaBdR` does not kill them.
   have h_xi : Associated (xi : BdRPlus) (algebraMap Amax BdRPlus (mu * p)) := by
