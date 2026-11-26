@@ -183,8 +183,6 @@ lemma besselRealToPi_apply_snd (h : S.Fits V l kw Y η) (s : Y.besselReal) (v : 
 /-- The map `besselRealToPi` is continuous, as both components at each place are. -/
 lemma continuous_besselRealToPi (h : S.Fits V l kw Y η) : Continuous h.besselRealToPi := by
   have h_coords : Continuous h.realCoords := h.isEmbedding_realCoords.continuous
-  have h_levi : Continuous fun s : Y.besselReal ↦ Y.leviPart ⟨(s.1, 1), s.2⟩ :=
-    Y.continuous_leviPart.comp (by fun_prop)
   refine continuous_pi fun v ↦ continuous_induced_rng.2 ?_
   change Continuous fun s : Y.besselReal ↦
     (h.realCoords s v, unitSignEquiv 𝔰.κ ((Y.leviPart ⟨(s.1, 1), s.2⟩).1 v))

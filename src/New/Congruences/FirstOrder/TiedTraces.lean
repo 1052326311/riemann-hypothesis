@@ -144,8 +144,6 @@ end New.Patching.TaylorWilesPlaces
 
 namespace New.Patching.BaseLevel
 
-set_option synthInstance.maxHeartbeats 200000
-
 section BaseData
 
 variable {ℓ : ℕ} [ThePrime ℓ] [PadicIso ℓ] {E : Type} [Field E] [CMType E]
@@ -736,7 +734,7 @@ lemma lineRep_mul_eq_self (hQ : ∀ j : J, D.IsOffLevel ![] (Q.place j))
   have norm_fixed : ((weightedSum (D.lineRep Q j) P.indLine 1).1 y).1 ∈
       parahoricEigenspace (localFormRep V κ (Q.apart.star_ne j j)) (min 1) 1 := by
     refine ⟨weightedSum_indLine_mem_levelSpace hQ P 1 y, fun g hg ↦ ?_⟩
-    rw [localFormRep_apply_eq_lineRep hQ hg, ← Module.End.mul_apply, ← Subalgebra.coe_mul,
+    rw [localFormRep_apply_eq_lineRep hQ hg, ← FormEnd.mul_apply, ← Subalgebra.coe_mul,
       mul_weightedSum]
     simp [Pi.one_def]
   -- `U` preserves the forms fixed by the parahoric subgroup, hence so does `p(Ũ)`.
@@ -776,7 +774,7 @@ lemma heckeAction_mul_norm_mul_eq_zero (hQ : ∀ j : J, D.IsOffLevel ![] (Q.plac
   let S : D.integralEnd Q.place := (∑ g, D.residueRep Q g) * B 1
   have S_base (y : D.formsOfLevel Q.place) : (S.1 y).1 ∈ D.formsOfLevel ![] := by
     refine mem_formsOfLevel_empty_iff_residueRep_fixed.2 fun g ↦ ?_
-    rw [← Module.End.mul_apply, ← Subalgebra.coe_mul, ← mul_assoc, mul_sum_monoidHom]
+    rw [← FormEnd.mul_apply, ← Subalgebra.coe_mul, ← mul_assoc, mul_sum_monoidHom]
   -- A form `w` of base level in a system where `δ` does not vanish is orthogonal to the values of
   -- `U'` by the chain lemma, and the finite groups fix it.
   have orth (x : D.Eigensystem Q.place) (hx : x.1 ∈ D.Eigensystem ![]) (hδ : δ.1 x ≠ 0)

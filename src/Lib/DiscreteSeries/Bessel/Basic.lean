@@ -288,6 +288,12 @@ abbrev realFrameGram (y : 𝔰.G₁) : Matrix (Fin (𝔰.ϱ + 1)) (Fin (𝔰.ϱ 
 
 namespace RealPlace
 
+/-- For `γ ∈ G₁`, the matrix `Z(γ) = realFrameGram γ` equals `Fᴴ J₁ γ F`, with `F = 𝔰.frameCols` the
+frame (e₁, …, e_ϱ, z) and `J₁ = 𝔰.J₁`. -/
+lemma realFrameGram_eq_conjTranspose_mul (γ : 𝔰.G₁) :
+    realFrameGram γ = 𝔰.frameColsᴴ * 𝔰.J₁ * (γ.val.val * 𝔰.frameCols) := by
+  simp [← Matrix.ext_iff, inclMatrix, Shape.Form.frameGram, Matrix.mul_apply, Matrix.one_apply]
+
 /-- Coordinates on matrices, as a continuous `ℝ`-linear map. For a set `p` of positions `(a, i)`,
 a matrix `M` goes to its complex entries in row `e_a` and column `i` for `(a, i)` in `p`,
 together with the imaginary parts of its entries in row `e_a` and column `e*_a`. -/

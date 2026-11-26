@@ -950,14 +950,12 @@ lemma exists_isTodaCancellation_etaClass [Algebra A ℂ_[ℓ]] :
     .comp (.ofClass (algebraMap ..)) (Perfection.teichmuller₀ ..)
   have ρ_nat (c d : PadicTest) (f : c ⟶ d) (x : PadicTest.tilt c) :
       R.map f (ρ c x) = ρ d (tiltMap f.1 x) := by
-    -- `erw` and `rfl`: these lemmas match `R.map f` and `ρ` only up to unfolding definitions.
-    erw [c.mapGeneric_algebraMap, ← untilt_tiltMap]
-    rfl
+    -- These lemmas match `R.map f` and `ρ` only up to unfolding definitions.
+    exact (c.mapGeneric_algebraMap _ _).trans (congrArg _ (untilt_tiltMap ..).symm)
   have ρ_const (c : PadicTest) (s : OFlat) :
       ρ c (algebraMap _ _ s) = c.genericStructureMap s.untilt := by
-    -- `erw` and `rfl`: as for `ρ_nat`, these lemmas match only up to unfolding definitions.
-    erw [c.genericStructureMap_coe, ← untilt_tiltMap c.structureMap s]
-    rfl
+    -- As for `ρ_nat`, these lemmas match only up to unfolding definitions.
+    exact ((c.genericStructureMap_coe _).trans (congrArg _ (untilt_tiltMap c.structureMap s).symm)).symm
   -- With `X` the untilt of the coordinate, `f` is `[(1, 0)] - [(X, 1)]` on the disc `true` and
   -- `[(1, 0)] - [(1, X)]` on the other one.
   let f : freeAb twoDiscs ⟶ (cocycle (genericTestOver A)).extension.X₂ := desc

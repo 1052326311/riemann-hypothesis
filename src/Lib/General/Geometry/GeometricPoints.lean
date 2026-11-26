@@ -219,6 +219,7 @@ open CategoryTheory AlgebraicGeometry Algebra MorphismProperty TensorProduct Set
 namespace New.Variety
 
 /-- An étale algebra over an integral domain is reduced. -/
+@[stacks 033B "for an étale algebra over a domain"]
 lemma isReduced_of_algebra_etale (A B : Type*) [CommRing A] [CommRing B] [IsDomain A]
     [Algebra A B] [Algebra.Etale A B] : IsReduced B := by
   -- `B` is flat over `A`, so it embeds in `K ⊗[A] B`, which is unramified over the field `K`.

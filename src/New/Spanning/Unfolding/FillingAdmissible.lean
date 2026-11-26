@@ -105,25 +105,6 @@ lemma filling_fits :
       exists_point_eq := ⟨γ, fun i w ↦ hγ_red ⟨i, w⟩, toUnits (D.latticeScale 0), ext hγ⟩
       central a := (Seesaw.commute_scalarFin a).inv_left }
 
-/-- A finite adelic point of U(X₀) preserves the lattice of Y₀ if and only if it is integral and
-its last row is that of 1 modulo π. In the coordinates of the filling data this is
-`New.Filling.inclHFin_mem_latticeStabilizer_iff`. -/
-lemma inclXFin_zero_mem_stdLevel_iff {a : Gf D.E (D.X 0)} :
-    (D.gradingY 0).inclXFin a ∈ stdLevel D.E (D.Y 0) ↔
-      a.val ∈ congruenceGL (Ô D.E ∙ D.piNIdele.val) Sum.inr :=
-  -- Both sides say that `D.filling.inclHFin a` lies in `D.filling.latticeStabilizer`.
-  (D.filling_fits.inclXFin_mem_stdLevel_iff a).trans D.filling.inclHFin_mem_latticeStabilizer_iff
-
-/-- The finite adelic points of U(X₀) that lie in the principal level of Y₀ at the chosen places
-form the level `New.Data.levelX` of X₀. In the coordinates of the filling data this is
-`New.Data.levelX_zero_eq_comap`. -/
-lemma comap_inclXFin_zero_chosenLevel :
-    (D.chosenLevel (n := D.Y 0)).comap (D.gradingY 0).inclXFin = D.levelX 0 := by
-  ext a
-  rw [levelX_zero_eq_comap]
-  -- `D.chosenLevel` is the standard principal level of the filling data.
-  exact D.filling_fits.inclXFin_mem_stdPrincipalLevel_iff a
-
 /-- The isomorphism that applies the central translation by `D.latticeScale 0` to a source form on
 X₀ and takes its values at the class representatives, in the coordinates of the Bessel systems. -/
 def sourceFormCoords :
@@ -511,25 +492,6 @@ theorem card_mul_card_classes_mul_prod_le :
       rw [← D.prod_unitSphereMass_mul_div_eq]
       exact D.card_sq_mul_mass_mul_prod_le
 
-/-- **Mean values.** For the filling data of admissible data `D`, let `H̄` be the reduced image of
-`besselH`, `n_X` the number of classes, `d_v` and `deg_v` the dimension and the degree of the Bessel
-system at `v`, `fr_v` the frame mass, `sph_k` the mass of the unit sphere in rank `k`, `mass_l` the
-mass `New.mass` in rank `l` and `c_v = fr_v N ^ k d_v ^ 2 / (sph_k deg_v)`. The numbers
-`|H̄| n_X ∏ fr_v d_v ^ 2 / deg_v` and `|H̄| ^ 2 mass_k ∏ sph_k c_v`, which bound mean values, are at
-most `(1 + b⁻⁹)` times the main second moment `(n_X ∏ d_v) ^ 2 / (mass_r ∏ deg_v)`. Here `N` is the
-prime level, `k`, `r` are the ranks of `X₀`, `Y₀`, and `b = D.b` is the weight at the `b`-places. -/
-theorem card_mul_prod_frameMass_le :
-    Nat.card (D.filling.reducedImage besselH) * Fintype.card D.filling.Classes *
-        ∏ v : D.Φ, D.frameMass v * Fintype.card (D.filling.besselSystem v).Index ^ 2 /
-          (D.filling.besselSystem v).deg ≤
-      (1 + D.b⁻¹ ^ 9) * D.filling.mainSecondMoment ∧
-    Nat.card (D.filling.reducedImage besselH) ^ 2 * mass D.E D.k *
-        ∏ v : D.Φ, D.unitSphereMass D.k v * (D.frameMass v * D.N ^ D.k *
-          Fintype.card (D.filling.besselSystem v).Index ^ 2 /
-            (D.unitSphereMass D.k v * (D.filling.besselSystem v).deg)) ≤
-      (1 + D.b⁻¹ ^ 9) * D.filling.mainSecondMoment :=
-  ⟨D.card_mul_card_classes_mul_prod_le, D.card_sq_mul_mass_mul_prod_le⟩
-
 -- Keeps definitional checks from unfolding the finite sums.
 seal Finset.univ in
 /-- For the filling data of admissible data `D`, the scaled Siegel constant `|S̄| |Ū| n_X c_S` is at
@@ -715,7 +677,6 @@ theorem mainSecondMoment_div_identitySecondMoment_mem_Icc :
     gcongr
     simpa using log_le_log (by positivity) (D.le_of_hasLogBound : D.b ^ 19 ≤ D.M)
   have one_le_logB : 1 ≤ D.logB := D.le_of_hasLogBound
-  have f_k_logB_nonneg : (0 : ℝ) ≤ D.f * D.k * D.logB := by positivity
   obtain ⟨h_lower, h_upper⟩ := abs_le.1 D.abs_log_mainSecondMoment_div_identitySecondMoment_sub_le
   constructor
   · rw [← log_le_log_iff (by positivity) ratio_pos, log_pow, log_exp]
