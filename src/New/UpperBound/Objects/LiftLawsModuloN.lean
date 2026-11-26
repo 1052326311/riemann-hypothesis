@@ -137,7 +137,7 @@ abbrev reductionGL : GL n (O (F := LocProd P)) →* GL n (P → ZMod N) := map �
 
 /-- A section of `reductionGL`. -/
 abbrev liftGL : GL n (P → ZMod N) → GL n (O (F := LocProd P)) :=
-  surjInv (GL_map_surjective Λ.reduction reduction_surjective)
+  surjInv (Matrix.GeneralLinearGroup.map_surjective Λ.reduction reduction_surjective)
 
 lemma reductionGL_liftGL (k : GL n (P → ZMod N)) : reductionGL (Λ.liftGL k) = k := surjInv_eq _ k
 
