@@ -535,13 +535,11 @@ lemma New.exists_isRootQuotient_of_isNormRoot {E E' n : Type} [Field E] [CMType 
   -- rational and `x` invertible at `e ν` when `P = q ν`. Put `A ν = z₀(ν) / z₀(ν)ᴴ` and
   -- `B ν = x(ν) / x(ν)ᴴ`, the roots (`IsRootQuotient`) for `z₀` and `x`; `B ν` is also a root for
   -- `b`.
-  have h_global (P : E'[X]) (hP : ∃ δ : U 1, q δ = P ∧ C (q δ)) :
-      ∃ (z₀ : E'[X]) (b : (𝔸f E')[X]), ∀ ν : U 1, q ν = P →
-        let x : (𝔸f E')[X] := z₀.map (algebraMap E' (𝔸f E')) * (b.map (adeleMap ↑σ) * z P)
-        IsUnit (aeval (e ν : Matrix n n (𝔸f E')) x) ∧
-          IsRootQuotient (e ν) x ≤ IsRootQuotient (e ν) b := by
-    obtain ⟨δ, rfl, hδ⟩ := hP
-    exact New.exists_isUnit_aeval_and_isRootQuotient_le hσ (hC _ hδ) (hz _ hδ)
+  have h_global (P : E'[X]) (hP : ∃ δ : U 1, q δ = P ∧ C (q δ)) := by
+    have h_eq : (hP.choose : Matrix n n E').charpoly = P := hP.choose_spec.1
+    have h_eval := New.exists_isUnit_aeval_and_isRootQuotient_le hσ
+      (hC _ hP.choose_spec.2) (hz _ hP.choose_spec.2)
+    rwa [h_eq] at h_eval
   choose! z₀ b hb using h_global
   replace hb {ν : U 1} (hν_C : C (q ν)) := hb (q ν) ⟨ν, rfl, hν_C⟩ ν rfl
   -- `x(e ν)` is a product of commuting matrices, so each factor is invertible.
