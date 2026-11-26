@@ -396,7 +396,7 @@ lemma IsAdapted.omega_projReal_of_isMixedLaw (hT : D.IsMixedLaw T) {g : G E s}
     rw [← h_char]
     simp [hT, N, coord, h_vec, realVec_realMatrix_mulVec, frameAt, ← g.adeleMatrix.mul_assoc,
       adelicHeisenberg, ← G.adeleMatrix_mul, star_mulVec_dotProduct, ← conjTranspose_mul, mul_add,
-      realVec_realCoordSum, omega_rho, mulVec_add, AddChar.map_add_eq_mul]
+      omega_rho, mulVec_add, AddChar.map_add_eq_mul]
   have h_vac_coord (c b : InfinitePlace E × p → ℂ) (w : InfinitePlace E × n₀ → ℂ) :
       realVac (coord c b w) = realVac c * realVac b * realVac w := by
     simp only [coord, h_vac, OrthogonalSum.vac_equiv]

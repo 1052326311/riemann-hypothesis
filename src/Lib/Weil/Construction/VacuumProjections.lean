@@ -616,7 +616,7 @@ lemma map_eq_zero_of_map_integrated_eq_zero {f : 𝒮 V} (hf_fix : V.projOn S f 
   -- `S.conjClosure`.
   suffices h_box : finCoord y ∈ integralBox n S.conjClosure →
       L (V.integrated w (V.finHeisenbergOp (finCoord y) V.vacElem)) = 0 by
-    show L (V.projOn S (V.ω 1 (V.ϱ y V.vacElem))) = 0
+    change L (V.projOn S (V.ω 1 (V.ϱ y V.vacElem))) = 0
     simpa [projOn_finHeisenbergOp, apply_ite, hw] using h_box
   intro hy
   have h_int : idem S.conjClosure • finCoord y ∈ stdLattice E n := hy
@@ -665,7 +665,7 @@ invertible matrix. -/
     realMultiplier, finMultiplier_inv]
   -- What remains: `projOn S` commutes with `finHeisenbergOp y`, as `y` is `0` above
   -- `S.conjClosure`, and the real vacuum takes the value `1` at `0`.
-  show V.integrated (polyVector (realSigns E s) P)
+  change V.integrated (polyVector (realSigns E s) P)
         (V.projOn S (V.finHeisenbergOp y (V.ω (1, g) V.vacElem))) =
       realVac 0 • V.integrated (polyVector (realSigns E s) P)
         (V.finHeisenbergOp y (V.projOn S (V.ω (1, g) V.vacElem)))

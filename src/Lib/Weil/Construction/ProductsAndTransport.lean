@@ -240,7 +240,7 @@ lemma omega_boxProd
   refine weilRep_tmul _ _ _ _ (weilMultiplier_fromBlocks hs h_blocks) (fun x ↦ ?_) f₁ f₂
   -- The action on the joined coordinates is that of `g.adeleMatrix` on
   -- `Sum.elim x.fst x.snd ∘ e.symm`.
-  show g.adeleMatrix *ᵥ ((x.fst ⊕ᵥ x.snd) ∘ e.symm) = ((g₁ • x.fst) ⊕ᵥ (g₂ • x.snd)) ∘ e.symm
+  change g.adeleMatrix *ᵥ ((x.fst ⊕ᵥ x.snd) ∘ e.symm) = ((g₁ • x.fst) ⊕ᵥ (g₂ • x.snd)) ∘ e.symm
   rw [e.eq_comp_symm, ← submatrix_mulVec_equiv, h_blocks, fromBlocks_mulVec]
   simp only [zero_mulVec, add_zero, zero_add, elim_comp_inl, elim_comp_inr]
   rfl
@@ -380,7 +380,7 @@ lemma map_omega {g : G E s} {g₁ : G E s₁}
   -- the value of `ω(g) (D.map f)` at `x`. (`erw`: as in `map_rho`, the lemmas about the Heisenberg
   -- model apply to `𝒮 V` only after unfolding.)
   refine ext fun x ↦ ?_
-  show σ ((V₁.ω g₁ f).val (D.φ x)) = c * (V.ω g (D.map f)).val x
+  change σ ((V₁.ω g₁ f).val (D.φ x)) = c * (V.ω g (D.map f)).val x
   -- write both values at `x` as `weilMultiplier` times an integral
   repeat erw [Space.ω, weilRep, IsVacuum.smul_apply, integrated_apply_eq_integral]
   -- substitute `D.φ` in the integral on the left: `σ (∫ F) = ∫ σ ∘ F ∘ D.φ` for every `F`, and
