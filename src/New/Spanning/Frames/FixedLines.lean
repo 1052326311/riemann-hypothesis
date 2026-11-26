@@ -654,7 +654,8 @@ lemma extendedBesselChar_eq_prod_toFibers (hψ : P.ψ = S.charOnPlaces T)
       have h_level : (S.toFibers T blk u i)⁻¹ * S.toFibers T blk x i ∈
           unitaryLevel integers (a.map (evalFiber T blk i))
             (S.latticeMiddle (LocProd (placeFiber T blk i))).splitGram := by
-        simpa using (mem_unitaryLevel_iff_toFibers blk).1 hux i
+        simpa only [MonoidHom.map_mul, MonoidHom.map_inv, Pi.mul_apply, Pi.inv_apply] using
+          (mem_unitaryLevel_iff_toFibers blk).1 hux i
       rw [extendedBesselChar_eq ((mem_besselU_iff_toFibers blk).1 hu i) h_level, hψ']
       simp only [simpleRootSum, map_mul, map_sum, toFibers_apply, Units.coe_map_inv,
         MonoidHom.coe_ofClass]
@@ -674,7 +675,8 @@ lemma extendedBesselChar_eq_prod_toFibers (hψ : P.ψ = S.charOnPlaces T)
     -- The elements `u i` of the fibres are the components of one element `v` over `T`.
     obtain ⟨(v : (S.latticeMiddle (LocProd T)).G), rfl⟩ := toFibers_surjective blk u
     have h_level : v⁻¹ * x ∈ unitaryLevel integers a (S.latticeMiddle (LocProd T)).splitGram :=
-      (mem_unitaryLevel_iff_toFibers blk).2 fun i ↦ by simpa using hux i
+      (mem_unitaryLevel_iff_toFibers blk).2 fun i ↦ by
+        simpa only [MonoidHom.map_mul, MonoidHom.map_inv, Pi.mul_apply, Pi.inv_apply] using hux i
     exact ⟨v, (mem_besselU_iff_toFibers blk).2 hu, h_level⟩
 
 variable {F' : ∀ i : ι, PlaceData (Fin (𝔰.k - (6 * 𝔰.ϱ + 13)))
