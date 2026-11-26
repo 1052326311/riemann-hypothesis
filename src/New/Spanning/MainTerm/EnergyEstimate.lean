@@ -101,7 +101,7 @@ lemma IsOpenElement.leadingMinor_ne_zero {c c' : S.Classes} {s : S.ResidueGL}
 
 /-- With `f` the number of infinite places, the factor `(1 + S.b⁻¹ ^ 10) ^ f` of the sieve is at
 most `1 + S.b⁻¹ ^ 9`, because `f ≤ S.b / 1000` by the hypothesis `S.IsAdmissible`. -/
-lemma one_add_inv_pow_ten_pow_le [S.IsAdmissible] :
+lemma one_add_inv_pow_ten_pow_le :
     (1 + S.b⁻¹ ^ 10) ^ Core.numInfPlaces E ≤ 1 + S.b⁻¹ ^ 9 := by
   have hb_one : 1 ≤ S.b := le_trans (by norm_num) S.thousand_le_b
   set u : ℝ := S.b⁻¹ ^ 9 / 1000 with hu_def
