@@ -682,7 +682,8 @@ lemma exists_span_formsOfType_mod_pred (i : Letter) (u : ℤ) :
     mem_span_singleton.1 (μ.property.2 t)
   -- Write `μ (letterProj i (1 ⊗ t)) = a μ t • tUnit ^ (-u)` with `a μ t` in `B_dR⁺`.
   choose a ha using h_type
-  -- The leading coefficient can be computed from any expression `y • tUnit ^ (-u)`.
+  -- The leading coefficient can be computed from any expression `y • tUnit ^ (-u)`. (`hz` is an
+  -- explicit argument: as a default tactic it was slow to elaborate.)
   have theta_a {μ : L.formsOfType i u} {t : Rep.of (overZp L.ρ)} {z : ℂ_[p]} {y : BdRPlus}
       (h : μ.val (L.letterProj i (.mk 1 t)) = y • (tUnit ^ (-u)).val)
       (hz : thetaBdR y = z) :
