@@ -774,6 +774,10 @@ lemma exists_mul_heisenbergElem_mem_unitaryLevel_iff
     rw [← inv_smul_smul g w, hw]
     simp [inclMatrix_val_mulVec, dite_mem, intVectors, Units.smul_def]
   obtain ⟨hg_mem, hg_star⟩ := hg
+  have h_form (hw_int : w ∈ intVectors integers 𝔰.BesselIndex) :
+      P.element * g * star w ⬝ᵥ T.splitGram *ᵥ w ∈ integers :=
+    mul_mem (mul_mem data_normalised.1 hg_mem)
+      (h.star_dotProduct_splitGram_mulVec_mem hw_int hw_int)
   rw [h_int]
   constructor
   · -- In the gauge of scale `1`, the column of `e*_a` gives `w` and `(β - τ h(v, v)) / g`.
@@ -785,9 +789,7 @@ lemma exists_mul_heisenbergElem_mem_unitaryLevel_iff
       simpa [Units.smul_def] using hw_int i
     replace hβ : g⁻¹.val * (β : A) - P.element * g * star w ⬝ᵥ T.splitGram *ᵥ w ∈ integers := by
       simpa [Units.smul_def, mulVec_smul, hg_star, mul_sub, mul_left_comm, mul_assoc] using hβ
-    have h_form : P.element * g * star w ⬝ᵥ T.splitGram *ᵥ w ∈ integers := by
-      simp [data_normalised, mul_mem, hg_mem, h.star_dotProduct_splitGram_mulVec_mem hw_int hw_int]
-    exact ⟨hw_int, by simpa using add_mem hβ h_form⟩
+    exact ⟨hw_int, by simpa using add_mem hβ (h_form hw_int)⟩
   · -- Take `u = 1`: with `e = e_a`, the Eichler map minus `1`, divided by `g`, is
     -- `(w - s e) h(e, ·) - e h(w, ·)` with `s` integral.
     rintro ⟨hw_int, hβ⟩
@@ -795,8 +797,7 @@ lemma exists_mul_heisenbergElem_mem_unitaryLevel_iff
     let s : A := P.element * g * star w ⬝ᵥ T.splitGram *ᵥ w - g⁻¹.val * (β : A)
     have hJ : IsIntMatrix integers T.splitGram := h.isUnimodular_splitGram.isIntMatrix
     have he : e ∈ intVectors integers 𝔰.BesselIndex := single_mem_intVectors _
-    have hs : s ∈ integers := sub_mem (mul_mem (mul_mem data_normalised.1 hg_mem)
-      (h.star_dotProduct_splitGram_mulVec_mem hw_int hw_int)) hβ
+    have hs : s ∈ integers := sub_mem (h_form hw_int) hβ
     have hws : w - s • e ∈ intVectors integers 𝔰.BesselIndex :=
       fun i ↦ sub_mem (hw_int i) (mul_mem hs (he i))
     have h_param : P.element * star (g • w) ⬝ᵥ T.splitGram *ᵥ (g • w) - (β : A) = g * s := by
