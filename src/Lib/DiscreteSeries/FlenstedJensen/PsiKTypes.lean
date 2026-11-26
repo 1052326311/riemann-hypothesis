@@ -114,8 +114,8 @@ theorem dsCoeff_inv (hg : l.HasGap h) (g : USign ε) : l.dsCoeff ↑g⁻¹ = con
   have h_inv := dsCoeff_polar hg 1 k (z := z⁻¹) (by simpa using hz)
   have h_denom (u : maxCompactU ε) :=
     weightMinors_unitary_inv ((u : USign ε)⁻¹ * z * (u : USign ε)) (-paramAddRho l)
-  simp [mul_assoc, Matrix.mul_inv_rev, GeneralLinearGroup.det_ne_zero] at h_self h_inv h_denom
-  simp [h_inv, h_self, mul_assoc, mul_comm, ← maxCompactU.coe_inv, Matrix.mul_inv_rev, h_denom,
+  simp [mul_assoc, Matrix.mul_inv_rev] at h_self h_inv h_denom
+  simp [h_inv, h_self, mul_comm, ← maxCompactU.coe_inv, h_denom,
     ← integral_conj]
 
 /-- Let `l = 2λ` be a parameter of gap `h`: its entries are distinct and congruent to `card n - 1`
