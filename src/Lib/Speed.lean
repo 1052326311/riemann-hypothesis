@@ -39,6 +39,9 @@ attribute [simp ←, simp] Matrix.conjTranspose_eq_transpose_of_trivial MonoidHo
   Nat.card_unique smul_left_inj norm_map RKHS.coe_smul tsum_comp_neg Nat.sub_self conj_trivial
   bot_eq_zero'
 
+-- Not a `simp` lemma in Mathlib; the development uses it as one.
+attribute [simp] Representation.isTrivial_def
+
 /-- A synonym of `IsEmpty` about which `simp` knows nothing. -/
 def New.IsVoid : Sort* → Prop := IsEmpty
 
