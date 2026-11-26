@@ -93,7 +93,7 @@ lemma New.mem_maxCompact_iff_isOrthoIntegral_adeleMatrix {g : G E s} :
     g ∈ maxCompact E s ↔ Exchange.IsOrthoIntegral g.adeleMatrix := by
   have h_inf (w : NumberField.InfinitePlace E) : g.fst w ∈ maxCompactU s ↔
       (g.adeleMatrix.map (evalInf w)).conjTranspose * g.adeleMatrix.map (evalInf w) = 1 := by
-    rw [maxCompactU, Subgroup.mem_subgroupOf, mem_U, Matrix.mul_one]
+    rw [maxCompactU, Subgroup.mem_subgroupOf, Matrix.mem_unitaryGroupOf_iff, Matrix.mul_one]
     rfl
   rw [maxCompact, Subgroup.mem_prod, Subgroup.mem_pi, mem_stdLevel]
   simp only [Set.mem_univ, forall_const, h_inf, Exchange.IsOrthoIntegral, G.adeleMatrix_snd]
@@ -497,7 +497,8 @@ lemma exists_unitary_mul_eq_of_isotropic {s : n → ℤˣ} {A B : Matrix n p ℂ
   let σ : n ≃ Σ ε : ℤˣ, {i : n // s i = ε} := (Equiv.sigmaFiberEquiv s).symm
   let K : Matrix n n ℂ := (blockDiagonal' fun ε ↦ (g ε).val.val).submatrix σ σ
   have h_unitary : Kᴴ * K = 1 := by
-    have h_block (ε : ℤˣ) : (g ε).val.valᴴ * (g ε).val.val = 1 := by simpa using mem_U.1 (g ε).prop
+    have h_block (ε : ℤˣ) : (g ε).val.valᴴ * (g ε).val.val = 1 := by
+      simpa [star_eq_conjTranspose] using mem_unitaryGroupOf_iff.1 (g ε).prop
     simp [K, ← blockDiagonal'_mul, h_block, ← Pi.one_def]
   have h_comm : signMatrix s * K = K * signMatrix s := by
     ext i j
@@ -507,7 +508,8 @@ lemma exists_unitary_mul_eq_of_isotropic {s : n → ℤˣ} {A B : Matrix n p ℂ
   have h_form : Kᴴ * signMatrix s * K = signMatrix s := by
     rw [Matrix.mul_assoc, h_comm, ← Matrix.mul_assoc, h_unitary, Matrix.one_mul]
   have h_mem : U.of IsHermitianInvolution.isUnit K h_form ∈ maxCompactU s := by
-    simpa [maxCompactU, Subgroup.mem_subgroupOf, mem_U] using h_unitary
+    simpa [maxCompactU, Subgroup.mem_subgroupOf, mem_unitaryGroupOf_iff,
+        star_eq_conjTranspose] using h_unitary
   refine ⟨_, h_mem, ?_⟩
   ext i j
   -- Row i of κ A is the row i of the block of sign s i.

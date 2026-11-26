@@ -130,7 +130,7 @@ lemma New.Exchange.exists_mem_maxCompactU_eq_rotation {r : n → ℂ}
       h_left, h_right, P_sq]
     linear_combination (norm := module) hη • ε • P
   exact ⟨U.of IsHermitianInvolution.isUnit _ (h_form (-1) (by simp [sign_P]) (by simp [P_sign])),
-    h_form 1 (by simp) (by simp), rfl⟩
+    mem_unitaryGroupOf_iff.2 (h_form 1 (by simp) (by simp)), rfl⟩
 
 open NumberField (InfinitePlace)
 

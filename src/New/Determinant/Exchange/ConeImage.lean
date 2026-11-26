@@ -123,7 +123,8 @@ lemma sum_norm_sq_conePoint (κ : maxCompact E t') (a : (InfinitePlace E → ℂ
   let K : Matrix r' r' ℂ := ↑(maxCompactInf κ w)⁻¹
   let y : r' → ℂ := a.val w • lineVector X w
   have h_unitary : Kᴴ * K = 1 := by
-    simpa [K] using mem_U.1 (inv_mem (maxCompact_fst_mem_maxCompactU κ w))
+    simpa [K, star_eq_conjTranspose] using
+      mem_unitaryGroupOf_iff.1 (inv_mem (maxCompact_fst_mem_maxCompactU κ w))
   have h_dot : star (K *ᵥ y) ⬝ᵥ K *ᵥ y = star y ⬝ᵥ y := by
     rw [star_mulVec, ← dotProduct_mulVec, mulVec_mulVec, h_unitary, one_mulVec]
   calc ∑ i, ‖(K *ᵥ y) i‖ ^ 2 = ∑ i, ‖y i‖ ^ 2 := by
@@ -282,7 +283,9 @@ lemma exists_hasPosMellinTransform_mulVec_eq_smul :
   have h_back : (κw : Matrix r' r' ℂ) *ᵥ y = a.val w • lineVector X w := by
     rw [hy, mulVec_mulVec, Subgroup.coe_inv, Units.mul_inv, one_mulVec]
   have h_iso : star y ⬝ᵥ signMatrix t' *ᵥ y = 0 := by
-    rw [← mem_U.1 κw.prop, ← mulVec_mulVec, ← mulVec_mulVec, ← star_mulVec_dotProduct, h_back]
+    rw [← show κw.val.valᴴ * signMatrix t' * κw.val.val = signMatrix t' from
+        mem_unitaryGroupOf_iff.1 κw.prop,
+      ← mulVec_mulVec, ← mulVec_mulVec, ← star_mulVec_dotProduct, h_back]
     simp [mulVec_smul, lineVector_isotropic X w]
   have h_image : (k w y : Matrix r' r' ℂ) *ᵥ lineVector X w = y := h_carry _ h_ne w h_iso
   rw [Subgroup.coe_mul, Units.val_mul, ← mulVec_mulVec, h_image, h_back]

@@ -301,7 +301,8 @@ lemma apply_comp_perm_of_conj_invariant {w : Perm n} (x : n → Circle) (hw : ε
     simp [g, ← Matrix.ext_iff, signMatrix, diagonal, Matrix.mul_apply, sum_ite, hw_apply]
   have h_unitary : (g : Matrix n n ℂ)ᴴ * 1 * g = 1 := by
     simp [g, ← Matrix.ext_iff, Matrix.mul_apply, sum_ite, Matrix.one_apply]
-  let y : maxCompactU ε := ⟨⟨g, h_form⟩, h_unitary⟩
+  let y : maxCompactU ε :=
+    ⟨⟨g, mem_unitaryGroupOf_iff.2 h_form⟩, mem_unitaryGroupOf_iff.2 h_unitary⟩
   have h_conj : y * diagTorusK (x ∘ w) * y⁻¹ = diagTorusK x := by
     ext
     simp [y, g, diagTorus, ← map_inv, diagonal, Matrix.mul_apply, sum_ite]
