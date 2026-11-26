@@ -675,13 +675,13 @@ lemma HodgeTatePair.contractionPow_cup {a : ℕ} {M L : AbFunctor HodgeTatePair}
       let z : H M formCoeff (a + 1) := x.comp contractionCocycle.shortExact_extension.extClass rfl
       have hz : comp x.toTotalH contractionCocycle.cohomClass = z.toTotalH :=
         comp_of x contractionCocycle.shortExact_extension.extClass rfl
-      erw [hz]
+      rw [hz]
       change comp (z.toTotalH.cup y) (pullbackAlong wedgePairing (contractionPow l)) = _
-      erw [ih z y]
+      rw [ih z y]
       apply sum_congr rfl
       intro h _
       rw [show a + 1 + h = a + (h + 1) by omega]
-      erw [← hz, comp_assoc (x := x.toTotalH) contractionCocycle.cohomClass (contractionPow h)]
+      rw [← hz, comp_assoc (x := x.toTotalH) contractionCocycle.cohomClass (contractionPow h)]
 
 
 /-- Product formula: let `N`, `N'` be functors from `k`-algebras to abelian groups, `x` a Hodge
