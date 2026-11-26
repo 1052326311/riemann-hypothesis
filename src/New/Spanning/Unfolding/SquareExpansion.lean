@@ -408,8 +408,8 @@ lemma exists_unitary_besselFn_mul {side : FullOrCut} {γ : S.G E} (hγ : γ ∈ 
   choose k hk using fun v ↦ exists_eq_toBesselH (hη.ratToInf_mem_agreeWithOneOn v) isUnit_one
   refine ⟨_, ?_, besselFn_mul_of_eq_embedH hu hk⟩
   -- A scalar of modulus one times a tensor product of unitary matrices is unitary.
-  have h_star : star (kroneckerPi fun v ↦ ((S.besselSystem v).rep (k v)).1) =
-      kroneckerPi fun v ↦ star ((S.besselSystem v).rep (k v)).1 :=
+  have h_star : star (kroneckerPi fun v ↦ ((S.besselSystem v).rep (k v)).val) =
+      kroneckerPi fun v ↦ star ((S.besselSystem v).rep (k v)).val :=
     Matrix.ext fun _ _ ↦ by simp [kroneckerPi]
   have h_norm : ‖S.unipotentChar (S.ratToFin u)‖ = 1 := norm_selfDualChar
   rw [mem_unitaryGroup_iff, star_smul, smul_mul_smul_comm, h_star, ← kroneckerPi_mul,
@@ -472,7 +472,7 @@ lemma amplitudeSum_besselS_inv [HasPrimitiveRoot5040 E] [S.IsAdmissible] (c d : 
     simp [amplitudeSum_besselS_apply hγ hγ_over hM,
       amplitudeSum_besselS_apply (inv_mem hγ) (termsOver.inv hγ_over) hM_inv]
   · have h_empty : IsEmpty ↥(((S.ratMiddle E).besselS : Set (S.G E)) ∩ S.termsOver c s d) :=
-      ⟨fun γ ↦ h ⟨γ, γ.2⟩⟩
+      ⟨fun γ ↦ h ⟨γ, γ.property⟩⟩
     have h_empty_inv : IsEmpty ↥(((S.ratMiddle E).besselS : Set (S.G E)) ∩ S.termsOver d s⁻¹ c) :=
       ⟨fun ⟨γ, hγ, hγ_over⟩ ↦ h ⟨γ⁻¹, inv_mem hγ, by simpa using termsOver.inv hγ_over⟩⟩
     simp [amplitudeSum, tsum_empty]
@@ -610,8 +610,8 @@ lemma avoidsScalarCosets_setOf_exists_apply_eq [HasPrimitiveRoot5040 E] [S.IsAdm
       {s : S.ResidueGL | ∃ t ∈ S.reducedImage besselS, s i = t i} := by
   rintro ζ h_int hζ h_ne s ⟨t, ht, hs⟩ ⟨t', ht', h_coset⟩
   refine h_ne (S.eq_one_of_reduceAt_scalar_eq_one hζ h_int i fun w ↦ ?_)
-  have h_entry : (s i w).1 (𝔰.besselFrame 0) (𝔰.besselFrame 0) =
-      New.reduceAt w.1 ⟨ζ, h_int⟩ * (t' i w).1 (𝔰.besselFrame 0) (𝔰.besselFrame 0) := by
+  have h_entry : (s i w).val (𝔰.besselFrame 0) (𝔰.besselFrame 0) =
+      New.reduceAt w.val ⟨ζ, h_int⟩ * (t' i w).val (𝔰.besselFrame 0) (𝔰.besselFrame 0) := by
     rw [h_coset i w, Matrix.smul_apply, smul_eq_mul]
   rw [hs, apply_besselFrame_zero_of_mem_reducedImage ht,
     apply_besselFrame_zero_of_mem_reducedImage ht', one_apply_eq, mul_one] at h_entry
