@@ -626,7 +626,7 @@ is in its field. -/
 lemma isIntegrallyClosedIn_Ô : IsIntegrallyClosedIn (Ô E') (𝔸f E') := by
   refine Subring.isIntegrallyClosedIn_iff.mpr fun x hx ↦ mem_Ô.mpr fun u ↦ ?_
   exact (Valuation.integer.integers (v.comap (evalAt u))).mem_of_integral
-    (hx.map_of_comp_eq (Subring.inclusion (iInf_le _ u)) 1 rfl)
+    (hx.map_of_comp_eq (Subring.inclusion fun _ hy ↦ mem_Ô.1 hy u) 1 rfl)
 
 /-- The ring homomorphism from the integral finite adeles of `E` to those of `F` induced by an
 embedding `f : E → F`. -/
