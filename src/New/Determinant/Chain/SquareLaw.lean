@@ -255,7 +255,7 @@ lemma exists_firstCols_eq_mul_of_invLastRows_eq {γ γ' : GL n R}
     simp only [d, h, h_eq, det_fromRows_invLastRows, GeneralLinearGroup.val_mk'']
   linear_combination γ.val.det * h_mixed - γ'.val.det * h_one
 
-omit [Fintype R] in
+omit [DecidableEq a] [Fintype R] in
 /-- If `Ψ` vanishes off the matrices `firstCols e γ` (the columns `b` of an invertible `γ`) and
 satisfies `χ (det h) Ψ (y h) = Ψ y` for invertible `b × b` matrices `h`, then `Φ = matchOf χ e Ψ` is
 matched with `Ψ`: it vanishes off the matrices `invLastRows e γ` (the rows `a` of `γ⁻¹`) and has
@@ -329,6 +329,7 @@ lemma hasLeftInv_submatrix_invLastRows (k : GL n R) {s : Matrix b n R}
   simpa [P, Matrix.mul_apply, ← e.sum_comp, h_entry, Matrix.one_apply, hf.eq_iff]
     using ext_iff.2 h_inv (f i) (f j)
 
+omit [DecidableEq a] in
 /-- Let `e` split the index set `N ⊕ n` into `b` and `a` and let `k` be invertible. Consider the
 columns `b` of `k` (`firstCols e k`) and the rows `a` of `k⁻¹` (`invLastRows e k`). If the rows `N`
 of the former have a left inverse, so have the columns `n` of the latter, and likewise with `N` and
