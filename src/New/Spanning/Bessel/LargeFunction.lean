@@ -234,7 +234,8 @@ lemma exists_sub_one_mul_definiteCols_eq (s : 𝔰.besselGraph) :
     · simpa [inclMatrix, Matrix.one_apply] using
         apply_inr_of_mem_besselU hu r (𝔰.indexX₀ j) (by simp)
   have hh_cols : (embedH h).val.val * 𝔰.isotropicCols = 𝔰.isotropicCols := by
-    simp [coe_embedH, actOnCols, Matrix.sub_mul, Matrix.add_mul, Matrix.mul_assoc, inclMatrix_gram_eq_zero]
+    simp [coe_embedH, actOnCols, Matrix.sub_mul, Matrix.add_mul, Matrix.mul_assoc,
+      inclMatrix_gram_eq_zero]
   change ((embedH h).val.val * u.val.val - 1) * 𝔰.definiteCols =
     𝔰.definiteCols * (h.val.val - 1) + 𝔰.isotropicCols * C
   rw [Matrix.sub_mul, Matrix.one_mul, Matrix.mul_assoc, hu_cols, Matrix.mul_add,
