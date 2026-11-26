@@ -248,11 +248,9 @@ lemma isIntMatrix_kAdelic_and_lCoord [hD : IsBaseAdapted D] :
     let O := (Ô E).comap (RingHom.snd (NumberField.InfinitePlace E → ℂ) (𝔸f E))
     IsIntMatrix O D.kAdelic ∧ IsIntMatrix O D.lCoord := by
   intro O
-  have h_int : ∀ (i : m) (j : (p ⊕ p) ⊕ n),
-      (((D.lAdelic.fromCols D.kAdelic).fromCols D.iAdelic) i j).2 ∈ Ô E :=
-    hD.isOrthoIntegral.right
   -- The columns of `D.kAdelic` are among those of the adapted frame.
-  have h_k (i : m) (j : p) : (D.kAdelic i j).2 ∈ Ô E := by simpa using h_int i (.inl (.inr j))
+  have h_k (i : m) (j : p) : (D.kAdelic i j).2 ∈ Ô E := by
+    simpa using hD.isOrthoIntegral.snd_mem_Ô i (.inl (.inr j))
   -- `D.lCoord` is `D.kAdelicᴴ` times the diagonal matrix of signs; `star` keeps integrality.
   exact ⟨fun i j ↦ by simpa [O] using h_k i j,
     fun i j ↦ by simpa [O, lCoord, stdForm] using star_mem_Ô (h_k j i)⟩
