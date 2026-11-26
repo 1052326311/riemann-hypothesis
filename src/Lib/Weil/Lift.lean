@@ -255,7 +255,6 @@ abbrev negIf {α : Type*} [Neg α] (d : Bool) (l : α) : α := match d with
 
 theorem negIf_true {α : Type*} [Neg α] (l : α) : negIf true l = -l := rfl
 
-theorem negIf_false {α : Type*} [Neg α] (l : α) : negIf false l = l := rfl
 
 /-- The doubled parameters l for the signs s : n → ℤˣ and l' for the signs t : n' → ℤˣ correspond:
 at each infinite place w they satisfy the block rule (`New.IsBlockRule`) for the weights γ w and γ'
