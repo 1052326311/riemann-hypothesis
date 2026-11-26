@@ -172,7 +172,7 @@ lemma coeff_charpoly_map_polyAction_single (ρ : G →* Matrix σ σ O) (g : G) 
 lie in `S` when `S` holds the variables and the coefficients of the characteristic polynomials of
 the `u x g`. Here `z g` are coordinates of `u · g - 1` in the `u · (gen i) - 1`
 (`AreCoordinates`). -/
-lemma C_det_linearCombination_mem [Fintype J]
+lemma C_det_linearCombination_mem
     (hS_X : ∀ j : J, (fun _ : Y ↦ MvPolynomial.X j) ∈ S)
     (hS_charpoly : ∀ (g : G) (k : ℕ),
       (fun x : Y ↦ MvPolynomial.C (algebraMap O L ((u x g).charpoly.coeff k))) ∈ S)
