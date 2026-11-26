@@ -450,18 +450,17 @@ lemma ellVal_pow_sub_one_of_isPrimitiveRoot {h j : ℕ} {ζ : intQpBar ℓ}
       (ℓ ^ padicValNat ℓ j : ℕ) * (Nat.totient (ℓ ^ (h + 1)) : ℝ≥0∞)⁻¹ := by
   -- write `j = ℓ ^ t j'` and `h = t + k`; then `ζ ^ j` has order `ℓ ^ (k + 1)`
   have hℓ : ℓ.Prime := Fact.out
-  obtain ⟨t, j', hj', rfl⟩ := Nat.exists_eq_pow_mul_and_not_dvd hj ℓ hℓ.ne_one
-  have ht : padicValNat ℓ (ℓ ^ t * j') = t := by
-    simp [Nat.padicValNat_def, Nat.multiplicity_mul, hℓ.ne_zero, right_ne_zero_of_mul hj,
-      multiplicity_eq_zero_of_not_dvd hj']
-  rw [ht] at hjh ⊢
-  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hjh
+  let t := padicValNat ℓ j
+  let j' := j.divMaxPow ℓ
+  have h_pow : ζ ^ j = (ζ ^ ℓ ^ t) ^ j' := by
+    rw [← pow_mul, Nat.mul_comm, Nat.divMaxPow_mul_pow_padicValNat]
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le (show t ≤ h from hjh)
   have h_order : IsPrimitiveRoot ((ζ ^ ℓ ^ t) ^ j') (ℓ ^ (k + 1)) :=
     (hζ.pow (pow_pos hℓ.pos _) (by ring)).pow_of_coprime j'
-      ((hℓ.coprime_iff_not_dvd.2 hj').pow_left _).symm
+      ((hℓ.coprime_iff_not_dvd.2 (Nat.not_dvd_divMaxPow hℓ.one_lt hj)).pow_left _).symm
   have h_totient : Nat.totient (ℓ ^ (t + k + 1)) = ℓ ^ t * Nat.totient (ℓ ^ (k + 1)) := by
     simp only [Nat.totient_prime_pow_succ hℓ, pow_add ℓ t k, mul_assoc]
-  rw [pow_mul, ellVal_sub_one_of_isPrimitiveRoot h_order, h_totient, Nat.cast_mul,
+  rw [h_pow, ellVal_sub_one_of_isPrimitiveRoot h_order, h_totient, Nat.cast_mul,
     ENNReal.mul_inv (by simp) (by simp), ENNReal.mul_inv_cancel_left (by simp [hℓ.ne_zero])]
   simp
 
