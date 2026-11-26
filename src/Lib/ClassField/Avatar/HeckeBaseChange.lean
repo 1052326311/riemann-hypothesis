@@ -299,7 +299,7 @@ private lemma decompRep_scalarRep_eq_cyclotomicCharIn_pow_mul [PadicIso ℓ]
 
 /-- Twisting a character by the `d`-th power of the cyclotomic character keeps it unramified or
 crystalline at `A`. -/
-lemma isGoodAt_scalarRep_cyclotomicCharIn_pow_mul [PadicIso ℓ] (μ : Gal(Ω/E) →* (PadicAlgCl ℓ)ˣ)
+lemma isGoodAt_scalarRep_cyclotomicCharIn_pow_mul (μ : Gal(Ω/E) →* (PadicAlgCl ℓ)ˣ)
     (A : ClosurePlace) (d : ℕ) (h : IsGoodAt (scalarRep μ) A) :
     IsGoodAt (scalarRep (cyclotomicCharIn (PadicAlgCl ℓ) Ω ℓ ^ d * μ)) A := by
   obtain ⟨h_inertia, h_crys⟩ := h
