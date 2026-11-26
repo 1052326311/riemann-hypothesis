@@ -1,6 +1,5 @@
 module
 
-public import Lib.Adelic.AutomorphicForms.BlockPeriods
 public import Lib.General.LinearAlgebra.BlockEmbeddings
 public import Lib.Weil.DualPair.MixedModel
 public import Lib.Weil.Periods.BesselIntegral

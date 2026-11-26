@@ -85,11 +85,6 @@ instance : Category (HodgeTest k) where
   id _ := ⟨𝟙 _, .id⟩
   comp f g := ⟨f.1 ≫ g.1, g.2.toAddHom.comp f.2.toAddHom, by simp⟩
 
-private lemma HodgeTest.id_fst (P : HodgeTest k) : (𝟙 P : P ⟶ P).1 = 𝟙 P.baseAlg := rfl
-
-private lemma HodgeTest.id_snd_apply (P : HodgeTest k) (x : P.Index → P.baseAlg) :
-    (𝟙 P : P ⟶ P).2 x = x := rfl
-
 private lemma HodgeTest.comp_fst {P Q R : HodgeTest k} (f : P ⟶ Q) (g : Q ⟶ R) :
     (f ≫ g).1 = f.1 ≫ g.1 := rfl
 
@@ -140,29 +135,25 @@ def HodgeTest.sqZeroExt : HodgeTest k ⥤ CommAlg k where
           intro r
           apply TrivSqZeroExt.ext <;> simp [Algebra.algebraMap_eq_smul_one] }
 
+private lemma exteriorHom_ext {X : HodgeTest k} {Y : AlgCat k}
+    {f g : AlgCat.of k (ExteriorAlgebra X.baseAlg (X.Index → X.baseAlg)) ⟶ Y}
+    (hT : ∀ r, f (algebraMap X.baseAlg _ r) = g (algebraMap X.baseAlg _ r))
+    (hM : ∀ v, f (ExteriorAlgebra.ι X.baseAlg v) = g (ExteriorAlgebra.ι X.baseAlg v)) : f = g := by
+  ext x
+  induction x using induction <;> simp_all
+
 /-- The functor sending a pair (A, M) to the exterior algebra ⋀_A M, as a k-algebra. -/
 def exteriorAlg : HodgeTest k ⥤ AlgCat k where
   obj X := AlgCat.of k (ExteriorAlgebra X.baseAlg (X.Index → X.baseAlg))
   map f :=
     AlgCat.ofHom <|
       AlgHom.mk' (exteriorMap f.2) fun r x ↦ by simpa using exteriorMap_smul f.2 (r • 1) x
-  map_id X := by
-    ext x
-    induction x using induction with
-    | algebraMap r =>
-      change exteriorMap (𝟙 X : X ⟶ X).2 (algebraMap _ _ r) = algebraMap _ _ r
-      rw [Algebra.algebraMap_eq_smul_one, exteriorMap_smul, map_one]
-      rfl
-    | ι v => simp [HodgeTest.id_snd_apply]
-    | mul x y hx hy => rw [map_mul, map_mul, hx, hy]
-    | add x y hx hy => rw [_root_.map_add, _root_.map_add, hx, hy]
-  map_comp f g := by
-    ext x
-    induction x using induction with
-    | algebraMap r => simp [Algebra.algebraMap_eq_smul_one, HodgeTest.comp_fst]
-    | ι v => simp [HodgeTest.comp_snd_apply]
-    | mul x y hx hy => rw [map_mul, map_mul, hx, hy]
-    | add x y hx hy => rw [_root_.map_add, _root_.map_add, hx, hy]
+  map_id _ := by
+    apply exteriorHom_ext <;> intro x <;> simp [Algebra.algebraMap_eq_smul_one]
+    all_goals rfl
+  map_comp _ _ := by
+    apply exteriorHom_ext <;> intro x <;> simp [Algebra.algebraMap_eq_smul_one]
+    all_goals rfl
 
 /-- The functor (A, M) ↦ ⋀_A M with values in abelian groups: the coefficient of Hodge
 cohomology. -/

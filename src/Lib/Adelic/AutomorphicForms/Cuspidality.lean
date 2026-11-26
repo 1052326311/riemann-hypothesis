@@ -2,7 +2,6 @@ module
 
 public import Lib.Adelic.Adeles.SemilocalProducts
 public import Lib.Adelic.AutomorphicForms.UnipotentRadical
-public import Lib.Weil.Construction.AdelicRepresentation
 public import Lib.Weil.Unramified.HeckeGL
 
 /-!

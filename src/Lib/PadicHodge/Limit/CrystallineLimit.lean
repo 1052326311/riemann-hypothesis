@@ -706,8 +706,9 @@ lemma isCrystalline_of_trace_limit [IsTopologicalGroup G]
     obtain ⟨v, hv, hvz⟩ := hz k
     let σ := tensorAction A (OverGp.toGp g) (actionRep ℤ_[p] T (q.toMonoidHom.comp w) g)
     have h₁ : σ (Q v) - Q v ∈ nsmulRange (p ^ k) _ := by
-      -- `erw`: `σ` is the action on `A ⊗ T` written through `q`, which `rw` does not unfold.
-      erw [tensorAction_periodTensorMap (g := mulLeft ℤ_[p] (w g)) (by simp), ← map_sub]
+      -- `σ` is the action on `A ⊗ T` written through `q`.
+      rw [show σ (Q v) = Q (tensorAction A (OverGp.toGp g) (mulLeft ℤ_[p] (w g)) v) from
+        tensorAction_periodTensorMap (g := mulLeft ℤ_[p] (w g)) (by simp) .., ← map_sub]
       exact (hker (hinv.mp hv g)).left
     -- `σ z - z = (σ (Q v) - Q v) - σ (Q v - z) + (Q v - z)`
     simpa [σ] using add_mem (sub_mem h₁ (nsmulRange.map_mem σ hvz)) hvz

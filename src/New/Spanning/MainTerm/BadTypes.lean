@@ -1,7 +1,6 @@
 module
 
 public import Lib.Analytic.Primes
-public import New.Spanning.RemainingTerms.Size
 public import New.UpperBound.Objects.LabelsAndIndexTypes
 
 /-!
@@ -210,7 +209,6 @@ lemma New.prod_le_re_tupleIdem_coeff_one {n ι : Type*} [Fintype n] [DecidableEq
     (hq : ∀ w : ι, Nat.card (k w) = q) (hr : Fintype.card n = r) (hrq : r < q)
     {c : ∀ w : ι, (k w)[X]} (hc : ∀ w : ι, IsLabel r (c w)) :
     ∏ _ : ι, ((1 - r / q) / q ^ r : ℝ) ≤ ((tupleIdem n c).coeff 1).re := by
-  classical
   subst r
   have weight_nonneg : 0 ≤ (1 - card n / q : ℝ) / q ^ card n := by
     bound [(mod_cast hrq.le : (card n : ℝ) ≤ q)]

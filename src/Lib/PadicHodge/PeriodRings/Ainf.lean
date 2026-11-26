@@ -808,7 +808,7 @@ lemma OFlat.isHausdorff_span_singleton_of_not_isUnit (h : ¬IsUnit t) :
   choose N hN using exists_pow_coeff_eq_zero h
   refine ⟨fun x hx ↦ Perfection.ext fun k ↦ ?_⟩
   have h_coeff_dvd : PreTilt.coeff k (t ^ N k) ∣ PreTilt.coeff k (x - 0) :=
-    map_dvd (PreTilt.coeff k) (smodEq_span_pow_iff_dvd.mp (hx (N k)))
+    map_dvd (PreTilt.coeff k) ((TauCeti.sModEq_span_singleton_pow_iff ..).mp (hx (N k)))
   rw [map_pow, hN k, zero_dvd_iff, sub_zero] at h_coeff_dvd
   exact h_coeff_dvd.trans (map_zero (PreTilt.coeff k)).symm
 
@@ -885,7 +885,7 @@ lemma mu_dvd_of_theta_frobEnd {a : Ainf} (h_theta : ∀ j : ℕ, theta (frobEnd^
     (pow_dvd_pow c (n.lt_pow_self (Fact.out : p.Prime).one_lt).le).trans
       (pow_pow_dvd_constantCoeff_mu_of_eq_mul n x hx_theta c h_eq)
   have h_smod (n : ℕ) : constantCoeff mu ≡ 0 [SMOD (span {c} ^ n • ⊤ : Ideal OFlat)] :=
-    smodEq_span_pow_iff_dvd.mpr (by simpa using h_dvd n)
+    (TauCeti.sModEq_span_singleton_pow_iff ..).mpr (by simpa using h_dvd n)
   exact constantCoeff_mu_ne_zero
     ((OFlat.isHausdorff_span_singleton_of_not_isUnit hc).haus' _ h_smod)
 
@@ -900,12 +900,10 @@ lemma tau_dvd_of_theta_frobEnd (h_theta : ∀ j : ℕ, theta (frobEnd^[j + 1] a)
 /-! ### Primes and adic completeness of `A_inf` -/
 
 /-- `p` is a prime element of `A_inf`, because `A_inf / p = O^♭` is a domain. -/
-lemma Ainf.prime_p : Prime (p : Ainf) := by
+lemma Ainf.prime_p : Prime (p : Ainf) :=
   -- `p ∣ x` means that the constant coefficient of `x` in the domain `O^♭` is zero
-  refine ⟨p_ne_zero p OFlat, fun h_unit ↦ ?_,
-    fun x y h_dvd ↦ by simpa [p_dvd_iff, -constantCoeff_apply] using h_dvd⟩
-  -- `p` does not divide `1`, whose constant coefficient is not zero
-  simpa [p_dvd_iff] using isUnit_iff_dvd_one.mp h_unit
+  (span_singleton_prime (p_ne_zero p OFlat)).mp
+    (ker_constantCoeff (k := OFlat) ▸ ker_isPrime constantCoeff)
 
 /-- If `p` does not divide `δ`, every non-unit of `A_inf` lies in the radical of `(p, δ)`. -/
 lemma Ainf.mem_radical_of_not_isUnit (h : ¬IsUnit a) (hδ : ¬↑p ∣ δ) :

@@ -1,6 +1,5 @@
 module
 
-public import Lib.Adelic.Unitary.Defs
 public import Lib.Cohomology.Hodge.DiagonalClass
 public import Lib.Cohomology.Hodge.Kunneth
 public import Lib.General.Algebra.MultivariatePolynomials
@@ -356,7 +355,7 @@ lemma IsTangentPoly.hasJacobianRatio_eval_div {X : CommAlg E ⥤ Type 1}
     have h_N : N (-S φ) = t • (φ - S φ) - φ := by
       simp only [N, LinearMap.comp_apply, LinearEquiv.coe_coe, map_neg,
         LinearEquiv.symm_apply_apply, LinearMap.sub_apply, LinearMap.smul_apply,
-        Module.End.one_apply]
+        one_apply_eq_self]
       module
     calc
       t • ξ α - ξ γ = D (t • (φ - S φ) - φ) := by
@@ -431,7 +430,7 @@ omit [CharZero k] in
 /-- The universal symbol `symbolClass` in degree `d` is compatible with a change of the base
 field: for a field `E` of characteristic `0` over `k`, the base change to `E` of the symbol over
 `k` is the symbol over `E`. -/
-lemma symbolClass_baseChange {E : Type} [Field E] [CharZero E] [Algebra k E] :
+lemma symbolClass_baseChange {E : Type} [Field E] [Algebra k E] :
     (symbolClass (k := k) (d := d)).baseChange (k := E) = symbolClass := by
   -- Both classes are given by the same determinant cocycle on the same relation; the three
   -- compatibilities hold by unfolding the identity maps.
@@ -520,7 +519,7 @@ of `u` and `c` come from a point of the finite set `s`. Then `scaledGraph t u c`
 square-zero points of the complement `offPoints s` of `s` into the complement `offDiagonal X` of
 the diagonal. -/
 private lemma offPoints_whisker_le_preimage_scaledGraph [IsSeparatedFunctor X] {E : Type} [Field E]
-    [CharZero E] [Algebra k E] {W : CommAlg E ⥤ Type 1} (u c : W ⟶ restrictAlg k E ⋙ X)
+    [Algebra k E] {W : CommAlg E ⥤ Type 1} (u c : W ⟶ restrictAlg k E ⋙ X)
     (s : Finset (W.obj (of E E))) (t : E)
     (h_field : ∀ K : CommAlg E, IsField K → ∀ x : W.obj K, c.app K x = u.app K x →
       ∃ w ∈ s, x = W.map structureMap w) :
@@ -582,7 +581,7 @@ diagonal) is the symbol of the coordinate differences of the chart `A`; `lift u 
 out `w = W.map ζ a.point` and generates `ker ζ`; `m` is the Jacobian ratio at `w`. Then on `a`,
 relative to the complement of `w`, `δ.baseChange` (`δ` read on `E`-algebras through
 `restrictAlg k E`) pulls back along `scaledGraph t u c` to `m • [df / f]`. -/
-private lemma map_pointMap_map_scaledGraph_eq_smul_symbolClass [IsSeparatedFunctor X] {E : Type}
+private lemma map_pointMap_map_scaledGraph_eq_smul_symbolClass {E : Type}
     [Field E] [CharZero E] [Algebra k E] {W : CommAlg E ⥤ Type 1} {u c : W ⟶ restrictAlg k E ⋙ X}
     {s : Finset (W.obj (of E E))} {t m : E} {δ : HodgeH (relFreeAb (offDiagonal X)) d}
     {A : EtaleChart d X} {O : Subfunctor (X ⊗ X)} (hO : IsOpenSubfunctor O)
@@ -1012,13 +1011,12 @@ lemma New.Variety.IsPointSum.cup_pointClass {k : Type} [Field k] [CharZero k] {d
     simp only [ComesFromPoints, Set.mem_singleton_iff, exists_eq_left, Ideal.span_le,
       Set.range_subset_iff, Fin.forall_fin_one] at h_cut
     convert h_cut using 2
-    · refine forall_congr' fun i ↦ ?_
-      change α.hom (G i.castSucc) = 0 ↔ α.hom (g i ⊗ₜ[k] 1) = 0
-      have hG : G i.castSucc = g i ⊗ₜ[k] 1 := Fin.snoc_castSucc _ _ _
-      rw [hG]
+    · change (∀ i : Fin d, α.hom (G i.castSucc) = 0) ↔
+        ∀ i : Fin d, α.hom (g i ⊗ₜ[k] 1) = 0
+      have hG (i : Fin d) : G i.castSucc = g i ⊗ₜ[k] 1 := Fin.snoc_castSucc _ _ _
+      simp only [hG]
     · change α.hom (G (Fin.last d)) = 0 ↔ α.hom (1 ⊗ₜ[k] g' 0) = 0
-      have hG : G (Fin.last d) = 1 ⊗ₜ[k] g' 0 := Fin.snoc_last _ _
-      rw [hG]
+      rw [show G (Fin.last d) = 1 ⊗ₜ[k] g' 0 from Fin.snoc_last _ _]
   obtain ⟨ξ, ξ_local, ξ_pt⟩ :=
     (a.prod b).exists_isLocalSymbol cut ((range_pointMap_prod ..).ge _ ⟨ha, hb⟩)
   let U : Subfunctor (X ⊗ Y) :=
