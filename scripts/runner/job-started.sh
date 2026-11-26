@@ -10,9 +10,8 @@
 #   repository whose name starts with batch/ (the batcher's batch pull requests);
 # - rh-pr-trusted: pull requests from any branch of this repository (pushing one needs write
 #   access);
-# - rh-pr-fork: pull requests from forks (build.yml sends them to the runner named by the
-#   repository variable PR_RUNS_ON), including those whose fork has been deleted. These runners
-#   assume hostile code and hold no credential.
+# - rh-pr-fork: pull requests from forks, including those whose fork has been deleted. These
+#   runners assume hostile code and hold no credential.
 # rh-big and rh-pr-trusted refuse pull requests from forks, and rh-pr-fork refuses pull requests
 # from branches of this repository. The head repository and branch are read from the event
 # payload at $GITHUB_EVENT_PATH, which GitHub writes and the pull request cannot change.

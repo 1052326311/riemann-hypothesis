@@ -46,12 +46,11 @@ baseline. `python3 -I scripts/tests/test_ci_cache_baseline.py` tests the selecti
 
 Pull requests land through GitHub's merge queue. `.github/workflows/build.yml` has one job,
 `lake build`, the queue's required check. It builds every pull request to `main` from a fork on
-a GitHub-hosted runner (or on the runner named by the repository variable `PR_RUNS_ON`, a JSON
-`runs-on` value such as `["self-hosted","rh-pr"]`; without it, `ubuntu-latest`), every pull
-request from a branch of this repository not starting with `batch/` on the self-hosted
-`rh-pr-trusted` runners, and every merge queue group (`merge_group`), push to `main`, manual run
-and pull request from a `batch/` branch of this repository on the self-hosted `rh-big` runner
-(both described below), with the exact record if there is one and the baseline otherwise. It
+the self-hosted `rh-pr-fork` runners, every pull request from a branch of this repository not
+starting with `batch/` on the self-hosted `rh-pr-trusted` runners, and every merge queue group
+(`merge_group`), push to `main`, manual run and pull request from a `batch/` branch of this
+repository on the self-hosted `rh-big` runner (all described below), with the exact record if
+there is one and the baseline otherwise. It
 fails if `lake build` fails, if the build log contains `` declaration uses `sorry` ``, or if
 `scripts/PrintAxioms.lean` reports any axiom other than `propext`, `Classical.choice` and
 `Quot.sound` for the five theorems. It never publishes anything.
@@ -95,9 +94,10 @@ pull requests:
   `batch/` (the batcher's batch pull requests). Only its builds are published (see above).
 - `rh-pr-trusted`, several runners on a shared host, run every other pull request from a branch
   of this repository. Each is confined to its own CPUs and memory, and uploads nothing.
-- `rh-pr-fork`, several runners on each of two 96-vCPU hosts, run pull requests from forks when
-  the repository variable `PR_RUNS_ON` is `["self-hosted","rh-pr-fork"]` (without it, they run
-  on `ubuntu-latest`). They assume hostile code: the hosts hold no credential at all (no R2 or
+- `rh-pr-fork`, several runners on each of two 96-vCPU hosts, run pull requests from forks.
+  (GitHub does not pass repository variables to pull requests from forks, so `build.yml` names
+  the label itself; changing it to `ubuntu-latest` there sends them back to GitHub-hosted
+  runners.) They assume hostile code: the hosts hold no credential at all (no R2 or
   AWS credential, no GitHub token beyond each runner's one-time configuration), and the
   instances' metadata endpoint is disabled in EC2 (`http-endpoint disabled`), so not even root
   can fetch the instance role's credentials. They upload nothing.
