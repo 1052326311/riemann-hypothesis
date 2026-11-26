@@ -233,12 +233,6 @@ lemma HodgeTest.hom_ext {f g : P ⟶ Q} (h_ring : f.1 = g.1)
   obtain rfl : m = m' := (basisFun P.baseAlg P.Index).ext fun i ↦ by simpa using h_basis i
   rfl
 
-private lemma HodgeTest.snd_sqZeroExt_map_apply (f : P ⟶ Q) (x : sqZeroExt.obj P) :
-    (sqZeroExt.map f x).snd = f.2 x.snd := rfl
-
-private lemma HodgeTest.sqZeroExt_map_comp_baseProj (f : P ⟶ Q) :
-    sqZeroExt.map f ≫ Q.baseProj = P.baseProj ≫ f.1 := rfl
-
 /-! ### Hodge cohomology, scaling, localisation and base change -/
 
 /-- Hodge cohomology: for a functor N from k-algebras to abelian groups, Ext^q from (A, M) ↦ N(A
@@ -379,11 +373,16 @@ lemma EtaleChart.bijective_pointMap_univPoint (c : HodgeTest k) :
   -- projection is the identity.
   have h_base (f : ⟨a.coordRing, Fin d⟩ ⟶ c) :
     (a.univPoint ≫ sqZeroExt.map f) ≫ c.baseProj = f.1 := by
-    simp [sqZeroExt_map_comp_baseProj, reassoc_of% a.univPoint_comp_baseProj]
+    rw [Category.assoc]
+    change a.univPoint ≫ (baseProj ⟨a.coordRing, Fin d⟩ ≫ f.1) = f.1
+    simp only [reassoc_of% a.univPoint_comp_baseProj]
   have h_left (f : ⟨a.coordRing, Fin d⟩ ⟶ c) : inv (a.univPoint ≫ sqZeroExt.map f) = f := by
     refine hom_ext (h_base f) fun i ↦ ?_
     -- The basis vector e_i is the M-part of the image of x_i.
-    simp [inv, EtaleChart.univPoint_coordinate a i, snd_sqZeroExt_map_apply]
+    simp only [inv, semilinearOfBasis_single]
+    change f.2 (a.univPoint (a.coordinate i)).snd = f.2 (single i 1)
+    rw [EtaleChart.univPoint_coordinate]
+    rfl
   have h_right (s : a.coordRing ⟶ sqZeroExt.obj c) : a.univPoint ≫ sqZeroExt.map (inv s) = s := by
     -- Both sides lift s followed by the projection, and u sends x_i to (x_i, e_i).
     refine a.lift_unique (π := c.baseProj) fst_surjective_and_kerIdeal_sq_eq_bot (h_base (inv s))

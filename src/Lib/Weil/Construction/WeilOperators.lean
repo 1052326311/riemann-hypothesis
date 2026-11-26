@@ -361,8 +361,7 @@ end New.Heisenberg.IsVacuum
   is bounded by the number of terms that fall in a fixed compact set, times a constant `M` and the
   norm of the model vector `v`.
 * `New.Heisenberg.OrthogonalSum.tmul`: the tensor product of model vectors, a product of functions.
-  It is multiplicative for norms and inner products (`New.Heisenberg.OrthogonalSum.norm_tmul`,
-  `New.Heisenberg.OrthogonalSum.modelInner_tmul`).
+  It is multiplicative for inner products (`New.Heisenberg.OrthogonalSum.modelInner_tmul`).
 * `New.Heisenberg.OrthogonalSum.weilRep_tmul`, `New.Heisenberg.Rep.integrated_tmul`: the tensor
   product is compatible with the Weil representation and with the integrated action.
 -/
