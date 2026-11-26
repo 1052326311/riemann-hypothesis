@@ -1,6 +1,8 @@
-import Lib.Adelic.Unitary.Defs
-import TauCeti.RepresentationTheory.CharacterTable.CentralCharacter
-import TauCeti.RepresentationTheory.CharacterTable.Completeness
+module
+
+public import Lib.Adelic.Unitary.Defs
+public import TauCeti.RepresentationTheory.CharacterTable.CentralCharacter
+public import TauCeti.RepresentationTheory.CharacterTable.Completeness
 
 /-!
 # Characters of finite groups: averages, virtual characters and central projections
@@ -34,6 +36,8 @@ This file sets up the character theory of a finite group `G` that is used for th
   projection in every unitary representation. Hence convolution with it does not increase `ℓ²`
   norms.
 -/
+
+@[expose] public section
 
 noncomputable section
 

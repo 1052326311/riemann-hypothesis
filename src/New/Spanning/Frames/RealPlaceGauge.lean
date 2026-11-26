@@ -1,10 +1,12 @@
-import Lib.CM.Sigma.Basic
-import Lib.DiscreteSeries.Bessel.FrameFibre
-import Lib.DiscreteSeries.Bruhat.FloorFibre
-import Lib.DiscreteSeries.Bruhat.SphereFibres
-import Lib.Weil.Construction.HeisenbergModel
-import New.Spanning.Bessel.Basic
-import New.Spanning.Frames.Correlations
+module
+
+public import Lib.CM.Sigma.Basic
+public import Lib.DiscreteSeries.Bessel.FrameFibre
+public import Lib.DiscreteSeries.Bruhat.FloorFibre
+public import Lib.DiscreteSeries.Bruhat.SphereFibres
+public import Lib.Weil.Construction.HeisenbergModel
+public import New.Spanning.Bessel.Basic
+public import New.Spanning.Frames.Correlations
 
 /-!
 # Floor measures at the complex place: Haar measure, place datum and gauge
@@ -59,6 +61,8 @@ Notions from other files:
 
 See `Lib.DiscreteSeries.Bruhat.ComplexPlace` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -1106,8 +1110,7 @@ def RealPlaceSizes.gauge (hρ : ρ ≤ L := by rfl) : Gauge hF.complexData := by
       levelUnit_mem_ofSize := by simpa using by linarith
       hasMatrixSize_basisMatrix := ?basis
       traceOne_div_mem_ofSize := ?trace
-      hasMatrixSize_boxSet := by
-              simp +contextual [HasMatrixSize, (norm_apply_le_l2_opNorm ..).trans, hρ.trans']
+      hasMatrixSize_boxSet := ?box
       mem_vecsOfSize_of_mem_closePairs := fun ω₁ ω₂ h_close ↦ ?close
       exists_unit_smul_mem_closePairs i _ :=
         ⟨(Units.mk0 ((L : ℂ) ^ (i + 2)) (by simpa using by linarith))⁻¹,
@@ -1142,14 +1145,17 @@ def RealPlaceSizes.gauge (hρ : ρ ≤ L := by rfl) : Gauge hF.complexData := by
     simp
     bound
   case le =>
-    simp (disch := positivity)
-    bound [sq_nonneg (L - 1)]
+    exact by
+      simp (disch := positivity)
+      bound [sq_nonneg (L - 1)]
   case basis =>
     simp [HasMatrixSize, apply_ite, complexBasis, Pi.single_apply, Matrix.one_apply]
     grind [norm_add_le, norm_one, norm_I]
   case trace =>
     simp
     linarith
+  case box =>
+    simp +contextual [HasMatrixSize, (norm_apply_le_l2_opNorm ..).trans, hρ.trans']
   case close =>
     have h_entry (k : 𝔰.BesselIndex) : ‖ω₁ k‖ ≤ 1 ∧ ‖ω₂ k‖ ≤ 1 :=
       norm_apply_le_one_of_sq_add_sq_lt_one h_close k
@@ -1157,13 +1163,15 @@ def RealPlaceSizes.gauge (hρ : ρ ≤ L := by rfl) : Gauge hF.complexData := by
     · simpa using (h_entry k).1.trans (by linarith)
     · simpa using (norm_sub_le_of_le (h_entry k).1 (h_entry k).2).trans (by linarith)
   case md =>
-    simp (disch := positivity) [← ofReal_norm, pow_right_comm]
-    bound
+    exact by
+      simp (disch := positivity) [← ofReal_norm, pow_right_comm]
+      bound
   case vol =>
-    simp (disch := positivity) [← mem_closedBall_zero_iff, -mem_closedBall]
-    grw [pi_le_four, h4]
-    ring_nf
-    bound
+    exact by
+      simp (disch := positivity) [← mem_closedBall_zero_iff, -mem_closedBall]
+      grw [pi_le_four, h4]
+      ring_nf
+      bound
 
 /-- A number has size `j` in the gauge of scale `L` if and only if its modulus is at most
 `L ^ j`. -/

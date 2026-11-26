@@ -1,8 +1,10 @@
-import Lib.Adelic.TraceFormula.OrbitalUnfolding
-import New.Appendix.DiscreteSeries.PositionGroup
-import New.Determinant.AuxiliaryForms.DeepLevelPoincarePeriod
-import New.Determinant.AuxiliaryForms.PathData
-import New.UpperBound.Objects.RowChain
+module
+
+public import Lib.Adelic.TraceFormula.OrbitalUnfolding
+public import New.Appendix.DiscreteSeries.PositionGroup
+public import New.Determinant.AuxiliaryForms.DeepLevelPoincarePeriod
+public import New.Determinant.AuxiliaryForms.PathData
+public import New.UpperBound.Objects.RowChain
 
 /-!
 # Vanishing of forms on Y₀ orthogonal to the deep level on Ỹ^0_0
@@ -58,6 +60,8 @@ are known in the literature. Related work: Prasad–Schulze-Pillot, Generalised 
 of Jacquet, 2008; Harris, Testing rationality of coherent cohomology of Shimura varieties, 2014;
 Muić, Fourier coefficients of automorphic forms and integrable discrete series, 2015.
 -/
+
+@[expose] public section
 
 /-!
 ## A vanishing criterion through restrictions of deep level forms
