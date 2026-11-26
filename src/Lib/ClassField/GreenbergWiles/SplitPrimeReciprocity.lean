@@ -86,7 +86,7 @@ namespace trivialisedCocycles
 functions with u. -/
 def map (u : A.Hom B) : A.trivialisedCocycles X I →+ B.trivialisedCocycles X I :=
   AddMonoidHom.mk'
-    (fun p ↦ ⟨p.1.map (Function.comp u) (Function.comp u), by
+    (fun p ↦ ⟨p.val.map (Function.comp u) (Function.comp u), by
       obtain ⟨⟨f, z⟩, h_cont, h_triv, h_zero⟩ := p
       refine ⟨by dsimp only [Prod.map_snd]; fun_prop, fun g x ↦ ?_, fun g hg ↦ ?_⟩
       · simpa [u.isIntertwining] using congrArg u (h_triv g x)
@@ -599,9 +599,9 @@ private lemma IsLargeLevel.SplitPlaces.sum_ord_smul_kummer_frob_eq_zero [Fintype
   -- Artin's law: the symbol `(χ, x)` dies on the stabiliser of `r`, which contains the complex
   -- conjugations.
   have h_artin : abelianLift χ (artinMap Q (principalIdele x.toMul)) = 1 :=
-    artin_reciprocity ⟨_, IsProGalois.isOpen_stabilizer r.toMul.1⟩
+    artin_reciprocity ⟨_, IsProGalois.isOpen_stabilizer r.toMul.val⟩
       (fun q hq ↦ congrArg (fun z : DiscreteUnits Ω ↦ z.toMul.val) (h_cc q hq))
-      (resH2_cyclicClass_eq_zero hx fun q ↦ ⟨ext q.2, χ_tors q⟩)
+      (resH2_cyclicClass_eq_zero hx fun q ↦ ⟨ext q.property, χ_tors q⟩)
   refine sum_ord_smul_frob_eq_zero (n := m) (Subtype.ext (funext χ_tors)) h_artin S.v_injective
     S.isPlaceOver (fun θ ↦ (S.isFrob θ).left)
     (fun θ ↦ χ_ine (S.isPlaceOver θ) (S.level_notMem θ)) fun u hu ↦ ?_
