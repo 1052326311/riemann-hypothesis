@@ -812,7 +812,8 @@ or `1 - (z + 1)` (for `β = false`). There are `C > 0`, independent of `𝔠`, a
 `(W', V')` on `planeDatum` is `γ` times the theta integral of `(W, V)` on the datum with
 `stdRowDatum σ 𝔠.semilocalChar y` at `S` and real part the cone integral of side `β` of `v'`, which
 integrates `coneIntegrand` with exponent `z + 1` over `k` in the maximal compact subgroup of `U(V')`
-and the archimedean ideles. -/
+and the archimedean ideles. As Poisson's formula is applied before the integral is evaluated, only
+values of `L` at points `≥ 1` occur, and the functional equation of `L` is not needed. -/
 theorem exists_planeConstantTerm_eq_thetaLarge (σ' : b ⊕ r' ≃ n') (σ : b ⊕ r ≃ n) (hn : 2 ∣ card n)
     (μ : InfinitePlace E → ℤ) (β : Bool) {z : ℕ}
     (hz : ((card r - card n / 2 : ℤ) + 1 : ℝ) = cond β (z + 1 : ℝ) (1 - (z + 1))) :
