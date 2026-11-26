@@ -166,8 +166,7 @@ lemma ker_thickeningProj_sq : ker c.thickeningProj ^ 2 = ⊥ := by
 lemma existsUnique_lift_thickening :
     ∃! ρ : PadicAlgCl p →ₐ[ℤ_[p]] c.Thickening,
       ∀ z : PadicAlgCl p, c.thickeningProj (ρ z) = c.genericStructureMap z := by
-  -- `thickeningProj` is onto with square-zero kernel, and `ℤ_p → ℚ_p → ℚ̄_p` is formally étale:
-  -- a lift exists by formal smoothness and is unique by formal unramifiedness.
+  -- `thickeningProj` is onto with square-zero kernel, and `ℤ_p → ℚ_p → ℚ̄_p` is formally étale.
   let : Algebra ℤ_[p] c.GenericRing := restrictScalars ℤ_[p] ℂ_[p] c.GenericRing
   have h_nil : IsNilpotent (ker c.thickeningProj) := ⟨2, c.ker_thickeningProj_sq⟩
   have : FormallyEtale ℤ_[p] ℚ_[p] := .of_isLocalization (nonZeroDivisors ℤ_[p])
@@ -184,9 +183,9 @@ lemma existsUnique_lift_thickening :
       (congrArg c.genericStructureMap ((OC.toPadicIntAlgHom _).commutes a))
   let π : c.Thickening →ₐ[ℤ_[p]] c.GenericRing := ⟨c.thickeningProj, h_linear⟩
   have h_surj : Surjective π := c.thickeningProj_surjective_and_ker_thetaGeneric.left
-  exact existsUnique_of_exists_of_unique
-    ⟨liftOfSurjective s π h_surj h_nil, liftOfSurjective_apply s π h_surj h_nil⟩
-    fun ρ ρ' hρ hρ' ↦ ext' c.thickeningProj h_nil ρ ρ' fun z ↦ by rw [hρ, hρ']
+  change ∃! ρ : PadicAlgCl p →ₐ[ℤ_[p]] c.Thickening, ∀ z, π (ρ z) = s z
+  simpa only [AlgHom.ext_iff, AlgHom.comp_apply] using
+    New.Variety.existsUnique_algHom_lift s π h_surj h_nil
 
 /-- The unique `ℤ_p`-algebra map from `ℚ̄_p` to the thickening that lifts the structure map
 `ℚ̄_p → ℂ_p → R[1/p]` along `thickeningProj`. -/
