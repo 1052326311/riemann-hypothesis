@@ -895,11 +895,11 @@ theorem eventually_exists_data (P : Parameters) {ε : ℝ} (hε : 0 < ε) (hε_l
   have h_four : 4 ∣ P.q₀ * P.d := Dvd.dvd.mul_right (.trans (by norm_num) P.dvd_q₀) P.d
   have hW : Tendsto (fun x : ℕ ↦ (x : ℝ) ^ (ε / 6)) atTop atTop :=
     (tendsto_rpow_atTop (by positivity)).comp tendsto_natCast_atTop_atTop
-  filter_upwards [h_scale, hW.eventually (exists_prime_modEq_one_log_mem _ (n + 7) h_four),
-    eventually_exists_data_of_isAdmissibleData P hε hε_lt] with x hx h_window h_data
+  filter_upwards [h_scale, hW.eventually (exists_prime_modEq_one_log_mem _ (n + 7) h_four)]
+    with x hx h_window
   -- admissible data exist, and they are the fields of the data `D`
   obtain ⟨m, r, s, b, T, g, α, N, β, h_adm⟩ := hx.exists_isAdmissibleData h_window
-  obtain ⟨D, h_fields, h_logX₁, h_logB⟩ := h_data m r s b T g α N β h_adm
+  obtain ⟨D, h_fields, h_logX₁, h_logB⟩ := h_adm.exists_hasFields hx
   obtain rfl : D.m = m := h_fields.m_eq
   obtain rfl : D.r = r := h_fields.r_eq
   obtain rfl : D.natB = b := h_fields.natB_eq
@@ -907,6 +907,6 @@ theorem eventually_exists_data (P : Parameters) {ε : ℝ} (hε : 0 < ε) (hε_l
   have h_natB : IsLeast {b : ℕ | D.q₁ * D.natX₁ ∣ b ∧ exp ((x : ℝ) ^ ε) < b} D.natB := by
     simpa only [h_fields.natX₁_eq, rpow_div_six_pow_six] using h_adm.isLeast_b
   exact ⟨D, h_fields.natX_eq, h_fields.natX₁_eq, h_natB, h_adm.isLeast_m, h_adm.isLeast_r, h_logX₁,
-    h_logB⟩
+    by simpa only [rpow_div_six_pow_six] using h_logB⟩
 
 end New
