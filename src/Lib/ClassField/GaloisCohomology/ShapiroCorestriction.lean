@@ -1,4 +1,6 @@
-import Lib.General.Groups.ProfiniteCharacters
+module
+
+public import Lib.General.Groups.ProfiniteCharacters
 
 /-!
 # Shapiro's lemma, corestriction and reduction of H² statements to steps of prime index
@@ -37,6 +39,8 @@ Notions from other files:
 
 Known; see `Lib.ClassField.GaloisCohomology.KummerCyclicClasses` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

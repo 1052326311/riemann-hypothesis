@@ -1,7 +1,9 @@
-import Lib.General.Algebra.IntegralPowerSeries
-import New.Congruences.Lifting.CutExponentBounds
-import New.Congruences.Lifting.FewLowJumps
-import New.Congruences.Lifting.TameCharts
+module
+
+public import Lib.General.Algebra.IntegralPowerSeries
+public import New.Congruences.Lifting.CutExponentBounds
+public import New.Congruences.Lifting.FewLowJumps
+public import New.Congruences.Lifting.TameCharts
 
 /-!
 # From sides to lattices: few low jumps, b-letters and tame types
@@ -58,6 +60,8 @@ work: Iovita–Marmora, Continuity of the finite Bloch–Kato cohomology, 2015; 
 Exactness of Breuil–Kisin functors, 2026; Gao–Liu, Integral filtered Sen theory and applications,
 2024.
 -/
+
+@[expose] public section
 
 namespace New.Lift
 

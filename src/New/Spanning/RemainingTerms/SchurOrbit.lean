@@ -1,7 +1,9 @@
-import New.Spanning.RemainingTerms.ColumnLattice
-import New.Spanning.RemainingTerms.FrameParts
-import New.Spanning.RemainingTerms.LinkLattice
-import New.Spanning.RemainingTerms.SchurTest
+module
+
+public import New.Spanning.RemainingTerms.ColumnLattice
+public import New.Spanning.RemainingTerms.FrameParts
+public import New.Spanning.RemainingTerms.LinkLattice
+public import New.Spanning.RemainingTerms.SchurTest
 
 /-!
 # Schur's test for one orbit
@@ -36,6 +38,8 @@ Notions from other files:
   `New.Filling.tsum_amplitudeMajorant_orbit_le`: the test, and its form as a bound by
   `New.Filling.orbitBound`.
 -/
+
+@[expose] public section
 
 namespace New.Filling
 

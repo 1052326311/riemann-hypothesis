@@ -1,8 +1,10 @@
-import Lib.GaloisRep.LocalGlobal.LabelCompatibility
-import Lib.GaloisRep.Main.DivisibleSelmerModules
-import New.Congruences.LocalLoss.Basic
-import New.OneLift.TestedForms
-import New.UpperBound.Objects.Rows
+module
+
+public import Lib.GaloisRep.LocalGlobal.LabelCompatibility
+public import Lib.GaloisRep.Main.DivisibleSelmerModules
+public import New.Congruences.LocalLoss.Basic
+public import New.OneLift.TestedForms
+public import New.UpperBound.Objects.Rows
 
 /-!
 # Bad places, ℓ-adic avatars and hypotheses on conjugate self-dual representations
@@ -39,6 +41,8 @@ Notions from other files:
 
 See `Lib.ClassField.Avatar.LocalGlobalCompatibility` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -720,7 +724,7 @@ lemma IsLiftSetting.range_typeProjection_mem_invtSubmodule {O : DescentPair D.E 
     commute_supportedOn_trivialOn hu h_off
   -- The action of `g` is a scalar multiple of this translation, so both pass through the operator.
   refine (map_smul ..).trans (congrArg _ (map_heckePolyOp (algFormRep _ _ _) x fun u hu ↦ ?_).symm)
-  rw [← Module.End.mul_apply, ← (h_comm u hu).map, Module.End.mul_apply]
+  rw [← mul_apply_eq_comp, ← (h_comm u hu).map, mul_apply_eq_comp]
 
 /-- Infinitely many places of `E` are split and are, with their conjugates, outside the places of
 the descent pair `O`. -/

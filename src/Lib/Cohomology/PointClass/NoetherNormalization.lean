@@ -1,7 +1,9 @@
-import Lib.General.Algebra.MultivariatePolynomials
-import Lib.General.Geometry.PointsOfProperSchemes
-import Lib.General.Geometry.ProjectiveSpace
-import Lib.PadicComparison.Descent.TestCategory
+module
+
+public import Lib.General.Algebra.MultivariatePolynomials
+public import Lib.General.Geometry.PointsOfProperSchemes
+public import Lib.General.Geometry.ProjectiveSpace
+public import Lib.PadicComparison.Descent.TestCategory
 
 /-!
 # Projective Noether normalisation and homogeneous coordinates of embedded points
@@ -39,6 +41,8 @@ Notions from other files:
 
 Known; see `Lib.Cohomology.PointClass.LinearIndependence` for sources.
 -/
+
+@[expose] public section
 
 /-!
 ## Noether normalisation of a cone by linear forms

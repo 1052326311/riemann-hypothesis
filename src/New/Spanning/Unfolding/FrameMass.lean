@@ -1,5 +1,7 @@
-import Lib.SiegelWeil.OneVector.SiegelClassSum
-import New.Spanning.Bessel.FillingData
+module
+
+public import Lib.SiegelWeil.OneVector.SiegelClassSum
+public import New.Spanning.Bessel.FillingData
 
 /-!
 # Masses of spheres and of frames
@@ -28,6 +30,8 @@ Notions from other files:
 * `New.Shape.openCellConst`: `c_G = vol U(k) (2 π ^ k / (k - 1)!) / vol U(r)`.
 * `New.volÔ E`: the volume `vol(Ô) = (2 / rd) ^ f` of the integral finite adeles.
 -/
+
+@[expose] public section
 
 noncomputable section
 

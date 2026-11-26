@@ -1,5 +1,7 @@
-import Lib.General.LinearAlgebra.MatrixNormBounds
-import New.Congruences.Lifting.ExponentLattices
+module
+
+public import Lib.General.LinearAlgebra.MatrixNormBounds
+public import New.Congruences.Lifting.ExponentLattices
 
 /-!
 # Exponents of lattice elements in a Hodge basis and the length of one step on a line
@@ -52,6 +54,8 @@ Notions from other files:
 See `New.Congruences.Lifting.SafeMoves` and `New.Congruences.Lifting.CupOrthogonalityBounds` for
 related work. For sources see `Lib.PadicHodge.Kisin.PeriodMatrixFrame`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
