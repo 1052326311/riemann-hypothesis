@@ -67,7 +67,6 @@ lemma le_constantBound :
   have hφ : (φ P.q₀ : ℝ) ≤ P.q₀ := mod_cast totient_le P.q₀
   -- `P.constantBound` is `q₀ + 2 d + 6` plus nonnegative terms
   have h_le : P.q₀ + (2 * P.d + 6) ≤ P.constantBound := by
-    have h_const : (0 : ℝ) ≤ P.vacuumBoundConst := P.vacuumBoundConst.cast_nonneg
     have h_sum : 0 ≤ ∑ w ∈ primitiveRoots P.q₀ ℂ,
         |Real.log ‖(Polynomial.cyclotomic P.q₀ ℂ).derivative.eval w‖| :=
       sum_nonneg fun w _ ↦ abs_nonneg _
