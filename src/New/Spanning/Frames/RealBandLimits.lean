@@ -379,6 +379,8 @@ lemma IsCutBessel.formIntegrandL1Norm_zero_eq (hF : IsCutBessel F rep ρ s b W f
     simp only [c, mul_assoc u, (hF.isBesselFunction .cut).map_unipotent_mul u hu, inner_smul_left,
       inner_smul_right]
     simp [← mul_assoc, Complex.mul_conj']
+  -- The integrand `c` is left invariant under `𝖴`, so its law for the floors is `hF.haarRatio`
+  -- times its law on the quotient.
   have h_pairing : hF.complexData.partialCorrelation 0 (frameCorrelation F 1) 1 x =
       hF.haarRatio.toReal • quotientPairing F F x := by
     simpa [c, partialCorrelation, quotientPairing, integral_smul_measure] using

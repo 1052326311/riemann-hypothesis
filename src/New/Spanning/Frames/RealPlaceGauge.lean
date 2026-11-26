@@ -537,9 +537,12 @@ lemma RealPlaceSizes.haarRatio_le (hF : RealPlaceSizes 𝔰 ρ s b) :
 
 open PlaceData Shape in
 /-- A measurable function invariant on the left under `besselU` has the same distribution
-for `quotientMeasureFrom 0` as for `besselQuotMeasure` scaled by `haarRatio`. -/
+under `quotientMeasureFrom 0`, the convolution of the floor measures of `complexData` at `ℂ`,
+as under `besselQuotMeasure` scaled by `haarRatio`. The measure `besselQuotMeasure` integrates
+over the quotient 𝖴 \ G₁. -/
 lemma RealPlaceSizes.identDistrib_quotientMeasureFrom_haarRatio_smul (hF : RealPlaceSizes 𝔰 ρ s b)
-    {A : Type*} [MeasurableSpace A] {f : 𝔰.G₁ → A} (hf : Measurable f) (h_inv : besselU.FixesLeft f) :
+    {A : Type*} [MeasurableSpace A] {f : 𝔰.G₁ → A} (hf : Measurable f)
+    (h_inv : besselU.FixesLeft f) :
     ProbabilityTheory.IdentDistrib f f (hF.complexData.quotientMeasureFrom 0)
       (hF.haarRatio • besselQuotMeasure) := by
   -- `groupMeasure` is `du ∗ θ`, with `θ` the convolution of the measures of the floors. So
