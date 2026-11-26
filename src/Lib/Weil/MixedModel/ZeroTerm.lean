@@ -1,6 +1,5 @@
 module
 
-public import Lib.DiscreteSeries.Holomorphic.MaximalCompactMinors
 public import Lib.Weil.MixedModel.NamedData
 public import Lib.Weil.MixedModel.RealTheta
 

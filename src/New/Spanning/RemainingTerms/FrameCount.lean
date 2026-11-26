@@ -1,6 +1,5 @@
 module
 
-public import Lib.GLn.SchurModule.Basic
 public import New.Spanning.Unfolding.ReducedPoints
 
 /-!
