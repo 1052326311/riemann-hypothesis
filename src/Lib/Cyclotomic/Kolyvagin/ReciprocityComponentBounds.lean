@@ -700,7 +700,7 @@ lemma nsmul_component_eq_zero (h_bound : IsStickelbergerBound N e X)
       galUnitsRep g (J (ofZMod (N * l ^ ν) 1)) = J (ofZMod (N * l ^ ν) 1) := by
     rw [hJ_level.galUnitsRep_apply (h_tors 1) g 1 (by simp [MonoidHom.mem_ker.1 g.prop]),
       one_nsmul]
-  have hJ_away (A : ValuationSubring Ω) (_hA_l : A.valuation (l : Ω) = 1)
+  have hJ_away (A : ValuationSubring Ω)
       (hA_p : A.valuation (p : Ω) = 1) :
       (∃ r : DiscreteUnits Ω, A.valuation (J (ofZMod (N * l ^ ν) 1) - l ^ ν • r).toMul = 1 ∧
         ∀ i ∈ inertiaGroup (cycloGalGroup (N * l ^ ν)) A, galUnitsRep i r = r) ∨
@@ -711,7 +711,7 @@ lemma nsmul_component_eq_zero (h_bound : IsStickelbergerBound N e X)
       (surjInv (cyclotomicCharMod_surjective _) u) = u :=
     surjInv_eq (cyclotomicCharMod_surjective _) u
   obtain ⟨μ, hμ, h_law⟩ := artin_reciprocity_of_mem_component hla ha hB hσ hz hp hz_tors hJ_fix
-    hJ_away h_reps
+    (fun A _ ↦ hJ_away A) h_reps
   have h_ord (u : (ZMod (N * l ^ ν))ˣ) :
       μ u = floorDiff a (ofZMod (N * l ^ ν) (u : ZMod (N * l ^ ν))) := by
     simpa [hJ_level.galUnitsRep_apply (h_tors 1) _ _ zmod_eq_natCast_val, surjInv_eq,
