@@ -208,13 +208,6 @@ lemma arrowProduct_twistedPairWeil (g' : G E ε') (g'' : G E ε'') :
 
 /-! ### The joining map on finite parts -/
 
-/-- The point evaluations separate the finite part: a vector u of the finite part of the data on
-Hom(V, V′) with θ(ϱ(x) u) = 0 for every point x is zero. -/
-private lemma eq_zero_of_forall_theta_rho_eq_zero {u : (V.hom V').finitePart}
-    (h : ∀ x : ι' × ι → 𝔸 E, (V.hom V').θ ((V.hom V').ϱ x u) = 0) : u = 0 :=
-  -- `θ (ϱ x f)` is the value `f x` (`theta_rho`), and data are determined by their values.
-  Subtype.ext ((V.hom V').data_ext fun x ↦ by simpa [theta_rho] using h x)
-
 /-- The induced map `New.Seesaw.arrowTensor` on the tensor product of the finite parts is
 injective. -/
 lemma injective_arrowTensor :
@@ -226,7 +219,8 @@ lemma injective_arrowTensor :
   obtain ⟨z, hz_ne, hz⟩ := theta_arrowProduct V V' V''
   refine tensor_eq_zero_of_separating
     (f := fun x ↦ ((V.hom V').θ ∘L (V.hom V').ϱ x).toLinearMap.domRestrict (V.hom V').finitePart)
-    (fun h ↦ eq_zero_of_forall_theta_rho_eq_zero fun x ↦ h x) t fun x ↦ ?_
+    (fun h ↦ Subtype.ext ((V.hom V').data_ext fun x ↦ by simpa [theta_rho] using h x)) t
+    fun x ↦ ?_
   -- Write the point `x` as the flip of a point `y`.
   obtain ⟨y, rfl⟩ := (flipCoords star_normNegOne_mul_self rfl (t := ε) (s := ε')).φ.surjective x
   ext x'
