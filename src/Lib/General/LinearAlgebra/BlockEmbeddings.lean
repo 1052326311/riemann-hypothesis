@@ -365,9 +365,7 @@ noncomputable def New.U.inl {n m : Type*} [Fintype n] [DecidableEq n] [Fintype m
   (sum (signMatrix_sum ε η)).comp (MonoidHom.inl (U (signMatrix ε)) (U (signMatrix η)))
 
 /-!
-## Norms of block diagonal matrices and properness of block embeddings
-
-Two facts on block diagonal matrices; all norms are `L²` operator norms.
+## Properness of block embeddings
 -/
 
 section BlockEmbeddingNorm
@@ -376,20 +374,6 @@ open Matrix Norms.L2Operator
 
 variable {n m : Type*} [Fintype n] [DecidableEq n] [Fintype m] [DecidableEq m] {ε : n → ℤˣ}
   {ε' : m → ℤˣ}
-
-/-- The L² operator norm of diag(x, b) is the larger of the norms of x and b. -/
-@[simp]
-theorem New.norm_fromBlocks_zero_zero (x : Matrix n n ℂ) (b : Matrix m m ℂ) :
-    ‖fromBlocks x 0 0 b‖ = ‖x‖ ⊔ ‖b‖ := by
-  -- `(x, b) ↦ fromBlocks x 0 0 b` is an injective star homomorphism of C⋆-algebras, so an isometry
-  let φ : Matrix n n ℂ × Matrix m m ℂ →⋆ₙₐ[ℂ] Matrix (n ⊕ m) (n ⊕ m) ℂ :=
-    { toFun p := fromBlocks p.1 0 0 p.2
-      map_smul' := by simp [fromBlocks_smul]
-      map_zero' := fromBlocks_zero
-      map_add' := by simp [fromBlocks_add]
-      map_mul' := by simp [fromBlocks_multiply]
-      map_star' := by simp [star_eq_conjTranspose, fromBlocks_conjTranspose] }
-  exact NonUnitalStarAlgHom.norm_map φ (fun p q h ↦ by simpa [φ, Prod.ext_iff] using h) (x, b)
 
 /-- For families of signs ε and ε', the embedding a ↦ diag(a, 1) of U(diag ε) into
 U(diag(ε, ε')) is a proper map. -/
