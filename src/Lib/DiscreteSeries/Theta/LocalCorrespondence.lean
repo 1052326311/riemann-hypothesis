@@ -554,7 +554,8 @@ theorem New.IsJointHarmonic.howe_argument [DecidableEq C] [DecidableEq R] {Φ : 
     simp [polyDegreeLE, restrictSupport_eq_span, h_empty]
   by_contra hj
   obtain ⟨-, Q, hQ, hQ_ne, -, h_col⟩ := l'.exists_highest_vector (ρ := T.swap.oscRows)
-    (perpInDegree j G) (perpInDegree_ne_bot hj) fun _ _ hcd ↦ mapsTo_perpInDegree hcd (hG_cols _)
+    (perpInDegree j G) (perpInDegree_ne_bot hj) fun _ _ hcd ↦
+      (Module.End.mem_invtSubmodule_iff_mapsTo _).2 (mapsTo_perpInDegree hcd (hG_cols _))
   -- `Q` is highest of weight `Λ` for the rows: take adjoints in `h_diag` and `h_lower`. If
   -- `E b a` maps `N` into `G`, then `E a b` maps the complement of `G` into that of `N`
   -- (`mapsTo_perpInDegree`).
