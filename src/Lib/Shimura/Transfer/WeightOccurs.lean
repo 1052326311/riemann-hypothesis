@@ -84,32 +84,19 @@ lemma New.Variety.prod_map_tauHecke_mem_spanOn {E : Type} [Field E] [NumberField
   induction L with
   | nil => exact subset_span ⟨1, Subgroup.one_mem _, by simp [MonoidAlgebra.one_def]⟩
   | cons s L ih =>
-    obtain ⟨⟨v, hv_safe⟩, j⟩ := s
+    obtain ⟨⟨v, -, h_notMem, h_notMem_conj⟩, j⟩ := s
     refine spanOn.mul heckeSum_mem_spanOn ih ?_
     rintro _ ⟨U, rfl⟩ g
-    have h_GU : invHeckeIsogeny (v : SplitFinPlace E) U ∈ GU E (Fin a) :=
-      And.left (invHeckeIsogeny_mem_GUPlus _ U)
-    refine Subgroup.mul_mem _ ⟨h_GU, ?_⟩
-    -- Both factors of `invHeckeIsogeny` are trivial at `w₁`, because `w₁` divides `𝔑`, whereas a
-    -- safe place and the places over the conjugate of the place below it do not.
-    -- (`h_notMem` says that `𝔑 ∉ v`, and `h_notMem_conj` that `𝔑` lies in no place over the
-    -- conjugate of the place below `v`.)
-    obtain ⟨-, h_notMem, h_notMem_conj⟩ := hv_safe
+    refine Subgroup.mul_mem _ ⟨(invHeckeIsogeny_mem_GUPlus _ U).1, ?_⟩
+    -- Both factors of `invHeckeIsogeny` are trivial at `w₁` since `w₁ ∣ 𝔑` and `v` is safe.
     have h_below_ne : (w₁ : FinPlace E).below (QuadField d₀) ≠
-        star ((v : FinPlace E).below (QuadField d₀)) :=
-      fun h_below ↦ h_notMem_conj _ h_below hw₁
-    have h_ne : (w₁ : FinPlace E) ≠ (v : FinPlace E) :=
-      fun h_eq ↦ h_notMem (by rwa [← h_eq])
-    have h_star_ne : star (w₁ : FinPlace E) ≠ (v : FinPlace E) :=
-      fun h_eq ↦ h_below_ne (by rw [← h_eq, below_star, star_star])
-    suffices h_triv :
-        (invHeckeIsogeny (v : SplitFinPlace E) U).map (evalAt (w₁ : FinPlace E)) = 1 by
-      simp [dualComponent, h_triv]
-    rw [invHeckeIsogeny, map_mul, evalAt_conjAtSplit_of_ne (hu := h_ne) (hu' := h_star_ne),
-      mul_one]
-    -- `uniformizerNorm v` is a norm of a local idele at `v`, so the central scalar is trivial
-    -- at `w₁`.
-    rw [uniformizerNorm, ← map_pow, ← map_inv, ← map_pow, ← map_inv]
+        star ((v : FinPlace E).below (QuadField d₀)) := fun h ↦ h_notMem_conj _ h hw₁
+    suffices (invHeckeIsogeny (v : SplitFinPlace E) U).map (evalAt (w₁ : FinPlace E)) = 1 by
+      simp [dualComponent, this]
+    rw [invHeckeIsogeny, map_mul,
+      evalAt_conjAtSplit_of_ne (hu := fun h ↦ h_notMem (by rwa [← h]))
+        (hu' := fun h ↦ h_below_ne (by rw [← h, below_star, star_star])),
+      mul_one, uniformizerNorm, ← map_pow, ← map_inv, ← map_pow, ← map_inv]
     exact evalAt_centralScalar_of_ne h_below_ne _
 
 /-- A word `L` in the Hecke operators `tauHecke` at safe places acts on a common eigenvector `φ`
