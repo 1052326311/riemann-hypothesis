@@ -230,7 +230,7 @@ lemma symm_homSource_zeroTerm_eq_integral (f : 𝒮 (V.hom T)) :
         (f (H.iAdelic *ᵥ y + H.lAdelic *ᵥ x)) := by
     refine (Equiv.ofInjective _ (toAdele (E := E)).injective.comp_left).hasSum_iff.mp ?_
     -- After reindexing, the index is a rational vector ξ, which acts by adding `toAdele ∘ ξ`.
-    show HasSum (fun ξ : n' × p → E ↦ H.slice (toAdele ∘ ξ + x) f y) _
+    change HasSum (fun ξ : n' × p → E ↦ H.slice (toAdele ∘ ξ + x) f y) _
     simpa [mulVec_add] using
       H.hasSum_theta_slice ((V.hom T).ϱ (H.iAdelic *ᵥ y + H.lAdelic *ᵥ x) f)
   -- Evaluation at `y` is the continuous linear map `evalAt`, so it commutes with the integral.

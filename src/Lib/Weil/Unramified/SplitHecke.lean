@@ -410,7 +410,7 @@ with eigenvalue the polynomial made from the `t i`. -/
 theorem hasHeckePolynomial_of_heckeSplit (hy : y ∈ sphericalAt π w) {t : ℕ → ℂ}
     (h : ∀ i : ℕ, heckeSplit π hw i y = t i • y) :
     HasHeckePolynomial π hw (heckePolyEval n w t) y := by
-  show y ∈ sphericalAt π w ∧ ∀ T : ℂ, heckePolyOp π hw T y = heckePolyEval n w t T • y
+  change y ∈ sphericalAt π w ∧ ∀ T : ℂ, heckePolyOp π hw T y = heckePolyEval n w t T • y
   refine ⟨hy, fun T ↦ ?_⟩
   -- termwise, `T_i` acts on `y` by `t i`
   calc heckePolyOp π hw T y

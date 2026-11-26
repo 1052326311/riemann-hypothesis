@@ -486,7 +486,7 @@ lemma isAppellHumbert_realLattice
   intro l hl m hm
   obtain ⟨γ, hγ, rfl⟩ := mem_realLattice.1 hl
   obtain ⟨γ', hγ', rfl⟩ := mem_realLattice.1 hm
-  show canonicalMultiplier (fockForm _) b (realImage γ + realImage γ') =
+  change canonicalMultiplier (fockForm _) b (realImage γ + realImage γ') =
     _ * _ * exp (Real.pi * I * ratRiemannForm γ' γ)
   -- The canonical multiplier is the inverse of the semicharacter.
   simp only [← realImage_add, canonicalMultiplier_realImage hb, semichar_finiteImage_add hγ hγ',
@@ -556,7 +556,7 @@ theorem Space.isThetaFunction_iff :
   · let θ : B.thetaSpace (canonicalMultiplier B b) := ⟨entireTheta V.vacElem, h_vac⟩
     have hθ : θ ≠ 0 := fun h ↦ V.entireTheta_vacElem_ne_zero (congrArg Subtype.val h)
     obtain ⟨c, hc⟩ : ∃ c : ℂ, c • θ = ⟨F, (mem_thetaSpace_iff_isThetaFunction hb).2 hF⟩ :=
-      (finrank_eq_one_iff_of_nonzero' θ hθ).1 h_dim _
+      (finrank_eq_one_iff_of_ne_zero' θ hθ).1 h_dim _
     exact ⟨c, congrArg Subtype.val hc⟩
   · rintro ⟨c, rfl⟩
     exact (mem_thetaSpace_iff_isThetaFunction hb).1 (Submodule.smul_mem _ c h_vac)

@@ -680,7 +680,7 @@ lemma Exchange.seesaw_periods (J : Type*) {X : J → Type}
   have h_line (v : fockSpace (realSigns E (homSigns t' s'))) : L v ∈ ℂ ∙ c := by
     -- The preimage of the line is closed and polynomials are dense; matched ones span them.
     refine denseRange_polyVector.induction_on v
-      ((closed_of_finiteDimensional _).preimage L.continuous) fun p ↦
+      ((isClosed_of_finiteDimensional _).preimage L.continuous) fun p ↦
         (span_le (p := (ℂ ∙ c).comap (L.toLinearMap ∘ₗ polyVector _))).2 ?_ (h_span mem_top)
     rintro p ⟨Q, Ψ, M, h_period, h_kernel⟩
     let U (o : J) (i : X o) : T.Form (l d) := modLift S T (a o) Φ (Ψ o i) (k d) (l d) (y o i)

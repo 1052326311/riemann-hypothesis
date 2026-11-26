@@ -562,7 +562,7 @@ lemma exists_tsum_enorm_constTerm_le (hd : ∀ b : ι', d (Y'.stringReversal b) 
     _ = ∑' a : {r // 0 < Y.mapDegree d r} → E, ‖U.θ (D.slice (toAdele ∘ a) f)‖ₑ := by
       simp only [← e.tsum_eq, term_eq]
     _ ≤ ‖U.θ‖ₑ * (M * ‖f‖ₑ) := by grw [U.θ.le_opENorm, ENNReal.tsum_mul_left, hM]
-    _ = (‖U.θ‖₊ * M : NNReal) * ‖f‖ₑ := by rw [ENNReal.coe_mul, mul_assoc, enorm_eq_nnnorm]
+    _ = (‖U.θ‖₊ * M : NNReal) * ‖f‖ₑ := by rw [ENNReal.coe_mul, mul_assoc, eNorm_eq_nnNorm]
 
 variable (Y) in
 /-- The set `𝒞` of classes whose chosen representative agrees with `T = Y.stringMap Y'`
