@@ -241,7 +241,8 @@ lemma oneSub_comp_gluing :
     change gluing.app A ((oneSub (pointOrTorusTwist χ)).app A (ofTorus (ψ := 𝟭 _) t')) =
       (oneSub (discTwist χ)).app A (gluing.app A (ofTorus (ψ := 𝟭 _) t'))
     simp [gluing_ofTorus, oneSub_ofTorus, oneSub_ofDisc, discTwist,
-      charTwist_comp_discToTorus_assoc, sub_sub_sub_comm]
+      charTwist_comp_discToTorus_assoc]
+    exact sub_sub_sub_comm ..
 
 /-- In `O^♭[ℚ]`, the monomial of the absolute value `mabs s` is `T^t` for the rational
 `t = s.nnabs`. -/
