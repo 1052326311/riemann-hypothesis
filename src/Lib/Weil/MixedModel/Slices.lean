@@ -461,8 +461,9 @@ def adaptedFrame (h : ReadsAt S π) (A : W'.Splitting W p) [k : IsBaseAdapted A]
                           -- The matrices are square by `A.card_eq`, so one of the two products
                           -- suffices. Three claims remain: the frame and its dual are integral, and
                           -- their product is one.
-                          simp +arith [↓mul_eq_one_comm_of_card_eq _ n', A.card_eq, ← add_assoc,
-                            fromCols_mul_fromRows]
+                          simp +arith only [↓mul_eq_one_comm_of_card_eq _ n', A.card_eq,
+                            ← add_assoc, fromCols_mul_fromRows, RingHom.coe_comp, RingHom.coe_snd,
+                            Fintype.card_sum, and_self]
                           obtain ⟨-, h_int⟩ := k.isOrthoIntegral
                           refine ⟨?_, ?_, ?_⟩
                           · -- the frame is integral
