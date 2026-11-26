@@ -365,8 +365,8 @@ lemma le_of_cover {V : κ → Y.Opens} (hV : IsOpenCover V) {U W : Y.Opens}
 
 /-! ### Effective epimorphisms -/
 
-/-- A quasi-compact effective epimorphism of schemes is scheme-theoretically dominant. -/
-instance [EffectiveEpi p] [QuasiCompact p] : IsSchemeTheoreticallyDominant p := by
+/-- An effective epimorphism of schemes is scheme-theoretically dominant. -/
+instance [EffectiveEpi p] : IsSchemeTheoreticallyDominant p := by
   -- `p` factors through the closed immersion of its image, which is thus an isomorphism.
   have : IsIso p.imageι := ExtremalEpi.isIso p p.toImage p.imageι p.toImage_imageι
   have h_ker : p.imageι.ker = ⊥ := p.imageι.ker_eq_bot_of_isIso
