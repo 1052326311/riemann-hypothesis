@@ -126,7 +126,7 @@ lemma exists_isTableauBasis {ι : Type} [Fintype ι] {M : ℕ} {k : ℕ → ℕ}
     rw [h_tableau]
     simpa [← Set.range_comp, h_prod] using
       hI.nabla_le_span R (minorProduct_mem_nabla cols_T)
-  · simpa [fill, J, Fintype.prod_sigma, ← diagramWeight_eq_columnWeight, diagramWeight_apply] using
+  · simpa [J, Fintype.prod_sigma, ← diagramWeight_eq_columnWeight, diagramWeight_apply] using
       hI.character ()
 
 /-- Over a finite alphabet `ι`, consider the set of fillings chosen by `Classical.epsilon` (heights

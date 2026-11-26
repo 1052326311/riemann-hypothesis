@@ -746,7 +746,7 @@ lemma vacuumCoeff_ofSplitPlace_uniformizer_zpow {l : InfinitePlace E → ℤ}
     rw [h_idele]
     exact (h_unram.apply_locFullIdele g.det).trans (by simp [hg])
   have h_unif : χ.atUniformizer w = ν.baseChange.atUniformizer w * υ.atUniformizer w ^ (2 * k) := by
-    simp [χ, HeckeChar.atUniformizer, finPart, pow_mul]
+    simp [χ, HeckeChar.atUniformizer, pow_mul]
   have h_conj : starRingEnd ℂ (υ.atUniformizer w) = (υ.atUniformizer w)⁻¹ := by
     simp [HeckeChar.atUniformizer, finPart, ← Circle.coe_inv_eq_conj]
   rw [vacuumCoeff, h_det, h_mult, h_unif, hν.atUniformizer_star hψ hψ_star, q_star,
@@ -755,7 +755,7 @@ lemma vacuumCoeff_ofSplitPlace_uniformizer_zpow {l : InfinitePlace E → ℤ}
   -- For either sign of `z` the powers of `υ.atUniformizer w` cancel.
   obtain ⟨i, rfl | rfl⟩ := z.eq_nat_or_neg
   all_goals
-    simp [h_conj, mul_pow, div_pow]
+    simp [h_conj, mul_pow]
     field
 
 open scoped Classical in
