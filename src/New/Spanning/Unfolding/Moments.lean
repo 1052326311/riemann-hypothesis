@@ -549,7 +549,6 @@ lemma HasAmplitudeBlocks.hilbertSchmidtNorm_adjoint_comp_sq_le [HasPrimitiveRoot
       gcongr
       norm_num
     exact (abs_le_of_sq_le_sq' h_sq (div_nonneg (hilbertSchmidtNorm_nonneg _) zero_le_three)).2
-  have h_le : hilbertSchmidtNorm (P.adjoint ∘ₗ P) ≤ 4 / 3 * hilbertSchmidtNorm one := by linarith
   rw [← hilbertSchmidtNorm_one_sq_eq_sourceDim]
   nlinarith [hilbertSchmidtNorm_nonneg (P.adjoint ∘ₗ P), hilbertSchmidtNorm_nonneg one]
 
