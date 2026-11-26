@@ -445,7 +445,6 @@ lemma vecMul_J_apply (y : ι → 𝔸 E) :
   simp [Y.gram_eq, gradedGram, vecMul_apply_eq_sum, reindex_equiv Y.indexEquiv, apply_ite toAdele,
     stringReversal, Matrix.one_apply]
 
-@[simp]
 lemma J_inv_eq_gradedGram : V.J⁻¹ = gradedGram Y.indexEquiv N⁻¹ := by
   rw [Y.gram_eq]
   refine inv_eq_left_inv ?_
