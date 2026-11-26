@@ -715,13 +715,10 @@ private lemma periodTensorMap_sum_lTensor_eq [L : PadicPlaceEmbedding E A ℓ] {
       linearFrob_twist_cyclotomicGp h_crys.isPotentiallyCrystalline hw d viaGroupRing_tateTwistHom]
   choose G hG using fun N ↦ (Y N).exists_finset
   -- apply `Q.coeff N` to `hY N`, untwist by `h_pow`, and sum over `N < n`
-  have h_sum : ∑ N ∈ range n, coeffEnd (PadicAlgCl ℓ) (σ.Index → PadicAlgCl ℓ) (Q.coeff N)
-        (periodTensorMap Amax Bmax (applyVec u.toLinearMap v) (Y N)) =
-      ∑ N ∈ range n, coeffEnd (PadicAlgCl ℓ) (σ.Index → PadicAlgCl ℓ) (Q.coeff N)
-        ((((ℓ ^ (k * d) : Bmax) • linearFrob (decompRep σ.rep A) ⟨s, hs⟩ k) ^ N)
-          ((ℓ ^ (k * d)) ^ (n - N) •
-            periodTensorMap Amax Bmax (applyVec u.toLinearMap v) (δ ⊗ₜ[ℤ_[ℓ]] 1))) :=
-    Finset.sum_congr rfl fun N _ ↦ by rw [hY N, h_pow N, map_nsmul]
+  have h_term (N : ℕ) := congrArg
+    (coeffEnd (PadicAlgCl ℓ) (σ.Index → PadicAlgCl ℓ) (Q.coeff N)) (hY N)
+  simp only [h_pow, map_nsmul] at h_term
+  have h_sum := Finset.sum_congr (rfl : range n = range n) fun N _ ↦ h_term N
   -- `pow_add` with `mem_range_le` (`N ≤ n`) merges `ℓ ^ (k d N)` and `ℓ ^ (k d (n - N))`
   simpa +contextual [eval₂_eq_sum_range' _ hQ, smul_sum, periodTensorMap, hG, smul_comm _ δ,
     tmul_eq_smul_one_tmul δ, ← Nat.cast_smul_eq_nsmul Bmax, smul_smul, ← pow_add,
