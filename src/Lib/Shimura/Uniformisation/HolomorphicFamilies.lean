@@ -1,7 +1,9 @@
-import Lib.General.Geometry.ProjectiveSpace
-import Lib.PadicComparison.Descent.TestCategory
-import Lib.Shimura.AbelianScheme.TangentCoordinates
-import Lib.Shimura.ComplexTheta.AppellHumbertData
+module
+
+public import Lib.General.Geometry.ProjectiveSpace
+public import Lib.PadicComparison.Descent.TestCategory
+public import Lib.Shimura.AbelianScheme.TangentCoordinates
+public import Lib.Shimura.ComplexTheta.AppellHumbertData
 
 /-!
 # Holomorphic families of complex points, jets, uniformisations and theta coordinates
@@ -50,6 +52,8 @@ Notions from other files:
 
 Known; see `Lib.Shimura.Uniformisation.AppellHumbert` and `Lib.Shimura.ArcExtension` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -868,7 +872,7 @@ lemma pull_translate (h : HasThetaCoords L e N B χ θ) {f : S ⟶ S} {a : V}
   mem_thetaSpace i := h.isAppellHumbert.thetaShift_mem (h.mem_thetaSpace i) a
   hasFieldCoords z := by
     -- The new coordinates at `z` are those at `z + a` times a nonzero exponential.
-    show N.IsHomogeneousCoords (e z ≫ f) (exp (-(B a z + B a a / 2)) • θ (z + a))
+    change N.IsHomogeneousCoords (e z ≫ f) (exp (-(B a z + B a a / 2)) • θ (z + a))
     rw [← he z]
     exact (h.hasFieldCoords (z + a)).smul (exp_ne_zero _).isUnit
 

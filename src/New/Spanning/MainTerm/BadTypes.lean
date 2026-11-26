@@ -1,5 +1,7 @@
-import Lib.Analytic.Primes
-import New.UpperBound.Objects.LabelsAndIndexTypes
+module
+
+public import Lib.Analytic.Primes
+public import New.UpperBound.Objects.LabelsAndIndexTypes
 
 /-!
 # The share of non-allowed polynomials and the bad share
@@ -31,6 +33,8 @@ and primitive polynomials over F_q, followed by a union bound over the factors. 
 The characters of the finite general linear groups, 1955; Dudko, Plancherel measures for GL(n,q),
 arXiv 0806.1345, 2008; Lidl–Niederreiter, Finite Fields, ch. 3, 1983.
 -/
+
+@[expose] public section
 
 section BadShare
 
