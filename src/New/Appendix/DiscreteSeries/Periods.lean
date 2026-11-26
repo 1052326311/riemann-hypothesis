@@ -136,7 +136,7 @@ lemma le_pow_mul_of_le {β : ℝ} {N : ℕ} {V W I : ℝ} (hβ : 16 ≤ β) (hN 
           linarith
       _ = 8 * β ^ (16 * N) * I + β ^ (16 * N) * (24 * β⁻¹ ^ (50 * N) * 16 ^ (9 * N)) * V := by ring
       _ ≤ 8 * β ^ (16 * N) * I + 1 / 2 * V := by gcongr
-  nlinarith [mul_le_mul_of_nonneg_right h_main hI]
+  linarith [mul_le_mul_of_nonneg_right h_main hI]
 
 /-- If `N ≥ 1`, `t ≥ 1` and `h ≥ 10³⁰ (N t)³`, then `h ≥ 18 N`. -/
 lemma eighteen_mul_le_of_mul_pow_three_le {N h : ℕ} {t : ℝ} (hN : 1 ≤ N) (ht : 1 ≤ t)
@@ -180,7 +180,7 @@ lemma IsLaplaceDatum.norm_laplaceIntegrand_le_of_far (h_datum : IsLaplaceDatum l
     _ ≤ (1 + ρ ^ 2)⁻¹ ^ h := by
         rw [← mul_pow, ← mul_inv]
         gcongr
-        nlinarith [mul_nonneg (sq_nonneg y) (sq_nonneg y')]
+        linarith [mul_nonneg (sq_nonneg y) (sq_nonneg y')]
     _ ≤ rexp (-100 * T) ^ 4 := inv_one_add_sq_pow_le_exp_pow_four hT hρ hh
 
 /-- The matrix of the block sum `U.sum (signMatrix_sum ε η) g` of `g.1` in `U(ε)` and `g.2` in

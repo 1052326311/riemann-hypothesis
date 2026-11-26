@@ -57,7 +57,7 @@ lemma two_mul_count_exponent_le {n f l : ℕ} (hn : 0 < n) (hl : l ≤ n ^ 3) :
     2 * (2000 * n ^ 6 * (l + 1) * f) ≤ 10 ^ 5 * n ^ 9 * f := by
   have h_cube : 1 ≤ n ^ 3 := Nat.pow_pos hn
   have h_corank : n ^ 6 * (l + 1) * f ≤ n ^ 6 * (n ^ 3 + n ^ 3) * f := by gcongr
-  nlinarith [Nat.zero_le (n ^ 9 * f)]
+  linarith [Nat.zero_le (n ^ 9 * f)]
 
 variable (S) in
 /-- The terms `γ` and `γ'` from the class `c'` to the class `c` both have the label `t`

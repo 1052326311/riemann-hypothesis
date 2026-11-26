@@ -447,7 +447,7 @@ lemma IsBoundedInCell.gramDiscReal_div_two_le {Z : 𝔰.FrameMatrix} {T : ℝ} {
   calc gramDiscReal Z / 2 ≤ (9 / 8 * ‖Y.det‖) ^ 2 * oneSubNormSqInvCorner Z / 2 := by
         grw [gramDiscReal_eq_norm_det_sq_mul (RealPlace.mem_openCell.1 hZ.mem_openCell).1, h_det]
     _ ≤ ‖Y.det‖ ^ 2 * (7 / 8 * oneSubNormSqInvCorner Z) := by
-        nlinarith [mul_nonneg (sq_nonneg ‖Y.det‖) hνZ_pos.le]
+        linarith [mul_nonneg (sq_nonneg ‖Y.det‖) hνZ_pos.le]
     _ ≤ gramDiscReal Y := by grw [hν_ratio, gramDiscReal_eq_norm_det_sq_mul hY_unit.ne_zero]
 
 end Perturbation
