@@ -374,7 +374,7 @@ theorem isKHighest_dsGenerator (hg : l.HasGap h) :
   -- `x ∈ blockDiagAlg ε`; differentiate in `x`.
   refine .of_E_eq_smul fun a b (h_sign : ε a = ε b) h_le ↦ ?_
   ext g
-  show (rightDeriv ε ℂ (single a b 1) l.dsCoeffSmooth).val g =
+  change (rightDeriv ε ℂ (single a b 1) l.dsCoeffSmooth).val g =
     (if a = b then (l.lowestKType a : ℂ) else 0) * l.dsCoeff g
   let F (y : Matrix n n ℂ) : ℂ := (-l).dsCoeff y⁻¹
   have h_ext (u : USign ε) : F u = l.dsCoeff u := by simpa [F] using dsCoeff_inv hg.neg u
@@ -475,7 +475,7 @@ theorem exists_smear_dsCoeffSmooth_eq (hg : l.HasLargeGap A) (f : l.DsModule) :
   -- the factor is the integral of `b(…)² |c_λ(g)|² ≥ 0`, which is positive at `g = 1`
   have h_factor : ∫ g, β.1.1 g⁻¹ * l.dsCoeff g ≠ 0 := by
     have h_pos : 0 < ∫ g : USign ε, ‖β.1.1 g⁻¹ • l.dsCoeff g‖ :=
-      integral_pos_of_integrable_nonneg_nonzero (x := 1) (by fun_prop)
+      integral_pos_of_integrable_nonneg_ne_zero (x := 1) (by fun_prop)
         (integrable_bump_inv_smul _ β).norm (fun _ ↦ norm_nonneg _)
         (by simp [hβ, b, ContDiffBump.one_of_mem_closedBall, default])
     simpa [hβ, ↓dsCoeff_inv hg, ← ofReal_pow, ← ofReal_mul, mul_assoc, conj_mul',
@@ -548,7 +548,7 @@ Haar measure `haarU`. -/
 @[simp]
 lemma _root_.New.formalDegree_pos (hg : l.HasLargeGap A) : 0 < l.formalDegree := by
   -- the inverse is the integral of `|c_λ|²`, which is continuous, nonnegative and `1` at `1`
-  exact inv_pos.2 (integral_pos_of_integrable_nonneg_nonzero (x := 1) (by fun_prop)
+  exact inv_pos.2 (integral_pos_of_integrable_nonneg_ne_zero (x := 1) (by fun_prop)
     (hg.memLp l.dsGenerator).norm.integrable_sq (fun _ ↦ sq_nonneg _) (by simp))
 
 /-- Let `l = 2λ` be a parameter for the signs `ε` with gap `500 n³ + A` (`HasLargeGap`), and let

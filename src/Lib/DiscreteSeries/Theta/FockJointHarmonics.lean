@@ -190,7 +190,6 @@ theorem IsMatch.sign_mul_relWeight_nonneg (hm : IsMatch T l l') (r : R) (s : ℤ
   have card_le : #{j : R | v j ∈ S} ≤ #S :=
     card_le_card_of_injOn v (fun j hj ↦ by simpa using hj) fun i _ j _ hij ↦ by grind
   specialize parity r
-
   -- Termwise comparison. Column terms are `≤ 0`, and row terms with `v j ∈ S` are `≥ 0`. For
   -- `v j ∉ S` a matched row has the term of its column, and an unmatched row is close to `r`, so
   -- `ε j = ε r` by `gap` and its term is `0`.

@@ -92,7 +92,7 @@ def _root_.New.Floors.TraceOne.heisenbergElem : U T.splitGram :=
 /-- The Heisenberg element ν(v, β) sends w to w + w(e*_a)v + ((β − τh(v, v))w(e*_a) − h(v, w))e_a.
 Here w(e*_a) is the e*_a coordinate of w, and v is the vector of floors at least a + 1, extended by
 zero. -/
-@[local simp ↓]
+@[local simp↓]
 lemma heisenbergElem_mulVec (w : SplitIndex 𝔰.ϱ 𝔰.MiddleIndex → A) :
     let v := inclMatrix A (↑) *ᵥ p.1
     heisenbergElem (T := T) a p *ᵥ w =
@@ -499,8 +499,7 @@ lemma simpleRootSum_conj_heisenbergElem (hs : s ∈ floorGroup (a + 1)) :
     ← inclMatrix_mulVec_floor_block a.2 hs, orbitPoint_eq_iff.1 rfl]
   -- the entries at the simple roots are read off the matrix on the frame
   change ∑ b : Fin 𝔰.ϱ, frameMatrix (heisenbergElem (T := T) a _) b.castSucc b.succ = _
-  simp [frameMatrix_heisenbergElem, vecMulVec_apply, Pi.single_apply, Matrix.one_apply,
-    (Fin.castSucc_lt_succ ..).ne]
+  simp [frameMatrix_heisenbergElem, vecMulVec_apply, Pi.single_apply, (Fin.castSucc_lt_succ ..).ne]
 
 end FloorGroups
 
@@ -1065,13 +1064,13 @@ lemma Place.lintegral_damped_fourier_le (ξ : A) {G : A → ℝ} (hG : Continuou
       ∏ i : ι, ‖∫ v : A, G v * P.ψ (star v * ξ * z i)‖ₑ := by
     have ψ_sum (s : Finset ι) (x : ι → A) : P.ψ (∑ i ∈ s, x i) = ∏ i ∈ s, P.ψ (x i) := by
       induction s using Finset.cons_induction <;> simp [*, AddChar.map_add_eq_mul]
-    simp [eNorm, ← ofNNReal_finsetProd, ← nnnorm_prod, ← integral_fintype_prod_volume_eq_prod,
+    simp [eNorm, ← ofNNReal_finsetProd, ← nnNorm_prod, ← integral_fintype_prod_volume_eq_prod,
       dotProduct, Finset.mul_sum, Finset.prod_mul_distrib, mul_comm, mul_left_comm, ψ_sum]
   -- For a fixed difference `z = w' - w`, Cauchy–Schwarz bounds `∫ |f w| |f (w + z)|`.
   have h_cauchy (z : ι → A) :
       ∫⁻ w : ι → A, ‖f w‖ₑ * ‖f (w + z)‖ₑ ≤ ∫⁻ w : ι → A, ‖f w‖ₑ ^ 2 := by
     simpa [← rpow_add_of_nonneg, ← two_mul, lintegral_add_right_eq_self (‖f ·‖ₑ ^ 2)] using
-      lintegral_mul_le_Lp_mul_Lq _ .two_two hf.1.enorm (hf.comp_add_right z).1.enorm
+      lintegral_mul_le_Lp_mul_Lq _ .two_two hf.1.eNorm (hf.comp_add_right z).1.eNorm
   have h_diff (z : ι → A) : ∫⁻ w : ι → A, ‖∫ v : ι → A, g v (w, w + z)‖ₑ ≤
       (∏ i : ι, ‖∫ v : A, G v * P.ψ (star v * ξ * z i)‖ₑ) * ∫⁻ w : ι → A, ‖f w‖ₑ ^ 2 := by
     simpa [g, ← mul_assoc (ψ _), integral_mul_const, lintegral_const_mul'] using
@@ -1083,12 +1082,12 @@ lemma Place.lintegral_damped_fourier_le (ξ : A) {G : A → ℝ} (hG : Continuou
   calc ∫⁻ v, ‖∫ x, g v x‖ₑ
     _ ≤ ‖∫ v, ∫ x, g v x‖ₑ := by
       -- The inner integrals are non-negative reals.
-      grw [← ofReal_integral_norm_eq_lintegral_enorm (by exact hg.integral_prod_left),
-        Real.ofReal_le_enorm]
+      grw [← ofReal_integral_norm_eq_lintegral_eNorm (by exact hg.integral_prod_left),
+        Real.ofReal_le_eNorm]
       rw [← integral_congr_ae (.of_forall h_nonneg), integral_complex_ofReal]
       simp [eNorm]
     _ ≤ ∫⁻ x : (ι → A) × (ι → A), ‖∫ v, g v x‖ₑ := by
-      grw [integral_integral_swap hg, enorm_integral_le_lintegral_enorm]
+      grw [integral_integral_swap hg, eNorm_integral_le_lintegral_eNorm]
     _ ≤ ∫⁻ z : ι → A, ∫⁻ w, ‖∫ v, g v (w, w + z)‖ₑ := by
       grw [volume_eq_prod, ← (measurePreserving_prod_add_swap ..).map_eq, lintegral_map_le,
         lintegral_prod_le]
