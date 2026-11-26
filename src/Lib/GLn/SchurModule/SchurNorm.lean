@@ -336,7 +336,8 @@ lemma gramForm_conjWeylRep {κ : T → ℕ → ℕ} {e : T → ℤ} (x : T → U
   -- `conjWeylRep` acts through the entrywise conjugates `g τ` of the `x τ`, again unitary.
   let g (τ : T) : Matrix n n ℂ := (x τ : Matrix n n ℂ).map conj
   have h_unitary (τ : T) : (g τ)ᴴ * g τ = 1 := by
-    simpa [U.map, g] using mem_U.mp (U.map conj (by simp) rfl (x τ)).prop
+    simpa [U.map, g, star_eq_conjTranspose] using
+      mem_unitaryGroupOf_iff.mp (U.map conj (by simp) rfl (x τ)).prop
   have h_det (τ : T) : (g τ).det * conj (g τ).det = 1 := by
     simpa [mul_comm] using congrArg det (h_unitary τ)
   have h_rep (ζ : WeylIndex n κ → ℂ) :

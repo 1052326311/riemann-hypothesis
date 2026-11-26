@@ -796,7 +796,8 @@ theorem conjTranspose_mul_signMatrix_mul_curve (g : USign ε) (t : ℝ) :
   · have factor : 1 + t • A * u⁻¹ʳ = (u + t • A) * hu.unit⁻¹ := by
       simp [add_mul, ← inverse_unit, mul_inverse_cancel _ hu]
     rw [factor, gram_mul, gram_inv_of_gram_eq]
-    simp [u, A, mem_U.1, Matrix.sub_mul, Matrix.mul_sub, Matrix.add_mul, Matrix.mul_add]
+    simp [u, A, show g.1.1ᴴ * _ * _ = _ from mem_unitaryGroupOf_iff.1 g.2, Matrix.sub_mul,
+        Matrix.mul_sub, Matrix.add_mul, Matrix.mul_add]
     module
   · simp [inverse_non_unit _ hu]
 
