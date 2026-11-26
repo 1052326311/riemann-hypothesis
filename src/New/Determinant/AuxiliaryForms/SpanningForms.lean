@@ -162,8 +162,6 @@ lemma norm_mul_det_flipScalar_zpow_le_one {ϑ : D.MFoldTwist} {p : ℕ} [Fact p.
   have hstar_a_eq : star a = ((ϑ.normQ * (D.M ^ D.natB * D.q₁) : ℕ) : 𝔸f D.E) * (u⁻¹).1 := by
     rw [ha_eq, star_mul', star_natCast]
     rfl
-  have hfu_inv : f (u⁻¹).1 = (f u.1)⁻¹ :=
-    eq_inv_of_mul_eq_one_left (by rw [← map_mul]; exact (congrArg f u.2.1).trans (map_one f))
   have hdet : (((((gridModulus ϑ).flipScalar Unit).val ^ D.m)⁻¹.map f).det : ℂ_[p]) =
       (f u.1 ^ D.m)⁻¹ := by
     have h1 : ((((gridModulus ϑ).flipScalar Unit).val.map f).det : ℂ_[p]) = f u.1 := by
@@ -192,7 +190,9 @@ lemma norm_mul_det_flipScalar_zpow_le_one {ϑ : D.MFoldTwist} {p : ℕ} [Fact p.
         ‖f (star a)‖ ^ (D.m * k) := by
       rw [Int.natAbs_neg, Int.natAbs_natCast, Nat.cast_pow, Units.val_inv_eq_inv_val,
         Units.val_zpow_eq_zpow_val, _root_.zpow_neg, zpow_natCast, inv_inv, hdet, inv_pow,
-        ← pow_mul, ← inv_pow, ← hfu_inv, ← mul_pow, norm_pow, hnorm (star a) u⁻¹ hstar_a_eq]
+        ← pow_mul, ← inv_pow,
+        ← (show f (u⁻¹).1 = (f u.1)⁻¹ from map_units_inv f (Unitary.toUnits u)),
+        ← mul_pow, norm_pow, hnorm (star a) u⁻¹ hstar_a_eq]
     rw [h_eq]
     exact pow_le_one₀ (norm_nonneg _)
       (norm_adeleExtension_le_one _ (star_mem_Ô (generator_inv_mul_normQ_mul_star_mem ϑ)))
