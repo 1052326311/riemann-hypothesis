@@ -1200,36 +1200,18 @@ lemma simpleRootSum_mul (hh : h ∈ besselS) (hu : u ∈ besselS) :
     refine Fintype.sum_eq_add y x (besselFrame_injective.ne i.castSucc_lt_succ.ne.symm)
       fun z ⟨hzy, hzx⟩ ↦ ?_
     dsimp only
-    have hzx_cases := floorOf_level_cases z
-    have hx_fl : floorOf x = i.val := floorOf_besselFrame
-    have hx_lv : BesselIndex.level x = i.val := level_besselFrame i.castSucc
-    have hy_fl : floorOf y = i.val + 1 := by simp only [y, floorOf_besselFrame, Fin.val_succ]
-    have hy_lv : BesselIndex.level y = i.val + 1 := by
-      simp only [y, level_besselFrame, Fin.val_succ]
-    have := i.is_lt
-    have : 𝔰.ϱ < 𝔰.n := Nat.lt_succ_self _
-    by_cases hz_lt : BesselIndex.level z ≤ i.val
-    · rw [mem_partialUnitriangularGroup.1 hh x z (by lia)
+    by_cases hz : BesselIndex.level z ≤ i.val
+    · have h_cases := floorOf_level_cases z
+      have hi := i.is_lt
+      rw [mem_partialUnitriangularGroup.1 hh x z ((level_besselFrame i.castSucc).symm ▸ hz)
         (.inl ⟨by lia, by lia⟩), one_apply_ne hzx.symm, zero_mul]
-    · rw [mem_partialUnitriangularGroup.1 hu z y (by lia)
-        (.inl ⟨by lia, by lia⟩), one_apply_ne hzy, mul_zero]
-  have h_diag : h.val x x = 1 :=
-    (mem_partialUnitriangularGroup.1 hh x x le_rfl (.inl
-      ⟨by
-        simp only [x, floorOf_besselFrame, Fin.val_castSucc]
-        exact i.is_lt.trans (Nat.lt_succ_self _),
-       by
-        simp only [x, level_besselFrame, Fin.val_castSucc]
-        exact i.is_lt.trans (Nat.lt_succ_self _)⟩)).trans (one_apply_eq x)
-  have hu_diag : u.val y y = 1 :=
-    (mem_partialUnitriangularGroup.1 hu y y le_rfl (.inl
-      ⟨by
-        simp only [y, floorOf_besselFrame, Fin.val_succ, Nat.succ_lt_succ_iff]
-        exact i.is_lt,
-       by
-        simp only [y, level_besselFrame, Fin.val_succ, Nat.succ_lt_succ_iff]
-        exact i.is_lt⟩)).trans (one_apply_eq y)
-  rw [h_entry, h_diag, hu_diag, mul_one, one_mul]
+    · have h_col : u.val z y = (1 : Matrix 𝔰.BesselIndex 𝔰.BesselIndex R) z y :=
+        Filling.mem_besselS_iff_frameImage.mp hu z i.succ (Nat.lt_of_not_ge hz)
+      rw [h_col, one_apply_ne hzy, mul_zero]
+  have diag {s : T.G} (hs : s ∈ besselS) (b : Fin 𝔰.n) :
+      s.val (𝔰.besselFrame b) (𝔰.besselFrame b) = 1 :=
+    (Filling.mem_besselS_iff_frameImage.mp hs _ b (level_besselFrame b).ge).trans (one_apply_eq _)
+  rw [h_entry, diag hh i.castSucc, diag hu i.succ, mul_one, one_mul]
 
 /-! ### Principal congruence subgroups and the factor `H` -/
 
