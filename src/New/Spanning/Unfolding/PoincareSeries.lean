@@ -758,9 +758,10 @@ theorem petersson_poincare {S : Filling E 𝔰} {V : Space E 𝔰.BesselIndex ε
         rw [X.coe_poincareMap]
         simp [poincareSeries, ← ((Equiv.inv (S.G E)).trans X.ratEquiv.toEquiv).tsum_eq]
       _ = _ := by
-        rw [← tsum_subtype_eq_of_support_subset (s := Set.univ ∩ S.termsOver c s c')]
-        · exact tsum_congr fun γ ↦ by rw [h_term, ite_eq_left γ.property.2]
-        · exact fun γ hγ ↦ ⟨trivial, by_contra fun h ↦ hγ ((h_term γ).trans (ite_eq_right h))⟩
+        rw [_root_.tsum_subtype (Set.univ ∩ S.termsOver c s c') (fun γ : S.G E ↦
+          (S.classCutoff c' ((S.ratToInf γ)⁻¹ * X.realHomeomorph x)).toReal •
+            S.besselFn .full ((S.ratToInf γ)⁻¹ * X.realHomeomorph x) i')]
+        simp only [h_term, Set.univ_inter, Set.indicator]
   calc
     _ = ∫ g : New.G E ε, star (z g) * X.poincareSeries (.single (c, i) 1) g ∂V.Γ.quotMeasure := by
       rw [← X.coe_poincareMap]
