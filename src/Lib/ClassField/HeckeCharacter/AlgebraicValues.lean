@@ -1,7 +1,9 @@
-import Lib.ClassField.HeckeL.EulerProduct
-import Lib.ClassField.Local.ArtinMap
-import Lib.Cohomology.Etale.Basic
-import Lib.Weil.Construction.FiniteMultiplier
+module
+
+public import Lib.ClassField.HeckeL.EulerProduct
+public import Lib.ClassField.Local.ArtinMap
+public import Lib.Cohomology.Etale.Basic
+public import Lib.Weil.Construction.FiniteMultiplier
 
 /-!
 # Values of algebraic Hecke characters
@@ -41,6 +43,8 @@ Notions from other files:
 Known result: the values of characters of type A₀. Source: A. Weil, On a certain type of characters
 of the idèle-class group of an algebraic number-field (1956).
 -/
+
+@[expose] public section
 
 noncomputable section
 

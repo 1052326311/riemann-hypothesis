@@ -1,5 +1,7 @@
-import Lib.Cohomology.ProjectiveLine.ConstantLineFormula
-import Lib.PadicComparison.Duality.GoodPairs
+module
+
+public import Lib.Cohomology.ProjectiveLine.ConstantLineFormula
+public import Lib.PadicComparison.Duality.GoodPairs
 
 /-!
 # Charted varieties, and smooth base change from a valuation ring to its fraction field
@@ -41,6 +43,8 @@ change and duality on products of projective lines. Source: Artin, SGA 4 Exp. XV
 duality in abstract 6-functor formalisms (arXiv 2301.03821) and Li-Reinecke-Zavyalov (arXiv
 2410.08200).
 -/
+
+@[expose] public section
 
 namespace New.Variety
 

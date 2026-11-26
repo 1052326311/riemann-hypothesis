@@ -1,5 +1,7 @@
-import Lib.GaloisRep.LocalGlobal.LocalFormTypes
-import Lib.GaloisRep.Main.AllRanks
+module
+
+public import Lib.GaloisRep.LocalGlobal.LocalFormTypes
+public import Lib.GaloisRep.Main.AllRanks
 
 /-!
 # Auxiliary places, base level, integral Hecke algebra and operators at the auxiliary places
@@ -47,6 +49,8 @@ subgroup of the product of the finite general linear groups at the auxiliary pla
 only up to a fixed integer and is expressed as one Higman operator. Source: Taylor–Wiles, Ann. Math.
 141 (1995); Clozel–Harris–Taylor, Publ. IHES 108 (2008), §3.
 -/
+
+@[expose] public section
 
 noncomputable section
 

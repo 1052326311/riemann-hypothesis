@@ -1,5 +1,7 @@
-import New.Derivatives.Vacuum.JetIntegrality
-import New.Derivatives.Vacuum.ShortVectors
+module
+
+public import New.Derivatives.Vacuum.JetIntegrality
+public import New.Derivatives.Vacuum.ShortVectors
 
 /-!
 # Standard data as products of theta functions of the curve
@@ -49,6 +51,8 @@ Notions from other files:
   form `μ` as a power series. `C.twistedTranslate k a f` is the translate of `f`, of weight `k`, by
   `a` times the factor that keeps it a theta function.
 -/
+
+@[expose] public section
 
 open NumberField ComplexConjugate
 
