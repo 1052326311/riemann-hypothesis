@@ -137,7 +137,7 @@ The strong integral `New.strongIntegral` serves here as the functional f ↦ ∫
 
 namespace New
 
-open MeasureTheory Metric ContinuousMap Module Real Finset AbstractMeasure
+open MeasureTheory Metric ContinuousMap Module Real Finset
 
 variable {E F K : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] [FiniteDimensional ℂ E]
   {p : E} [NormedAddCommGroup F] [NormedSpace ℂ F] [TopologicalSpace K] [CompactSpace K]
