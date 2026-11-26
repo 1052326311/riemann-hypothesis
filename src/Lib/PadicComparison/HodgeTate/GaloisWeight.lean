@@ -72,7 +72,7 @@ both lifts reduce to the structure map, and the lift is unique (`PadicTest.eq_un
 lemma PadicTest.uniqueLift_comp_eq_uniqueLift_twist [ThePrime p] (g : Gp p) (c : PadicTest) :
     c.uniqueLift.comp (g.toAlgHom.restrictScalars ℤ_[p]) = (PadicTest.twist g c).uniqueLift := by
   refine (PadicTest.twist g c).eq_uniqueLift _ fun z ↦ ?_
-  rw [c.genericStructureMap_twist, smul_coe_Cp]
+  rw [c.genericStructureMap_twist, UniformSpace.Completion.algEquiv_smul_coe]
   exact c.thickeningProj_uniqueLift (g z)
 
 /-- For a `p`-adic test `c` with ring `R`, let `ι = mulMu` be the additive map from `K = R[1/p]` to
@@ -187,7 +187,7 @@ theorem hodgeTateMap_galois_twist
       .mk fun (c : PadicTest) ↦
       CommAlg.homOfRingHom (.id c.GenericRing) fun (z : E) ↦ by
         symm
-        erw [c.genericStructureMap_twist, smul_coe_Cp, hg]
+        erw [c.genericStructureMap_twist, UniformSpace.Completion.algEquiv_smul_coe, hg]
         rfl
     restrictToPairs
         ((Comparison.of (PadicTest.twist g) (twistGenericCoeff g)).pull (whiskerRight τ N) n ξ :
