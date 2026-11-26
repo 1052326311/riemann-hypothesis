@@ -34,22 +34,7 @@ lemma New.zeros_on_line : DirichletLZerosOnLine :=
 /-- Assume `DirichletLNonvanishingRightOfHalf` (hypothesis `h`): Dirichlet L-functions do not vanish
 for Re s > 1/2, the pole excepted. Then `RiemannZetaZerosOnLine` holds: every zero s of ζ outside
 {1, −2, −4, …} has Re s = 1/2. -/
-lemma New.zeta_zeros_on_line : RiemannZetaZerosOnLine := by
-  intro s h_zero h_nontriv hs1
-  have hs0 : s ≠ 0 := by grind [riemannZeta_zero]
-  -- The poles of `Gammaℝ` are `0, -2, -4, …`, all excluded.
-  have h_gamma : Gammaℝ s ≠ 0 := by
-    intro h_pole
-    obtain ⟨_ | n, rfl⟩ := Gammaℝ_eq_zero_iff.1 h_pole <;> grind
-  -- So `s` is a zero of the completed zeta function, which is symmetric under `s ↦ 1 - s`.
-  have h_completed : completedRiemannZeta s = 0 := by
-    simpa [riemannZeta_def_of_ne_zero hs0, h_gamma] using h_zero
-  have h_zero' : riemannZeta (1 - s) = 0 := by
-    simp [riemannZeta_def_of_ne_zero (sub_ne_zero.2 hs1.symm), completedRiemannZeta_one_sub,
-      h_completed]
-  -- ζ is the L-function of the character modulo `1`: neither zero lies to the right of `1 / 2`.
-  have h_le (z : ℂ) (hz1 : z ≠ 1) (hz : riemannZeta z = 0) : z.re ≤ 1 / 2 :=
-    le_of_not_gt fun hlt ↦ h 1 1 z hlt (.inr hz1) (by simpa using hz)
-  have h_upper : s.re ≤ 1 / 2 := h_le s hs1 h_zero
-  have h_lower : 1 - s.re ≤ 1 / 2 := by simpa using h_le (1 - s) (by simpa using hs0) h_zero'
-  linarith
+lemma New.zeta_zeros_on_line : RiemannZetaZerosOnLine := fun s ↦ by
+  obtain _ := h 1 1 s, h 1 1 (1 - s), @Nat.or_exists_add_one, riemannZeta_zero
+  simp_all
+  grind [riemannZeta_def_of_ne_zero, completedRiemannZeta_one_sub, Complex.Gammaℝ_eq_zero_iff]
