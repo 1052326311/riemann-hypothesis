@@ -252,14 +252,6 @@ lemma finrank_residueKer_diagGL (hϖ : v ϖ.val = exp (-1)) (s : Finset n) :
   rw [residueKer, ← card_sub_rank_eq_finrank_ker]
   simp +decide [apply_ite, hϖ, ite_apply, rank_diagonal, ← card_compl]
 
-/-- For a uniformiser ϖ of E_w and a set s of indices, the diagonal matrix with ϖ on s and 1
-elsewhere lies in the double coset `New.basicDoubleCoset` with j = #s, and the kernel of its
-reduction has dimension #s. -/
-lemma diagGL_mem_basicDoubleCoset (hϖ : v ϖ.val = exp (-1)) (s : Finset n) :
-    diagGL (fun i : n ↦ if i ∈ s then ϖ else 1) ∈ basicDoubleCoset n w #s ∧
-      finrank (ResField w) (residueKer (diagGL fun i : n ↦ if i ∈ s then ϖ else 1).val) = #s :=
-  ⟨diagGL_ite_mem_basicDoubleCoset hϖ s, finrank_residueKer_diagGL hϖ s⟩
-
 /-- The set `New.basicDoubleCoset` n w j is stable under multiplication on both sides by elements
 of GL_n(O_w) = `New.localIntGL` n w. -/
 lemma mul_mul_mem_basicDoubleCoset (hg : g ∈ basicDoubleCoset n w j) {k k' : GL n (LocField w)}

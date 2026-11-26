@@ -221,15 +221,6 @@ lemma map_piMatrixUnit_mul_intertwiner (U : Fin m → Matrix N n k) (i : Fin m) 
   simp +contextual [intertwiner, ← map_mul, ← (f _).mul_assoc (f _), eq_comm, sum_eq_single i,
     sum_eq_single b, Matrix.mul_assoc, ← single_mul_left, Matrix.mul_sum]
 
-/-- Multiplying `intertwiner f f' U` by the image of the matrix unit E^i_{ab}, on the right under
-`f'` or on the left under `f`, gives the same matrix f(E^i_{a0}) U_i f'(E^i_{0b}). -/
-lemma intertwiner_mul_piMatrixUnit (U : Fin m → Matrix N n k) (i : Fin m) (a b : Fin (d i)) :
-    intertwiner f f' U * f' (piMatrixUnit i a b) =
-      f (piMatrixUnit i a) * U i * f' (piMatrixUnit i 0 b) ∧
-    f (piMatrixUnit i a b) * intertwiner f f' U =
-      f (piMatrixUnit i a) * U i * f' (piMatrixUnit i 0 b) :=
-  ⟨intertwiner_mul_map_piMatrixUnit f f' U i a b, map_piMatrixUnit_mul_intertwiner f f' U i a b⟩
-
 /-- `intertwiner f f' U` intertwines the two actions of the product of matrix algebras. -/
 lemma mul_intertwiner (U : Fin m → Matrix N n k) (z : PiMatrix k d) :
     f z * intertwiner f f' U = intertwiner f f' U * f' z := by
