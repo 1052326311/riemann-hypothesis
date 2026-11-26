@@ -837,8 +837,8 @@ lemma isFiniteLerayHirsch_of_integrate_params (β : ι → TotalH (relFreeAb I.t
       rw [map_sum]
       exact Finset.sum_congr rfl fun i _ ↦ (h_nat (ρ i) _).trans (congrArg _ (h_nat (T i) x))
     change comp _ (r _) = comp _ (r _)
-    -- `erw`: the target is well typed only after unfolding `Comparison.restrict`.
-    erw [h_sum_r, h_proj]
+    refine (congrArg (comp _) h_sum_r).trans ?_
+    refine Eq.trans ?_ (congrArg (comp _) h_proj).symm
     -- This is `h_sum_eq_foldr` at `t'` and the tautological section `a ↦ a.2` of `X`.
     exact h_sum_eq_foldr t' ⟨fun a ↦ a.val, fun f ↦ f.map_val⟩ (r x)
   | succ d ih =>
@@ -903,10 +903,10 @@ lemma isFiniteLerayHirsch_topPoints_of_surjective {J : Type*} {d : J → ℕ}
             (I.extendToZeros t.theory t.points w)) =
         pullbackAlong (I.atSection t.points)
           (pullbackAlong (t.toTestOver.whiskerLeft (abCoker.π _)) w) := by
-    erw [(congrArg _ (I.zerosEquiv_extendToZeros t.theory t.points w)).trans
-        (pullbackAlong_pullbackAlong ..),
-      pullbackAlong_pullbackAlong]
-    rfl
+    refine ((congrArg (pullbackAlong _) (I.zerosEquiv_extendToZeros t.theory t.points w)).trans
+      (pullbackAlong_pullbackAlong ..)).trans ?_
+    exact (pullbackAlong_pullbackAlong (f := I.atSection t.points)
+      (t.toTestOver.whiskerLeft (abCoker.π _)) w).symm
   let T (i : J) : NaturalOp m (abCoker (ℓ • 𝟙 (relFreeAb I.topPoints))) N :=
     { app t :=
         (comp (map (restrictAlong (sectionLift (X := X) t.toTestOver t.points)) (θ i).toTotalH
