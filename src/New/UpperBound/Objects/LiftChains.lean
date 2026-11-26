@@ -514,7 +514,7 @@ elements reduce to `1` at the chosen places above the prime `D.levelPrime i`. If
 `4 * D.n D.m` elements, four times the rank of the last stage, the stabiliser of each coset gK in
 the rational unitary group is trivial. -/
 theorem classAut_eq_bot_of_le_levelOf_chosenPlace (i : Fin 2)
-    (hK : K ≤ levelOf (n := n) (fun w : D.ChosenPlace i ↦ w.1) ⊥)
+    (hK : K ≤ levelOf (n := n) (fun w : D.ChosenPlace i ↦ w.val) ⊥)
     (hn : Fintype.card n ≤ 4 * D.n D.m) (g : Gf D.E n) : classAut stdRatPoints K g = ⊥ := by
   -- `Variety.classAut_eq_bot` asks that the norms of the places multiply to more than
   -- `(2 * card n) ^ [E : ℚ]`. The `f` places have norm p_i, and `[E : ℚ] = 2 * f`.
@@ -532,7 +532,7 @@ theorem classAut_eq_bot_of_le_levelOf_chosenPlace (i : Fin 2)
 sufficiently small: the stabiliser of each point gK in the rational unitary group is trivial. -/
 lemma classAut_eq_bot_of_le_chosenLevel (hK : K ≤ D.chosenLevel)
     (hn : Fintype.card n ≤ 2 * D.n D.m) : ∀ g : Gf D.E n, classAut stdRatPoints K g = ⊥ := by
-  have h_le : D.chosenLevel ≤ levelOf (n := n) (fun w : D.ChosenPlace 0 ↦ w.1) ⊥ := by
+  have h_le : D.chosenLevel ≤ levelOf (n := n) (fun w : D.ChosenPlace 0 ↦ w.val) ⊥ := by
     intro k hk
     obtain ⟨hk_int, hk_red⟩ := mem_levelOf.1 hk
     exact mem_levelOf.2 ⟨hk_int, mem_bot.2 (funext fun w ↦ congrFun (mem_bot.1 hk_red) ⟨0, w⟩)⟩

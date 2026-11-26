@@ -170,7 +170,7 @@ theorem New.Parameters.exists_isJetConjugation {P : Parameters} {s : ℕ} {n : T
   let L : 𝒮 V →ₛₗ[(σ : ℂ →+* ℂ)] V.finitePart := renamedJet.leftInverse ∘ₛₗ conjJet
   -- A vector of `V.finitePart` is determined by its jets, since `t ≠ 0`.
   have h_inj : ker renamedJet = ⊥ := ker_eq_bot'.2 fun f hf ↦ Subtype.ext <|
-    eq_zero_of_jetSeries_eq_zero f.2 (fun h ↦ by simpa [h, bigOmega_pos.ne'] using ht.symm)
+    eq_zero_of_jetSeries_eq_zero f.property (fun h ↦ by simpa [h, bigOmega_pos.ne'] using ht.symm)
       ((renameEquiv ..).map_eq_zero_iff.1 hf)
   have hL (x : n → 𝔸f (E P s)) : L (V.ϱ (finVec x) F) = V.ϱ (finVec (B σ • x)) F' := by
     have h_jet : conjJet (V.ϱ (finVec x) F) =
@@ -184,7 +184,7 @@ theorem New.Parameters.exists_isJetConjugation {P : Parameters} {s : ℕ} {n : T
     jetScale_ne_zero hJ₁
   -- The next two laws hold on translates of `F`, hence on their span.
   refine ⟨t, B σ, V.finitePart.subtype ∘ₛₗ L, ht,
-    { map_selfDualAddChar := hχ, map_mem := fun _ ↦ (L _).2, map_rho := ?_ }, ?_⟩
+    { map_selfDualAddChar := hχ, map_mem := fun _ ↦ (L _).property, map_rho := ?_ }, ?_⟩
   · intro f hf
     refine Submodule.span_induction ?_ (by simp) (by simp +contextual) (by simp +contextual)
       (h_span hf)
@@ -386,7 +386,7 @@ lemma New.Parameters.norm_omega_vac_le {P : Parameters} {s : ℕ} {n : Type} [Fi
   let dim : ℕ := Module.finrank ℝ (EuclideanSpace ℂ (P.Φ s × n))
   let D : ℝ := dim + 1
   have h_sep : Pairwise fun γ δ : supp ↦ 1 ≤ ‖W.archCoords γ - W.archCoords δ‖ :=
-    fun γ δ h_ne ↦ one_le_norm_archCoords_sub W γ.2 δ.2 (coe_injective.ne h_ne)
+    fun γ δ h_ne ↦ one_le_norm_archCoords_sub W γ.property δ.property (coe_injective.ne h_ne)
   -- The packing bound in real dimension `dim`, with exponent `dim + 1`.
   obtain ⟨h_summable, h_pack⟩ : Summable (fun γ : supp ↦ exp ‖W.archCoords γ‖ ^ (-D)) ∧
       ∑' γ : supp, exp ‖W.archCoords γ‖ ^ (-D) ≤ (1 + 2 * 1 / 1) ^ dim * exp dim :=
