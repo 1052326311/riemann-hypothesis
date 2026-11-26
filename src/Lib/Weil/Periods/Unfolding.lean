@@ -370,7 +370,9 @@ lemma tsum_agreeingTranslates (hW : Y.IsEquivariant W) (h : G E ε') :
       Y.exists_agreesWithStringMap Y' w.out w.out.property survives
     let δ₀ : V'.ratParabolic 0 := ⟨δ, δ_rat, nofun⟩
     have δ₀_smul : ((1 : Y.ratBessel), δ₀) • w ∈ Y.agreeingClasses Y' 0 :=
-      (agreesWithStringMap_out_smul Y' (by simp) (1, δ₀) w).2 (by simpa using agrees)
+      (agreesWithStringMap_out_smul Y' (by simp) (1, δ₀) w).2 (by
+        rw [show (((1 : Y.ratBessel), δ₀)⁻¹.1 : G E ε) = 1 from inv_one, map_one, Matrix.mul_one]
+        exact agrees)
     exact hw ⟨δ₀, δ₀_smul⟩
   have h_stable : ∀ w ∈ univ \ Y.agreeingTranslates Y', ∀ γ : Y.ratBessel,
       (γ, (1 : V'.ratParabolic 0)) • w ∈ univ \ Y.agreeingTranslates Y' := by
