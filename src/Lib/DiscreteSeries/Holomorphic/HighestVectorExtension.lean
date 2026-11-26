@@ -126,15 +126,10 @@ noncomputable def lowerLiePart (c : ℂ) : Matrix n n ℂ →L[ℝ] Matrix n n �
 lemma lowerLiePart_mem_unitaryLie (c : ℂ) (Z : Matrix n n ℂ) :
     lowerLiePart ε ε' o c Z ∈ unitaryLie (signMatrix ε) := by
   let N : Matrix n n ℂ := lowerMask ε' o Z + c • entryMask Eq Z
-  let J : Matrix n n ℂ := signMatrix ε
-  have J_sq : J * J = 1 := IsHermitianInvolution.mul_self
-  have J_herm : Jᴴ = J := IsHermitianInvolution.isHermitian.eq
-  have h_left : (N - J * Nᴴ * J)ᴴ * J = Nᴴ * J - J * N := by
-    simp [sub_mul, mul_assoc, J_sq, J_herm]
-  have h_right : J * (N - J * Nᴴ * J) = J * N - Nᴴ * J := by
-    simp [mul_sub, ← mul_assoc, J_sq]
-  change (N - J * Nᴴ * J)ᴴ * J + J * (N - J * Nᴴ * J) = 0
-  rw [h_left, h_right, sub_add_sub_cancel, sub_self]
+  convert (unitaryLie (signMatrix ε)).smul_mem (2 : ℝ) (unitaryLiePart ε N).2 using 1
+  change N - signMatrix ε * Nᴴ * signMatrix ε =
+    (2 : ℝ) • (2⁻¹ : ℝ) • (N - (signMatrix ε)⁻¹ * Nᴴ * signMatrix ε)
+  rw [smul_smul, mul_inv_cancel₀ two_ne_zero, one_smul, inv_eq_left_inv (signMatrix_mul_self ε)]
 
 /-- A chart at `1` adapted to the triangular matrices. Let `E` send `0` to `1` with strict
 derivative the identity. Let `L` be real linear, with every `E (L Z)` block diagonal for `ε`, and
