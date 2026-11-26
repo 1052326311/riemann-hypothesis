@@ -224,14 +224,14 @@ abbrev offClosedFibre (Y : TestOver A ⥤ Type 1) : Subfunctor Y :=
 
 /-- The pairs of points of `E` with the same image under `u` that have the same class in
 `ℤ E / ℤ (u⁻¹ U)`. -/
-def sameClassLocus (u : E ⟶ Y) (U : Subfunctor Y) : Subfunctor (fibreProd u u) where
-  obj c := {x : (fibreProd u u).obj c |
-    relFreeAb.mk (U.preimage u) ((fibreProd.fst u u).app c x) =
-      relFreeAb.mk (U.preimage u) ((fibreProd.snd u u).app c x)}
+def sameClassLocus (u : E ⟶ Y) (U : Subfunctor Y) : Subfunctor (fiberProd u u) where
+  obj c := {x : (fiberProd u u).obj c |
+    relFreeAb.mk (U.preimage u) ((fiberProd.fst u u).app c x) =
+      relFreeAb.mk (U.preimage u) ((fiberProd.snd u u).app c x)}
   map f _ := congrArg ((relFreeAb (U.preimage u)).map f)
 
 /-- If `u` is injective on every test, then two points of `E` with the same image under `u` are
-equal, so they have the same class and the locus `sameClassLocus u U` is all of `fibreProd u u`;
+equal, so they have the same class and the locus `sameClassLocus u U` is all of `fiberProd u u`;
 in particular it is everything Zariski-locally. -/
 lemma isZariskiLocallyTop_sameClassLocus_of_injective (u : E ⟶ Y) (U : Subfunctor Y)
     (hu : ∀ c : TestOver A, Function.Injective (u.app c)) :
