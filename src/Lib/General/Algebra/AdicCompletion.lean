@@ -1,6 +1,7 @@
 module
 
 public import Lib.Base
+public import TauCeti.NumberTheory.Padics.Complex.Basic
 
 /-!
 # Adic completeness: p-adic tools, extension by continuity, topological bases
@@ -93,8 +94,6 @@ noncomputable instance : PadicField (PadicAlgCl p) p where
 lemma norm_p_eq_inv : ‖(p : F)‖ = (↑p)⁻¹ := by
   simpa using norm_algebraMap' F (p : ℚ_[p])
 
-lemma norm_p_lt_one : ‖(p : F)‖ < 1 := by simp [norm_p_eq_inv, ← norm_p]
-
 /-- The ring of integers of `ℂ_p`: the elements of norm at most one. It has the same elements as
 Mathlib's `PadicComplexInt p`; here membership is the inequality `‖x‖ ≤ 1` by definition. -/
 noncomputable def valRingCp (p : ℕ) [Fact p.Prime] : Subring ℂ_[p] :=
@@ -108,9 +107,6 @@ lemma valRingCp.algebraMap_apply (x : valRingCp p) : algebraMap (valRingCp p) �
 
 lemma valRingCp.dvd_iff_norm_le (x y : valRingCp p) : x ∣ y ↔ ‖(y : ℂ_[p])‖ ≤ ‖(x : ℂ_[p])‖ :=
   (Valuation.integer.integers (NormedField.valuation (K := ℂ_[p]))).dvd_iff_le
-
-lemma valRingCp.isClosed : IsClosed (valRingCp p : Set ℂ_[p]) :=
-  isClosed_Iic.preimage continuous_norm
 
 instance : ValuationRing (valRingCp p) :=
   inferInstanceAs (ValuationRing (NormedField.valuation (K := ℂ_[p])).integer)
