@@ -115,7 +115,7 @@ of 𝒮(Hom(V, T)). -/
 @[simps! apply_apply_coe]
 def pairWeilFinite : Gf E n × Gf E n' →* Module.End ℂ (V.hom T).finitePart where
   toFun p :=
-    LinearMap.restrict (pairWeil V T a b ((1, p.1), 1, p.2)).1 fun f hf ↦ by
+    LinearMap.restrict (pairWeil V T a b ((1, p.1), 1, p.2)).toLinearMap fun f hf ↦ by
       -- Up to a scalar, `pairWeil` is `ω` at a point whose infinite part is trivial (`onHom_fin`).
       refine (finitePart _).smul_mem _ ?_
       rw [onHom_fin]
@@ -193,7 +193,7 @@ points, for the Haar measure with vol K = 1 (`New.classIntegral`). -/
 def Kernel.lift : S →ₗ[ℂ] AlgForm n κ e →ₗ[ℂ] AlgForm n' κ ea := by
   refine LinearMap.mk₂ ℂ
     (fun Φ φ ↦
-      ⟨fun h ↦ classIntegral stdRatPoints K fun g ↦ k.jetMap (k.ω (g, h) Φ) (φ.1 g), ?_,
+      ⟨fun h ↦ classIntegral stdRatPoints K fun g ↦ k.jetMap (k.ω (g, h) Φ) (φ.val g), ?_,
         fun γ h ↦ ?_⟩)
     (fun Φ Φ' φ ↦ ?_) (fun c Φ φ ↦ ?_) (fun Φ φ φ' ↦ ?_) fun c Φ φ ↦ ?_
   · -- Smoothness: the lift is fixed by the open subgroup of the `a` with `(1, a)` fixing `Φ`.
@@ -416,8 +416,8 @@ def thetaKernel (hκ : IsLiftWeight n n' κ eb e) (c : ℂ) {a b : AutChar E} {e
     rw [← h_eq, Representation.self_inv_apply]
   isOpen_stabilizer f := by
     -- The stabiliser of `f` contains an open subgroup `L × L'`.
-    obtain ⟨L, L', h_fix⟩ := exists_level_pairWeil a b f.2
-    refine isOpen_mono ?_ (L.prod L').2
+    obtain ⟨L, L', h_fix⟩ := exists_level_pairWeil a b f.property
+    refine isOpen_mono ?_ (L.prod L').isOpen'
     simp_all [LE.le, mem_prod, Subtype.ext_iff]
 
 end New
