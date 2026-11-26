@@ -2,7 +2,16 @@ module
 
 public import TauCeti.Analysis.Matrix.MeasurableSpace
 public import Mathlib.Data.Matrix.ColumnRowPartitioned
-public import Lib.DiscreteSeries.Haar.CayleyChart
+import Mathlib.Algebra.Order.Archimedean.Real.Hom
+import Mathlib.Analysis.Calculus.FDeriv.Star
+import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
+import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
+import Mathlib.RingTheory.Coalgebra.CoassocSimps
+import Mathlib.RingTheory.SimpleRing.Principal
+import Mathlib.RingTheory.TotallySplit
+import TauCeti.Topology.Instances.Matrix
+public import Lib.General.LinearAlgebra.HermitianMatrices
+import Lib.DiscreteSeries.Haar.CayleyChart
 
 /-!
 # Coordinates for the Gram map

@@ -1,7 +1,12 @@
 module
 
 public import TauCeti.Analysis.Matrix.Frobenius
-public import Mathlib.Analysis.CStarAlgebra.Module.Constructions
+public import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
+import Mathlib.Analysis.CStarAlgebra.Module.Constructions
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
+import Mathlib.RingTheory.PiTensorProduct
+import Mathlib.RingTheory.SimpleRing.Principal
 public import Lib.DiscreteSeries.FlenstedJensen.Defs
 public import Lib.General.Analysis.GaussianIntegral
 
