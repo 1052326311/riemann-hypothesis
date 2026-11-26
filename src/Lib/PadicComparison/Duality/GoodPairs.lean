@@ -566,7 +566,14 @@ lemma isFiniteLerayHirsch_principal_open
       exact (of_comp_homClass ..).trans (congrArg _ (push_homReprEquiv_symm ..))
     have factor : lerayHirsch θ _ ∘ mapRange r r.map_zero = lerayHirsch (fun i : ι ↦ i.1.2) _ := by
       refine _root_.funext (lerayHirsch_naturality _ r (r' := .id _) fun i x ↦ ?_)
-      erw [map_comp_assoc, map_homClass, pullbackAlong_of, hθ, AddMonoidHom.id_apply]
+      let Φ : AbFunctor (TestOver A) ⥤ AbFunctor X.Elements := restrictAlong p
+      let π := Q.toZerosCoeff (locConstAlong (𝟭 (TestOver A)))
+      change comp (TotalH.map Φ (comp x (homClass π))) (θ i).toTotalH =
+        comp (TotalH.map Φ x) i.1.2.toTotalH
+      refine (map_comp_assoc Φ (θ i).toTotalH).trans (congrArg (comp (TotalH.map Φ x)) ?_)
+      refine (congrArg (fun y ↦ comp y (θ i).toTotalH) (map_homClass (f := π) (Φ := Φ))).trans ?_
+      exact (pullbackAlong_of (f := Φ.map π) (θ i)).trans
+        (congrArg (DirectSum.of _ _) (hθ i))
     have h_comp : (lerayHirsch θ _ ∘ mapRange r r.map_zero).Bijective := by
       rw [factor]
       exact h_basis c hc
