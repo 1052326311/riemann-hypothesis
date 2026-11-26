@@ -441,7 +441,7 @@ lemma IsNear.mul_of_mem_besselU0 {u' : (S.ratMiddle E).G} (h_near : S.IsNear γ)
   obtain ⟨y, hy, hy'⟩ := h_near
   refine ⟨S.ratToInf u * y,
     (mul_mem_boxedPoints_iff fun v ↦ ratToInf_mem_besselU0 hu v).2 hy, ?_⟩
-  show (S.ratToInf (u * γ * u'))⁻¹ * (S.ratToInf u * y) ∈ S.boxedPoints
+  change (S.ratToInf (u * γ * u'))⁻¹ * (S.ratToInf u * y) ∈ S.boxedPoints
   simpa [mul_assoc, mul_mem_boxedPoints_iff, ratToInf_mem_besselU0, hu'] using hy'
 
 /-- An isometry that fixes every vector of the frame (e₁, …, e_ϱ, z) lies in `besselS`. -/
@@ -579,7 +579,7 @@ lemma termsOver.eq_and_mem_classUnipotent₀ [S.IsAdmissible] (hγ : γ ∈ S.te
     eq_and_mem_classUnipotent_of_besselS (mem_besselS_of_frameImage_eq_one h_fix) h_over
   -- fixing every frame vector is the extra condition of `classUnipotent₀`
   have h_frame : frameMatrix (γ⁻¹ * u) = 1 := by
-    show (frameImage (γ⁻¹ * u).val.val).submatrix 𝔰.besselFrame id = 1
+    change (frameImage (γ⁻¹ * u).val.val).submatrix 𝔰.besselFrame id = 1
     rw [h_fix]
     simp [submatrix_submatrix, submatrix_one, besselFrame_injective]
   exact ⟨h_class, h_mem, mem_besselU0_iff.2 ⟨h_mem.1, h_frame⟩⟩

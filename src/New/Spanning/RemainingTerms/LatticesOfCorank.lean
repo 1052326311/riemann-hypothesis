@@ -301,7 +301,7 @@ lemma sub_mem_smul_intVectors_of_values {π : Type} [Fintype π] [DecidableEq π
   let z : π → 𝔸f E := d⁻¹ • (v - w)
   have h_first : z ᵥ* firstCols e U = s := by
     refine vecMul_injective_of_isUnit A.isUnit ?_
-    show (z ᵥ* firstCols e U) ᵥ* A.val = s ᵥ* A.val
+    change (z ᵥ* firstCols e U) ᵥ* A.val = s ᵥ* A.val
     rw [← mulVec_transpose A.val s, hs, vecMul_vecMul, smul_vecMul, sub_vecMul, smul_sub]
   have h_values : z ᵥ* U.val ∈ intVectors (Ô E) π := by
     intro p
