@@ -414,7 +414,7 @@ theorem norm_thetaSeries_inv (hχ_ne : χ ≠ 1) (hχ_parity : χ (-1) = (-1) ^ 
     have h_theta : gaussianTheta j (fun n : ℕ ↦ 𝓕⁻ χ n) u =
         (q : ℂ)⁻¹ * gaussSum χ stdAddChar * star (gaussianTheta j (fun n : ℕ ↦ χ n) u) := by
       simp [gaussianTheta, tsum_star, h_coeff, mul_assoc, ← tsum_mul_left]
-    simp [h_theta, norm_gaussSum_of_isPrimitive hχ, field]
+    simp [h_theta, DirichletCharacter.norm_gaussSum_stdAddChar hχ, field]
   rw [norm_thetaSeries, norm_thetaSeries, ← h_dual,
     ← gaussianTheta_poisson_summation hχ_ne hχ_parity ht, sqrt_inv, sqrt_mul hq.le]
   simp [field, sq_sqrt ht.le]
