@@ -599,14 +599,14 @@ lemma HasCellRank.isLeast_normOnePairOccursFrom {j : Fin (𝔰.ϱ + 2)} (h_rank 
     (h_above b (Fin.lt_def.2 (hij.trans_le hb))).right
   exact h_minor (leadingMinor_eq_zero_of_mulVec_eq_zero hx'_ne h_products hx'_above)
 
-/-- Let `E` contain a primitive root of unity of order `5040`. Let `γ` satisfy `S.CharsAgree γ`: the
-character `unipotentChar` takes the same value at `u` and at `γ⁻¹uγ` for every rational `u` in
+/-- Assume `S.CharsAgree γ`, so `unipotentChar` takes the same value at `u` and at `γ⁻¹uγ`
+for every rational `u` in
 `U₀ ∩ γU₀γ⁻¹`. Let `j` be least with `NormOnePairOccursFrom j γ`: for one `ζ` with `ζ ζ̄ = 1`, at
 every index from `j` on, the flags of the frame `e_1, …, e_ϱ, z_N` and of its image under `γ` share
 a vector with leading coefficients `ζ` and `1`. Then `flagSpan γ j`, the span of the images under
 `γ` of the first `j` frame vectors, meets the span `colSpan (frameImage 1)` of the frame only in
 `0`. -/
-lemma CharsAgree.disjoint_flagSpan_coe {j : Fin (𝔰.ϱ + 2)} [HasPrimitiveRoot5040 E]
+lemma CharsAgree.disjoint_flagSpan_coe {j : Fin (𝔰.ϱ + 2)}
     (h_agree : S.CharsAgree γ) (h_least : IsLeast {i : ℕ | NormOnePairOccursFrom i γ} j.val) :
     Disjoint (flagSpan (γ : Matrix 𝔰.BesselIndex 𝔰.BesselIndex E) j) (colSpan (frameImage 1)) := by
   refine Submodule.disjoint_def.2 fun w hw hw' ↦ ?_
@@ -634,11 +634,10 @@ theorem HasCellRank.flagSpan_coe_sup_commonIsotropic {j : Fin (𝔰.ϱ + 2)}
   h_rank.normOnePairOccursFrom.flagSpan_coe_sup_commonIsotropic
     (h_rank.le_of_termDisc_eq_zero h_disc)
 
-/-- Let `E` contain a primitive root of unity of order `5040`, let `γ` agree, let
-`gr(γ) = S.termDisc γ` vanish and let `γ` have the cell rank `j`. Then
+/-- Let `γ` agree, let `gr(γ) = S.termDisc γ` vanish and let `γ` have the cell rank `j`. Then
 `γ A_{≤j} = ⟨γ e_1, …, γ e_j⟩` meets `I_γ = A ∩ γ A` only in `0`. -/
 theorem CharsAgree.disjoint_flagSpan_coe_commonIsotropic {j : Fin (𝔰.ϱ + 2)}
-    [HasPrimitiveRoot5040 E] (h_agree : S.CharsAgree γ) (h_disc : S.termDisc γ = 0)
+    (h_agree : S.CharsAgree γ) (h_disc : S.termDisc γ = 0)
     (h_rank : S.HasCellRank j γ) : Disjoint (flagSpan γ j) (commonIsotropic γ) :=
   (h_agree.disjoint_flagSpan_coe (h_rank.isLeast_normOnePairOccursFrom h_disc)).mono_right
     (commonIsotropic_le_colSpan_frameImage_one γ)
