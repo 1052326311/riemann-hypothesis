@@ -17,6 +17,12 @@ time. Each outer integral is a real integral times a weighted sum over the class
 remains is the upper chain for the tensor `φ_ξ`, a multiple of which is the glued tensor of a chain
 datum.
 
+The identity has two inputs: equality of the pairings with every form on `Y_m`, and an
+admissible expansion of the resulting tensor into translated vacuum data. The first supplies
+the equality of lifts; the second supplies support and coefficient bounds. The scalar in the
+final identity is a unit independent of the twist and the source form, but the theorem does
+not assert that either lift is nonzero.
+
 Notions from other files:
 * `D.spaceY j`, `D.FormY j`: the space `Y_j` of the lower chain and the forms on its unitary group.
 * `liftY ϑ j`, `lowerChainUpTo ϑ j`: the theta lift from `Y_j` to `Y_(j+1)` with twist `ϑ`,
@@ -570,7 +576,8 @@ lemma exists_lowerChainUpTo_poincareAt_eq (t : (WeylIndex (D.X 0) D.columnCount 
   choose l h_stage using h_top_coeff
   obtain ⟨c₀, h_sum⟩ :=
     exists_integral_mul_lowerChainUpTo_eq_cutSum t g _ le_rfl (D.lastGrading hm) (by omega) (c ∘ l)
-  -- Pair both sides with a form `x` on `Y_m`.
+  -- Pair both sides with an arbitrary form `x` on `Y_m`; equality of these pairings
+  -- suffices for equality of the lifts.
   refine ⟨c₀, fun ϑ φ ↦ ext_inner_left ℂ fun x ↦ ?_⟩
   let L : D.ChainTensor →ₗ[ℂ] ℂ := innerₛₗ ℂ x ∘ₗ restrictToFormY hm ∘ₗ chainOfTensor ϑ φ
   have h_top (ξ : ∀ i, GInf D.E (D.signsY i)) (y : ∀ i, Gf D.E (D.Y i)) (hy : y (2 * D.ϱ + 2) = 1) :
@@ -643,7 +650,8 @@ theorem seesaw_identity {P : Parameters} {D : Data P}
         (2 * D.ϱ + 2))
       ((u : ℂ) • c₀ • seesawDatum ϑ) :=
     (h_admissibleComb ϑ).normUnit_smul c₀ NeZero.out
-  -- Each translation may be replaced by a supported one with the same glued vacuum.
+  -- Replace each translation by a supported representative without changing the glued tensor.
+  -- This gives the support condition separately from the equality of lifts.
   obtain ⟨Ψ, h_adm, h_glued : (u : ℂ) • c₀ • seesawDatum ϑ = gluedTensor Ψ⟩ :=
     h_rescaled.of_eq_isOfFinOrder_smul
       (A' := admissibleTranslations ϑ.normQ ∩ supportedTranslations (D.M * ϑ.normQ))
