@@ -482,10 +482,10 @@ lemma mem_besselS_of_frameImage_eq_one (h_fix : frameImage s.val.val = frameImag
     s ∈ besselS :=
   mem_besselS_iff_frameImage.2 fun i a _ ↦ congrFun₂ h_fix i a
 
-/-- For admissible data with size parameter `b`, the powers `b ^ e` with `e ≤ 10 ^ 5 n ^ 9 f` are at
+/-- For filling data with size parameter `b`, the powers `b ^ e` with `e ≤ 10 ^ 5 n ^ 9 f` are at
 most `τ = S.tailScale = b ^ (k f / 4)`. Here `n = ϱ + 1` is the number of frame vectors, `k` is the
 rank of `X₀` and `f` is the number of infinite places. -/
-lemma pow_le_tailScale [S.IsAdmissible] {e : ℕ} (he : e ≤ 10 ^ 5 * 𝔰.n ^ 9 * numInfPlaces E) :
+lemma pow_le_tailScale {e : ℕ} (he : e ≤ 10 ^ 5 * 𝔰.n ^ 9 * numInfPlaces E) :
     S.b ^ e ≤ S.tailScale := by
   -- compare the exponents
   have h_exponent : (e : ℝ) ≤ 𝔰.k * numInfPlaces E / 4 := by
@@ -495,9 +495,9 @@ lemma pow_le_tailScale [S.IsAdmissible] {e : ℕ} (he : e ≤ 10 ^ 5 * 𝔰.n ^ 
     grind
   simpa [tailScale] using rpow_le_rpow_of_exponent_le S.one_le_b h_exponent
 
-/-- For admissible data, the fourth power of `tailScale` `τ = b ^ (k f / 4)` is `b ^ (k f)`, where
-`k = 𝔰.k` and `f = numInfPlaces E` is the number of infinite places of `E`. -/
-lemma tailScale_pow_four [S.IsAdmissible] :
+/-- The fourth power of `tailScale` `τ = b ^ (k f / 4)` is `b ^ (k f)`, where `k = 𝔰.k` and
+`f = numInfPlaces E` is the number of infinite places of `E`. -/
+lemma tailScale_pow_four :
     S.tailScale ^ 4 = S.b ^ (𝔰.k * numInfPlaces E) := by
   rw [tailScale, ← rpow_mul_natCast (by linarith [S.thousand_le_b]), ← rpow_natCast]
   push_cast
