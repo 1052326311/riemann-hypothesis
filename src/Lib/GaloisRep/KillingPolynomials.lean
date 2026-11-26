@@ -326,13 +326,10 @@ private lemma exists_eq_of_powMinor_diagonal_eq_zero (he_inj : e.Injective) {κ 
   have hκ_eq : κ (a i) = κ (a i') := by
     simpa [T, AddMonoidAlgebra.single_inj, -single_eq_C_mul_T] using h_T_eq
   -- The equal weights are at `j` and some `l i`, or at two `l i`, which `e` injective rules out.
-  cases i using Fin.cases <;> cases i' using Fin.cases
-  case zero.zero => exact absurd rfl h_ne
-  case zero.succ i' => exact ⟨i', by simpa [a, hl] using hκ_eq.symm⟩
-  case succ.zero i => exact ⟨i, by simpa [a, hl] using hκ_eq⟩
-  case succ.succ i i' =>
-    have h_e_eq : e i = e i' := by simpa [a, hl] using hκ_eq
-    exact absurd (congrArg Fin.succ (he_inj h_e_eq)) h_ne
+  have h_not_inj : ¬Injective (cons (κ j) e : Fin (n + 1) → ℤ) := by
+    rw [← show κ ∘ l = e from funext hl, ← comp_cons]
+    exact fun h_inj ↦ h_ne (h_inj hκ_eq)
+  simpa [cons_injective_iff, he_inj] using h_not_inj
 
 /-- Let `Q` be an invertible matrix over `k`, let `φ` send a matrix `M` over `K` to `Q * M * Q⁻¹`
 over `k`, and let the `K`-subspace `V` contain every diagonal matrix. Then the matrices `φ x`,
