@@ -18,9 +18,6 @@ coefficient `c ↦ K ⊗ (S ⊗ W(R♭))^` has partitions.
 * `New.Variety.hasPartitions_periodAlg`: a functor `Ψ` with an isomorphism `θ` from the period
   coefficients `asModules (tilt ⋙ periodAlg S) ⋙ tensorWith K K` turns a product of two tests into a
   product (`New.Variety.HasPartitions`).
-
-These results were split off `Lib.PadicComparison.Primitive.PeriodCoefficients` so that files that
-need only them do not wait for the rest of that file and its imports.
 -/
 
 @[expose] public section
@@ -81,7 +78,6 @@ lemma bijective_prod_tilt {p : ℕ} [ThePrime p] {c d d' : PadicTest} (f : c ⟶
 end TiltProducts
 
 section PeriodPairs
-
 
 open CategoryTheory Algebra TensorProduct Period PadicTest Equiv
 

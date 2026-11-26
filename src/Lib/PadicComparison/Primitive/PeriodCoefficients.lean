@@ -63,7 +63,6 @@ noncomputable section
 
 namespace New.Variety
 
-
 /-!
 ## Period ring pairs and additivity of period coefficients
 
