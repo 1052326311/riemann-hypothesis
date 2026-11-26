@@ -423,7 +423,7 @@ over `v` of `bandLimit 𝔰.n`, the top one of the forms on pairs of heads that 
 each weighted by the product over `v` of the scalar of `normalizedOrbitalIntegral`, √c_G · (|x_ϱ|² -
 1)^((k - 1)/2) · |I|⁻¹ · ∏_{a<ϱ} |x_a|^(k + 1 + 2(ϱ - a - 1)), where `x = x v p`, `k = 𝔰.k`,
 `c_G = 𝔰.openCellConst` and `I` is the index set of the Bessel system at `v`. -/
-lemma prod_bandLimit_eq_gram [S.IsAdmissible] {T₀ : Finset Eˣ} {σ : S.G E} {t : Eˣ}
+lemma prod_bandLimit_eq_gram {T₀ : Finset Eˣ} {σ : S.G E} {t : Eˣ}
     (hσ : σ ∈ Shape.Form.floorGroup 𝔰.ϱ) (h_tail : S.frameProducts σ 𝔰.top 𝔰.top = t) :
     let x (v : NumberField.InfinitePlace E) (p : Fin 𝔰.ϱ → T₀) (a : ℕ) : ℂˣ :=
       unitOrOne (S.frameScaleSq v a * Φ v (padTuple (fun b : Fin 𝔰.ϱ ↦ (p b).val) t a).val)
