@@ -108,7 +108,6 @@ lemma card_rowIndex_sum_fin_le_two_mul_n : card (D.RowIndex ⊕ Fin D.t) ≤ 2 *
 lemma nonempty_carrierIndex_embedding_firstFactorIndex :
     Nonempty (D.CarrierIndex ↪ FirstFactorIndex j) := by
   have r_add_one : D.r + 1 = D.k + D.m := D.r_add_one
-  have k_large : 100 * D.m + 9 < D.k := D.hundred_mul_m_add_nine_lt_k
   refine nonempty_of_card_le ?_
   rw [card_firstFactorIndex, Fintype.card_sum, Fintype.card_fin, Fintype.card_fin]
   omega

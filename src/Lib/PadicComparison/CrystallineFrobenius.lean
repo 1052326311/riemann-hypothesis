@@ -336,12 +336,9 @@ lemma exists_tensor_twist {C : Type*} {A S : Type} [Category C] [CommRing A] [Co
 root of the nonzero polynomial `X ^ q - X`. -/
 lemma finite_of_forall_pow_eq {k : Type*} [CommRing k] [IsDomain k] {q : ℕ} (hq : 1 < q)
     (h_pow_eq : ∀ z : k, z ^ q = z) :
-    Finite k := by
-  -- Otherwise the monic polynomial `X ^ q - X` would be zero.
-  refine .of_not_infinite fun _ ↦ ?_
-  have h_ne : (.X ^ q - .X : Polynomial k) ≠ 0 :=
-    (Polynomial.monic_X_pow_sub (by simpa using hq)).ne_zero
-  exact h_ne (Polynomial.funext fun z ↦ by simp [h_pow_eq z])
+    Finite k :=
+  Set.finite_univ_iff.mp ((Polynomial.finite_setOfPred_isRoot (Polynomial.monic_X_pow_sub
+    (p := .X) (by simpa using hq)).ne_zero).subset fun z _ ↦ by simp [h_pow_eq z])
 
 /-- Suppose the structure map `hP.algebraMap : Ainf → Amax` commutes with the action of
 `(a, σ) ∈ FrobGal`. Then there is a natural transformation `τ` from the σ-twisted period sheaf to
@@ -671,7 +668,7 @@ private lemma sum_linearFrob_apply_eq_zero {p : ℕ} [ThePrime p] {R : CommRingC
     J Y (tensorAction Bmax ((.ofAdd (a i), toGp (γ i)) : FrobGal)
       (ellAdicCohom.galoisAction R Ω Γ Y n (γ i)) (C z))
   simp [linearFrob_apply h_crys.isPotentiallyCrystalline (hW _), h_fixed, hJ.natural, Ψ, H.map_map]
-  show ∑ i, m i • H.map Ψ (freeAb.map T.ι ≫ freeAb.map (testPoints.map (u i))) n (y i) = 0
+  change ∑ i, m i • H.map Ψ (freeAb.map T.ι ≫ freeAb.map (testPoints.map (u i))) n (y i) = 0
   -- `δ i` takes a point `w` of `T` to `u i w`; `red i` takes it on to the point over the period
   -- ring modulo divided powers, composed with `Frob ^ a i`.
   let δ (i : ι) : T.toFunctor ⟶ V'.toFunctor := T.homOfLe (iInf_le _ i) ≫ Subfunctor.fromPreimage ..

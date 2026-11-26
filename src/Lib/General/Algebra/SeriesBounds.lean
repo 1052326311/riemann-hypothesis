@@ -85,7 +85,7 @@ lemma New.exists_val_coeff_le_val_eval {K σ : Type*} {n : ℕ} [Field K] [IsAlg
       obtain rfl | hkd := eq_or_ne k d <;> simp [g, coeff_monomial, eq_comm, *]
     refine ⟨q.coeff k, g, ne_of_apply_ne (·.coeff k) (by simp [coeff_map, h_coeff]), ?_⟩
     ext d
-    rw [MvPolynomial.coeff_smul, coeff_map, h_coeff]
+    rw [AddMonoidAlgebra.coeff_smul_apply, coeff_map, h_coeff]
     split_ifs with hkd hd
     · simp [hkd]
     · simp [← hw d hd, mul_comm]
@@ -107,8 +107,8 @@ lemma New.exists_val_coeff_le_val_eval {K σ : Type*} {n : ℕ} [Field K] [IsAlg
   -- The factor `c i` is common, and the unit `eval y (g i)` divides every coefficient of `g i`.
   have h_le : v (algebraMap V K ((g i).coeff m)) ≤ v (algebraMap V K (eval y (g i))) :=
     (Valuation.integer.integers v).le_of_dvd (h_unit i).dvd
-  grw [hfg i, MvPolynomial.coeff_smul, coeff_map, smul_eval, eval_map, ← eval₂_comp, smul_eq_mul,
-    map_mul, map_mul, h_le]
+  grw [hfg i, AddMonoidAlgebra.coeff_smul_apply, coeff_map, smul_eval, eval_map, ← eval₂_comp,
+    smul_eq_mul, map_mul, map_mul, h_le]
 
 end IntegralityPrinciple
 
@@ -125,10 +125,6 @@ open PowerSeries IsUltrametricDist
 namespace New
 variable {p : ℕ} [Fact p.Prime]
 
-/-- If `g(0) = 0`, then `(exp g)' = exp g * g'`, where `exp g` is `expSubst g`. -/
-lemma derivative_expSubst {g : ℂ_[p]⟦X⟧} (hg_zero : constantCoeff g = 0) :
-    d⁄dX (expSubst g) = expSubst g * d⁄dX g := by
-  rw [expSubst, derivative_subst (.of_constantCoeff_zero' hg_zero), derivative_exp]
 
 /-- If `g(0) = 0`, then `exp g` has constant term `1`. -/
 lemma constantCoeff_expSubst {g : ℂ_[p]⟦X⟧} (hg_zero : constantCoeff g = 0) :

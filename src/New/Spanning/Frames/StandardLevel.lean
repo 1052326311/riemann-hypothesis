@@ -207,7 +207,7 @@ lemma IntegralPlace.exists_right_invariant_measure_besselH :
   let H : Subgroup T.G := T.besselH
   have h_closed : IsClosed (H : Set T.G) := isClosed_of_entries_eq_one mem_floorGroup
   have h_emb : MeasurableEmbedding (Subtype.val : H → T.G) :=
-    .subtype_coe h_closed.measurableSet
+    .subtypeVal h_closed.measurableSet
   have h_open : IsOpen (K : Set T.G)⁻¹ := IsOpen.inv unitaryLevel_open_compact.1
   let K₀ : TopologicalSpace.PositiveCompacts H :=
     ⟨⟨Subtype.val ⁻¹' (K : Set T.G)⁻¹, unitaryLevel_open_compact.2.inv.preimage_val h_closed⟩,
