@@ -149,7 +149,7 @@ lemma hasPartitions_periodAlg (θ : asModules (tilt ⋙ periodAlg S) ⋙ tensorW
     HasPartitions ringFunctor (moduleCoeff Ψ) := by
   refine ⟨exists_isQuotientByElem, fun {A B₁ B₂ : PadicTest} f g hfg ↦ ?_⟩
   -- Tilting keeps the product, and so do Witt vectors, which are sequences of coordinates.
-  let e {R : Type} : WittVector p R ≃ (ℕ → R) := mk WittVector.coeff .mk'
+  let e {R : Type} : WittVector p R ≃ (ℕ → R) := mk WittVector.coeff (.mk p)
   let W : PadicTest ⥤ ModuleCat Ainf := asModules (tilt ⋙ wittFunctor)
   have h_witt : Function.Bijective fun x : W.obj A ↦ (W.map f x, W.map g x) :=
     ((arrowProdEquivProdArrow ℕ (fun _ ↦ tilt.obj B₁) (fun _ ↦ tilt.obj B₂)).trans

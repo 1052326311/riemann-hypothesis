@@ -172,8 +172,7 @@ lemma reduction_levelModulus_eq_zero_iff {c : ℕ} {x : Ô E} :
     have h_mult : multiplicity w.asIdeal (O.levelModulus c false).ideal =
         c * multiplicity w.asIdeal (O.levelModulus 1 false).ideal := by
       have := (O.levelModulus 1).ne_bot
-      simp_all [levelModulus, FiniteMultiplicity.multiplicity_pow,
-        FiniteMultiplicity.of_prime_left, w.prime]
+      simp_all [levelModulus, multiplicity_pow, w.prime]
     simp [DescentPair.genIdele, idele_inv_apply_and_ne_zero, valued_generator, h_mult]
   simp [h_reduction, mem_Ô, h_val]
 
