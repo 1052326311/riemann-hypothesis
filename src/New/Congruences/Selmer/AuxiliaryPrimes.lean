@@ -1,7 +1,9 @@
-import Lib.ClassField.Global.CMSplittingCharacters
-import Lib.ClassField.Global.Chebotarev
-import Lib.ClassField.Global.ExistenceTheorem
-import Lib.General.NumberTheory.FrobeniusOrbits
+module
+
+public import Lib.ClassField.Global.CMSplittingCharacters
+public import Lib.ClassField.Global.Chebotarev
+public import Lib.ClassField.Global.ExistenceTheorem
+public import Lib.General.NumberTheory.FrobeniusOrbits
 
 /-!
 # Auxiliary primes, anticyclotomic characters, slopes and ties
@@ -41,6 +43,8 @@ Notions from other files:
 
 See `New.Congruences.Selmer.TwistingTheorem` and `New.Congruences.Selmer.Descent` for related work.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -167,7 +171,7 @@ lemma New.Selmer.exists_discreteLog {E : Type*} [Field E] [NumberField E] {P : F
 /-- Let `σ` be a Frobenius at a place above `P`, with `P.q = 1 + n * k`. If `σ` fixes an `n`-th root
 of a `T`-unit `u`, where `P ∉ T`, then `u ^ k ≡ 1` modulo `P`. -/
 lemma New.Selmer.valuation_pow_sub_one_lt_one_of_isFrob {E : Type*} [Field E]
-    [EmbeddedNumberField E] [NumberField.IsCMField E]
+    [EmbeddedNumberField E]
     {A : ClosurePlace} {P : FinPlace E} (hA : IsPlaceOver A P) {σ : Gal(Ω/E)} (hσ : IsFrob A P.q σ)
     {n k : ℕ} [NeZero n] (hk : P.q = 1 + n * k) {T : Set (FinPlace E)} (hPT : P ∉ T) {u : Eˣ}
     (hu : u ∈ T.unit E) {y : Ω} (hy : y ^ n = algebraMap E Ω u) (hy_fix : σ • y = y) :
@@ -285,7 +289,7 @@ lemma New.Selmer.exists_anticyclotomicChar_of_frob_fixes_roots {E : Type} [Field
 `q`-th root of `x`. Then an element of the normal closure of the inertia groups above `R` fixes the
 `q`-th roots of unity and the roots `y u` of each element `u` of a set `s` of `T`-units. -/
 lemma New.Selmer.mem_ker_inf_stabilizer_of_mem_normalClosure {E : Type} [Field E]
-    [EmbeddedNumberField E] [NumberField.IsCMField E]
+    [EmbeddedNumberField E]
     {q : ℕ} [NeZero q] {T R : Set (FinPlace E)} (hRT : ∀ w ∈ R, w ∉ T)
     (hq : ∀ (w : FinPlace E) (A : ClosurePlace), w ∉ T → IsPlaceOver A w → A (q : Ω) = 1)
     {y : E → Ω} (hy : ∀ x : E, y x ^ q = algebraMap E Ω x) (s : Finset (Additive (T.unit E)))

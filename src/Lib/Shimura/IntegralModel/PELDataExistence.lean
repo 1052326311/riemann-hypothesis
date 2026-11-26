@@ -1,5 +1,7 @@
-import Lib.GaloisRep.Main.QuadraticStep
-import Lib.Shimura.HeckeTower.Model
+module
+
+public import Lib.GaloisRep.Main.QuadraticStep
+public import Lib.Shimura.HeckeTower.Model
 
 /-!
 # Existence of PEL data at levels good at all safe places, with the form ξ and a Lagrangian
@@ -26,6 +28,8 @@ Notions from other files:
 
 Known; see `Lib.Shimura.IntegralModel.TowerExistence` for sources.
 -/
+
+@[expose] public section
 
 namespace New.Variety
 
@@ -190,7 +194,7 @@ lemma exists_cmBase_restrict_ne {d : ℕ} {E : Type} [Field E] [NumberField E] [
     grind [mk_embedding, mk_eq_iff]
 
 /-- On integers, the map `𝓞 (QuadField d) → 𝓞 E` induced by the inclusion is the algebra map. -/
-private lemma mapRingHom_algebraMap_eq {d : ℕ} {E : Type} [Field E] [NumberField E]
+private lemma mapRingHom_algebraMap_eq {d : ℕ} {E : Type} [Field E]
     [HasQuadSubfield d E] :
     RingOfIntegers.mapRingHom (algebraMap (QuadField d) E) = algebraMap (𝓞 (QuadField d)) (𝓞 E) :=
   rfl

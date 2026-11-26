@@ -1,5 +1,7 @@
-import Lib.ClassField.GaloisCohomology.KummerCyclicClasses
-import Lib.ClassField.GaloisCohomology.TateIndexFormula
+module
+
+public import Lib.ClassField.GaloisCohomology.KummerCyclicClasses
+public import Lib.ClassField.GaloisCohomology.TateIndexFormula
 
 /-!
 # Index of l-th powers in a local field and finiteness of Kummer 1-cocycles
@@ -31,6 +33,8 @@ Notions from other files:
 
 Known; see `Lib.ClassField.LocalDuality.CrystallineDuality` for sources.
 -/
+
+@[expose] public section
 
 /-!
 ## The index of l-th powers in the multiplicative group
@@ -367,7 +371,7 @@ lemma finite_Z1 [IsLocalGalois Γ k A] ⦃R : Type⦄ [CommRing R] (M : Discrete
   have e := equivFinOfCardPos h_card_pos.ne'
   let res (z : Z1 M.ρ) (f : M →+ DiscreteUnits Ω) :=
     e ⟨⟨fun u ↦ f (z.val u),
-      continuous_of_discreteTopology.comp (z.property.left.comp continuous_subtype_val),
+      continuous_of_discreteTopology.comp (z.property.left.comp continuous_subtypeVal),
       fun g g' ↦ by simpa [hz_mul z] using! h_equiv f g _⟩,
       by simp [Subtype.ext_iff, funext_iff, ← map_nsmul]⟩
   refine .of_injective (fun z ↦ (fun q : Γ ⧸ U.1 ↦ z.val q.out, res z)) fun y z hyz ↦ ?_

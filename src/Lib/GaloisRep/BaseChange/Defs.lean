@@ -1,4 +1,6 @@
-import Lib.Adelic.Unitary.Defs
+module
+
+public import Lib.Adelic.Unitary.Defs
 
 /-!
 # Twisted norms, matching pairs and base change maps for unitary groups
@@ -35,6 +37,8 @@ Notions from other files:
 
 Known; see `Lib.GaloisRep.BaseChange.PrimeDegreeTransfer` for sources.
 -/
+
+@[expose] public section
 
 namespace New
 
@@ -198,7 +202,7 @@ below it. -/
 lemma below_comap (u : FinPlace E') : (u.comap σ : FinPlace E').below E = u.below E := by
   -- Restricting along `σ` and then to `E` is, by definition, restricting along the composite,
   -- and `σ` fixes `E`.
-  show u.comap ((σ : E' →+* E').comp (algebraMap E E')) = u.comap (algebraMap E E')
+  change u.comap ((σ : E' →+* E').comp (algebraMap E E')) = u.comap (algebraMap E E')
   exact congrArg u.comap σ.toAlgHom.comp_algebraMap
 
 omit [IsCMField E'] in

@@ -1,6 +1,8 @@
-import Lib.Adelic.AutomorphicForms.PAdicGauge
-import Lib.General.LinearAlgebra.BlockEmbeddings
-import New.Determinant.Exchange.MatchingPartners
+module
+
+public import Lib.Adelic.AutomorphicForms.PAdicGauge
+public import Lib.General.LinearAlgebra.BlockEmbeddings
+public import New.Determinant.Exchange.MatchingPartners
 
 /-!
 # One exchange, and class sums at the level of a row stabilizer
@@ -53,6 +55,8 @@ Notions from other files:
 See `New.OneLift.ComparisonOperator.FirstFactors`, `New.OneLift.ComparisonOperator.GluingMaps`
 and `New.Determinant.Exchange.ExplicitMatching` for related work.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -179,7 +183,7 @@ lemma isRapid_modKernel {s : n → ℤˣ} {t : b → ℤˣ} {𝔪 : Modulus E} (
 /-- A matrix `y` with rows indexed by `m ⊕ k` whose top block `y.toRows₁` (the rows in `m`) has unit
 determinant has a left inverse (`HasLeftInv`), namely `(y.toRows₁⁻¹ 0)`. -/
 lemma hasLeftInv_of_isUnit_det_toRows₁ {R m k : Type} [CommRing R] [Fintype m] [DecidableEq m]
-    [Fintype k] [DecidableEq k] {y : Matrix (m ⊕ k) m R} (hy : IsUnit y.toRows₁.det) :
+    [Fintype k] {y : Matrix (m ⊕ k) m R} (hy : IsUnit y.toRows₁.det) :
     HasLeftInv y := by
   refine ⟨fromCols y.toRows₁⁻¹ 0, ?_⟩
   rw [← y.fromRows_toRows, fromCols_mul_fromRows]

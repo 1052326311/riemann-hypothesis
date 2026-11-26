@@ -1,4 +1,16 @@
-import Lib.Base
+module
+
+public import Mathlib.Data.Fin.Tuple.Sort
+public import Mathlib.Data.ZMod.Basic
+public import Mathlib.LinearAlgebra.Matrix.Permutation
+public import Mathlib.LinearAlgebra.Matrix.SchurComplement
+public import Mathlib.MeasureTheory.Integral.Bochner.Set
+public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+public import Mathlib.Tactic.CongrExclamation
+public import Mathlib.Tactic.Field
+public import Mathlib.Tactic.FunProp
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.LinearCombination
 
 /-!
 # The Pieri cone, the step map and the slab: interlacing and volume of the cone
@@ -33,6 +45,8 @@ the application `v j` is true for even `j`.
 See `New.UpperBound.ElementaryDivisors.DefectCount` for related work.
 -/
 
+@[expose] public section
+
 namespace New
 
 section SignedCount
@@ -48,15 +62,10 @@ variable {T : Type} [Add T] [One T] (v : T → Bool) (P : ℝ)
 /-- The step map. For permutations `σ j` of `Fin k`, one for each letter `j`, it is the linear map
 `ν ↦ β` with `β (b, j) = ± (P * ν (b, j + 1) - ν (σ j b, j))`, the sign being `+` if `v j` is true
 and `-` otherwise. The entries of `β` are the steps of `ν`. -/
+@[simps!]
 def permStep (σ : T → Equiv.Perm (Fin k)) : Module.End ℝ (Fin k × T → ℝ) :=
   LinearMap.pi fun x : Fin k × T ↦
     (if v x.2 then (1 : ℝ) else -1) • (P • .proj (x.1, x.2 + 1) - .proj (σ x.2 x.1, x.2))
-
-@[simp]
-lemma permStep_apply (σ : T → Equiv.Perm (Fin k)) (ν : Fin k × T → ℝ) (x : Fin k × T) :
-    permStep v P σ ν x =
-      (if v x.2 then (1 : ℝ) else -1) * (P * ν (x.1, x.2 + 1) - ν (σ x.2 x.1, x.2)) :=
-  rfl
 
 /-- The slab: the vectors `β ≥ 0` whose degree `∑ b, β (b, j)` lies in `[D j - 1, D j]` for every
 letter `j`. -/
@@ -378,7 +387,7 @@ lemma volume_real_inter_degreeSlab_eq_signed_sum {v : Fin (m + 1) → Bool} (hP 
   -- Integrate the pointwise count `sum_indicator_positiveStepSet` over `ν`: each set is a linear
   -- preimage of a part of the slab, and the determinants are known up to a common constant.
   let Δ (τ : Perm (Fin k)) : ℝ := |detOneSubPerm (P ^ (m + 1)) τ|
-  show _ = Δ 1 / k.factorial * (∑ τ : Perm (Fin k), τ.sign / Δ τ) * volume.real (degreeSlab k D)
+  change _ = Δ 1 / k.factorial * (∑ τ : Perm (Fin k), τ.sign / Δ τ) * volume.real (degreeSlab k D)
   obtain ⟨c, hc⟩ := exists_det_permStep_eq (k := k) P v hP
   obtain ⟨hc_ne, hΔ_ne⟩ : c ≠ 0 ∧ Δ 1 ≠ 0 := by
     simpa [hc, Δ] using det_permStep_ne_zero (k := k) P v hP 1
