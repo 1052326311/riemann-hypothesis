@@ -343,7 +343,7 @@ lemma dirichletCharacter_jacobiSym_ne_one {m : ℕ} (h_odd : Odd m) (h_not_sq : 
   have h_dvd : b * p ∣ c ^ 2 * (p * b) := by simp [mul_comm]
   refine quadTwist_ne_one ψb p hp_two h_coprime ?_
   refine (changeLevel_eq_one_iff h_dvd).1 (MulChar.ext fun u ↦ ?_)
-  let v : ℤ := u.1.cast
+  let v : ℤ := u.val.cast
   have h_symbol : J(v | c) ^ 2 * (J(v | p) * J(v | b)) = 1 := by
     have h_unit : (J(v | c ^ 2 * (p * b)) : ℂ) = 1 := by simp [← hψ, v]
     rw [mul_right' _ (by simpa) (by simp [hb, hp.ne_zero]), mul_right' _ hp.ne_zero hb,
