@@ -804,15 +804,7 @@ lemma isOntoUpToColength_scaledHeckeOperator_of_frobeniusCycle {P : Parameters} 
     nonempty_heckeEdges r (D.levelX 0) hl q (hΛ.natCast_mem_asIdeal hlΛ)
   have h_aPlace (i : ZMod N) : (t i).val ∈ D.aPlaces := ((hQ (t i)).1 (t i).property).1
   let H : Type := WeylIndex (D.X 0) fun τ : {τ : D.Φ // ¬Q τ} ↦ D.columnCount τ
-  obtain ⟨J, hJ⟩ : ∃ J : WeylIndex (D.X 0) D.columnCount ≃ Exponents N D.k D.a × H,
-      ∀ (c : ZMod N → ℂ) (z : D.Φ → Matrix (D.X 0) (D.X 0) ℂ)
-        (i j : WeylIndex (D.X 0) D.columnCount),
-        (∏ s : ZMod N, c s) ^ D.a * schur D.columnCount z i j =
-          schur (fun τ : {τ : D.Φ // ¬Q τ} ↦ D.columnCount τ) (fun τ ↦ z τ) (J i).2 (J j).2 *
-            kroneckerPi (fun s : ZMod N ↦
-              symPowMatrix D.a (c s • (z (t s))ᵀ.submatrix C.numbering.symm C.numbering.symm))
-              (J j).1 (J i).1 :=
-    exists_weylIndex_equiv C.numbering t h_aPlace
+  obtain ⟨J, hJ⟩ := exists_weylIndex_equiv C.numbering t h_aPlace
   have h_off (e : ClassEdges (D.levelX 0) l D.k r) :
       ∃ m : GL H embValRing,
         schur (fun τ : {τ : D.Φ // ¬Q τ} ↦ D.columnCount τ)
