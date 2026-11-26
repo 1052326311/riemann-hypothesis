@@ -66,7 +66,7 @@ def New.QZChar.comap : QZChar Γ →+ QZChar H := pairMapZ1 φ LinearMap.id
 
 omit [IsTopologicalGroup Γ] [CompactSpace Γ] in
 /-- The character `χ ∘ φ`, as a homomorphism to `ℚ/ℤ`, takes the value `χ (φ h)` at `h`. -/
-lemma New.QZChar.comap_apply [IsTopologicalGroup H] (χ : ↥(QZChar Γ)) (h : H) :
+lemma New.QZChar.comap_apply (χ : ↥(QZChar Γ)) (h : H) :
     QZChar.toHom (QZChar.comap φ χ) h = QZChar.toHom χ (φ h) := rfl
 
 /-- An open normal subgroup `U` of the compact group `Γ` with cyclic quotient is the kernel of a
