@@ -699,9 +699,16 @@ private lemma projSpace.exists_map_eq_map_of_isTodaCancellation
             aeval b₁.down (v₁ i) * aeval b₀.down (v₀ j)
           have hv₀ : v₀ 0 = X 0 :=
             Fin.insertNth_apply_succAbove (α := fun _ ↦ MvPolynomial (Fin 1) k) 1 1 X 0
-          intro i j
-          fin_cases i <;> fin_cases j <;>
-            simp [hv₀, v₁, Fin.insertNth_zero', aeval_X, mul_comm, h_mul, v₀]
+          have hv₀' : v₀ 1 = 1 :=
+            Fin.insertNth_apply_same (α := fun _ ↦ MvPolynomial (Fin 1) k) 1 1 X
+          have hv₁ : v₁ 0 = 1 :=
+            Fin.insertNth_apply_same (α := fun _ ↦ MvPolynomial (Fin 1) k) 0 1 X
+          have hv₁' : v₁ 1 = X 0 :=
+            Fin.insertNth_apply_succAbove (α := fun _ ↦ MvPolynomial (Fin 1) k) 0 1 X 0
+          -- Two of the four cross products are trivial, and the other two are `h_mul`.
+          simp only [Fin.forall_fin_two, hv₀, hv₀', hv₁, hv₁', map_one, aeval_X, mul_one, one_mul,
+            true_and, and_true]
+          exact ⟨(mul_comm _ _).trans h_mul, h_mul.symm⟩
         change (F.app c).hom ((gluing.app c).hom (.of u)) = 0
         refine (congrArg (F.app c).hom (gluing_apply_torus c t)).trans ?_
         refine (_root_.map_sub (F.app c).hom _ _).trans ?_
