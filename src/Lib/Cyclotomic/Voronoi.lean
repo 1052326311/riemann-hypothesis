@@ -290,7 +290,7 @@ lemma exists_isStickelbergerBound (he : e ≠ 0) :
   refine ⟨X, ?_, ?_, fun {l} hl ↦ exists_modEq_one_coprime_dvd_of_prime N e hl Y,
     fun {c} hc_mod O _ _ _ χ hχ ↦ ?_⟩
   · simpa [X, Y, tsub_eq_zero_iff_le, add_assoc, hN, he, hq_ne] using hdet_ne
-  · -- Bound `q ≤ (e + 2)!` and `|bernoulliGroupDet N (e + 1)| ≤ (32 * N ^ (e + 2) * (e + 1)!) ^ φ N`.
+  · -- Bound `q ≤ (e + 2)!` and the determinant via `TauCeti.abs_bernoulliGroupDet_le`.
     have hq_le : q ≤ (e + 2)! := Nat.le_of_dvd (factorial_pos _) ⟨primorial (e + 2), by linarith⟩
     have hdet_le : (TauCeti.bernoulliGroupDet N (e + 1)).natAbs ≤
         (2 ^ 5 * N ^ (e + 2) * (e + 1)!) ^ φ N := by
@@ -326,7 +326,8 @@ lemma exists_isStickelbergerBound (he : e ≠ 0) :
       rintro _ ⟨a, rfl⟩
       exact ⟨χ a, rfl⟩
     obtain ⟨u₀, hu₀⟩ := hx_range
-    have h_sum_dvd : ∑ a : ZMod N, χ a * b a.val ∣ (q * TauCeti.bernoulliGroupDet N (e + 1) : O) := by
+    have h_sum_dvd : ∑ a : ZMod N, χ a * b a.val ∣
+        (q * TauCeti.bernoulliGroupDet N (e + 1) : O) := by
       refine ⟨u₀, hι_inj ?_⟩
       have hsum := sum_mul_bernoulli_eq_generalizedBernoulli N e (χ.ringHomComp ι) he b hb_rat
       simp only [map_mul, map_sum, map_intCast, map_natCast, MulChar.ringHomComp_apply] at hsum ⊢
