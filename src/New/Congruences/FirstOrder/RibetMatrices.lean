@@ -527,7 +527,7 @@ length of the module of cocycles of `ρ` with values in `K/O` (`K` the fraction 
 linear relations among the families `(u x g - 1)_x` and vanish at the `τ k` and at `γ`. Then some
 square matrix of tied rows, for `ρ₀ = n + (1 - n) (a - 1)` with `n = c₁ (γ - 1)` (`tiedNormaliser`),
 has through `ρ` at `X j = 0` a determinant of valuation at most `b₀`. -/
-lemma exists_tiedRows_addVal_det_le [DVR O] [Fintype J] {r ι : Type} [Fintype r] [DecidableEq r]
+lemma exists_tiedRows_addVal_det_le [DVR O] {r ι : Type} [Fintype r] [DecidableEq r]
     [Fintype ι] [DecidableEq ι] (ρ : G →* Matrix r r O) (hρ_span : span O (Set.range ρ) = ⊤)
     {γ : G} {y : O}
     (hργ : ρ γ = y • 1) {c₁ : O} (hc₁ : c₁ * (y - 1) = 1) (a : G) {gen : ι → G} {z : G → ι → O}
@@ -561,7 +561,7 @@ every linear form `Ψ` with values in `O / p` on coordinate vectors that kills t
 `K`, the function `Ψ ∘ z` is a cocycle for `ξ` in the sense of `IsCharacterCocycle`: it obeys the
 linear relations among the families `(u x g - 1)_x`, vanishes at the `δ w`, and if it vanishes at
 `γ` then every `ξ g - 1` kills its value at `a`. -/
-lemma isCharacterCocycle_of_tiedRows [DVR O] {ξ : G →* O}
+lemma isCharacterCocycle_of_tiedRows {ξ : G →* O}
     [Fintype W] {δ : W → G} {ι' : Type} [Fintype ι'] {gen' : ι' → G} {z : G → W ⊕ ι' → O}
     (hz : AreCoordinates u (δ ⊕ᵥ gen') z)
     {γ a : G} (hξγ : ξ γ = 1) (c₁ : O) {r' : Type}

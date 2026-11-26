@@ -128,7 +128,7 @@ lemma LValueData.algFormRep_scalarFin_apply_comm (ν : unitary (𝔸f D.E)) (g :
         (algFormRep Y.descentPair.columnCount Y.descentPair.detExp g φ) =
       algFormRep Y.descentPair.columnCount Y.descentPair.detExp g
         (algFormRep Y.descentPair.columnCount Y.descentPair.detExp (scalarFin n ν) φ) := by
-  rw [← Module.End.mul_apply, (Y.commute_algFormRep_scalarFin ν g).eq, Module.End.mul_apply]
+  rw [← mul_apply_eq_comp, (Y.commute_algFormRep_scalarFin ν g).eq, mul_apply_eq_comp]
 
 /-- Central translations preserve the image of an element `e` of the group algebra of the residue
 units at the chosen places. -/
@@ -139,7 +139,7 @@ lemma LValueData.centralRep_mem_range_groupAlgAction (z : Gf D.E Unit)
   refine DescentPair.range_groupAlgAction_mem_invtSubmodule _
     (fun g ↦ LinearMap.ext fun x ↦ Subtype.ext ?_) hy
   -- The action `Y.descentPair.formAction g` is a right translation times a number.
-  rw [Module.End.mul_apply, Module.End.mul_apply, coe_centralRep_apply, DescentPair.coe_formAction,
+  rw [mul_apply_eq_comp, mul_apply_eq_comp, coe_centralRep_apply, DescentPair.coe_formAction,
     DescentPair.coe_formAction, coe_centralRep_apply, map_smul,
     algFormRep_scalarFin_apply_comm]
 
@@ -344,7 +344,7 @@ lemma Selmer.DenominatorLe.norm_inner_starProjection_le {ℓ : ℕ} [Fact ℓ.Pr
     h_denom.norm_card_mul_inner_starProjection_le Y h_aut hΞ hΞ'
   rw [map_mul, norm_mul, h_norm, inv_pow, inv_mul_le_iff₀ (by positivity)] at h_bound
   rwa [inner_starProjection_left_eq_right,
-    starProjection_eq_self_iff.2 (starProjection_apply_mem _ Ξ'), exp_add, exp_nat_mul,
+    starProjection_eq_self_iff.2 (starProjection_apply_mem _ Ξ'), exp_add, exp_natCast_mul,
     exp_log hℓ, mul_comm]
 
 end New

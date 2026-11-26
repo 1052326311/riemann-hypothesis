@@ -836,7 +836,7 @@ lemma volume_sum_mem_Icc_le {n : ℕ} {d D : ℝ} (hd : d ≤ D) :
       _ ≤ ∫⁻ x in .uIoc D 0, ‖(D - x) ^ n / n !‖ₑ := lintegral_mono fun x ↦
         (measure_mono fun y hy ↦ ((mem_slice x y).1 hy).right).trans (ih (sub_le_sub_right hd x))
       _ = ‖D ^ (n + 1) / (n + 1)!‖ₑ := by
-        rw [← ofReal_integral_norm_eq_lintegral_enorm (Continuous.integrableOn_uIoc (by fun_prop))]
+        rw [← ofReal_integral_norm_eq_lintegral_eNorm (Continuous.integrableOn_uIoc (by fun_prop))]
         simp [← ofReal_norm, integral_div, abs_sub_comm D, integral_pow_abs_sub_uIoc, factorial,
           abs_of_nonneg (show (0 : ℝ) ≤ n + 1 by positivity), div_div]
 
@@ -875,29 +875,18 @@ lemma FrobeniusCycle.index_mul_relIndex_le (T : FrobeniusCycle N W K) (r : ℕ) 
         (parahoric W Fin.val).relIndex (levi W (twoBlock k r)) : ℝ) ≤
       ∏ l : Fin k, (((T.P : ℝ) ^ N) ^ (l.val + 1) - 1) / (T.P ^ N - 1) := by
   have : Finite (IsLocalRing.ResidueField W) := T.finite_residueField
-  have h_iff {τ : Fin k → ℕ} {g : GL (Fin k) W} :
-      g ∈ parahoric W τ ↔ ∀ ⦃i j : Fin k⦄, τ i < τ j → ¬IsUnit (g i j) := by
-    simp [parahoric, parabolic, BlockTriangular]
   -- The entries of the Levi subgroup between the blocks vanish, and
   -- `twoBlock k r i < twoBlock k r j` implies `i < j`.
-  have h_levi : levi W (twoBlock k r) ≤ parahoric W (twoBlock k r) :=
-    fun g hg ↦ h_iff.2 fun i j h_lt ↦ by simp [show g i j = 0 from hg i j h_lt.ne]
-  have h_iwahori_le : parahoric W Fin.val ≤ parahoric W (twoBlock k r) := fun g hg ↦
-    h_iff.2 fun i j h_lt ↦ h_iff.1 hg (by grind [twoBlock] : i.val < j.val)
-  calc ((parahoric W (twoBlock k r)).index *
-          (parahoric W Fin.val).relIndex (levi W (twoBlock k r)) : ℝ)
-      ≤ (parahoric W (twoBlock k r)).index *
-          (parahoric W Fin.val).relIndex (parahoric W (twoBlock k r)) := by
-        gcongr
-        exact relIndex_le_of_le_right h_levi index_ne_zero_of_finite
-    _ = (parahoric (k := k) W Fin.val).index := by
-        rw [mul_comm, ← cast_mul, relIndex_mul_index h_iwahori_le]
-    _ ≤ (parabolic (R := IsLocalRing.ResidueField W)
-          (OrderDual.toDual ∘ (Fin.val : Fin k → ℕ))).index := by
-        grw [parahoric, index_comap, relIndex_le_of_le_right le_top index_ne_zero_of_finite,
-          relIndex_top_right]
-    _ ≤ ∏ l : Fin k, (((T.P : ℝ) ^ N) ^ (l.val + 1) - 1) / (T.P ^ N - 1) := by
-        grw [index_borel_le, T.card_residueField, cast_pow]
+  have h_levi : levi W (twoBlock k r) ≤ parahoric W (twoBlock k r) := fun g hg ↦ by
+    simp [parahoric, parabolic, BlockTriangular]
+    exact fun i j h ↦ by simp [hg i j h.ne]
+  have h_iwahori_le : parahoric W Fin.val ≤ parahoric W (twoBlock k r) := fun g hg ↦ by
+    simp [parahoric, parabolic, BlockTriangular] at hg ⊢
+    exact fun i j h ↦ hg (by grind [twoBlock])
+  grw [relIndex_le_of_le_right h_levi index_ne_zero_of_finite, mul_comm, ← cast_mul,
+    relIndex_mul_index h_iwahori_le, parahoric, index_comap,
+    relIndex_le_of_le_right le_top index_ne_zero_of_finite, relIndex_top_right,
+    index_borel_le, T.card_residueField, cast_pow]
 
 /-- The image of `ν` under `New.permStep` with trivial permutations, that is, the vector
 `± (P ν (b, s + 1) - ν (b, s))` with the sign `+` at even letters, has defect at most `0` along all
@@ -978,9 +967,9 @@ lemma FrobeniusCycle.index_mul_finrank_defectConditions_le (T : FrobeniusCycle N
     _ ≤ rexp x * (n ^ k' / k' !) ^ N := by
         refine (ENNReal.toReal_le_of_le_ofReal (b := ((rexp (E / n) * n) ^ k' / k' !) ^ N)
           (by positivity) ?_).trans_eq ?_
-        · rw [ENNReal.ofReal_pow (by positivity), ← enorm_of_nonneg (by positivity)]
+        · rw [ENNReal.ofReal_pow (by positivity), ← eNorm_of_nonneg (by positivity)]
           exact volume_degreeSlab_le h_deg
-        · rw [mul_pow, mul_div_assoc, mul_pow, ← exp_nat_mul, ← exp_nat_mul]
+        · rw [mul_pow, mul_div_assoc, mul_pow, ← exp_natCast_mul, ← exp_natCast_mul]
     _ ≤ (1 + θ) * Fintype.card (Monomials (Fin (k' + 1)) n) ^ N := by
         gcongr
         · exact (exp_pos _).le.trans h_exp

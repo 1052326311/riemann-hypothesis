@@ -289,7 +289,7 @@ private lemma index_re_le_sum_of_hasPrimeDensity [FiniteIndex W]
   rcases (D v).eq_empty_or_nonempty with hD | hD
   · simp_all [D, ← mul_sum, sum_apply_eq_ite, apply_ite, mul_nonneg]
   · have h_mul : (W.index : ℝ) * (D v).ncard ≤ finrank K L * W.index := by grw [h_card, mul_comm]
-    simpa [(eq_one_iff _).mpr (hv hD), index, mul_comm, D] using h_mul
+    simpa [(eq_one_iff _).mpr (hv hD), index, mul_comm] using h_mul
 
 /-- Let `L / K` be Galois and `W` an open subgroup of the finite ideles of `K` (`hW_open`) that
 contains the totally positive principal ideles (`hW_pos`) and the norms from `L` (`h_norm`). A
@@ -713,7 +713,7 @@ lemma albert_brauer_hasse_noether (α : (unitsModule Γ).H2)
       ⟨U.normalCore, isOpen_of_isClosed_of_finiteIndex _ (normalCore_isClosed _ U.isClosed)⟩
     -- Restriction to `W` factors through restriction to `U`.
     have h_factor : (unitsModule Γ).resH2 W α =
-        (pairMapH2 (.mk (inclusion U.normalCore_le) (continuous_subtype_val.subtype_mk _)) .id)
+        (pairMapH2 (.mk (inclusion U.normalCore_le) (continuous_subtypeVal.subtype_mk _)) .id)
           ((unitsModule Γ).resH2 U α) := by
       induction α using QuotientAddGroup.induction_on
       rfl

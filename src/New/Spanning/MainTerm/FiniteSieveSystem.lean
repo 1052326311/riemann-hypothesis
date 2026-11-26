@@ -44,8 +44,8 @@ open Finset ComplexOrder MeasureTheory Floors ENNReal PlaceData IntegralPlace.Is
 whose powers sizes are measured, `M = S.M` the product of the two level primes, `f = numInfPlaces E`
 the number of infinite places, and `n = 𝔰.n = ϱ + 1` with `ϱ` the number of hyperbolic planes. Then
 `(2 (M ^ f) ^ 2) ^ (n ^ 6) ≤ b ^ (n ^ 9 * f)`. -/
-lemma two_mul_M_pow_sq_pow_le {E : Type} {𝔰 : Shape} [Field E] [CMType E] [WeilData E]
-    (S : Filling E 𝔰) [S.IsAdmissible] :
+lemma two_mul_M_pow_sq_pow_le {E : Type} {𝔰 : Shape} [Field E] [CMType E]
+    (S : Filling E 𝔰) :
     (2 * ((S.M : ℝ) ^ numInfPlaces E) ^ 2) ^ 𝔰.n ^ 6 ≤ S.b ^ (𝔰.n ^ 9 * numInfPlaces E) := by
   have one_le_b : 1 ≤ S.b := S.one_le_b
   have exponent_le : 46 * numInfPlaces E + 1 ≤ 𝔰.n ^ 3 * numInfPlaces E := by
@@ -65,8 +65,8 @@ of `G`, `K(g) = F.congruenceSubgroup` its principal congruence subgroup and `vol
 the Haar measure. Then `F.massIntegral K = ∫_G |∫_K χ(y x y⁻¹) dy| ^ 2 dx`, with
 `χ = phase F.levelUnit` the generic character of the unipotent group `U` extended to `U K(g)` and by
 zero, is at most `vol(K) vol(K(g)) (1 + b⁻¹ ^ 6)`, where `b = S.b` is the size parameter of `S`. -/
-lemma IsFillingData.massIntegral_full_le {E : Type} {𝔰 : Shape} [Field E] [CMType E] [WeilData E]
-    {S : Filling E 𝔰} [S.IsAdmissible] {T : Finset (FinPlace E)} [T.StarStable]
+lemma IsFillingData.massIntegral_full_le {E : Type} {𝔰 : Shape} [Field E] [CMType E]
+    {S : Filling E 𝔰} {T : Finset (FinPlace E)} [T.StarStable]
     {P : IntegralPlace (LocProd T)}
     {F : PlaceData (Fin (𝔰.k - (6 * 𝔰.ϱ + 13))) (S.latticeMiddle (LocProd T)) (𝔰.ϱ + 1 + 2 * 𝔰.ϱ +
       5)}
@@ -91,7 +91,7 @@ lemma IsFillingData.massIntegral_full_le {E : Type} {𝔰 : Shape} [Field E] [CM
 /-- Let `Z` be a group between the congruence subgroup of the place datum `F` and the integral
 points, and let `c = Z.massRatio` be its normalising constant in `ℝ≥0∞`. A bound `‖x‖ₑ ≤ c * D` with
 `D` finite gives `‖x / c.toReal‖ ≤ D.toReal`. -/
-lemma norm_div_massRatio_le {E : Type} {𝔰 : Shape} [Field E] [CMType E] [WeilData E]
+lemma norm_div_massRatio_le {E : Type} {𝔰 : Shape} [Field E] [CMType E]
     {S : Filling E 𝔰} {T : Finset (FinPlace E)} [T.StarStable] {P : IntegralPlace (LocProd T)}
     {F : PlaceData (Fin (𝔰.k - (6 * 𝔰.ϱ + 13))) (S.latticeMiddle (LocProd T)) (𝔰.ϱ + 1 + 2 * 𝔰.ϱ +
       5)}
@@ -149,7 +149,7 @@ orbital integral `F.floorForm 0` of `Z.besselVector`, the vector of the translat
 character `χ = phase F.levelUnit` by the cosets of `K(g)` in `Z`. Its norm times the square of
 `F.unipotentMass` is at most `F.massIntegral Z = ∫_G |∫_Z χ(y x y⁻¹) dy| ^ 2 dx`. -/
 lemma IsFillingData.enorm_floorForm_zero_mul_le {E : Type} {𝔰 : Shape} [Field E] [CMType E]
-    [WeilData E] {S : Filling E 𝔰} [S.IsAdmissible] {T : Finset (FinPlace E)} [T.StarStable]
+    {S : Filling E 𝔰} {T : Finset (FinPlace E)} [T.StarStable]
     {P : IntegralPlace (LocProd T)}
     {F : PlaceData (Fin (𝔰.k - (6 * 𝔰.ϱ + 13))) (S.latticeMiddle (LocProd T)) (𝔰.ϱ + 1 + 2 * 𝔰.ϱ +
       5)}
@@ -160,7 +160,7 @@ lemma IsFillingData.enorm_floorForm_zero_mul_le {E : Type} {𝔰 : Shape} [Field
     F.partialCorrelation 0 (frameCorrelation Z.besselVector 1) 1 z
   have h_form : ‖F.floorForm 0 p q Z.besselVector 1‖ₑ ≤ ∫⁻ z, ‖k₀ z‖ₑ ^ 2 ∂F.groupMeasure := by
     rw [floorForm_zero_eq_integral hF.gauge (isCut_besselVector Z), ← integral_complex_ofReal]
-    exact (enorm_integral_le_lintegral_enorm _).trans_eq (by simp [k₀, ← ofReal_norm])
+    exact (eNorm_integral_le_lintegral_eNorm _).trans_eq (by simp [k₀, ← ofReal_norm])
   have h_floorZeroForm_eq :
       F.massIntegral Z = ∫⁻ z, ‖k₀ z‖ₑ ^ 2 * F.unipotentMass ^ 2 ∂F.groupMeasure := by
     simp only [massIntegral, enorm_integral_extendedBesselChar_eq_enorm_mul, mul_pow, k₀]
@@ -246,7 +246,7 @@ scaled orbital integrals of `p` and `q` over the vectors of the top quadric with
 On finitely many sequences `a i` with the same entry `t` at position `ϱ = 𝔰.ϱ`, the number of
 hyperbolic planes, it is a positive semidefinite matrix. -/
 lemma IsFillingData.posSemidef_lastEntryDensity {E : Type} {𝔰 : Shape} [Field E] [CMType E]
-    [WeilData E] {S : Filling E 𝔰} [S.IsAdmissible] {T : Finset (FinPlace E)} [T.StarStable]
+    {S : Filling E 𝔰} {T : Finset (FinPlace E)} [T.StarStable]
     {P : IntegralPlace (LocProd T)}
     {F : PlaceData (Fin (𝔰.k - (6 * 𝔰.ϱ + 13))) (S.latticeMiddle (LocProd T)) (𝔰.ϱ + 1 + 2 * 𝔰.ϱ +
       5)}

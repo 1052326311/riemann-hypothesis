@@ -121,9 +121,9 @@ lemma heckeSplit_comm_of_trivialOn (hw : w.IsSplit) (j : ℕ) {g : Gf E n}
   -- An element trivial at `w, w̄` commutes with every element supported there.
   refine map_heckeSplit hw j (π g) fun k hk ↦ ?_
   have h_comm : Commute k g := commute_supportedOn_trivialOn hk hg
-  calc π g (π k v) = π (g * k) v := by rw [map_mul, Module.End.mul_apply]
+  calc π g (π k v) = π (g * k) v := by rw [map_mul, mul_apply_eq_comp]
     _ = π (k * g) v := by rw [h_comm.eq]
-    _ = π k (π g v) := by rw [map_mul, Module.End.mul_apply]
+    _ = π k (π g v) := by rw [map_mul, mul_apply_eq_comp]
 
 /-! ### The operators on spherical vectors -/
 
@@ -200,7 +200,7 @@ lemma heckeSplit_comm_of_atPlace_mem (hw : w.IsSplit) (j : ℕ) (hv : v ∈ sphe
   have h_fix_T : π k (heckeSplit π hw j v) = heckeSplit π hw j v := by
     simpa using mem_levelSpace.mp h_T_sph ⟨g.atPlace w, hg⟩
   have h_g (x : W) : π g x = π (g / k) (π k x) := by
-    rw [← Module.End.mul_apply (π (g / k)) (π k), ← map_mul, div_mul_cancel]
+    rw [← mul_apply_eq_comp (π (g / k)) (π k), ← map_mul, div_mul_cancel]
   calc heckeSplit π hw j (π g v) = heckeSplit π hw j (π (g / k) v) := by rw [h_g, h_fix]
     _ = π (g / k) (heckeSplit π hw j v) := (heckeSplit_comm_of_trivialOn hw j h_off).symm
     _ = π g (heckeSplit π hw j v) := by rw [h_g, h_fix_T]
@@ -410,21 +410,13 @@ with eigenvalue the polynomial made from the `t i`. -/
 theorem hasHeckePolynomial_of_heckeSplit (hy : y ∈ sphericalAt π w) {t : ℕ → ℂ}
     (h : ∀ i : ℕ, heckeSplit π hw i y = t i • y) :
     HasHeckePolynomial π hw (heckePolyEval n w t) y := by
-  show y ∈ sphericalAt π w ∧ ∀ T : ℂ, heckePolyOp π hw T y = heckePolyEval n w t T • y
+  change y ∈ sphericalAt π w ∧ ∀ T : ℂ, heckePolyOp π hw T y = heckePolyEval n w t T • y
   refine ⟨hy, fun T ↦ ?_⟩
   -- termwise, `T_i` acts on `y` by `t i`
   calc heckePolyOp π hw T y
       = ∑ i ∈ range (Fintype.card n + 1), ((-T) ^ i * w.q ^ i.choose 2) • heckeSplit π hw i y := by
         simp [heckePolyOp, heckePolyEval]
     _ = heckePolyEval n w t T • y := by simp [heckePolyEval, h, sum_smul, mul_smul]
-
-/-- A scalar multiple of a spherical eigenvector of the Hecke polynomial is one with the same
-eigenvalue `p`. -/
-theorem HasHeckePolynomial.smul {a : ℂ} (h : HasHeckePolynomial π hw p y) :
-    HasHeckePolynomial π hw p (a • y) := by
-  obtain ⟨hy, h_eigen⟩ := h
-  refine ⟨Submodule.smul_mem _ a hy, fun T ↦ ?_⟩
-  rw [map_smul, h_eigen T, smul_comm]
 
 /-- A `σ`-semilinear map that is equivariant on `y` for the elements supported above `w` and
 `star w` carries the Hecke polynomial at `T` to the Hecke polynomial at `σ T`. -/

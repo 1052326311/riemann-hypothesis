@@ -67,7 +67,7 @@ lemma exists_isSchwartzVector_realSlice_eq (D : X.Splitting W₁ b) [IsBaseAdapt
   -- Choose `κ` so that `τ κ` and the Gaussian slices of the vacuum have the same integral. The
   -- slice at `0` for `D.symm` is the integral of all slices, so the section `τ κ • v` gives `v`.
   have hpos : 0 < ∫ x, τ x ∂normalizedVolume _ :=
-    hτ.continuous.integral_pos_of_hasCompactSupport_nonneg_nonzero hsupp hτ₀ hy
+    hτ.continuous.integral_pos_of_hasCompactSupport_nonneg_ne_zero hsupp hτ₀ hy
   set 𝓜 := (isAdapted_homSource D V').mixedModel
   obtain ⟨κ, hκ⟩ : ∃ κ : ℂ,
       ∫ x, 𝓜.slice x Fock.vacVector 0 ∂normalizedVolume _ = (∫ x, τ x ∂normalizedVolume _ : ℝ) *
@@ -94,7 +94,7 @@ lemma exists_isSchwartzVector_realSlice_eq (D : X.Splitting W₁ b) [IsBaseAdapt
         symm_homSource_zeroTerm_eq_integral D V' _
       _ = ∫ x,
           (W₁.hom V').integrated v ((D.homSource V').slice x ((X.hom V').projReal f)) := by
-        simpa [hc, ν, term, integral_domSMul, star, -coe_units_inv] using congrArg (c • ·) h
+        simpa [hc, ν, integral_domSMul, star, -coe_units_inv] using congrArg (c • ·) h
       _ = (W₁.hom V').integrated v ((D.symm.homSource V').zeroTerm ((X.hom V').projReal f)) := by
         rw [symm_homSource_zeroTerm_eq_integral,
           ← (integrated _ v).integral_comp_comm (by fun_prop)]

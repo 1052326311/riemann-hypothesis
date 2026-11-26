@@ -299,8 +299,6 @@ theorem IsUnimodularHaar.of_freeEntries {S : Subgroup 𝔰.G₁}
   have := hν.sigmaFinite
   obtain ⟨c, rfl⟩ : ∃ c : ℝ≥0∞, ν = c • haar := exists_eq_smul_haar haar h_right
   -- A Gaussian in the coordinates has integral `1`, so `c` is neither `0` nor `∞`.
-  have : (volume (α := (Subtype p → ℂ) × (Fin 𝔰.ϱ → ℝ))).IsAddHaarMeasure :=
-    prod.instIsAddHaarMeasure ..
   have hc : c ≠ 0 ∧ c ≠ ∞ := by
     have h_int := (hν.lintegral_comp (by fun_prop)).trans
       (lintegral_gaussian_eq_one (V := (Subtype p → ℂ) × (Fin 𝔰.ϱ → ℝ)))
@@ -487,17 +485,6 @@ theorem measurePreserving_freeEntries_besselHaar₀ :
       freeEntries IsFreeEntry₀ (unipotentOf q).val.val :=
     (hE.comp h_shear).congr (by fun_prop) (.of_forall fun q ↦ (h_coord q).symm)
   exact .map_of_comp h_param (by fun_prop) (by fun_prop)
-
-open scoped Classical in
-/-- The free entries are coordinates on 𝖴⁰ in which `New.Shape.besselHaar₀` is Lebesgue measure:
-they are injective on 𝖴⁰ (`New.RealPlace.injective_freeEntries_besselU0`) and carry this measure
-to Lebesgue measure (`New.RealPlace.measurePreserving_freeEntries_besselHaar₀`). -/
-theorem injective_measurePreserving_freeEntries₀ :
-    (Injective fun u : (𝔰.middleGram (1 : ℂ)).besselU0 ↦
-      freeEntries IsFreeEntry₀ (u : Matrix 𝔰.BesselIndex 𝔰.BesselIndex ℂ)) ∧
-    MeasurePreserving (fun u : (𝔰.middleGram (1 : ℂ)).besselU0 ↦
-      freeEntries IsFreeEntry₀ (u : Matrix 𝔰.BesselIndex 𝔰.BesselIndex ℂ)) 𝔰.besselHaar₀ :=
-  ⟨injective_freeEntries_besselU0, measurePreserving_freeEntries_besselHaar₀⟩
 
 /-- `New.Shape.besselHaar₀` is a two-sided Haar measure on 𝖴⁰ with a cutoff for the action on G₁,
 in the sense of `New.RealPlace.IsUnimodularHaar`. -/
@@ -744,7 +731,7 @@ lemma mul_mem_homogeneousBall {ρ ρ' : ℝ} {u v : (𝔰.middleGram (1 : ℂ)).
     calc ‖eichlerScalars u.val + eichlerScalars v.val +
           (eichlerVectors u.val)ᴴ * eichlerVectors v.val‖ ≤ ρ ^ 2 + ρ' ^ 2 + ρ * ρ' := by
           grw [norm_add₃_le, l2_opNorm_mul, l2_opNorm_conjTranspose, hu_ω, hu_μ, hv_ω, hv_μ]
-      _ ≤ (ρ + ρ') ^ 2 := by nlinarith [mul_nonneg hρ ((norm_nonneg _).trans hv_ω)]
+      _ ≤ (ρ + ρ') ^ 2 := by linarith [mul_nonneg hρ ((norm_nonneg _).trans hv_ω)]
 
 /-- On the frame-fixing unipotent group 𝖴⁰, the measure `besselHaar₀` is the pushforward of Lebesgue
 measure under `unipotentOf`. For ρ > 0 it gives `homogeneousBall ρ` (‖ω‖ ≤ ρ, ‖μ‖ ≤ ρ² in operator
@@ -830,14 +817,13 @@ lemma besselHaar₀_homogeneousBall_add_le {t : ℝ} (ht : 0 < t) :
     𝔰.besselHaar₀ (homogeneousBall (𝔰.r ^ 2 * t + t)) ≤
       3 * 𝔰.besselHaar₀ (homogeneousBall (𝔰.r ^ 2 * t)) := by
   -- The radius grows by the factor `1 + 1 / r ^ 2`, and the exponent `d` is at most `r ^ 2`.
-  have hr_pos : (0 : ℝ) < 𝔰.r := mod_cast card_pos
   set d : ℕ := 2 * 𝔰.ϱ * (𝔰.k + 𝔰.ϱ) with hd_def
   have hd : d ≤ 𝔰.r ^ 2 := by
     rw [hd_def, show 𝔰.r = 𝔰.ϱ + (𝔰.k + 1 + 𝔰.ϱ) by simp]
     nlinarith
   have h_factor : ((𝔰.r ^ 2 : ℝ)⁻¹ + 1) ^ d ≤ 3 :=
     calc ((𝔰.r ^ 2 : ℝ)⁻¹ + 1) ^ d ≤ Real.exp (d * (𝔰.r ^ 2 : ℝ)⁻¹) := by
-          grw [Real.add_one_le_exp, Real.exp_nat_mul]
+          grw [Real.add_one_le_exp, Real.exp_natCast_mul]
       _ ≤ Real.exp 1 := Real.exp_le_exp.2 (mul_inv_le_one_of_le₀ (mod_cast hd) (by positivity))
       _ ≤ 3 := Real.exp_one_lt_three.le
   rw [besselHaar₀_homogeneousBall (by positivity),

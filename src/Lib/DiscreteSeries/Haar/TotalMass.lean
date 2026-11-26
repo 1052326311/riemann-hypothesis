@@ -156,7 +156,8 @@ theorem HasGramDensity.lintegral_conjTranspose_mulVec {W : Set (Matrix n' n' ℝ
     simp [gramCoords, outerCoords, h_sum]
   have h_prod (X : Matrix n' n' ℂ) (w : n' → ℂ) :
       ((u : Matrix n n ℂ) * rows (X, w))ᴴ *ᵥ v = √r • w := by
-    have h_unitary : (u : Matrix n n ℂ)ᴴ * u = 1 := by simpa using mem_U.1 u.property
+    have h_unitary : (u : Matrix n n ℂ)ᴴ * u = 1 := by
+      simpa [star_eq_conjTranspose] using mem_unitaryGroupOf_iff.1 u.property
     rw [← hu, mulVec_mulVec, conjTranspose_mul, Matrix.mul_assoc, h_unitary]
     simp [funext_iff, v₀, rows, mulVec_smul]
   have h_outer (w : n' → ℂ) : r⁻¹ • outerCoords (√r • w) = outerCoords w := by
@@ -398,7 +399,7 @@ theorem measure_ball_le_covering (ν : Measure S) [MeasurableMul S] [ν.IsMulRig
   have : Finite M := Set.Finite.to_subtype (by simpa using h_card.trans_lt ofReal_lt_top)
   have h_cover : {s : S | ‖f s‖ ≤ R} ⊆ ⋃ k : M, (· * (k : S)⁻¹) ⁻¹' B := by
     intro g hg
-    by_contra! h_not_mem
+    by_contra h_not_mem
     -- Otherwise `g` is far from all of `M`: `j (g k⁻¹) - 1 = (f g - f k) (j k * y)⁻¹`, and an
     -- element of `U J` has the norm of its inverse.
     have h_far (k : M) : IsFar ⟨g, hg⟩ k := (div_le_iff₀ (by positivity)).2 <|
@@ -418,8 +419,8 @@ theorem measure_ball_le_covering (ν : Measure S) [MeasurableMul S] [ν.IsMulRig
 
 /-- For a proper homomorphism `j` to `U J` and a measure `ν` that is finite on compact sets, the
 ball `‖j s - 1‖ ≤ R` in the operator norm has finite measure. -/
-lemma measure_ball_ne_top_of_isProperMap (ν : Measure S) [MeasurableMul S]
-    [ν.IsMulRightInvariant] {j : S →* U J} [TopologicalSpace S] [IsFiniteMeasureOnCompacts ν]
+lemma measure_ball_ne_top_of_isProperMap (ν : Measure S)
+    {j : S →* U J} [TopologicalSpace S] [IsFiniteMeasureOnCompacts ν]
     (hj : IsProperMap j) (R : ℝ) : ν {s : S | ‖(j s : Matrix n n ℂ) - 1‖ ≤ R} ≠ ⊤ := by
   have h_eq : {s : S | ‖(j s : Matrix n n ℂ) - 1‖ ≤ R} = j ⁻¹' Metric.closedBall 1 R :=
     Set.ext fun s ↦ (mem_closedBall_iff_norm (b := (j s : Matrix n n ℂ))).symm

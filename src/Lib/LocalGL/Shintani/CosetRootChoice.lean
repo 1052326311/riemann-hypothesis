@@ -313,7 +313,7 @@ lemma IsIrreducibleChar.extend_semidirect [Finite Γ] (hY : IsIrreducibleChar Y)
     have h_convY_g : Y 1 * (finMean fun t : G ↦ conj (χ (inl t)) * Y (t * g)) =
         (finMean fun t : G ↦ conj (χ (inl t)) * Y t) * Y g := by
       simp only [mul_comm (conj (χ _))]
-      simpa [← finMean_conj, ← hY_char.apply_inv, field, classInner] using h_convY
+      simpa [← finMean_conj, ← hY_char.apply_inv, classInner] using h_convY
     have h_pair_ne : (finMean fun t : G ↦ conj (χ (inl t)) * Y t) ≠ 0 := by
       simpa [← finMean_conj, ← hY_char.apply_inv, field, classInner] using h_ne
     have hY_one_ne : Y 1 ≠ 0 := fun h_zero ↦ by
@@ -415,7 +415,7 @@ lemma IsRootChoice.index_mul_finMean_eq_classInner [Finite Γ]
     sum_subtype _ mem_filter_univ, ← R.bijective_conjRoot.sum_comp, ← π.ker.index_mul_card,
     ← R.card_preimage_eq, ← Nat.card_eq_of_bijective _ R.bijective_conjRoot]
   have h_index : (π.ker.index : ℂ) ≠ 0 := mod_cast index_ne_zero_of_finite
-  simp [IsRootChoice.conjRoot, h_ker, hh_conj, hg_conj, field, Fintype.sum_prod_type, mul_sum]
+  simp [IsRootChoice.conjRoot, h_ker, hh_conj, hg_conj, field, Fintype.sum_prod_type]
   -- the values at r(γ) are those of f and f'
   grind [DescendsOnCoset]
 
@@ -455,7 +455,7 @@ lemma IsRootChoice.descendsOnCoset_comp (R : IsRootChoice π σ j r)
       _ = j γ := by rw [h_s_eq, h_pow]
   have h_comm : j γ * x = x * j γ := mem_centralizer_iff.mp hx (j γ) rfl
   have h_j_eq : j δ = j γ := mul_left_cancel <| by rwa [← h_comm, ← mul_inv_eq_iff_eq_mul]
-  show g s = g (r γ)
+  change g s = g (r γ)
   rw [← h_s_eq, h_inv (r δ) x h_ker, R.injective h_j_eq]
 
 omit [Finite G] in

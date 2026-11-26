@@ -123,12 +123,9 @@ lemma relLength_iInf_le (T : m → Submodule A M) :
 
 /-- The length of `S` is the sum of its length modulo `T` and the length of `S ⊓ T`. -/
 lemma relLength_add_length_inf : relLength S T + length A ↥(S ⊓ T) = length A S := by
-  -- Additivity of length in `0 → S ⊓ T → S → S ⧸ T → 0`.
-  have h_exact : Function.Exact (inclusion (inf_le_left : S ⊓ T ≤ S)) (T.submoduleOf S).mkQ := by
-    rw [exact_iff, ker_mkQ, range_inclusion]
-    simp [submoduleOf]
-  rw [length_eq_add_of_exact _ _ (inclusion_injective _) (mkQ_surjective _) h_exact, add_comm,
-    relLength]
+  rw [relLength, ← (T.submoduleOfEquivInf S).length_eq, add_comm]
+  exact (length_eq_add_of_exact (T.submoduleOf S).subtype (T.submoduleOf S).mkQ
+    (Submodule.subtype_injective _) (mkQ_surjective _) (LinearMap.exact_subtype_mkQ _)).symm
 @[simp]
 lemma relLength_bot : relLength S ⊥ = length A S := by rw [← ker_id, relLength_ker, S.map_id]
 
@@ -618,11 +615,12 @@ variable {Φ N p}
 
 /-- Duality. Let `p ≠ 0` with `Φ (p • O^n) ⊆ N`. If every `O`-linear map `Ψ : O^n → O / p` (with
 values written in `Unit → O / p`) vanishing on `Φ⁻¹ N` vanishes at `v`, then `Φ v ∈ N`. -/
-lemma mem_of_forall_form_eq_zero [Fintype n] (hp : p ≠ 0) (hN : ∀ v : n → O, Φ (p • v) ∈ N)
+lemma mem_of_forall_form_eq_zero [Finite n] (hp : p ≠ 0) (hN : ∀ v : n → O, Φ (p • v) ∈ N)
     {v : n → O}
     (h_kill : ∀ Ψ : (n → O) →ₗ[O] Unit → QuotSpan p, (∀ ⦃u : n → O⦄, Φ u ∈ N → Ψ u = 0) → Ψ v = 0) :
     Φ v ∈ N := by
   classical
+  have := Fintype.ofFinite n
   -- `Φ⁻¹ N` is the annihilator of a module `S` of vectors modulo `p`, and each `w ∈ S` gives a
   -- linear form that vanishes on `Φ⁻¹ N`.
   obtain ⟨-, S, -, (hS : ∀ u : n → O, Φ u ∈ N ↔ ∀ w ∈ S, ∑ j : n, u j • w j = 0), -⟩ :=
@@ -654,7 +652,7 @@ Assume `p ≠ 0` and `Φ (p • O^n) ⊆ N ≤ N'`. Let `V` be an `O`-module of 
 for some `a : O`, then the image of `formsMod Φ z N' p` in the quotient by `V` is strictly smaller
 than the image of `formsMod Φ z N p`. -/
 lemma map_mkQ_formsMod_lt {O R G n ι : Type} [CommRing O] [DVR O] [CommRing R] [Algebra O R]
-    {Φ : (n → O) →ₗ[O] ι → R} (z : G → n → O) {N : Submodule R (ι → R)} {p : O} [Fintype n]
+    {Φ : (n → O) →ₗ[O] ι → R} (z : G → n → O) {N : Submodule R (ι → R)} {p : O} [Finite n]
     (hp : p ≠ 0) (hN : ∀ u : n → O, Φ (p • u) ∈ N)
     {N' : Submodule R (ι → R)} (h_le : N ≤ N') {V : Submodule O (G → Unit → QuotSpan p)}
     {v : n → O} (h_kill : ∀ Ψ : (n → O) →ₗ[O] Unit → QuotSpan p, Ψ ∘ z ∈ V → Ψ v = 0) {a : O}
@@ -681,7 +679,7 @@ that vanish on `Φ⁻¹ N`; (b) `K` contains `Φ v` whenever every linear `Ψ` w
 
 This is a relative, dual form of the bound of a Fitting ideal by length over a discrete valuation
 ring, for Noetherian `R`. -/
-lemma fittingIdeal.exists_addVal_le_relLength [Fintype n] (hp : p ≠ 0)
+lemma fittingIdeal.exists_addVal_le_relLength [Finite n] (hp : p ≠ 0)
     (hN : ∀ v : n → O, Φ (p • v) ∈ N) [IsNoetherianRing R] [Fintype ι] [DecidableEq ι]
     (V : Submodule O (G → Unit → QuotSpan p)) :
     ∃ (c : O) (K : Submodule R (ι → R)), N ≤ K ∧
@@ -691,6 +689,7 @@ lemma fittingIdeal.exists_addVal_le_relLength [Fintype n] (hp : p ≠ 0)
       (∀ ⦃v : n → O⦄, (∀ Ψ : (n → O) →ₗ[O] Unit → QuotSpan p, Ψ ∘ z ∈ V → Ψ v = 0) → Φ v ∈ K) ∧
       -- (c)
       ∀ d ∈ fittingIdeal K, c • d ∈ fittingIdeal N := by
+  have := Fintype.ofFinite n
   -- Noetherian induction on `N`. If `K = N` fails (b), enlarge `N` by one vector `x` with
   -- `ϖ • x ∈ N`, `ϖ` a uniformiser: `ϖ` takes the new Fitting ideal into the old one, and the
   -- length of `formsMod` modulo `V` drops.

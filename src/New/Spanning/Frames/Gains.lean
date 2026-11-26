@@ -384,26 +384,16 @@ theorem Gauge.formMajorant_sq_le_of_hasDeepVector (hk : F.IsCut W) (hj : j ≤ �
     Γ.isPairingKernel_frameCorrelation hk j p q
   grw [mul_pow, ker₂.pivotL1Norm_sq_le_of_floorMassLe_one h_vol,
     lintegral_partialCorrelation_sq_le hj]
-  -- The second modulus is not zero, so for some `τ` the function `W` vanishes at neither of the
-  -- translates by `τ` of the two points.
-  obtain ⟨τ, hτ, hτ_ne⟩ : ∃ τ ∈ floorGroup j, frameCorrelation W (weylRatio j p q)
-      (τ * ((weylElem j p)⁻¹ * y)) (τ * ((weylElem j p)⁻¹ * y * x)) ≠ 0 :=
-    exists_ne_zero_of_pivotL1Norm_ne_zero (right_ne_zero_of_mul h_ne)
-  have h_ne_p : W (τ * ((weylElem j p)⁻¹ * y)) ≠ 0 := fun h ↦ hτ_ne (by simp [h])
-  have h_ne_q : W (τ * ((weylElem j q)⁻¹ * (y * x))) ≠ 0 := fun h ↦
-    hτ_ne (by simp [weylRatio, weylElem_mul_left_comm hτ, h, mul_assoc])
-  -- Hence both points are near at `j` along the whole orbit of `y` under `floorGroup j`.
-  have h_near {ρ : T.G} (hρ : ρ ∈ floorGroup j) {r : ℕ → Aˣ} {z : T.G}
-      (hz : W (τ * ((weylElem j r)⁻¹ * z)) ≠ 0) : F.IsNear j ((weylElem j r)⁻¹ * (ρ * z)) := by
-    refine .of_floorGroup_mul (hk.isNear_of_ne_zero ?_) (div_mem hτ hρ)
-    simpa [weylElem_mul_left_comm hρ, div_eq_mul_inv, mul_assoc] using hz
   have h_deep_orbit (ρ : T.G) (hρ : ρ ∈ floorGroup j)
       (h_pair : frameCorrelation W 1 (ρ * y) (ρ * (y * x)) ≠ 0) :
       ∃ a : Fin 𝔰.ϱ, j ≤ a ∧ σ⁻¹ ≤ F.depth a (ρ * y) x := by
     have h_inner : ⟪W (ρ * y), W (ρ * y * x)⟫_ℂ ≠ 0 := by simpa [mul_assoc] using h_pair
-    have h_near_q : F.IsNear j ((weylElem j q)⁻¹ * (ρ * y * x)) := by
-      simpa only [mul_assoc] using h_near hρ h_ne_q
-    exact h_deep (ρ * y) ⟨h_inner, h_near hρ h_ne_p, h_near_q⟩
+    obtain ⟨near_p, near_q⟩ := hk.isNear_pair_of_pivot_ne_zero
+      (by intro τ hτ; simp [weylRatio, mul_assoc, weylElem_mul_left_comm hτ])
+      (right_ne_zero_of_mul h_ne) hρ
+    apply h_deep (ρ * y)
+    exact ⟨h_inner, by simpa only [weylElem_mul_left_comm hρ] using near_p,
+      by simpa [weylRatio, mul_assoc, weylElem_mul_left_comm hρ] using near_q⟩
   grw [Γ.pivotL1Norm_sq_le_of_deep ker₁ hx h_deep_orbit, ← le_self_pow hV two_ne_zero]
   exact le_of_eq (by ring)
 
@@ -509,7 +499,7 @@ theorem Gauge.formIntegrandL1Norm_sq_le_of_char (hk : F.IsCut W) (hj : j ≤ �
   -- `t` moves both to a bounded size.
   obtain ⟨σ, hσ, τ, hτ, hfσ, hfτ⟩ : ∃ σ ∈ floorGroup j, ∃ τ ∈ floorGroup j, f σ ≠ 0 ∧ f' τ ≠ 0 := by
     by_contra! h_zero
-    refine enorm_ne_zero.1 h_ne (integral_eq_zero_of_ae (ae_floorMeasure_mem.mono fun σ hσ ↦
+    refine eNorm_ne_zero.1 h_ne (integral_eq_zero_of_ae (ae_floorMeasure_mem.mono fun σ hσ ↦
       integral_eq_zero_of_ae (ae_floorMeasure_mem.mono fun τ hτ ↦ ?_)))
     exact mul_eq_zero_of_right _ (by simpa [or_iff_not_imp_left] using h_zero σ hσ τ hτ)
   obtain ⟨t, ht, h_size, h_size'⟩ : ∃ t ∈ floorGroup j,
@@ -577,7 +567,7 @@ theorem Gauge.formIntegrandL1Norm_sq_le_of_char (hk : F.IsCut W) (hj : j ≤ �
   rw [integral_congr_ae h_inner, ← setIntegral_eq_integral_of_ae_compl_eq_zero h_off]
   calc ‖∫ σ in S, f σ * conj (G (t *ᵥ orbitPoint j σ)) ∂F.floorMeasure j‖ₑ ^ 2
       ≤ (∫⁻ σ in S, ‖f σ * conj (G (t *ᵥ orbitPoint j σ))‖ₑ ∂F.floorMeasure j) ^ 2 := by
-        grw [enorm_integral_le_lintegral_enorm]
+        grw [eNorm_integral_le_lintegral_eNorm]
     _ ≤ (∫⁻ σ in S, ‖f σ‖ₑ ^ 2 ∂F.floorMeasure j) *
           ∫⁻ σ in S, ‖G (t *ᵥ orbitPoint j σ)‖ₑ ^ 2 ∂F.floorMeasure j :=
         sq_lintegral_le (by fun_prop) (by fun_prop) (by simp [mul_pow])
@@ -977,7 +967,7 @@ theorem Gauge.formIntegrandL1Norm_sq_le_of_heads (hk : F.IsCut W) (hj : j ≤ �
       φ₂, k₁, k₂]
   have hφ₂ : (floorGroup (i + 1)).FixesLeft φ₂ ∧ ∀ g : T.G, ¬F.IsNear (i + 1) g → φ₂ g = 0 :=
     ⟨fun σ hσ g ↦ by simp [φ₂, ker₂.partialCorrelation_mul_left, hσ, mul_assoc],
-      fun g hg ↦ enorm_eq_zero.2 (not_imp_comm.1 ker₂.isNear_of_partialCorrelation_ne_zero hg)⟩
+      fun g hg ↦ eNorm_eq_zero.2 (not_imp_comm.1 ker₂.isNear_of_partialCorrelation_ne_zero hg)⟩
   have h_section (g : T.G) :
       ∫⁻ n in {n | F.IsNear (i + 1) (weylElem (i + 1) p * (n * g))}, φ₂ (n * g) ^ 2
           ∂heisenbergMeasure i ≤

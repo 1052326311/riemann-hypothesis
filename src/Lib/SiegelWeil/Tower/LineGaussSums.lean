@@ -391,15 +391,15 @@ lemma mul_stdColDatum_triangularForm (ε : ℂ) (β : Bool) (c : F) (p : Matrix 
   by_cases hM : IsIntMatrix O M
   · by_cases hc : c ∈ O
     · by_cases hz : ∀ i, z i ∈ O
-      · rw [if_pos ⟨hM, hc, hz⟩, if_pos hz, if_pos hM,
+      · rw [ite_eq_left ⟨hM, hc, hz⟩, ite_eq_left hz, ite_eq_left hM,
           invOnUnits_mul (mul_mem hc (hz _)) hM.det_mem, invOnUnits_mul hc (hz _)]
         ring
-      · rw [if_neg fun h ↦ hz h.2.2, if_neg hz]
+      · rw [ite_eq_right fun h ↦ hz h.2.2, ite_eq_right hz]
         simp
-    · have h0 : invOnUnits χ c = 0 := if_neg fun h ↦ hc h.1
-      rw [if_neg fun h ↦ hc h.2.1]
+    · have h0 : invOnUnits χ c = 0 := ite_eq_right fun h ↦ hc h.1
+      rw [ite_eq_right fun h ↦ hc h.2.1]
       split_ifs <;> simp [h0]
-  · rw [if_neg fun h ↦ hM h.1, if_neg hM]
+  · rw [ite_eq_right fun h ↦ hM h.1, ite_eq_right hM]
     simp
 
 /-- The quotient `invOnUnits χ x / invOnUnits χ y` is `χ⁻¹(x) χ(y)` if `x` and `y` are units of
@@ -444,7 +444,7 @@ lemma stdRowDatum_frameAt_lineTermSplitting (X : V'.Splitting V Unit) [IsBaseAda
     fromCols_mul_fromBlocks, fromBlocks_mul_fromRows, fromCols_mul_fromRows, Matrix.add_mul]
   -- It remains to rearrange the products and sums in each entry.
   cases β <;> congr with ⟨⟩ <;>
-    simp [Finset.mul_sum, diagonal, mul_add, mul_assoc, Matrix.mul_apply, Finset.sum_add_distrib]
+    simp [Finset.mul_sum, diagonal, mul_add, mul_assoc, Matrix.mul_apply]
   all_goals simp only [show (0 : Unit × Unit) = (PUnit.unit, PUnit.unit) from rfl] at *
   all_goals grind
 
@@ -639,7 +639,7 @@ lemma exists_linear_centreCoeff (h𝒟 : IsEquivariantLift 𝔠 X M 𝒟) [Finty
     { toFun Ψ := H.centreCoeff T (𝒟 Ψ) x
       map_add' Ψ Φ := by
         simpa using H.centreCoeff_add (h𝒟.isAutFunction Ψ.2) (h𝒟.isAutFunction Φ.2) T x
-      map_smul' := by simp [centreCoeff, ← quotMean_const_mul, mul_left_comm] }
+      map_smul' := by simp [centreCoeff, mul_left_comm] }
   obtain ⟨L, hL₀ : L ∘ₗ M.subtype = L₀⟩ := L₀.exists_extend
   have hL Φ (hΦ : Φ ∈ M) : L Φ = H.centreCoeff T (𝒟 Φ) x := LinearMap.congr_fun hL₀ ⟨Φ, hΦ⟩
   refine ⟨L, fun Ψ hΨ ↦ ⟨hL Ψ hΨ, fun z ↦ ?_⟩⟩

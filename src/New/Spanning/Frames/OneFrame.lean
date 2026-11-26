@@ -60,7 +60,7 @@ lemma exists_ne_zero_of_pivotL1Norm_ne_zero (h : F.pivotL1Norm l k g y ≠ 0) :
   have h_integrand (x : T.G) (hx : x ∈ floorGroup (l + 1)) :
       k (x * (σ * g)) (x * (σ * y)) = 0 := by
     simpa only [mul_assoc] using h_zero (x * σ) (mul_mem (floorGroup_anti l.le_succ hx) hσ)
-  exact enorm_ne_zero.1 h_ne
+  exact eNorm_ne_zero.1 h_ne
     (integral_eq_zero_of_ae ((ae_descConv_mem ae_floorMeasure_mem).mono h_integrand))
 
 /-- For `l ≤ 𝔰.ϱ`, the integral over σ against θ_l = `F.floorMeasure l` of the squared modulus of
@@ -179,7 +179,6 @@ lemma pivotL1Norm_sq_le (hk : F.IsPairingKernel j k d) {u v : T.G → ENNReal}
       ‖F.partialCorrelation (l + 1) k (σ * g) (σ * y)‖ₑ ^ 2 ≤ u (σ * g) * v σ)
     (hu : Measurable u := by fun_prop) (hv : Measurable v := by fun_prop) :
     F.pivotL1Norm l k g y ^ 2 ≤ K * ∫⁻ σ : T.G, v σ ∂F.floorMeasure l := by
-  classical
   -- `F.floorMeasure l` lives on `floorGroup l`, so the integrand may be cut to that group; the cut
   -- function `f` vanishes outside the set `N` on which `h_mass` bounds the integral of `u`.
   let f : T.G → ENNReal :=
@@ -188,7 +187,7 @@ lemma pivotL1Norm_sq_le (hk : F.IsPairingKernel j k d) {u v : T.G → ENNReal}
   have h_supp : f.support ⊆ N := by
     intro σ hσ
     obtain ⟨-, h_ne⟩ := indicator_apply_ne_zero.1 hσ
-    exact hk.isNear_of_partialCorrelation_ne_zero (enorm_ne_zero.1 h_ne)
+    exact hk.isNear_of_partialCorrelation_ne_zero (eNorm_ne_zero.1 h_ne)
   have h_sq (σ : T.G) : f σ ^ 2 ≤ u (σ * g) * v σ := by
     by_cases hσ : σ ∈ floorGroup l
     · simpa [f, hσ] using h_bound σ hσ
@@ -251,6 +250,19 @@ variable {A : Type} [CommRing A] [StarRing A] [TopologicalSpace A] [MeasureSpace
   {ι : Type} [Fintype ι] [DecidableEq ι] {m : ℕ} {𝔰 : Shape} {j : ℕ}
   {T : 𝔰.Form A} [IsHermitianUnit T.splitGram] {F : PlaceData ι T m} {p q : ℕ → Aˣ}
   {I : Type} [Fintype I] {W : T.G → EuclideanSpace ℂ I} {x : T.G} (Γ Γ' : Gauge F)
+
+/-- A nonzero pivot for a cut frame correlation forces both points to be near, also after
+simultaneous translation by an element of the floor group. -/
+lemma PlaceData.IsCut.isNear_pair_of_pivot_ne_zero (hk : F.IsCut W) {d g z ρ : T.G}
+    (hd : ∀ τ ∈ floorGroup j, d * (τ * z) = τ * (d * z))
+    (h : F.pivotL1Norm j (frameCorrelation W d) g z ≠ 0) (hρ : ρ ∈ floorGroup j) :
+    F.IsNear j (ρ * g) ∧ F.IsNear j (ρ * (d * z)) := by
+  obtain ⟨τ, hτ, h_pair⟩ := exists_ne_zero_of_pivotL1Norm_ne_zero h
+  have near {u : T.G} (hu : W (τ * u) ≠ 0) : F.IsNear j (ρ * u) :=
+    (isNear_mul_iff (mem_partialUnitriangularGroup_of_mem_floorGroup hρ)).2
+      ((hk.isNear_of_ne_zero hu).of_floorGroup_mul hτ le_rfl)
+  refine ⟨near (fun h₀ ↦ h_pair (by simp [h₀])), near (fun h₀ ↦ h_pair ?_)⟩
+  simp [frameCorrelation, hd τ hτ, h₀]
 
 /-! ### Integrals of inverse depth weights and weighted squares over several floors -/
 
@@ -570,7 +582,6 @@ lemma Gauge.exists_factor_cutSquare_le (Γ : Gauge F) [F.groupMeasure.IsHaarMeas
         (∏ a ∈ range 𝔰.ϱ, Γ.floorConst a) *
           ∫⁻ g : T.G, ∫⁻ y : T.G, ‖k g y‖ₑ ^ 2 ∂F.quotientMeasureFrom 0 ∂F.quotientMeasureFrom
             0 := by
-  have h_meas (l : ℕ) : Measurable ↿(Γ.cutSquare k l) := Γ.measurable_cutSquare hK l
   induction hl using Nat.decreasingInduction with
   | self =>
     refine ⟨F.quotientMeasureFrom 0, inferInstance, by
@@ -629,7 +640,6 @@ theorem Gauge.lintegral_weightedSquare_le (Γ : Gauge F) [F.groupMeasure.IsHaarM
   -- Put `x = g⁻¹ ν y` with `ν` in the unipotent group of the first `l` floors. The modulus of the
   -- correlation does not depend on `ν`, and the weight has bounded integral over `ν`.
   have h_positions : MeasurableSet Γ.positionsOfSize := Γ.measurableSet_positionsOfSize
-  have h_meas : Measurable ↿(Γ.cutSquare k l) := Γ.measurable_cutSquare hK l
   obtain ⟨ρ, hρ, h_factor, h_mass⟩ := Γ.exists_factor_cutSquare_le hK hjl hl.step
   grw [← h_mass, lintegral_lintegral_swap (by fun_prop), ← lintegral_const_mul _ (by fun_prop)]
   gcongr with g

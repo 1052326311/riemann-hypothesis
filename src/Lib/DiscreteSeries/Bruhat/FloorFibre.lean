@@ -66,7 +66,7 @@ lemma inclMatrix_sumElim_mulVec {α β ι : Type} [Fintype α] [Fintype β] [Dec
 `f` are `c`, Lebesgue measure in the coordinates along `g` is at most the fibre measure of
 `y ↦ y ∘ f` over `c`. -/
 lemma leFibreMeasure_coords {α β ι : Type} [Fintype α] [Fintype β] [Fintype ι] [DecidableEq α]
-    [DecidableEq β] [DecidableEq ι] {f : α → ι} {g : β → ι} (hf : f.Injective)
+    [DecidableEq ι] {f : α → ι} {g : β → ι} (hf : f.Injective)
     (hg : g.Injective) (h_compl : Set.range g = (Set.range f)ᶜ) (c : α → ℂ) :
     LeFibreMeasure volume volume (fun y : ι → ℂ ↦ y ∘ f) c
       (volume.map fun v : β → ℂ ↦ inclMatrix ℂ f *ᵥ c + inclMatrix ℂ g *ᵥ v) := by
@@ -91,12 +91,10 @@ lemma involutive_oppositeIndex : (oppositeIndex (𝔰 := 𝔰)).Involutive :=
 exchanges `e_a` with `e*_a`, consists of the indices whose opposite has property `p`. -/
 lemma range_oppositeIndex_val (p : 𝔰.BesselIndex → Prop) :
     (Set.range fun i : Subtype p ↦ oppositeIndex i.1) =
-      {i : 𝔰.BesselIndex | p (oppositeIndex i)} := by
-  ext i
-  constructor
-  · rintro ⟨j, rfl⟩
-    simpa [involutive_oppositeIndex j.1] using j.2
-  · exact fun hi ↦ ⟨⟨oppositeIndex i, hi⟩, involutive_oppositeIndex i⟩
+      {i : 𝔰.BesselIndex | p (oppositeIndex i)} :=
+  (Set.range_comp oppositeIndex Subtype.val).trans <| by
+    rw [Subtype.range_coe_subtype, involutive_oppositeIndex.image_eq_preimage_symm]
+    rfl
 
 /-- The skew element `i t / 2`, which indexes the quadric `h(v, v) = t` at the place `ℂ`. -/
 noncomputable def skewOfLevel (t : ℝ) : skewAdjoint ℂ :=
@@ -141,7 +139,7 @@ lemma measurePreserving_half_add :
 `planeSumGram T`). Half the measure `quadricMeasure` of the quadric `h(v, v) = t₀`, which is indexed
 by `skewOfLevel t₀ = i t₀ / 2`, is at most the fibre measure `dv / dh(v, v)` (`LeFibreMeasure`)
 over `t₀`. -/
-lemma leFibreMeasure_quadricMeasure {ι : Type} [Fintype ι] [DecidableEq ι] {T : Matrix ι ι ℂ}
+lemma leFibreMeasure_quadricMeasure {ι : Type} [Fintype ι] {T : Matrix ι ι ℂ}
     (hT : Tᴴ = T) (t₀ : ℝ) :
     LeFibreMeasure volume volume (fun v : Fin 2 ⊕ ι → ℂ ↦ (star v ⬝ᵥ planeSumGram T *ᵥ v).re) t₀
       ((2 : ENNReal)⁻¹ • Place.quadricMeasure T (skewOfLevel t₀)) := by
@@ -209,12 +207,6 @@ lemma leFibreMeasure_floorQuadric (b : Fin 𝔰.n) (t₀ : ℝ) :
   exact .map ((leFibreMeasure_quadricMeasure h_herm t₀).congr (.of_forall h_form))
     (by fun_prop) (by fun_prop) (by fun_prop)
 
-/-- The product `(J₁ *ᵥ y) i` of `y` with the basis vector of an index `i` of a floor below `ϱ` is
-the coordinate of `y` at the opposite index. -/
-lemma J₁_mulVec_apply_eq_oppositeIndex {i : 𝔰.BesselIndex} (hi : floorOf i < 𝔰.ϱ)
-    (y : 𝔰.BesselIndex → ℂ) : (𝔰.J₁ *ᵥ y) i = y (oppositeIndex i) :=
-  splitGram_mulVec_apply i hi
-
 /-- The frame vector `f_b` of floor `b`, the basis vector of index `besselFrame b`. The vectors
 `y` orthogonal for the form `h` of matrix `J₁` to the basis vectors of lower floors (`floorOf`)
 form `V_b`. Half the measure of the quadric `h(y, y) = h(f_b, f_b)` in `V_b`, which is the default
@@ -244,7 +236,7 @@ lemma leFibreMeasure_frameVector (b : Fin 𝔰.n) :
         h_compl 0
     -- The product of `y` with a basis vector of a lower floor is the opposite coordinate of `y`.
     exact h_coords.congr
-      (.of_forall fun y ↦ funext fun i ↦ (J₁_mulVec_apply_eq_oppositeIndex (h_low i) y).symm)
+      (.of_forall fun y ↦ funext fun i ↦ (splitGram_mulVec_apply (e := y) _ (h_low i)).symm)
   have h_orth :
       (fun i : {i : 𝔰.BesselIndex // floorOf i < b} ↦ 𝔰.J₁ i.1 (𝔰.besselFrame b)) = 0 := by
     funext i
@@ -326,7 +318,7 @@ lemma leFibreMeasure_dualPoint (a : Fin 𝔰.ϱ) :
       add_comm (p.1 • _)]
   rw [h_point, ← Measure.map_map (by fun_prop) h_param.measurable, h_param.map_eq]
   exact (leFibreMeasure_coords hf hg h_compl c).congr
-    (.of_forall fun y ↦ funext fun i ↦ (J₁_mulVec_apply_eq_oppositeIndex (h_low i) y).symm)
+    (.of_forall fun y ↦ funext fun i ↦ (splitGram_mulVec_apply (e := y) _ (h_low i)).symm)
 
 /-- The real part of a skew element of `ℂ` is zero. -/
 lemma re_skewAdjoint_complex (β : skewAdjoint ℂ) : (β : ℂ).re = 0 := by
@@ -379,7 +371,6 @@ lemma leFibreMeasure_heisenbergMeasure (a : Fin 𝔰.ϱ) :
     rw [Function.comp_apply, heisenbergElem_mulVec, h_orth]
     simp [ψ, q, dualPoint]
   have h_norm (t : ℝ) (p : (S → ℂ) × skewAdjoint ℂ) : (star (ψ t p) ⬝ᵥ 𝔰.J₁ *ᵥ ψ t p).re = t := by
-
     have h_re : (t / 2 + p.2 - q p.1 : ℂ).re = t / 2 -
         (star (inclMatrix ℂ Subtype.val *ᵥ p.1) ⬝ᵥ
           𝔰.J₁ *ᵥ inclMatrix ℂ Subtype.val *ᵥ p.1).re / 2 := by

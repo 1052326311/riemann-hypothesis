@@ -110,7 +110,6 @@ lemma measurePreserving_append_last {Z : Type} [MeasurableSpace Z] (ζ : Measure
     MeasurePreserving
       (fun ((t, (s, w), z) : A × (A × (κ → A)) × Z) ↦ ((s, w ⊕ᵥ fun _ : Unit ↦ u * t), z))
       ((P.modulus u • volume).prod (volume.prod ζ)) (volume.prod ζ) := by
-  classical
   let ν : Measure A := P.modulus u • volume
   have h_scale : MeasurePreserving (fun t : A ↦ u * t) ν volume := by
     refine ⟨by fun_prop, ?_⟩
@@ -305,7 +304,7 @@ lemma IntegralPlace.ae_vectorOfLastEntry_mem_lastVectorQuadric (hN : π * star (
     have h_ne (a : 𝔰.MiddleIndex) : i ≠ inr (inl a) := by
       rintro rfl
       cases a <;> simp [floorOf] at hi
-    simp [vectorOfLastEntry_eq_mulVec, inclMatrix, mulVec, dotProduct, Matrix.one_apply, h_ne]
+    simp [vectorOfLastEntry_eq_mulVec, inclMatrix, mulVec, dotProduct, h_ne]
   have h_sphere : star x ⬝ᵥ x = ↑(π * star π)⁻¹ * t * star t - N := by
     rw [hx, ← hN]
     simp [lastEntrySphereIndex]

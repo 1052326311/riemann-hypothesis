@@ -220,7 +220,7 @@ lemma tsum_discriminant_inv_le_of_out_eq {c : S.Classes} {η : U (stdSpace E �
   -- The rational isometry `η⁻¹` moves the lattices injectively and preserves the discriminant.
   let H : Matrix 𝔰.κ 𝔰.κ E := (η⁻¹ : GL 𝔰.κ E).val
   let P : (𝔰.κ → 𝔸f E) →ₗ[Ô E] 𝔰.κ → 𝔸f E := (finAdeleMatrix H).mulVecLin.restrictScalars (Ô E)
-  have hH : Hᴴ * H = 1 := by simpa [H] using mem_U.1 η⁻¹.2
+  have hH : Hᴴ * H = 1 := by simpa [H, star_eq_conjTranspose] using mem_unitaryGroupOf_iff.1 η⁻¹.2
   have h_inv : finAdeleMatrix Hᴴ * finAdeleMatrix H = 1 := by
     simpa only [Matrix.map_mul, Matrix.map_one, map_zero, map_one] using congrArg finAdeleMatrix hH
   have hP : Function.Injective P := injective_restrictScalars_mulVecLin h_inv
@@ -301,7 +301,7 @@ lemma sub_mem_smul_intVectors_of_values {π : Type} [Fintype π] [DecidableEq π
   let z : π → 𝔸f E := d⁻¹ • (v - w)
   have h_first : z ᵥ* firstCols e U = s := by
     refine vecMul_injective_of_isUnit A.isUnit ?_
-    show (z ᵥ* firstCols e U) ᵥ* A.val = s ᵥ* A.val
+    change (z ᵥ* firstCols e U) ᵥ* A.val = s ᵥ* A.val
     rw [← mulVec_transpose A.val s, hs, vecMul_vecMul, smul_vecMul, sub_vecMul, smul_sub]
   have h_values : z ᵥ* U.val ∈ intVectors (Ô E) π := by
     intro p
@@ -460,8 +460,7 @@ lemma mul_inv_pow_le_of_mul_le {d i H : ℝ} (hd : 1 ≤ d) (hi : 1 ≤ i) (hH :
   have hH_pos : 0 < H := by linarith
   calc i * ((d * i) ^ k)⁻¹
     _ = i * (d * i) ^ (μ + 1) * (d ^ (k + μ + 1) * i ^ (k + μ + 1))⁻¹ := by
-      field_simp
-      ring
+      field
     _ ≤ H * H ^ (μ + 1) * (d ^ (k + 1) * i ^ (r + μ))⁻¹ := by
       have hd_pow : d ^ (k + 1) ≤ d ^ (k + μ + 1) := pow_le_pow_right₀ hd (by lia)
       have hi_pow : i ^ (r + μ) ≤ i ^ (k + μ + 1) := pow_le_pow_right₀ hi (by lia)
@@ -474,7 +473,8 @@ lemma one_le_sublatticeDiscriminant_unimodular (u : Gf E 𝔰.κ) (V : Submodule
     1 ≤ sublatticeDiscriminant u.val.val_inv V := by
   refine one_le_sublatticeDiscriminant u.1.val_inv V fun m hm ↦ ?_
   -- As `u⁻¹` is unitary, the Gram matrix of `m` is that of the integral matrix `u⁻¹ m`.
-  have h_unitary : (u.1.inv)ᴴ * u.1.inv = 1 := by simpa using mem_U.1 u⁻¹.2
+  have h_unitary : (u.1.inv)ᴴ * u.1.inv = 1 := by
+    simpa [star_eq_conjTranspose] using mem_unitaryGroupOf_iff.1 u⁻¹.2
   have h_gram : (u.1.inv * m)ᴴ * (u.1.inv * m) = mᴴ * m := by
     rw [conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc _ u.1.inv, h_unitary,
       Matrix.one_mul]
@@ -632,13 +632,13 @@ lemma sum_tsum_discWeightIfRowVanishes_le [Fintype S.LatticeStabilizerCoset] (u 
     exact Subtype.ext (by rwa [← hM L, ← hM L'])
   calc _ = ∑' L : S.BoundedDiscSublattice r (unimodularLattice u), ∑ φ : S.LatticeStabilizerCoset,
           S.discWeightIfRowVanishes u (y φ) r L.1 :=
-      (Summable.tsum_finsetSum fun _ _ ↦ ENNReal.summable).symm
+      (Summable.tsum_finsetSum fun _ _ ↦ CompleteLattice.summable).symm
     _ ≤ ∑' L : S.BoundedDiscSublattice r (unimodularLattice u),
-          C * (subspaceDiscWeight u l (span L) * w (span L) (M L)) := ENNReal.tsum_le_tsum h_term
+          C * (subspaceDiscWeight u l (span L) * w (span L) (M L)) := tsum_le_tsum h_term
     _ ≤ ∑' p : Σ V : Submodule E (𝔰.κ → E), Sub V, C * (subspaceDiscWeight u l p.1 * w p.1 p.2) :=
       tsum_comp_le_tsum_of_injective h_sort fun p ↦ C * (subspaceDiscWeight u l p.1 * w p.1 p.2)
     _ = C * ∑' V : Submodule E (𝔰.κ → E), subspaceDiscWeight u l V * ∑' M : Sub V, w V M := by
-      simp only [ENNReal.tsum_sigma', ENNReal.tsum_mul_left]
+      simp only [tsum_sigma', ENNReal.tsum_mul_left]
     _ ≤ C * ((∑' V : Submodule E (𝔰.κ → E), subspaceDiscWeight u l V) * 2 ^ 𝔰.k) := by
       rw [← ENNReal.tsum_mul_right]
       gcongr with V
@@ -663,7 +663,7 @@ end Forms
 omit [HasPrimitiveRoot5040 E] in
 /-- The number `S.tailScale = b ^ (k f / 4)` is nonnegative, as the size parameter `b` is. Here
 `k = |κ|` and `f` is the number of infinite places of `E`. -/
-lemma tailScale_nonneg (S : Filling E 𝔰) [S.IsAdmissible] : 0 ≤ S.tailScale := by
+lemma tailScale_nonneg (S : Filling E 𝔰) : 0 ≤ S.tailScale := by
   have hb : 0 < S.b := by linarith [S.thousand_le_b]
   rw [tailScale]
   positivity
@@ -722,11 +722,10 @@ lemma pow_mul_mul_rootDiscr_pow_le_tailScale (S : Filling E 𝔰) [S.IsAdmissibl
     lia
   refine le_of_pow_le_pow_left₀ (n := 1000) (by norm_num) S.tailScale_nonneg ?_
   set X : ℝ := 200 * (numInfPlaces E * 𝔰.k) * rootDiscr E
-  have hX : 0 ≤ X := by positivity
   calc (S.N ^ numInfPlaces E * X ^ (numInfPlaces E * (𝔰.k + 1))) ^ 1000
     _ = (S.N ^ 1000 * (X ^ 1000) ^ (𝔰.k + 1)) ^ numInfPlaces E := by
       simp only [mul_pow, ← pow_mul]
-      ring_nf
+      ring
     _ ≤ ((S.b ^ (60 * 𝔰.n)) ^ 1000 * S.b ^ (𝔰.k + 1)) ^ numInfPlaces E := by
       gcongr
       exacts [IsAdmissible.N_le, S.mul_rootDiscr_pow_le]
@@ -750,7 +749,6 @@ lemma mul_rootDiscr_pow_le_tailScale_pow_div (S : Filling E 𝔰) [S.IsAdmissibl
       S.tailScale ^ (l + 1) / S.b ^ numInfPlaces E := by
   have hb : 0 < S.b := by linarith [S.thousand_le_b]
   have h_rd : 0 < rootDiscr E := rootDiscr_pos E
-  have discriminantBound_nonneg : 0 ≤ S.discriminantBound := pow_nonneg hb.le _
   have hτ : 0 ≤ S.tailScale := S.tailScale_nonneg
   rw [le_div_iff₀ (by positivity)]
   calc _ = S.b ^ numInfPlaces E * S.discriminantBound ^ (2 * 𝔰.ϱ + 4 + 2) * 2 ^ 𝔰.k *

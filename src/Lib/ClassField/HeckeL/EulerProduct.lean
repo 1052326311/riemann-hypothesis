@@ -1,6 +1,8 @@
 module
 
 public import Lib.ClassField.Places.Ideles
+public import TauCeti.NumberTheory.RamificationInertia.Tower
+import TauCeti.NumberTheory.ArithmeticDirichletSeries.Convergence
 
 /-!
 # Euler products over primes of a number field and densities at primes of degree one
@@ -90,14 +92,6 @@ def HasPrimeDensity (l : ℂ) : Prop :=
       HasSum (fun v : FinPlace K ↦ ite v.q.Prime (a v) 0 * v.q ^ (-s : ℂ))
         (x s - l * Real.log (s - 1))
 
-/-- At most `[K : ℚ]` primes of `K` lie over a maximal ideal of `ℤ`. -/
-lemma ncard_primesOver_le_finrank (p : Ideal ℤ) [p.IsMaximal] :
-    (p.primesOver (𝓞 K)).ncard ≤ finrank ℚ K := by
-  -- Each term of the fundamental identity `∑ e f = [K : ℚ]` is at least `1`.
-  rw [← RingOfIntegers.rank, ← sum_ramification_inertia_eq_finrank p (𝓞 K),
-    ← Set.fintypeCard_eq_ncard, Fintype.card_eq_sum_ones]
-  exact sum_le_sum fun P _ ↦ mul_pos (P.1.ramificationIdx_pos ℤ) (P.1.inertiaDeg_pos ℤ)
-
 /-- For a finite set `u` of primes of `K`, the sum over `v ∈ u` of `1 / p ^ 2`, with `p` the least
 prime factor of the norm `v.q`, is at most the degree `[K : ℚ]`. -/
 lemma sum_inv_minFac_sq_le_finrank (u : Finset (FinPlace K)) :
@@ -109,7 +103,9 @@ lemma sum_inv_minFac_sq_le_finrank (u : Finset (FinPlace K)) :
     simp [← (v.asIdeal.under ℤ).absNorm_pow_inertiaDeg v.asIdeal,
       (Nat.absNorm_under_prime _).pow_minFac (inertiaDeg_pos ..).ne']
   have h_group (v : FinPlace K) : #{w ∈ u | w.q.minFac = v.q.minFac} ≤ finrank ℚ K := by
-    grw [← ncard_primesOver_le_finrank (v.asIdeal.under ℤ), ← Set.ncard_coe_finset]
+    grw [← RingOfIntegers.rank,
+      ← TauCeti.RamificationInertia.ncard_primesOver_le_finrank (v.asIdeal.under ℤ),
+      ← Set.ncard_coe_finset]
     refine Set.ncard_le_ncard_of_injOn _ (fun w hw ↦ ⟨w.isPrime, ⟨ext ?_⟩⟩) asIdeal_injective.injOn
       (IsDedekindDomain.primesOver_finite ..)
     -- `w` lies over the prime below `v`: two ideals of `ℤ` with the same norm are equal.
@@ -136,29 +132,12 @@ variable {a b} {l l' : ℂ}
 `N(I) = absNorm I` (the zero ideal has norm `0` and term `0`). -/
 lemma summable_absNorm_rpow (hs : 1 < s) :
     Summable fun I : Ideal (𝓞 K) ↦ (absNorm I : ℝ) ^ (-s) := by
-  -- The Dedekind zeta function has a pole at `1`, so it is nonzero at some `t` in `(1, s]`.
-  obtain ⟨t, ht_ne, -, ht_le⟩ : ∃ t : ℝ, (t - 1 : ℂ) * dedekindZeta K t ≠ 0 ∧ t ∈ Ioc 1 s :=
-    (((tendsto_sub_one_mul_dedekindZeta_nhdsGT K).eventually_ne
-      (mod_cast dedekindZeta_residue_ne_zero K)).and (Ioc_mem_nhdsGT hs)).exists
-  -- A divergent series has sum `0` by convention, so the series converges at `t`, hence at `s`.
-  have h_s : LSeriesSummable (fun n ↦ Nat.card {I : Ideal (𝓞 K) // absNorm I = n}) s := by
-    refine LSeriesSummable.of_re_le_re (s := (t : ℂ)) (by simpa using ht_le) ?_
-    by_contra h_not
-    exact right_ne_zero_of_mul ht_ne (LSeries.eq_zero_of_not_LSeriesSummable _ _ h_not)
-  -- Group the ideals by their norm: each group is finite and gives one term of that series.
-  have h_part (I : Ideal (𝓞 K)) : ∃! n : ℕ, I ∈ {J : Ideal (𝓞 K) | absNorm J = n} := by simp
-  rw [summable_partition (fun I ↦ by positivity) h_part]
-  refine ⟨fun n ↦ (finite_setOfPred_absNorm_eq n).summable (fun I ↦ (absNorm I : ℝ) ^ (-s)),
-    h_s.norm.congr fun n ↦ ?_⟩
-  have h_fiber (I : {J : Ideal (𝓞 K) | absNorm J = n}) :
-      (absNorm (I : Ideal (𝓞 K)) : ℝ) ^ (-s) = (n : ℝ) ^ (-s) :=
-    congrArg (fun m : ℕ ↦ (m : ℝ) ^ (-s)) I.property
-  -- The `Nat.card` ideals of norm `n` each give `n ^ (-s)`; for `n = 0` both sides are `0`.
-  rw [tsum_congr h_fiber, tsum_const, nsmul_eq_mul]
-  rcases eq_or_ne n 0 with rfl | hn
-  · simp [Real.zero_rpow (neg_neg_of_pos (zero_lt_one.trans hs)).ne]
-  · simp [LSeries.term_of_ne_zero hn, norm_natCast_cpow_of_pos (Nat.pos_of_ne_zero hn),
-      Real.rpow_neg, div_eq_mul_inv, Set.coe_ofPred]
+  refine (summable_subtype_and_compl (s := (nonZeroDivisors (Ideal (𝓞 K)) : Set _))).1
+    ⟨(TauCeti.summable_absNorm_rpow_ideal_iff (K := K)).mpr hs, ?_⟩
+  have h_fin : ((nonZeroDivisors (Ideal (𝓞 K)) : Set (Ideal (𝓞 K)))ᶜ).Finite :=
+    (Set.finite_singleton (⊥ : Ideal (𝓞 K))).subset fun I hI ↦
+      by_contra fun hne ↦ hI (mem_nonZeroDivisors_of_ne_zero hne)
+  exact h_fin.summable (fun I ↦ (absNorm I : ℝ) ^ (-s))
 
 /-- For `‖a v‖ ≤ 1` and real `t ≤ s`, the term `-(a v * q ^ (-s))` of the Euler factor has norm at
 most `q ^ (-t)`, with `q = v.q` the norm of the prime `v`. -/
@@ -427,7 +406,7 @@ lemma hasSum_eulerProd (χ : Ideal (𝓞 K) →* ℂ) (hχ : ∀ I : Ideal (𝓞
         -- `t` is multiplicative; `v ∣ v * I`, and a prime `w ∈ T` (so `w ≠ v`) divides `v * I`
         -- if and only if it divides `I`.
         have h_t_mul : t (v.asIdeal * I) = t v.asIdeal * t I := by
-          simp only [t, map_mul, Nat.cast_mul, natCast_mul_natCast_cpow]
+          simp only [t, map_mul, Nat.cast_mul, natCast_mul_cpow]
           ring
         have h_cons_zero : sieved (cons v T hv) (v.asIdeal * I) = 0 :=
           ite_eq_right fun h ↦ h v (mem_cons_self v T) (dvd_mul_right v.asIdeal I)

@@ -93,7 +93,7 @@ lemma integralFormsAt_one_le :
     (GeneralLinearGroup.map (adeleExtension (weightEmbedding ιₚ τ)) d.val).val
   have hA (τ : D.Φ) (i j : D.X 0) : ‖A τ i j‖ ≤ 1 := by
     simp only [A, d, map_adeleExtension_diagPoint, coe_diagGL, diagonal_apply]
-    split_ifs <;> simp [norm_p_lt_one.le]
+    split_ifs <;> simp [inv_le_one_of_one_le₀, (Fact.out : D.N.Prime).one_le]
   let ξ : WeylIndex (D.X 0) D.columnCount → ℂ_[D.N] :=
     weylRep D.columnCount (D.lastEntry 0) (fun τ : D.Φ ↦
     GeneralLinearGroup.map (adeleExtension (weightEmbedding ιₚ τ)) (g * 1)⁻¹.val) *ᵥ ιₚ ∘ φ.val g
@@ -219,7 +219,7 @@ lemma colengthDvd_comap_upOperator_pow (i : ℕ) :
   | zero =>
     rw [zero_add, mul_one]
     exact D.colengthDvd_integralFormsAt_diagPointN.comap .id D.integralFormsAt_one_le
-      fun φ _ hφ ↦ by simpa using hφ
+      fun φ _ hφ ↦ hφ
   | succ i ih =>
     rw [mul_add_one, pow_add (D.N : embValRing)]
     refine ih.trans (D.colengthDvd_integralFormsAt_diagPointN.comap _ (fun φ hφ ↦ ?_) fun _ _ h ↦ h)

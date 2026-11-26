@@ -118,7 +118,7 @@ def pairWeilFinite : Gf E n × Gf E n' →* Module.End ℂ (V.hom T).finitePart 
     LinearMap.restrict (pairWeil V T a b ((1, p.1), 1, p.2)).1 fun f hf ↦ by
       -- Up to a scalar, `pairWeil` is `ω` at a point whose infinite part is trivial (`onHom_fin`).
       refine (finitePart _).smul_mem _ ?_
-      erw [onHom_fin]
+      rw [onHom_fin]
       exact omega_mem_finitePart _ hf
   map_one' := by
     ext
@@ -406,8 +406,7 @@ def thetaKernel (hκ : IsLiftWeight n n' κ eb e) (c : ℂ) {a b : AutChar E} {e
           (theta_pairWeil_schurCoeffPoly hκ c ha hb x (stdEmbFin γ) y (stdEmbFin γ') A v f).symm
         _ = c ^ boxes κ (card n') * V.θ F := by rw [h_inv]
         _ = _ := by
-          simpa only [Prod.mk_one_one, map_one, inv_one, Module.End.one_apply,
-            one_apply_eq_self]
+          simpa only [Prod.mk_one_one, map_one, inv_one, one_apply_eq_self]
             using theta_pairWeil_schurCoeffPoly hκ c ha hb 1 1 1 1 A v f
     change schurJet κ (V.jetSeries c f') *ᵥ conjWeylRep κ e x v =
       conjWeylRep κ ea y (schurJet κ (V.jetSeries c f.val) *ᵥ v)

@@ -6,6 +6,7 @@ public import Lib.Shimura.TraceFormula.DefiniteTrace
 public import Lib.Shimura.TraceFormula.MarkedDefiniteSums
 public import Lib.Shimura.TraceFormula.TestFunction
 public import Lib.Shimura.Transfer.Lefschetz
+import TauCeti.LinearAlgebra.Trace.Nilpotent
 
 /-!
 # Coefficient systems from weights and the degrees where Hecke eigensystems occur
@@ -47,22 +48,6 @@ topological trace formula (2003), and Shimura, On the trace formula for Hecke op
 @[expose] public section
 
 open NumberField Matrix Polynomial Fintype Finset IsAlgClosed LinearMap Submodule New.QuadField Fin
-
-/-- An endomorphism of a finite-dimensional complex vector space all of whose positive powers have
-trace zero is nilpotent. -/
-lemma New.Variety.isNilpotent_of_trace_pow_succ_eq_zero {V : Type} [AddCommGroup V] [Module ℂ V]
-    [Module.Finite ℂ V] {f : Module.End ℂ V} (hf : ∀ k : ℕ, (f ^ (k + 1)).trace ℂ V = 0) :
-    IsNilpotent f := by
-  -- The powers of `f` have the traces of the powers of zero, so the characteristic polynomials
-  -- agree.
-  let b : Module.Basis (Module.Free.ChooseBasisIndex ℂ V) ℂ V := Module.Free.chooseBasis ℂ V
-  have h_trace (k : ℕ) : (toMatrix b b f ^ k).trace =
-      (toMatrix b b 0 ^ k).trace + ∑ e ∈ (∅ : Finset ℂ), e ^ k := by
-    rw [toMatrix_pow, toMatrix_pow, ← trace_eq_matrix_trace, ← trace_eq_matrix_trace]
-    cases k <;> simp [hf]
-  rw [isNilpotent_iff_charpoly, ← charpoly_toMatrix f b,
-    charpoly_eq_mul_of_trace_pow_add _ ∅ _ h_trace, charpoly_toMatrix, LinearMap.charpoly_zero,
-    Finset.prod_empty, mul_one]
 
 /-- For `a` odd, `rootCoeffEval` sends the variable `X 0` to minus the product of the `a` roots. -/
 lemma New.Variety.rootCoeffEval_X_zero_of_odd {a : ℕ} [NeZero a] (ha : Odd a) {R : Type}
@@ -342,7 +327,8 @@ lemma New.Variety.occursInWeight_of_isTestEigenform {E : Type} [Field E] [CMBase
     exists_test_function (Submodule.mem_inf.mp hφ).right h_test h_supp h_fix
   have h_finite_forms : Module.Finite ℂ (definiteForms 𝔑 ξ) := finite_definiteForms ξ hN
   have h_nilpotent : IsNilpotent (definiteForms.rep 𝔑 ξ (b * p)) := by
-    refine isNilpotent_of_trace_pow_succ_eq_zero fun k ↦ ?_
+    refine LinearMap.isNilpotent_iff_forall_trace_pow_eq_zero.2 fun k hk ↦ ?_
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hk.ne'
     obtain ⟨-, h_reg, h_type⟩ := hb k
     rw [← map_pow]
     refine trace_definiteForms_rep_eq_zero_of_isNullHecke ha h_char hq hq_conj hq_other hN h_reg
@@ -529,7 +515,7 @@ lemma New.Variety.weightRep_entryConj_eq_twistedWeylRep {E : Type} [Field E] [CM
     (stdSpace E (Fin a)).weightRep κ.1 κ.2 (entryConj y) = twistedWeylRep κ p m y.val := by
   -- The determinant has norm one, and both branches of the embedding at `v` are `Φ v y`; on the
   -- other side `entryConj` and `stdSpace_weightRep_apply` each conjugate the entries once.
-  have h_unitary : y.val.valᴴ * 1 * y.val.val = 1 := y.prop
+  have h_unitary : y.val.valᴴ * 1 * y.val.val = 1 := mem_unitaryGroupOf_iff.1 y.prop
   have h_norm (v : InfinitePlace E) :
       Φ v y.val.val.det * starRingEnd ℂ (Φ v y.val.val.det) = 1 := by
     simpa [mul_comm] using congrArg (fun M : Matrix (Fin a) (Fin a) E ↦ Φ v M.det) h_unitary
@@ -537,7 +523,7 @@ lemma New.Variety.weightRep_entryConj_eq_twistedWeylRep {E : Type} [Field E] [CM
       fun v ↦ .map ((Φ v).comp (starRingEnd E)) (entryConj y).val := by
     ext v
     simp [extendedEmbedding, entryConj, invTransposeGL, transposeGL, starRingEnd_apply (R := E),
-      apply_ite, Matrix.ite_apply, ← map_inv, inv_eq_left_inv y.prop]
+      apply_ite, Matrix.ite_apply, ← map_inv, inv_eq_left_inv h_unitary]
   refine LinearMap.ext fun w ↦ (stdSpace_weightRep_apply (entryConj y) w).trans ?_
   simp [twistedWeylRep, twistedWeylMatrix, prod_embeddings_eq_prod_pairs, h_norm, h_embedding]
 

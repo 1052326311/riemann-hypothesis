@@ -95,7 +95,7 @@ lemma amplitudeSum_eq_inter_compl_add_inter [HasPrimitiveRoot5040 E] [S.IsAdmiss
   have h_union : T ∩ S.termsOver c s c' =
       (T ∩ Uᶜ ∩ S.termsOver c s c') ∪ (T ∩ U ∩ S.termsOver c s c') := by grind
   simp only [Pi.add_apply, amplitudeSum, tsum_congr_set_coe _ h_union]
-  exact (summable_amplitude ..).tsum_union_disjoint (by grind) (summable_amplitude ..)
+  exact (summable_amplitude ..).tsum_union_of_disjoint (by grind) (summable_amplitude ..)
 
 lemma secondMoment_nonneg {A : S.Classes → S.ResidueGL → S.Classes → V} {Ω : Set S.ResidueGL} :
     0 ≤ secondMoment A Ω := by
@@ -137,8 +137,8 @@ lemma sum_norm_amplitudeSum_sub_cut_le [HasPrimitiveRoot5040 E] [S.IsAdmissible]
         (S.classCutoff c y * S.classCutoff c' ((S.ratToInf γ)⁻¹ * y)).toReal •
           S.besselKernel side γ y :=
     integrable_toReal_smul (by fun_prop) (by fun_prop)
-      ((ENNReal.le_tsum γ).trans_lt
-        ((ENNReal.le_tsum c').trans_lt (tsum_amplitudeMajorant_lt_top U c s)))
+      ((le_tsum _ γ).trans_lt
+        ((le_tsum _ c').trans_lt (tsum_amplitudeMajorant_lt_top U c s)))
   have h_block (c' : S.Classes) :
       ‖S.amplitudeSum .full U c s c' - S.amplitudeSum .cut U c s c'‖ₑ ≤
         ∑' γ : ↥(U ∩ S.termsOver c s c'),
@@ -146,7 +146,7 @@ lemma sum_norm_amplitudeSum_sub_cut_le [HasPrimitiveRoot5040 E] [S.IsAdmissible]
             ‖S.besselKernel .full γ y - S.besselKernel .cut γ y‖ₑ := by
     simp only [amplitudeSum, ← Summable.tsum_sub, summable_amplitude]
     simp only [amplitude, ← integral_sub, h_integrable, ← smul_sub]
-    grw [enorm_tsum_le_tsum_enorm, enorm_integral_le_lintegral_enorm, enorm_toReal_smul_le]
+    grw [eNorm_tsum_le_tsum_eNorm, eNorm_integral_le_lintegral_eNorm, enorm_toReal_smul_le]
   have hν : 0 < S.unipotentCovolume := S.unipotentCovolume_pos
   have hb : 1 ≤ S.b := S.one_le_b
   rw [← ofReal_le_ofReal_iff (by positivity), ofReal_sum_of_nonneg (by simp)]
@@ -292,7 +292,7 @@ lemma tsum_ite_representative_eq_one {c c' : S.Classes}
         DoubleCoset.mk _ _ ((a : S.classUnipotent c) * γ * (b : S.G E)⁻¹) :=
       (DoubleCoset.eq ..).mpr ⟨_, a.prop, _, b⁻¹.prop, rfl⟩
     exact (congrArg ρ h_same.symm).trans h_rep
-  simp_rw [rep_eq, ← ENNReal.tsum_prod]
+  simp_rw [rep_eq, ← tsum_prod]
   let a₀ : (S.classUnipotent₀ c).subgroupOf (S.classUnipotent c) := ⟨⟨u, hu.1⟩, hu⟩
   rw [tsum_eq_single (a₀, (⟨u', hu'⟩ : S.classUnipotent c')⁻¹) ?_]
   · simp [a₀]
@@ -323,7 +323,7 @@ the squared local pairing, in terms of the local value of `𝗀`, the radius `ρ
 the dimension of the Bessel system `S.besselSystem v`. Then the integral of `ω` times the cut kernel
 has norm at most `ε` plus the integral of `ω` times the norm of the difference of the full and the
 cut kernel. -/
-theorem enorm_integral_besselKernel_le [HasPrimitiveRoot5040 E] {γ : S.G E} (h_near : S.IsNear γ)
+theorem enorm_integral_besselKernel_le {γ : S.G E} (h_near : S.IsNear γ)
     (h_disc : S.termDisc γ ≠ 0) {ω : (NumberField.InfinitePlace E → 𝔰.G₁) → ℝ≥0∞}
     (ω_meas : Measurable ω) (ω_le : ∀ y : NumberField.InfinitePlace E → 𝔰.G₁, ω y ≤ 1)
     (ω_inv : ∀ t y : NumberField.InfinitePlace E → 𝔰.G₁,
@@ -412,6 +412,7 @@ lemma exists_isNearRepresentative_of_besselKernel_ne_zero [HasPrimitiveRoot5040 
     ⟨h_near.mul_of_mem_besselU0 ha.2 hb_fix, by simp [← out_eq]⟩, ?_⟩
   exact ((DoubleCoset.eq ..).2 ⟨a, ha, u⁻¹ * b, mul_mem (inv_mem hu) hb_unip, by group⟩).symm
 
+omit [S.IsAdmissible] in
 /-- The element `𝗀(γ) = |D_{ϱ+1}|² - N² |D_ϱ|²` (`termDisc γ`), formed from the last two leading
 minors of the matrix of frame products, is an algebraic integer for a rational `γ` in
 `S.termsOver c s c'`. -/
@@ -469,7 +470,7 @@ lemma tsum_representative_weight_eq_one {c c' : S.Classes}
       tsum_ite_representative_eq_one hρ (h_disc _ h_mem)
   have h_sum : ∑' x : S.classUnipotent c, repCount x * ω (S.ratToInf x * y) = 1 :=
     hω.tsum_mul_eq_one _ repCount h_coset
-  rw [ENNReal.tsum_prod']
+  rw [tsum_prod']
   simpa [repCount, repIndicator, ← ENNReal.tsum_mul_right] using h_sum
 
 variable [HasPrimitiveRoot5040 E]
@@ -519,7 +520,7 @@ lemma enorm_amplitudeSum_le_orbitBound_top (hT : S.IsStable T)
         φ γ y * ‖S.besselKernel .full γ y - S.besselKernel .cut γ y‖ₑ ≤
       ENNReal.ofReal (S.unipotentCovolume * (S.b ^ (𝔰.k ^ 3 * numInfPlaces E))⁻¹ / 2) :=
     (hasSum_amplitudeSum_of_cutoff (side := .full) hT c s c' φ φ_sum (by fun_prop)).2.2
-  grw [← h_cut_sum.tsum_eq, enorm_tsum_le_tsum_enorm]
+  grw [← h_cut_sum.tsum_eq, eNorm_tsum_le_tsum_eNorm]
   gcongr with γ
   obtain ⟨hγT, hγ_over⟩ := γ.2
   by_cases! h_rep : ρ ⟦γ⟧ ≠ γ
@@ -543,7 +544,7 @@ lemma enorm_amplitudeSum_le_orbitBound_top (hT : S.IsStable T)
           (prod_pairingBoundSq_le h_one_le)
       _ ≤ .ofReal ε + .ofReal (S.unipotentCovolume * (S.b ^ (𝔰.k ^ 3 * numInfPlaces E))⁻¹ / 2) := by
         gcongr
-        simpa only [φ_eq] using (ENNReal.le_tsum γ).trans h_tail
+        simpa only [φ_eq] using (le_tsum _ γ).trans h_tail
       _ ≤ .ofReal ε + .ofReal ε := by grw [h_near.inv_pow_le_orbitBound h_one_le]
       _ = _ := by rw [← ofReal_add hε hε, add_halves]
   · -- The representative `γ` is maximal for `IsNearRepresentative` in its double coset and fails
@@ -620,7 +621,7 @@ lemma enorm_amplitudeSum_le_of_termDiscNorm_le (hT : S.IsStable T) {j : Fin (�
     by_cases h_zero : ∑' γ : rep ⁻¹' {δ}, S.amplitudeMajorant .cut c c' γ = 0
     · simp [h_zero]
     -- If the sum is nonzero, some `γ` in the orbit has a nonzero amplitude majorant, so it is near.
-    obtain ⟨⟨γ, rfl⟩, hγ⟩ := ENNReal.summable.tsum_ne_zero_iff.1 h_zero
+    obtain ⟨⟨γ, rfl⟩, hγ⟩ := CompleteLattice.summable.tsum_ne_zero_iff.1 h_zero
     have h_nearRep : S.IsNearRepresentative c c' (rep γ) :=
       ⟨(isNear_of_amplitudeMajorant_ne_zero hγ).mul_of_mem_besselU0 (hu γ).2 (hv γ).2,
         by simp [rep, ← out_eq]⟩
@@ -640,9 +641,9 @@ lemma enorm_amplitudeSum_le_of_termDiscNorm_le (hT : S.IsStable T) {j : Fin (�
       _ ≤ _ := tsum_amplitudeMajorant_orbit_le hδ_over (h_cell _ hδT) hj (h_disc_le _ hδT)
   calc
     _ ≤ ∑' γ : X, S.amplitudeMajorant .cut c c' γ :=
-      enorm_tsum_le_tsum_enorm.trans (ENNReal.tsum_le_tsum fun _ ↦ enorm_amplitude_le ..)
+      eNorm_tsum_le_tsum_eNorm.trans (tsum_le_tsum fun _ ↦ enorm_amplitude_le ..)
     _ = ∑' δ : X, ∑' γ : rep ⁻¹' {δ}, S.amplitudeMajorant .cut c c' γ := (tsum_fiberwise _ rep).symm
-    _ ≤ _ := ENNReal.tsum_le_tsum fibre_le
+    _ ≤ _ := tsum_le_tsum fibre_le
 
 /-- Write `D_l(γ)` for the leading minors of the matrix of products of the frame with its image
 under `γ`, `𝗀 = |D_{ϱ+1}|² - N² |D_ϱ|²`, and `f` for the number of infinite places. Let `T` be
@@ -685,7 +686,7 @@ lemma enorm_amplitudeSum_le_orbitBound (hT : S.IsStable T) {j : Fin (𝔰.ϱ + 2
   have on_K : ‖S.amplitudeSum .cut (T ∩ K) c s c'‖ₑ ≤
       ∑' γ : ↥(T ∩ K ∩ S.termsOver c s c'), bound γ := by
     refine (enorm_amplitudeSum_le_orbitBound_top on_stable (fun γ hγ ↦ disc_ne γ hγ.2) c s c').trans
-      (ENNReal.tsum_le_tsum fun ⟨γ, ⟨hγT, hγK⟩, _⟩ ↦ ?_)
+      (tsum_le_tsum fun ⟨γ, ⟨hγT, hγK⟩, _⟩ ↦ ?_)
     -- A term with `𝗀 ≠ 0` has the top cell rank, where the indices are `1`.
     have h_ne : S.termDisc γ ≠ 0 := disc_ne γ hγK
     obtain rfl : j = ⊤ := by grind [HasCellRank]
@@ -697,8 +698,8 @@ lemma enorm_amplitudeSum_le_orbitBound (hT : S.IsStable T) {j : Fin (𝔰.ϱ + 2
   calc
     _ ≤ ∑' γ : ↥(T ∩ Kᶜ ∩ S.termsOver c s c' ∪ T ∩ K ∩ S.termsOver c s c'), bound γ := by
       rw [amplitudeSum_eq_inter_compl_add_inter T K,
-        ENNReal.summable.tsum_union_disjoint (by grind) ENNReal.summable]
-      exact (enorm_add_le ..).trans (add_le_add off_K on_K)
+        CompleteLattice.summable.tsum_union_of_disjoint (by grind) CompleteLattice.summable]
+      exact (eNorm_add_le ..).trans (add_le_add off_K on_K)
     _ ≤ ∑' γ : ↥(T ∩ S.termsOver c s c'), bound γ := tsum_mono_subtype bound (by grind)
     _ = _ := by
       rw [_root_.tsum_subtype _ bound,
@@ -727,7 +728,7 @@ the fibres `T ∩ f ⁻¹' {i}` at the same `c`, `s`, `c'`. -/
 lemma enorm_amplitudeSum_le_tsum_fibre {ι : Type} (f : S.G E → ι) (c : S.Classes) (s : S.ResidueGL)
     (c' : S.Classes) :
     ‖S.amplitudeSum .cut T c s c'‖ₑ ≤ ∑' i : ι, ‖S.amplitudeSum .cut (T ∩ f ⁻¹' {i}) c s c'‖ₑ := by
-  grw [← (hasSum_amplitudeSum_fibre f c s c').tsum_eq, enorm_tsum_le_tsum_enorm]
+  grw [← (hasSum_amplitudeSum_fibre f c s c').tsum_eq, eNorm_tsum_le_tsum_eNorm]
 
 omit [HasPrimitiveRoot5040 E] [S.IsAdmissible] in
 /-- Every element of `Γ* = S.remainingTerms` has a cell rank, namely `S.cellRank γ`. -/
@@ -754,9 +755,9 @@ theorem enorm_amplitudeSum_le_tsum_termSize (hT : S.IsStable T) (h_sub : T ⊆ S
         .ofReal (S.unipotentCovolume * S.termSize c c' γ) := by
   -- Sort the terms by their cell rank and bound each part.
   let size (γ : S.G E) : ℝ≥0∞ := .ofReal (S.unipotentCovolume * S.termSize c c' γ)
-  grw [enorm_amplitudeSum_le_tsum_fibre S.cellRank c s c', ← ENNReal.tsum_fiberwise _
+  grw [enorm_amplitudeSum_le_tsum_fibre S.cellRank c s c', ← tsum_fiberwise _
     fun γ : S.nearRepresentativesOver T c s c' ↦ S.cellRank γ]
-  refine ENNReal.tsum_le_tsum fun j ↦ ?_
+  refine tsum_le_tsum fun j ↦ ?_
   let part : Set (S.G E) := T ∩ S.cellRank ⁻¹' {j}
   have h_stable : S.IsStable part := by
     intro u hu u' hu' γ

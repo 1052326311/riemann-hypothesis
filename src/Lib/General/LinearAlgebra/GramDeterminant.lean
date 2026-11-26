@@ -105,7 +105,7 @@ noncomputable def formGram (G : Matrix I I ℂ) (v : S → I → ℂ) : Matrix S
   of fun i k ↦ star (v i) ⬝ᵥ G *ᵥ v k
 
 /-- The matrix `formGram G v` of a positive semidefinite form is positive semidefinite. -/
-lemma posSemidef_formGram [Fintype S] (hG : G.PosSemidef) (v : S → I → ℂ) :
+lemma posSemidef_formGram (hG : G.PosSemidef) (v : S → I → ℂ) :
     (formGram G v).PosSemidef := by
   have h_eq : formGram G v = (of v)ᵀᴴ * G * (of v)ᵀ := by
     rw [Matrix.mul_assoc]
@@ -125,7 +125,7 @@ lemma norm_det_formGram_le (hG : G.PosSemidef) {n : ℕ} {v : Fin n → I → �
     _ ≤ ∏ _i : Fin n, exp h := by
         gcongr with i
         simpa [formGram, Complex.re_eq_norm.mpr (hG.dotProduct_mulVec_nonneg (v i))] using hv i
-    _ = exp (n * h) := by rw [Fin.prod_const, exp_nat_mul]
+    _ = exp (n * h) := by rw [Fin.prod_const, exp_natCast_mul]
 
 /-- The Cauchy–Schwarz inequality in the exterior power, where the product of `v₁ ∧ ⋯ ∧ vₙ` and
 `w₁ ∧ ⋯ ∧ wₙ` is `det (v_i* G w_k)`: for `G` positive semidefinite,

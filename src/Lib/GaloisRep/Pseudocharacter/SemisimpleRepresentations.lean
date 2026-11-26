@@ -5,6 +5,7 @@ public import Lib.General.LinearAlgebra.Eigenvalues
 public import Lib.General.LinearAlgebra.MatrixNormBounds
 public import Lib.General.NumberTheory.CoefficientRings
 public import Lib.PadicComparison.Descent.TestCategory
+public import TauCeti.LinearAlgebra.Trace.Idempotent
 
 /-!
 # Semisimple representations: conjugacy, continuity, cancellation and stable lattices
@@ -76,13 +77,7 @@ the m_i, sending a family of square matrices to the block diagonal matrix. -/
 def blockDiagonalAlgHom {R o : Type*} {m : o → Type} [CommRing R] [DecidableEq o] [Fintype o]
     [∀ i, Fintype (m i)] [∀ i, DecidableEq (m i)] :
     (∀ i : o, Matrix (m i) (m i) R) →ₐ[R] Matrix (Σ i : o, m i) (Σ i : o, m i) R :=
-  AlgHom.mk'
-    { toFun := blockDiagonal'
-      map_one' := by simp
-      map_mul' := by simp [Pi.mul_def]
-      map_zero' := by simp
-      map_add' := by simp }
-    (by simp)
+  AlgHom.mk' (blockDiagonal'RingHom m R) (by simp)
 
 /-- The element of the product of matrix algebras M_{d_i}(k) that is the matrix unit E_ab in
 factor i and zero elsewhere; a, b default to 0. -/
@@ -119,18 +114,13 @@ variable {p : Matrix n n k} (f : PiMatrix k d →ₐ[k] Matrix N N k)
   (f' : PiMatrix k d →ₐ[k] Matrix n n k) [Ring B] [Group H] [Algebra k B] [Module.Finite k B]
   (ρ : G →* B)
 
-lemma eq_zero_iff_trace_eq_zero_of_isIdempotentElem [CharZero k] [IsAlgClosed k]
-    (hp : IsIdempotentElem p) :
-    p = 0 ↔ p.trace = 0 := by
-  have h_rank : p.rank = 0 ↔ p = 0 := by
-    rw [← finrank_range_mulVecLin, finrank_eq_zero, range_eq_bot, ← toLin'_apply', toLin'.map_eq_zero_iff]
-  rw [trace_eq_rank_of_isIdempotentElem hp, Nat.cast_eq_zero, h_rank]
-
+omit [DecidableEq n] in
 /-- The trace of an idempotent matrix is its rank. In characteristic zero, the matrix is zero
 exactly when its trace is zero. -/
-lemma trace_of_idempotent [CharZero k] [IsAlgClosed k] (hp : IsIdempotentElem p) :
+lemma trace_of_idempotent [CharZero k] (hp : IsIdempotentElem p) :
     p.trace = p.rank ∧ (p = 0 ↔ p.trace = 0) :=
-  ⟨trace_eq_rank_of_isIdempotentElem hp, eq_zero_iff_trace_eq_zero_of_isIdempotentElem hp⟩
+  ⟨IsIdempotentElem.trace_eq_rank hp, fun h ↦ by simp [h],
+    Matrix.IsIdempotentElem.eq_zero_of_trace_eq_zero hp⟩
 
 attribute [local ext] ext_linearMap
 
@@ -140,10 +130,10 @@ lemma isIdempotentElem_map_piMatrixUnit (f : PiMatrix k d →ₐ[k] B) (i : Fin 
   IsIdempotentElem.map (by simp [IsIdempotentElem, ← Pi.single_mul]) f
 
 omit [∀ i, NeZero (d i)] in
-/-- Let `k` be algebraically closed of characteristic zero. If `r = f' ∘ s`, where the image of
+/-- Let `k` have characteristic zero. If `r = f' ∘ s`, where the image of
 `s` spans a finite product of matrix algebras and `f'` is an algebra map to `M_n(k)`, then the
 trace form on the span of `r(G)` is non-degenerate. -/
-lemma IsTraceNondeg.of_span_piMatrix [CharZero k] [IsAlgClosed k]
+lemma IsTraceNondeg.of_span_piMatrix [CharZero k]
     {s : G → PiMatrix k d} (s_span : span k (Set.range s) = ⊤) (hr : ∀ g : G, f' (s g) = r g) :
     IsTraceNondeg r := by
   -- Write `x = f' a`. The left ideal spanned by `a` is spanned by an idempotent `c * a`. Its image
@@ -161,7 +151,7 @@ lemma IsTraceNondeg.of_span_piMatrix [CharZero k] [IsAlgClosed k]
       LinearMap.ext_on_range s_span fun g ↦ by simp [hr, Matrix.trace_mul_comm _ (f' a), h_trace]
     simpa using LinearMap.congr_fun h_lin y
   have idem_zero : f' (c * a) = 0 :=
-    (eq_zero_iff_trace_eq_zero_of_isIdempotentElem (idem.map f')).2 (trace_zero c)
+    Matrix.IsIdempotentElem.eq_zero_of_trace_eq_zero (idem.map f') (trace_zero c)
   rw [← hb, map_mul, idem_zero, mul_zero]
 
 /-- Let `k` be an algebraically closed field of characteristic zero, and let `s : G →* PiMatrix k d`
@@ -387,8 +377,8 @@ lemma IsTraceNondeg.exists_conj_of_trace_eq [CharZero k]
     simpa using LinearMap.congr_fun h_lin y
   have rank_eq (i : Fin b) : (F₂ (piMatrixUnit i)).rank = (F₁ (piMatrixUnit i)).rank := by
     refine Nat.cast_injective (R := k) ?_
-    rw [← trace_eq_rank_of_isIdempotentElem (isIdempotentElem_map_piMatrixUnit F₁ i),
-      ← trace_eq_rank_of_isIdempotentElem (isIdempotentElem_map_piMatrixUnit F₂ i), trace_eq]
+    rw [← IsIdempotentElem.trace_eq_rank (isIdempotentElem_map_piMatrixUnit F₁ i),
+      ← IsIdempotentElem.trace_eq_rank (isIdempotentElem_map_piMatrixUnit F₂ i), trace_eq]
   obtain ⟨P, Q, QP, hP⟩ := exists_piMatrix_retract F₁ F₂ fun i ↦ (rank_eq i).le
   exact ⟨⟨P, Q, mul_eq_one_comm.1 QP, QP⟩, fun g ↦ by rw [← F₁_s, ← F₂_s, hP]⟩
 
@@ -611,7 +601,8 @@ lemma eventually_exists_isLatticeIn [TopologicalSpace G] [IsTopologicalGroup G] 
   choose D hD_count hD_dense using fun p : n × n ↦ (isCompact_range (hs_cont p)).isSeparable
   have h_gen (g : G) (p : n × n) : ∃ S : Finset (PadicAlgCl ℓ),
       ↑S ⊆ D p ∧ s g p.fst p.snd ∈ adjoin ℚ_[ℓ] (S : Set (PadicAlgCl ℓ)) := by
-    refine exists_finset_of_mem_adjoin ((fixedField_fixingSubgroup _).le fun σ ↦ ?_)
+    refine exists_finset_of_mem_adjoin
+      ((InfiniteGalois.fixedField_fixingSubgroup _).le fun σ ↦ ?_)
     -- `σ` fixes `D p`, hence its closure, which contains `s g p.fst p.snd`
     exact EqOn.closure (fun x hx ↦ σ.prop ⟨x, subset_adjoin ℚ_[ℓ] _ hx⟩) (by fun_prop) continuous_id
       (hD_dense p ⟨g, rfl⟩)
@@ -628,7 +619,7 @@ lemma eventually_exists_isLatticeIn [TopologicalSpace G] [IsTopologicalGroup G] 
   have hZ_closed (m : ∀ p, I p) : IsClosed (Z m) := isClosed_iInter fun p ↦
     -- `O (m p)` is compact, hence closed; `Z m` is an intersection of preimages of it
     .preimage (hs_cont p) <| by
-      simpa using (isCompact_range (X := O (m p)) continuous_subtype_val).isClosed
+      simpa using (isCompact_range (X := O (m p)) continuous_subtypeVal).isClosed
   have hZ_cover : ⋃ m, Z m = univ := by
     refine eq_univ_of_forall fun g ↦ ?_
     choose m hm hg using h_gen g

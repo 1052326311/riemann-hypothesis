@@ -107,7 +107,7 @@ lemma theta_sub_one_dvd_pow_mul_theta_zTau {g : k.subgroup} {ω : Ainf}
   let w : Ainf :=
     tau * u * (∑ j ∈ Finset.range (p ^ a), WittVector.teichmuller p epsTilt ^ j) * k.z.val
   have h_diff : toGp g.val • k.z.val - k.z.val = k.E.val * w := by
-    rw [hz, ← sub_one_mul, ← mul_geom_sum, ← mu, ← hu]
+    rw [hz, ← sub_one_mul, ← mul_geom_sum, ← mu_eq, ← hu]
     ring
   have h_theta_w : theta w = theta tau * theta u * p ^ a * theta k.z := by simp [w]
   have h_aeval : aeval (toGp g.val • k.z.val) F = toGp g.val • aeval k.z.val F :=
@@ -555,40 +555,6 @@ lemma frobEUnit_zpow_smul_mem_withOrders (b : ℕ) (m : ℤ) (hx : x ∈ L.withO
     k.frobEUnit b ^ m • x ∈ L.withOrders i c' :=
   mem_withOrders_of_le (frobEUnit_zpow_smul_mem_withOrders_add b m hx) h_le
 
-/-- Let `p_b = φ^b E` be the unit `k.frobEUnit b`. Then `p_b ^ m • x` has orders at the letter `i`
-given by c(a,u) + m for a = b and c(a,u) for a ≠ b if and only if `x` has the orders `c` at `i`. -/
-lemma frobEUnit_zpow_smul_mem_withOrders_add_iff (b : ℕ) (m : ℤ) :
-    k.frobEUnit b ^ m • x ∈
-        L.withOrders i (fun (a : ℕ) (u : ℤ) ↦ c a u + if b = a then m else 0) ↔
-      x ∈ L.withOrders i c := by
-  refine ⟨fun hx ↦ ?_, frobEUnit_zpow_smul_mem_withOrders_add b m⟩
-  have h_back : k.frobEUnit b ^ (-m) • k.frobEUnit b ^ m • x ∈ L.withOrders i c :=
-    frobEUnit_zpow_smul_mem_withOrders b (-m) hx fun a u _ ↦ by grind
-  simpa [smul_smul, ← zpow_add] using h_back
-
-/-- Let `F = ∏_{b ∈ s} p_b ^ r b` be a product of integer powers of the units `p_b = φ^b E`
-(`k.frobEUnit b`). Then `F • x` has the orders `c` raised by `r a` at `p_a` for `a ∈ s` (and
-unchanged at the other `p_a`) at the letter `i` if and only if `x` has the orders `c` at `i`. -/
-lemma prod_frobEUnit_zpow_smul_mem_withOrders_add_iff (s : Finset ℕ) (r : ℕ → ℤ) :
-    (∏ b ∈ s, k.frobEUnit b ^ r b) • x ∈
-        L.withOrders i (fun (a : ℕ) (u : ℤ) ↦ c a u + if a ∈ s then r a else 0) ↔
-      x ∈ L.withOrders i c := by
-  induction s using Finset.induction_on with
-  | empty => simp
-  | insert b s hb ih =>
-    have h_exponents : (fun (a : ℕ) (u : ℤ) ↦ c a u + if a ∈ insert b s then r a else 0) =
-        fun (a : ℕ) (u : ℤ) ↦ (c a u + if a ∈ s then r a else 0) + if b = a then r b else 0 := by
-      grind
-    rw [prod_insert hb, mul_smul, h_exponents, frobEUnit_zpow_smul_mem_withOrders_add_iff, ih]
-
-/-- The Kisin module `L.kisinLoc` with all `φ^a E` inverted is stable under multiplication and
-division by products of integer powers of the units `k.frobEUnit b = φ^b E`. -/
-lemma prod_frobEUnit_zpow_smul_mem_kisinLoc_iff (s : Finset ℕ) (r : ℕ → ℤ) :
-    (∏ b ∈ s, k.frobEUnit b ^ r b) • x ∈ L.kisinLoc ↔ x ∈ L.kisinLoc := by
-  induction s using Finset.induction_on with
-  | empty => simp
-  | insert b s hb ih => rw [prod_insert hb, mul_smul, frobEUnit_zpow_smul_mem_kisinLoc_iff, ih]
-
 /-- Every element of `L.kisinLocAinf` has a multiple by a non-zero element of A_inf in the
 A_inf-span of 1 ⊗ L, that is, lies in `L.fracSpan`. -/
 lemma kisinLocAinf_le_fracSpan : L.kisinLocAinf ≤ L.fracSpan :=
@@ -612,8 +578,8 @@ lemma smul_sub_mem_withOrders (hx : x ∈ L.withOrders i c) (g : k.galMonoid) :
   obtain ⟨h_span, h_letter, h_exp⟩ := mem_withOrders_iff.1 hx
   refine mem_withOrders_iff.2 ⟨sub_mem (galMonoid_smul_mem_kisinLocAinf h_span) h_span,
     sub_mem ((gal_smul_mem_letterPart g).2 h_letter) h_letter, fun a u hu μ hμ ↦ ?_⟩
-  rw [valueAt_smul_sub h_span hμ.1]
-  exact sub_mem (galMonoid_smul_mem_hodgeFil g (h_exp a u hu μ hμ)) (h_exp a u hu μ hμ)
+  have h_mem := h_exp a u hu μ hμ
+  simpa only [valueAt_smul_sub h_span hμ.1] using sub_mem (galMonoid_smul_mem_hodgeFil g h_mem) h_mem
 
 /-! ### Divisibility of `g x - x` by `zTau` -/
 
@@ -701,17 +667,12 @@ lemma phi_pow_smul_mem_kisinLoc {x : L.Ambient} (hx : x ∈ L.kisinLoc) : φ ^ l
   | zero => simpa using hx
   | succ l ih => simpa only [pow_succ', mul_smul] using phi_smul_mem_kisinLoc ih
 
-/-- The A_inf-module `L.kisinAinf` is spanned by the Kisin module `L.kisinModule`. This is a part of
-`frame_theorem`. -/
-lemma span_kisinModule : span Ainf (L.kisinModule : Set L.Ambient) = L.kisinAinf :=
-  L.frame_theorem.kisinAinf_eq_span_kisinModule.symm
-
 /-- The A_inf-span of the Kisin module `L.kisinLoc` with all φ^a E inverted is `L.kisinLocAinf`,
 which is defined as the set of x that some product of the φ^a E sends into `L.kisinAinf`, the
 A_inf-span of the Kisin module `L.kisinModule`. -/
 lemma span_kisinLoc : span Ainf (L.kisinLoc : Set L.Ambient) = L.kisinLocAinf := by
   have h_base : L.kisinAinf ≤ span Ainf (L.kisinLoc : Set L.Ambient) :=
-    span_kisinModule.ge.trans (span_mono kisinModule_le_kisinLoc)
+    kisinAinf_eq_span_kisinModule.le.trans (span_mono kisinModule_le_kisinLoc)
   have h_step (a : ℕ) (y : L.Ambient)
       (hy : (k.frobE a).val • y ∈ span Ainf (L.kisinLoc : Set L.Ambient)) :
       y ∈ span Ainf (L.kisinLoc : Set L.Ambient) := by
@@ -739,14 +700,6 @@ lemma sum_map_smul_eq_zero_of_mem_kisinLoc (f : Ainf →ₗ[k.S] k.S) {ι : Type
   refine sum_map_smul_eq_zero_of_mem_valueFieldPoints f (fun i ↦ ?_) h_zero
   exact ⟨kisinLocAinf_le_fracSpan (hv i).1, (hv i).2⟩
 
-/-- The element τ^h multiplies the A_inf-span `L.ainfLattice` of 1 ⊗ L into `L.kisinAinf`, the
-A_inf-span of the Kisin module. Here τ = `tau` is [ε^{1/p}] − 1, and h = `L.jumpBound` is the least
-natural number with all Hodge–Tate jumps of L over Γ' in [−h, h]. This is a part of
-`frame_theorem`. -/
-lemma tau_pow_smul_mem_kisinAinf {x : L.Ambient} (hx : x ∈ L.ainfLattice) :
-    tau ^ L.jumpBound • x ∈ L.kisinAinf :=
-  L.frame_theorem.tau_pow_smul_mem_kisinAinf x hx
-
 /-- Let L be a Galois lattice over the Kummer chart and a ≥ 0. Let μ be a form, that is, an
 A_inf-linear map `L.Ambient` = W(C^♭) ⊗ L → B_dR that is Γ'-equivariant on 1 ⊗ L, and let x lie in
 the Kisin module `L.kisinLoc` with all φ^b E inverted. Then the value `valueAt a μ x` = μ(φ^{−a}x)
@@ -761,7 +714,8 @@ lemma valueAt_mem_valueField {a : ℕ} {μ : L.Functional} {x : L.Ambient} (hμ 
     smul_mem_fracSpan (φ ^ a)⁻¹ (kisinLocAinf_le_fracSpan (mem_kisinLocAinf_of_mem_kisinLoc hx))
   obtain ⟨n, t, v, hv⟩ : ∃ (n : ℕ) (t : Fin n → Ainf) (v : Fin n → L.kisinLoc),
       ∑ l : Fin n, t l • (v l).val = tau ^ L.jumpBound • r • (φ ^ a)⁻¹ • x :=
-    mem_span_set'.1 (span_kisinLoc.ge (mem_saturateBy_of_mem (tau_pow_smul_mem_kisinAinf hrx)))
+    mem_span_set'.1 (span_kisinLoc.ge
+      (mem_saturateBy_of_mem (tau_pow_jumpBound_smul_mem_kisinAinf_of_mem_ainfLattice hrx)))
   let ρ : Ainf := φ ^ a • (tau ^ L.jumpBound * r)
   have hρx : ρ • x = ∑ l : Fin n, (φ ^ a • t l) • φ ^ a • (v l).val := by
     simpa [ρ, smul_sum, frobGroup_smul_smul, smul_smul] using
@@ -1180,8 +1134,7 @@ lemma exists_valueAt_sub_mem_hodgeFil_succ (a : ℕ) (n : ℤ) :
     have h_fix (g : k.galMonoid) :
         g • ∑ l, t l • valueAt a μ x - ∑ l, t l • valueAt a μ x ∈ hodgeFil 1 :=
       smul_sub_mem_hodgeFil_of_valueField g t (valueAt_mem_valueField hμ hx) h_int (ht g)
-    rw [h_value, zero_add]
-    exact exists_const_sub_mem_hodgeFil_of_smul_sub_mem h_fix
+    simpa only [h_value, zero_add] using exists_const_sub_mem_hodgeFil_of_smul_sub_mem h_fix
 
 end New.Lift.KummerChart.JumpLattice
 
