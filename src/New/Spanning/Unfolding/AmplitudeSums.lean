@@ -105,9 +105,9 @@ lemma tsum_integral_apply {X J I : Type*} [MeasurableSpace X] {μ : Measure X} [
     (∑' j : J, ∫ x : X, g j x ∂μ) i = ∫ x : X, ∑' j : J, g j x i ∂μ := by
   -- Take the `i`-th coordinate through the sum and the integral, then exchange the two.
   have h_integrable (j) : Integrable (g j) μ := ⟨by fun_prop, (ENNReal.le_tsum j).trans_lt hg_fin⟩
-  have h_coord_fin : ∑' j, ∫⁻ x, ‖g j x i‖ₑ ∂μ < ∞ := by grw [PiLp.enorm_apply_le, hg_fin]
+  have h_coord_fin : ∑' j, ∫⁻ x, ‖g j x i‖ₑ ∂μ < ∞ := by grw [PiLp.eNorm_apply_le, hg_fin]
   have h_summable : Summable fun j ↦ ∫ x, g j x ∂μ :=
-    .of_enorm (ne_of_lt (by grw [enorm_integral_le_lintegral_enorm, hg_fin]))
+    .of_eNorm (ne_of_lt (by grw [eNorm_integral_le_lintegral_eNorm, hg_fin]))
   calc
     _ = ∑' j, (∫ x, g j x ∂μ) i := (EuclideanSpace.proj i).map_tsum h_summable
     _ = ∑' j, ∫ x, g j x i ∂μ := tsum_congr fun j ↦ eval_integral_piLp (h_integrable j).eval_piLp i
@@ -410,7 +410,7 @@ lemma enorm_besselKernel_sub_cut_le
     grw [h_gain, enorm_besselKernel, mul_mul_mul_comm, pow_mul_prod_enorm_le_majorant hw,
       pow_mul_prod_enorm_le_bound hw]
   rw [← mul_le_iff_le_inv (by positivity) ofReal_ne_top]
-  grw [enorm_sub_le, mul_add, h_kernel, h_kernel, two_mul]
+  grw [eNorm_sub_le, mul_add, h_kernel, h_kernel, two_mul]
 
 end Majorant
 
@@ -634,7 +634,7 @@ theorem tsum_lintegral_enorm_besselKernel_sub_cut_le (T : Set (S.G E)) (c : S.Cl
 /-- For admissible `S`, the amplitudes of the elements of `T` over `(c, s, c')` are summable. -/
 lemma summable_amplitude (T : Set (S.G E)) (c : S.Classes) (s : S.ResidueGL) (c' : S.Classes) :
     Summable fun γ : ↥(T ∩ S.termsOver c s c') ↦ S.amplitude side c c' γ := by
-  refine .of_enorm (ne_of_lt ?_)
+  refine .of_eNorm (ne_of_lt ?_)
   grw [enorm_amplitude_le]
   exact (ENNReal.le_tsum c').trans_lt (tsum_amplitudeMajorant_lt_top T c s)
 
@@ -779,7 +779,7 @@ lemma hasSum_amplitudeSum_of_cutoff (hT : S.IsStable T) (c : S.Classes) (s : S.R
   have integrable {β : X × Y → ℝ≥0∞} (hβ : IsCutoff (count : Measure Δ) β) :
       Integrable (fun p ↦ (β p).toReal • kernel side p) ρ :=
     integrable_toReal_smul hβ.1 (kernel_meas side).aestronglyMeasurable
-      ((lintegral_le hβ (kernel_meas side).enorm (by simp [kernel_smul])).trans_lt
+      ((lintegral_le hβ (kernel_meas side).eNorm (by simp [kernel_smul])).trans_lt
         ((ENNReal.le_tsum c').trans_lt (tsum_amplitudeMajorant_lt_top T c s)))
   -- Fubini: for every cutoff the integrals over `y` sum to that of the kernel over the quotient.
   have hasSum {β : X × Y → ℝ≥0∞} (hβ : IsCutoff (count : Measure Δ) β) :
