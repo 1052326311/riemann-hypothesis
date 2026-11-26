@@ -783,11 +783,9 @@ lemma mapExactFunctor_restrictAlong_id : x.mapExactFunctor (restrictAlong (𝟭 
 end H
 
 /-- An isomorphism `α : M ⟶ N` induces bijections `Ext^n(N,F) → Ext^n(M,F)` in every degree. -/
-lemma IsCohomEquiv.of_isIso [IsIso α] : IsCohomEquiv F α := by
-  intro n
-  -- pull-back along `inv α` is inverse to pull-back along `α`
-  refine bijective_iff_has_inverse.mpr ⟨map F (inv α) n, fun x ↦ ?_, fun x ↦ ?_⟩ <;>
-    simp [← H.map_comp]
+lemma IsCohomEquiv.of_isIso [IsIso α] : IsCohomEquiv F α := fun n ↦
+  -- pull-back along `α` is the value at `F` of the isomorphism `Ext^n(α, -)`
+  ConcreteCategory.bijective_of_isIso (((Abelian.extFunctor n).map α.op).app F)
 
 /-- If `γ : F ⟶ G` and `γ' : F' ⟶ G'` intertwine the coefficient maps of two comparisons with the
 same functor `c.functor`, then the comparison maps commute with push-forward along `γ` and `γ'`. The
