@@ -157,14 +157,14 @@ end General
 
 /-- Let `T` be a Selmer datum over `O₀`: a Galois lattice `T.ρ` unramified outside the finite set
 `T.places ⊆ S₀`, with modules of local cocycles at the places above `ℓ` and an inertial element
-`T.γ` that acts by a scalar. Let `O` be a discrete valuation ring, `e : O₀ → O` a ring map, `ρ` the
+`T.γ` that acts by a scalar. Let `O` be a commutative ring, `e : O₀ → O` a ring map, `ρ` the
 twist by the `O`-valued character `ψ` of `T.ρ` extended along `e`, and `S = T.places ∪ Q ∪ Q̄`. The
 group `Sel_Q(T ψ)`, of length `T.divisibleLength Q e ψ`, consists of the cocycles for `ρ` unramified
 outside `S` that obey the images under `e` of the relations `T.classRelations`. If the set of linear
 relations `L` contains these images, then the module of cocycles for `ρ` unramified outside `S` that
 obey `L` is at most as long as `Sel_Q(T ψ)`, both with coefficients in `Frac(O) / O`. -/
 lemma divisibleSelmerLength_le_divisibleLength {ℓ : ℕ} [ThePrime ℓ] {E O n : Type} [Field E]
-    [CMFieldWithRoot5040 E] [CommRing O] [DVR O] [Fintype n] [DecidableEq n]
+    [CMFieldWithRoot5040 E] [CommRing O] [Fintype n] [DecidableEq n]
     {ρ : Gal(Ω/E) → Matrix n n O} {S : Set (FinPlace E)} {L : Set (Gal(Ω/E) →₀ Matrix n n O)}
     {O₀ : Type} [CommRing O₀] [PadicIntegerRing O₀ ℓ]
     {S₀ : Finset (FinPlace E)} {g₀ : Gal(Ω/E)} (T : SelmerDatum ℓ S₀ g₀ O₀ n)
