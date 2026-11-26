@@ -149,7 +149,7 @@ private lemma card_le_of_prod_dvd_classNumber_mul_index {M l : ℕ} [NeZero M] [
 /-- If a place `v` of an intermediate field `K` of `Ω/ℚ` is prime to `l`, then so is some place of
 `E` lying under the chosen valuation subring `placeOver v` of `Ω`. -/
 private lemma exists_notMem_placesDividing_isPlaceOver (E : Type) [Field E]
-    [EmbeddedNumberField E] {l : ℕ} [ThePrime l] {K : IntermediateField ℚ Ω} [NumberField K]
+    [EmbeddedNumberField E] {l : ℕ} {K : IntermediateField ℚ Ω} [NumberField K]
     {v : FinPlace K} (hv : v ∉ placesDividing K l) :
     ∃ w : FinPlace E, w ∉ placesDividing E l ∧ IsPlaceOver (placeOver v) w := by
   have hv_over : IsPlaceOver (placeOver v) v := v.isPlaceOver_placeOver
