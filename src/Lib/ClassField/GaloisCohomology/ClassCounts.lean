@@ -85,7 +85,7 @@ lemma range_coboundaryZ1 (hρ : ∀ m : M, Continuous fun g : G ↦ ρ g m) :
 
 /-- For a finite module `M` on which `G` acts with continuous orbit maps, the coboundaries number
 `|M| / |H⁰|`: `|B¹| · |M^G| = |M|`. -/
-theorem card_B1_mul_card_invariants [Finite M] (hρ : ∀ m : M, Continuous fun g : G ↦ ρ g m) :
+theorem card_B1_mul_card_invariants (hρ : ∀ m : M, Continuous fun g : G ↦ ρ g m) :
     Nat.card (B1 ρ) * Nat.card ρ.invariants = Nat.card M := by
   have h_ker : LinearMap.ker (coboundaryZ1 hρ) = ρ.invariants := by
     ext m
