@@ -718,7 +718,6 @@ lemma pow_mul_mul_rootDiscr_pow_le_tailScale (S : Filling E 𝔰) [S.IsAdmissibl
   have hb : 0 < S.b := by linarith [S.thousand_le_b]
   have h_exponent : 60 * 𝔰.n * 1000 + (𝔰.k + 1) ≤ 250 * 𝔰.k := by
     have hk : 1000 * (2 * 𝔰.ϱ + 2) ≤ 𝔰.k := S.thousand_mul_le_k
-    have hn : 𝔰.n = 𝔰.ϱ + 1 := rfl
     lia
   refine le_of_pow_le_pow_left₀ (n := 1000) (by norm_num) S.tailScale_nonneg ?_
   set X : ℝ := 200 * (numInfPlaces E * 𝔰.k) * rootDiscr E
