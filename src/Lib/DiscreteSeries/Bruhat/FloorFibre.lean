@@ -335,9 +335,9 @@ lemma re_skewAdjoint_complex (β : skewAdjoint ℂ) : (β : ℂ).re = 0 := by
   exact self_eq_neg.1 h_re_neg
 
 /-- The integral against the image of `dμ dv` under `dualPoint a`, in the coordinates `(v, t, β)`
-with `μ = t / 2 + β - q v`, for a continuous shift `q`, `t` real and `β` skew. -/
+with `μ = t / 2 + β - q v`, for a shift `q`, `t` real and `β` skew. -/
 lemma lintegral_map_dualPoint (a : Fin 𝔰.ϱ)
-    {q : ({i : 𝔰.BesselIndex // a + 1 ≤ floorOf i} → ℂ) → ℂ} (_hq : Continuous q)
+    {q : ({i : 𝔰.BesselIndex // a + 1 ≤ floorOf i} → ℂ) → ℂ}
     {K : (𝔰.BesselIndex → ℂ) → ENNReal} (hK : Measurable K) :
     ∫⁻ y : 𝔰.BesselIndex → ℂ, K y ∂volume.map (dualPoint a) =
       ∫⁻ v : { i : 𝔰.BesselIndex // a + 1 ≤ floorOf i } → ℂ,
@@ -404,7 +404,7 @@ lemma leFibreMeasure_heisenbergMeasure (a : Fin 𝔰.ϱ) :
           ∂((2 : ENNReal)⁻¹ • volume).prod complexPlace.skewMeasure := by
         simp (disch := first | fun_prop | finiteness) only [prod_smul_left,
           lintegral_const_mul', lintegral_prod, lintegral_smul_measure, smul_eq_mul]
-    _ = ∫⁻ y, K y ∂volume.map (dualPoint a) := (lintegral_map_dualPoint a hq hK).symm
+    _ = ∫⁻ y, K y ∂volume.map (dualPoint a) := (lintegral_map_dualPoint a hK).symm
 
 /-- The dual vector `e*_a` of floor `a`, of index `eStar a`. For the form `h` of matrix `J₁`, on the
 isotropic vectors `y` with `h(e_a, y) = 1` that are orthogonal to the basis vectors of lower floors
