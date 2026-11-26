@@ -247,17 +247,11 @@ valuation with `v(ℓ) = 1`. -/
 lemma four_mul_ellVal_levelPrime_sub_one_add_le_twistError {ℓ : ℕ} [ThePrime ℓ] {P : Parameters}
     {D : Data P} (i : Fin 2) :
     4 * ellVal (D.levelPrime i - 1 : PadicAlgCl ℓ) + ((1 / 2) ^ ℓ : ℝ≥0) ≤ twistError ℓ D := by
-  let v : ℕ := padicValNat ℓ D.chosenGroupOrder
-  have h_val : ellVal (D.levelPrime i - 1 : PadicAlgCl ℓ) ≤ v := by
-    simpa using ellVal_levelPrime_pow_sub_one_le D ℓ i ⟨le_rfl, D.nat_le_of_hasLogBound⟩
-  have h_four : 4 * v ≤ (4 * D.f + 3) * D.r * v :=
-    Nat.mul_le_mul_right v D.nat_le_of_hasLogBound
-  calc
-    _ ≤ 4 * v + (((1 / 2) ^ ℓ : ℝ≥0) : ℝ≥0∞) := by gcongr
-    _ ≤ ((4 * D.f + 3) * D.r * v : ℕ) + (((1 / 2) ^ ℓ : ℝ≥0) : ℝ≥0∞) := by
-      gcongr
-      exact_mod_cast h_four
-    _ = twistError ℓ D := by simp [twistError, v]
+  rw [twistError]
+  push_cast
+  gcongr
+  · exact_mod_cast D.nat_le_of_hasLogBound
+  · simpa using ellVal_levelPrime_pow_sub_one_le D ℓ i ⟨le_rfl, D.nat_le_of_hasLogBound⟩
 
 /-- For a tame character `τ` and `j : ℕ`, `(τ.pow j).invAvatar`, the `ℓ`-adic Galois character
 attached to the inverse of `τ ^ j`, is the `j`-th power of `τ.invAvatar`. -/
@@ -278,18 +272,12 @@ lemma tamePart_ne_one_of_invAvatar_ne_one {ℓ : ℕ} [ThePrime ℓ] {P : Parame
     [PadicIso ℓ] (τ : D.TameChar) {w : FinPlace D.E}
     (hw : w ∈ τ.Q) {g : AbsGal D} (hg : g ∈ inertiaAbove ({w} : Set (FinPlace D.E)))
     (h_ne : (τ.invAvatar : AbsGal D →* PadicAlgCl ℓ) g ≠ 1) : τ.tamePart w ≠ 1 := by
-  intro h_triv
-  obtain ⟨w', hw', A, hA, hgA⟩ := hg
-  obtain rfl : w' = w := hw'
+  obtain ⟨w', rfl, _, hA, hgA⟩ := hg
   -- The class of the inertial element `g` is the local Artin symbol of a unit `x` at `w'`.
-  obtain ⟨x, hx_unit, h_art⟩ : ∃ x : (LocField w')ˣ,
-      Valued.v x.val = 1 ∧ artinMap (AbsGal D) (locIdele w' x) = g := by
-    obtain ⟨x, hx_unit, hx_art⟩ := hA.exists_localArtin_eq_of_mem_inertiaGroup hgA
-    exact ⟨x, hx_unit, by simp [hA.artinAt_eq_of_localArtin_eq hx_art]⟩
-  have h_unr : CharUnramifiedAt τ.toAutChar.baseChange.finPart w' :=
-    τ.hasWeight.charUnramifiedAt h_triv (τ.tamePart_eq_one (star w') (τ.star_notMem w' hw))
-  apply h_ne
-  simp [invAvatar_eq_of_artinMap_eq h_art, h_unr x hx_unit]
+  obtain ⟨x, hx, h⟩ := hA.exists_localArtin_eq_of_mem_inertiaGroup hgA
+  have ha : artinMap (AbsGal D) (locIdele w' x) = g := by simp [hA.artinAt_eq_of_localArtin_eq h]
+  exact fun h_triv => h_ne <| by simp [invAvatar_eq_of_artinMap_eq ha,
+    τ.hasWeight.charUnramifiedAt h_triv (τ.tamePart_eq_one _ (τ.star_notMem w' hw)) x hx]
 
 open IsDiscreteValuationRing in
 /-- Let `D` be admissible data, with CM field `D.E` and primes `p₀, p₁`, and let `badPlaces D ℓ` be
