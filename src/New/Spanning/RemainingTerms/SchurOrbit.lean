@@ -161,14 +161,9 @@ lemma norm_det_submatrix_realFrameGram (v : InfinitePlace E) :
     ‖((realFrameGram (S.ratToInf γ v)).submatrix (castLE j.is_le) (castLE j.is_le)).det‖ =
       (|S.realM v| ^ ∑ a : Fin j, (𝔰.ϱ - a)) ^ 2 / S.N ^ j.1 *
         ‖Φ v (leadingMinor (S.frameProducts γ) j)‖ := by
-  have h_det :
-      ((realFrameGram (S.ratToInf γ v)).submatrix (castLE j.is_le) (castLE j.is_le)).det =
-        ↑(∏ a : Fin j, S.realM v ^ (2 * (𝔰.ϱ - castLE j.is_le a)) / S.N) *
-          Φ v (leadingMinor (S.frameProducts γ) j) :=
-    det_submatrix_realFrameGram_ratToInf ..
-  rw [h_det, norm_mul, Complex.norm_real, Real.norm_eq_abs, Finset.prod_div_distrib, abs_div,
-    abs_prod]
-  simp [prod_pow_eq_pow_sum, ← pow_mul, sum_mul, mul_comm 2]
+  rw [det_submatrix_realFrameGram_ratToInf, norm_mul, Complex.norm_real, Real.norm_eq_abs,
+    Finset.prod_div_distrib, abs_div, abs_prod]
+  simp [leadingMinor, prod_pow_eq_pow_sum, ← pow_mul, sum_mul, mul_comm 2]
 
 /-- If `γ` has cell rank `j`, the determinant of the products of `e₁, …, e_i, z` (`i = min ϱ j`)
 with their images, in the unit frame at `v` (the matrix `subframeBlock`), has the modulus of the
@@ -550,19 +545,16 @@ lemma HasCellRank.exists_majorant_lintegral_le_kernelBound (h_rank : S.HasCellRa
   have h_seven : 7 ≤ 𝔰.k := by
     have h_base : 2 ^ 9 ≤ (2 * 𝔰.ϱ + 2) ^ 9 := Nat.pow_le_pow_left (by lia) 9
     grind [S.pow_le_k]
-  have h_block : (subframeBlock (min_le_left 𝔰.ϱ j) (realFrameGram (S.ratToInf γ v))).det ≠ 0 :=
-    h_rank.det_subframeBlock_ne_zero v
   obtain ⟨φ₀, h_meas, h_int, h_le⟩ := exists_majorant_volumeRatio_inv_pow (min_le_left 𝔰.ϱ j)
-    h_box h_cut j.is_le (hij := rfl) h_seven hg₀_gram hg₀_pair h_block
+    h_box h_cut j.is_le (hij := rfl) h_seven hg₀_gram hg₀_pair (h_rank.det_subframeBlock_ne_zero v)
   -- Pass to the parameters of the shift; the term `+ 0` is the form that `lintegral_comp_mul_add`
   -- takes.
   refine ⟨fun A ↦ φ₀ ((S.shiftScaling j v)ᴴ * of A + 0), h_meas.comp (Continuous.measurable ?_),
     ?_, fun g A hg_gram hg_pair hg_part ↦ h_le g _ hg_gram hg_pair ?_⟩
-  · change Continuous fun A : Fin (min 𝔰.ϱ j) → 𝔰.κ → ℂ ↦ (S.shiftScaling j v)ᴴ * of A + 0
-    fun_prop
+  · fun_prop
   · -- The change of variables brings in the Jacobian that `kernelBound` carries.
     have h_det : (S.shiftScaling j v)ᴴ.det ≠ 0 := by
-      simp [shiftScaling, basisScale, prod_eq_zero_iff, Nat.Prime.ne_zero]
+      simp [shiftScaling, prod_eq_zero_iff, Nat.Prime.ne_zero]
     have h_card : card 𝔰.κ = 𝔰.k := by simp
     refine (lintegral_comp_mul_add h_det 0 h_meas).trans_le ?_
     grw [h_int, det_conjTranspose, norm_star, h_card, kernelBound, ofReal_mul (by positivity)]

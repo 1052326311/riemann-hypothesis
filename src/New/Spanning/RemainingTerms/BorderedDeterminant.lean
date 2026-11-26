@@ -132,7 +132,7 @@ lemma gram_linkMatrix_mul {S : Filling E 𝔰} {γ γ' : S.G E} {t : Matrix 𝔰
     a * star x ᵥ* S.ratGram ⬝ᵥ y - b * star x ᵥ* S.ratGram ⬝ᵥ (γ * γ'⁻¹).val.val *ᵥ y
   -- in the last term apply the isometry `γ⁻¹` to both vectors first
   have h_move : γ⁻¹.val.val *ᵥ ((γ * γ'⁻¹).val.val *ᵥ y) = γ'⁻¹.val.val *ᵥ y := by
-    simp [mulVec_mulVec, ← Matrix.mul_assoc]
+    simp [mulVec_mulVec]
   rw [← dotProduct_mulVec, ← dotProduct_mulVec, ← dotProduct_mulVec,
     ← U.form_mulVec_mulVec γ⁻¹ x ((γ * γ'⁻¹).val.val *ᵥ y), h_move,
     ratGram_form_of_eStar_eq_zero hx hy, ratGram_form_of_eStar_eq_zero hγx hγy]
@@ -756,7 +756,7 @@ the lattice that they span, of the lattice spanned by the first `j` of them. The
 `𝗀♯ = S.minorGauge j c c' γ` is `N ^ r * S.minorNorm j γ` divided by the product of these indices at
 `k` and at `k⁻¹`. -/
 lemma HasCellRank.minorGauge_eq {S : Filling E 𝔰} {j : Fin (𝔰.ϱ + 2)} {γ : S.G E}
-    [HasPrimitiveRoot5040 E] (hγ : S.HasCellRank j γ) (c c' : S.Classes) :
+    (hγ : S.HasCellRank j γ) (c c' : S.Classes) :
     S.minorGauge j c c' γ = S.N ^ numInfPlaces E * S.minorNorm j γ /
       (S.isotropicRowsIndex j (S.translateByClassReps c c' γ) *
         S.isotropicRowsIndex j (S.translateByClassReps c c' γ)⁻¹) := by

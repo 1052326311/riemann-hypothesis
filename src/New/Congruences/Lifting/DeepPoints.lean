@@ -283,22 +283,19 @@ lemma pointsOver_nonempty_of_jumps_nonpos {a η t n : ℕ} {β : ℤ} (hk : k.Is
   -- As the jumps are at most `0`, the element `1 = p ^ 0 * E ^ 0` kills the cokernel.
   have h_kill : S.KillsCokernel i 0 0 := killsCokernel_zero_zero_of_small_jumps (ω := 0)
     (fun j u hu ↦ (mem_Icc.1 (h_nonpos j hu)).2) (Nat.zero_le _) i
-  have h_point : (S.pointsOver c i 0 (raisedOrdersAtZero 0) (raisedOrdersAtZero 0)).Nonempty := by
-    simpa only [Nat.cast_zero, neg_zero] using pointsOver_nonempty_of_killsCokernel h_kill c
-  have h_steps : ∀ l : ℕ, ∀ u ∈ S.jumpSet (i.stepBack l), ∀ y : ℤ, raisedOrdersAtZero 0 l u ≤ y →
-      y < plainDepth a t 1 0 l u → l = 0 ∧ y ∈ twoWindows n β ∪ twoWindows n (-β) :=
-    fun l u hu y hy_ge hy_lt ↦ by
-      have hu' := mem_Icc.1 (h_nonpos _ hu)
-      dsimp only [raisedOrdersAtZero, plainDepth, standardDepth] at hy_ge hy_lt
-      refine ⟨by split_ifs at hy_ge hy_lt <;> omega, mem_twoWindows_union_iff.2 ?_⟩
-      split_ifs at hy_ge hy_lt <;> omega
-  have h_exponent : ∀ l : ℕ, ∀ u ∈ S.jumpSet (i.stepBack l),
-      raisedOrdersAtZero 0 l u ≤ improvedOrders (raisedOrdersAtZero 0) (plainDepth a t 1 0) l u :=
-    fun l u hu ↦ by
-      have hu' := mem_Icc.1 (h_nonpos _ hu)
-      dsimp only [improvedOrders, raisedOrdersAtZero, plainDepth, standardDepth]
-      split_ifs <;> omega
-  exact pointsOver_nonempty_of_near_steps hk hβ_gap h_point h_steps h_exponent
+  -- With no pole, apply the gap lemma with pole order zero and total depth `a + t`.
+  have h_depth : plainDepth 0 (a + t) 1 0 = plainDepth a t 1 0 := by
+    funext l u
+    cases l <;> simp [plainDepth, standardDepth]
+    omega
+  rw [← h_depth]
+  refine pointsOver_nonempty_of_gap (stepCost := 0) h_kill (by simp)
+    (steps := twoWindows n β ∪ twoWindows n (-β)) ?_ ?_ c
+  · intro u hu y hy
+    have := mem_Icc.1 (h_nonpos i hu)
+    have := mem_Ico.1 hy
+    exact mem_twoWindows_union_iff.2 (.inl (by omega))
+  · exact sum_nonpos fun y hy ↦ cost_le_of_isUnramified hk (hβ_gap.eq_zero_of_dvd hy)
 
 /-- On an unramified chart let the jumps `u` of the side `S'` lie in `[-η, 0]`, and let `x₀'` be a
 point over `c'` at the letter `i.stepBack 1` before `i`, without pole and of depth `a + t - u` at

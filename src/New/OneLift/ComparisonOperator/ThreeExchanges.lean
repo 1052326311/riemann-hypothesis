@@ -118,7 +118,6 @@ variable {D} (j : D.LiftIndex)
 the `j`-th lift at an infinite place `v` is at most `4 b`, where `b = D.b` is the real number
 `exp D.logB` of the data. -/
 lemma liftWeight_le_four_mul_b (v : D.Φ) : D.liftWeight j v ≤ 4 * D.b := by
-  have hb_pos : 0 < D.b := Real.exp_pos D.logB
   linarith only [D.liftWeight_le_two_mul_b (j := j) (by grind) v]
 
 /-- For a lift index `j`, let `n = j + (t - 11 m - 1) / 2`; this is the exponent of the splitting
@@ -730,8 +729,8 @@ lemma isTameFor_twistedChiMPow_mul_carrierChar :
   have h_weight : (fun τ : InfinitePlace D.E ↦ (card (Fin D.m) : ℤ) - card (DetIndex j τ)) =
       0 + fun τ : InfinitePlace D.E ↦ ↑(D.m + firstFactorCharExp j) - (D.liftWeight j τ : ℤ) := by
     simp [← card_detIndex_add_firstFactorCharExp j]
-  rw [h_weight]
-  exact (isTameFor_twistedChiMPow (c := 2) j ϑ).mul (carrierChar_hasWeight j)
+  simpa only [h_weight] using
+    (isTameFor_twistedChiMPow (c := 2) j ϑ).mul (carrierChar_hasWeight j)
 
 /-- Let `D` be admissible data, `j` a lift index (`1 ≤ j ≤ m`) and `W = E^{3m} ⊕ W'`, where
 `W' = W_j ⊕ (E^j)⁻ ⊕ E^{3m-j} ⊕ W♭`: the space `W_j = D.spaceW j`, its padding, and the definite

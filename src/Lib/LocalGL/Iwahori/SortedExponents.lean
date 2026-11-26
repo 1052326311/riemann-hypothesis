@@ -485,7 +485,7 @@ lemma IsIwahoriEigen.exists_isExponent {B : ρ →ₗ⋆[ℂ] ρ →ₗ[ℂ] ℂ
   -- Evaluation at `y` is a nonzero `ξ`-eigenfunctional on `S`, so `S` contains a `ξ`-eigenform
   -- (`exists_eigenvector_of_functional`).
   obtain ⟨hy₀, hy_fix, hy_eig⟩ := h_eig
-  have hB_pos : ∀ z : ρ, z ≠ 0 → 0 < B z z := hB.1
+  have hB_pos : ∀ z : ρ, z ≠ 0 → 0 < B z z := hB.pos
   let W : Submodule ℂ ρ := levelSpace ρ.ρ proIwahori
   let S : Submodule ℂ (Dual ℂ W) := ((cyclicSpan ρ.ρ x).submoduleOf W).map (B.domRestrict₁₂ W W)
   have h_stable (t : dominantTorus) : ∀ φ ∈ S, (iwahoriHeckeHom ρ t).dualMap φ ∈ S := by
@@ -790,7 +790,7 @@ integral `g : intGL n 𝒪[F]` whose reduction lies in `parabolic b` act on `y` 
 ring that is upper triangular modulo the maximal ideal acts on `y` by the product of the
 `χ (b (e⁻¹ i))` of the residues `R (g i i)` of its diagonal entries. -/
 private lemma New.apply_eq_prod_smul_of_valuation_lt_one {F : Type*} [Field F] [Valued F ℤᵐ⁰]
-    [CompactSpace 𝒪[F]] {N : ℕ} {ρ : Rep ℂ (GL (Fin N) F)} {y : ρ}
+    {N : ℕ} {ρ : Rep ℂ (GL (Fin N) F)} {y : ρ}
     {n : Type*} [Fintype n] [DecidableEq n] (e : n ≃ Fin N) {r : ℕ}
     {χ : Fin r → MulChar (IsLocalRing.ResidueField 𝒪[F]) ℂ} {b : n → Fin r} (hb : Monovary e b)
     {R : F → 𝓀[F]} (hR : ∀ a : 𝒪[F], R a = residue 𝒪[F] a)

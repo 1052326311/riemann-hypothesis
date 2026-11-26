@@ -1,6 +1,5 @@
 module
 
-public import New.Reduction.Data.AdmissibleData
 public import New.Spanning.MainTerm.FiniteSieveSystem
 public import New.Spanning.RemainingTerms.Size
 

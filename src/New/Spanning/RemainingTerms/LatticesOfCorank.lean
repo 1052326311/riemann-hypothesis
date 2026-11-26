@@ -715,7 +715,6 @@ lemma pow_mul_mul_rootDiscr_pow_le_tailScale (S : Filling E 𝔰) [S.IsAdmissibl
       S.tailScale := by
   -- Compare the thousandth powers, which are bounded by powers of `b`.
   have hb : 0 < S.b := by linarith [S.thousand_le_b]
-  have h_rd : 0 < rootDiscr E := rootDiscr_pos E
   have h_exponent : 60 * 𝔰.n * 1000 + (𝔰.k + 1) ≤ 250 * 𝔰.k := by
     have hk : 1000 * (2 * 𝔰.ϱ + 2) ≤ 𝔰.k := S.thousand_mul_le_k
     have hn : 𝔰.n = 𝔰.ϱ + 1 := rfl
