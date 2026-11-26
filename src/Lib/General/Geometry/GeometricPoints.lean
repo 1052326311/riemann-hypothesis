@@ -206,7 +206,7 @@ end GeometricPoints
 ## Geometric reducedness of smooth morphisms and integral abelian varieties
 
 Two instances. A smooth morphism of schemes is geometrically reduced (locally it is étale over a
-polynomial ring, `New.Variety.isReduced_of_algebra_etale`). An abelian scheme over an algebraically
+polynomial ring, `New.Variety.isReduced_of_etale`). An abelian scheme over an algebraically
 closed field is integral. Here `New.IsAbelianScheme` asks a commutative group scheme to be smooth,
 proper and divisible (multiplication by each `m ≠ 0` is onto); divisibility takes the place of the
 usual connectedness of the fibres, and the second instance recovers it.
@@ -218,20 +218,15 @@ open CategoryTheory AlgebraicGeometry Algebra MorphismProperty TensorProduct Set
 
 namespace New.Variety
 
-/-- An étale algebra over an integral domain is reduced. -/
+/-- An étale algebra over an integral domain is reduced. Étaleness of `B` over the domain `A` is
+an explicit hypothesis, from which the algebra structure is inferred. -/
 @[stacks 033B "for an étale algebra over a domain"]
-lemma isReduced_of_algebra_etale (A B : Type*) [CommRing A] [CommRing B] [IsDomain A]
-    [Algebra A B] [Algebra.Etale A B] : IsReduced B := by
+lemma isReduced_of_etale {A B : Type*} [CommRing A] [CommRing B] [IsDomain A] {alg : Algebra A B}
+    (h_etale : Algebra.Etale A B) : IsReduced B := by
   -- `B` is flat over `A`, so it embeds in `K ⊗[A] B`, which is unramified over the field `K`.
   let K : Type _ := FractionRing A
   have : IsReduced (K ⊗[A] B) := FormallyUnramified.isReduced_of_field K _
   exact isReduced_of_injective _ (includeRight_injective (IsFractionRing.injective A K))
-
-/-- The form of `New.Variety.isReduced_of_algebra_etale` in which étaleness of `B` over the domain
-`A` is an explicit hypothesis, from which the algebra structure is inferred. -/
-lemma isReduced_of_etale {A B : Type*} [CommRing A] [CommRing B] [IsDomain A] {alg : Algebra A B}
-    (h_etale : Algebra.Etale A B) : IsReduced B :=
-  isReduced_of_algebra_etale A B
 
 /-- A smooth morphism of schemes is geometrically reduced. -/
 instance {X Y : Scheme.{0}} (s : X ⟶ Y) [hs : Smooth s] : GeometricallyReduced s := by
