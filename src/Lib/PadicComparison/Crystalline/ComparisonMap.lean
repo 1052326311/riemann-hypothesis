@@ -473,7 +473,7 @@ lemma hasCrysComparison_of_etale (G : Type) [AddCommMonoid.{0} G] [Module ℚ≥
     exists_isCompletionBijective_witt_tensor G T h_perf
   -- `B ≅ OC ⊗ T`, so `Hom(B, -)` on `OC`-algebras is `Hom(T, -)` over `Ainf`.
   let iso : reprBy B ≅ restrictAlg Ainf OC ⋙ reprBy (.of Ainf T) :=
-    reprFunctor.mapIso (isoMk ((bc _).symm.trans (liftIso.restrictScalars _))).op ≪≫
+    reprFunctor.mapIso (CommAlgCat.isoMk ((bc OC).symm.trans (liftIso.restrictScalars OC))).op ≪≫
       isoOfAppBijective _ (pointMap_algBaseChange_unit_bijective (.of Ainf T))
   have h_witt : HasCrysComparison (restrictAlg Ainf OC ⋙ reprBy (.of Ainf T)) :=
     hasCrysComparison_of_witt ⟨b, h_perf, h_reg⟩ k hk
@@ -1210,8 +1210,7 @@ lemma span_range_crysComparison_pull_eq_top (hi_iso : IsIso i) [IsDomain S]
   have h_torsionFree : IsTorsionFree S Amax := by
     -- `p` is regular on `Amax`, and every nonzero element of `S` divides a power of `p`.
     refine isTorsionFree_of_dvd_pow h.isSMulRegular_natCast fun ht ↦ ?_
-    obtain ⟨k, hk⟩ := associated_pow_irreducible ht hp
-    exact ⟨k, hk.dvd⟩
+    exact (associated_pow_irreducible ht hp).imp fun _ hk ↦ hk.dvd
   algebraize [r, (algebraMap Amax Bmax).comp (algebraMap S Amax)]
   let N : CrysTest S ⥤ Ab := freeAb.obj (pdReduction r ⋙ V.toFunctor)
   -- Completed base change `L` along `S → Amax` is left adjoint to restriction of scalars.

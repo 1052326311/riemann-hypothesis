@@ -327,7 +327,6 @@ lemma exists_iwahoriHeckeHom_injective [CompactSpace 𝒪[F]] (hϖ : v ϖ.val = 
   intro a x hx
   -- A cyclic permutation makes `s a` an element `n` that normalises `proIwahori`, so `proIwahori`
   -- fixes `y`.
-  have hN : NeZero N := a.neZero
   let n : GL (Fin N) F := permGL (finCycle a)⁻¹ * diagGL (s a)
   let y : ρ := ρ n x
   have h_conj (k : GL (Fin N) F) (hk : k ∈ proIwahori) : n⁻¹ * k * n ∈ proIwahori := by

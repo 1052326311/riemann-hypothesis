@@ -963,7 +963,6 @@ lemma le_finrank_ramifiedSourceForms {P : Parameters} (D : Data P) :
 
 /-- The proportion `f / (N - 1)` is at most `b⁻⁸`, because `f ≤ b` and `b⁹ + 1 ≤ N`. -/
 lemma f_div_N_sub_one_le {P : Parameters} (D : Data P) : D.f / (D.N - 1 : ℝ) ≤ (D.b ^ 8)⁻¹ := by
-  have hb : 0 < D.b := HasLogBound.pos D
   have hf : D.f ≤ D.b := D.le_of_hasLogBound
   have hN : D.b ^ 9 ≤ D.N - 1 := le_sub_iff_add_le.2 D.le_of_hasLogBound
   calc D.f / (D.N - 1 : ℝ) ≤ D.b / D.b ^ 9 := by gcongr

@@ -847,12 +847,12 @@ lemma eq_and_mem_classUnipotent_of_besselS [hS : S.IsAdmissible] {c d : S.Classe
     eq_and_eq_one_of_doubleCoset_rep Quotient.out_eq h_free η h_level
   exact ⟨rfl, by simpa using hu, by simpa [translateByClassReps] using hγ_level⟩
 
-/-- Let `S` be admissible (`S.IsAdmissible`), `c` a class in `S.Classes` with representative `h_c`,
-and `u` in `𝖴(𝔸_f)`. There is a rational `u₀ ∈ 𝖴` such that
+/-- Let `c` be a class in `S.Classes` with representative `h_c`, and let `u` belong to `𝖴(𝔸_f)`.
+There is a rational `u₀ ∈ 𝖴` such that
 `S.translateByClassReps c c u₀ = h_c⁻¹ u₀ h_c` lies in `u K(M)`, with `K(M) = S.principalLevel`.
 Moreover `S.unipotentChar`, the character u ↦ ψ_f(−σ(u)/(Mϖ)), takes the same value at
 `S.ratToFin u₀` and at `u`. -/
-lemma exists_rat_approx_unipotentChar_eq [_hS : S.IsAdmissible] (c : S.Classes) {u : S.GFin}
+lemma exists_rat_approx_unipotentChar_eq (c : S.Classes) {u : S.GFin}
     (hu : u ∈ besselU) :
     ∃ u₀ : S.G E, u₀ ∈ besselU ∧
       u⁻¹ * S.translateByClassReps c c u₀ ∈ S.principalLevel ∧
@@ -897,12 +897,12 @@ lemma exists_besselS_mem_termsOver [hS : S.IsAdmissible] (c : S.Classes) {s : S.
   exact mul_mem h_approx (inv_mem (hS.sourceLevel_eq.le a.property))
 
 /-- Freeness in rank at most `𝔰.k`, the rank of the definite space X₀. Let `E` be a CM field that
-contains a primitive 5040th root of unity, and let the filling data `S` over `E` satisfy the
-standing hypotheses `S.IsAdmissible`. For `i = 0, 1`, `S.chosenPlaces i` is the chosen set of finite
-places of `E` of norm the prime `S.levelPrime i`. Let `γ` be a rational point of the standard
-unitary group in `n` variables, `|n| ≤ 𝔰.k`, and `g` a finite adelic point. If `g⁻¹ γ g` is integral
-(lies in `stdLevel E n`) and reduces to `1` at every place of `S.chosenPlaces i`, then `γ = 1`. -/
-lemma eq_one_of_reduceAt_eq_one [_hS : S.IsAdmissible] [HasPrimitiveRoot5040 E] {n : Type}
+contains a primitive 5040th root of unity, and let `S` be filling data over `E`. For `i = 0, 1`,
+`S.chosenPlaces i` is the chosen set of finite places of `E` of norm the prime `S.levelPrime i`.
+Let `γ` be a rational point of the standard unitary group in `n` variables, `|n| ≤ 𝔰.k`, and `g` a
+finite adelic point. If `g⁻¹ γ g` is integral (lies in `stdLevel E n`) and reduces to `1` at every
+place of `S.chosenPlaces i`, then `γ = 1`. -/
+lemma eq_one_of_reduceAt_eq_one [HasPrimitiveRoot5040 E] {n : Type}
     [Fintype n] [DecidableEq n] (hn : card n ≤ 𝔰.k) (i : Fin 2) {γ : U (stdSpace E n).J}
     {g : Gf E n} (h_int : g⁻¹ * (stdSpace E n).embFin γ * g ∈ stdLevel E n)
     (h_red : ∀ w : S.chosenPlaces i,
