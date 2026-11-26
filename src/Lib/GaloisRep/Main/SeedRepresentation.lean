@@ -542,7 +542,7 @@ places containing `N` and those of `levelPlaces d S w₀ w₁ w'`, `N` is prime 
 lies over that place too if `ℓ ∈ w'`, then `v`, and `w'` if `w'` and `star w'` lie outside `S`, are
 safe, `𝔑 ∉ star w₀`, and `𝔑` lies in `w₁` but not in `star w₁`. -/
 private lemma New.GaloisRep.isSafe_and_mem_of_mem_iff {ℓ : ℕ} {E : Type} {d : ℕ}
-    [ThePrime ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
+    [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
     {S : Finset (FinPlace E)} {w₀ w₁ v w' : FinPlace E} {N : ℕ+} {𝔑 : 𝓞 E}
     (h𝔑_mem : ∀ w : FinPlace E,
       𝔑 ∈ w.asIdeal ↔ ((N : ℕ) : 𝓞 E) ∈ w.asIdeal ∨ w ∈ levelPlaces d S w₀ w₁ w')
@@ -567,8 +567,8 @@ open Classical in
 `IsSplitPrimeToDisc`, neither that place nor its conjugate lies below `w₁` or below a place of `S`,
 and it is prime to `N`; here `𝔑` lies exactly in the places that contain `N` and in those of
 `levelPlaces d S w₀ w₁ w'`. -/
-private lemma New.GaloisRep.isSafe_of_notMem_image_below {ℓ : ℕ} {E : Type} {d : ℕ}
-    [ThePrime ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
+private lemma New.GaloisRep.isSafe_of_notMem_image_below {E : Type} {d : ℕ}
+    [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
     {S : Finset (FinPlace E)} {w₀ w₁ w' u : FinPlace E} {N : ℕ+} {𝔑 : 𝓞 E}
     (h𝔑_mem : ∀ w : FinPlace E,
       𝔑 ∈ w.asIdeal ↔ ((N : ℕ) : 𝓞 E) ∈ w.asIdeal ∨ w ∈ levelPlaces d S w₀ w₁ w')
@@ -586,8 +586,8 @@ open Classical in
 `𝔑` lies in `w₀`. Here `𝔑` lies exactly in the places that contain `N` and in those of
 `levelPlaces d S w₀ w₁ w'`, each place of `insert w₁ S` or its conjugate lies in that set
 (`h_cover`), `w₀ ∈ S`, and `𝔑` is prime to the conjugate of `w₀`. -/
-private lemma New.GaloisRep.mem_and_notMem_of_isSafe {ℓ : ℕ} {E : Type} {d : ℕ}
-    [ThePrime ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
+private lemma New.GaloisRep.mem_and_notMem_of_isSafe {E : Type} {d : ℕ}
+    [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
     {S : Finset (FinPlace E)} {w₀ w₁ w' : FinPlace E} {N : ℕ+} {𝔑 : 𝓞 E}
     (h𝔑_mem : ∀ w : FinPlace E,
       𝔑 ∈ w.asIdeal ↔ ((N : ℕ) : 𝓞 E) ∈ w.asIdeal ∨ w ∈ levelPlaces d S w₀ w₁ w')
@@ -602,8 +602,8 @@ the integral points trivial at `S ∋ w₀`, and each place of `insert w₁ S` o
 `levelPlaces d S w₀ w₁ w'`, then some multiple `𝔑` of `N` lies exactly in the places containing `N`
 and those of that set, and each `u` whose inverse transpose lies in `levelGU (Fin a) 𝔑` fixes `f`,
 is `≡ 1` modulo `w₀` and lies in `proIwahori` at `w₁`. -/
-private lemma New.GaloisRep.exists_levelGU_le_rightStabilizer {ℓ : ℕ} {E : Type} {d : ℕ}
-    [ThePrime ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
+private lemma New.GaloisRep.exists_levelGU_le_rightStabilizer {E : Type} {d : ℕ}
+    [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
     {a : ℕ} {W : Type} {f : Gf E (Fin a) → W → ℂ}
     (hf_open : IsOpen ((rightStabilizer f : Subgroup (Gf E (Fin a))) : Set (Gf E (Fin a))))
     {S : Finset (FinPlace E)} (hf_off : ∀ k ∈ stdLevel E (Fin a) ⊓ Gf.trivialOn (Fin a) S,
