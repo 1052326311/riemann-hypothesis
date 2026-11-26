@@ -298,7 +298,6 @@ lemma IsMarked.mul_sum_heckeScalingExponent_le_loss (hΛ : D.IsMarked Λ) :
       1 / (D.m ^ 2 * D.f) * D.collisionExponent p : ℝ) ≤ D.loss p := by
   have hp_pos : (0 : ℝ) < p := mod_cast hp.1.pos
   have hm_pos : (0 : ℝ) < D.m := HasLogBound.pos D
-  have hf_pos : (0 : ℝ) < D.f := HasLogBound.pos D
   -- Each a-place induces one prime, so the `A_l` add up to at most `a f`.
   have h_sum : ∑ l ∈ Λ, heckeScalingExponent l ≤ D.a * D.f :=
     (sum_heckeScalingExponent Λ).trans_le (Nat.mul_le_mul_left _ (card_le_univ _))
