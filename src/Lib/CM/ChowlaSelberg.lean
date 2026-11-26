@@ -155,7 +155,7 @@ lemma classGroup_sq_bijective :
   obtain ⟨w, hw : s * sqrtNegDInt d ^ m = (star α + I.absNorm) * w⟩ :=
     span_singleton_le_span_singleton.1 (hJ_span.ge.trans mul_le_left)
   refine (mk0_eq_one_iff _).2 ⟨w, ?_⟩
-  show I = span {w}
+  change I = span {w}
   simpa [hJ_def, hw, ← span_singleton_mul_span_singleton, h_ne] using hJ_span
 
 open scoped Classical in
@@ -173,7 +173,7 @@ lemma eulerFactor_mul_eq_prod_inv {p : ℕ} [hp : Fact p.Prime] {w J : FinPlace 
   obtain ⟨rfl, h_norm⟩ | ⟨hwq, hJq, h_span⟩ := h_split
   · -- Inert: one prime of norm `p ^ 2`, and the symbol is `-1`.
     have h_chi : chiK d p = -1 := by grind [hp.out.one_lt, lt_self_pow₀]
-    simp [h_chi, h_norm, sq, Complex.natCast_mul_natCast_cpow, ← mul_inv, ← mul_self_sub_mul_self]
+    simp [h_chi, h_norm, sq, Complex.natCast_mul_cpow, ← mul_inv, ← mul_self_sub_mul_self]
   obtain ⟨rfl, h_chi : chiK p p = 0⟩ | ⟨hp_ne, h_chi⟩ := chiK_cases d p
   · -- Ramified: `w * J` is a square, so `w = J`, as coprime factors of a square are squares.
     have h_sq : w.asIdeal * J.asIdeal = span {sqrtNegDInt p} ^ 2 := by

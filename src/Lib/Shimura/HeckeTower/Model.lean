@@ -189,7 +189,7 @@ def entryConj {R : Type*} [CommRing R] [StarRing R] :
   (invTransposeGL.toMonoidHom.comp (U 1).subtype).codRestrict (U (1 : Matrix n n R)) fun g ↦
     -- transpose the equation that makes `g⁻¹` unitary
     mem_unitaryGroupOf_iff.2 <| mul_eq_one_comm.1 (by
-      show g⁻¹.1.1ᵀ * (g⁻¹.1.1ᵀᴴ * 1) = 1
+      change g⁻¹.1.1ᵀ * (g⁻¹.1.1ᵀᴴ * 1) = 1
       simpa [star_eq_conjTranspose, -coe_units_inv, conjTranspose, transpose_map] using
         congrArg Matrix.transpose (mem_unitaryGroupOf_iff.1 g⁻¹.2))
 
@@ -205,7 +205,7 @@ lemma conjAtSplit_mem_GU : conjAtSplit w g ∈ GU E n := ⟨1, rfl, 1, by simp�
 
 @[simp]
 lemma evalAt_conjAtSplit : (conjAtSplit w g).map (evalAt w.1) = invTransposeGL g := by
-  show invTransposeGL ((ofSplitPlace w.2 g).atPlace w.1) = invTransposeGL g
+  change invTransposeGL ((ofSplitPlace w.2 g).atPlace w.1) = invTransposeGL g
   rw [atPlace_ofSplitPlace]
 
 /-- At a place `u` other than `w` and its conjugate, the component of `conjAtSplit w g` is `1`. -/
@@ -252,7 +252,7 @@ lemma commute_conjAtSplit {g : GL n (𝔸f E)} (hg : g ∈ GU E n ⊓ (dualCompo
 `localIntGL n w` of `GL_n(E_w)`. -/
 lemma conjAtSplit_mem_intGL_iff {g : GL n (LocField (w : FinPlace E))} :
     conjAtSplit w g ∈ intGL n (Ô E) ↔ g ∈ localIntGL n w.1 := by
-  show invTransposeGL (ofSplitPlace w.2 g).val ∈ intGL n (Ô E) ↔ g ∈ localIntGL n w.1
+  change invTransposeGL (ofSplitPlace w.2 g).val ∈ intGL n (Ô E) ↔ g ∈ localIntGL n w.1
   rw [invTransposeGL_mem_intGL]
   exact ofSplitPlace_mem_stdLevel w.2 g
 
@@ -282,7 +282,7 @@ lemma mem_levelGU_of_map_evalAt_eq {g : GL n (𝔸f E)} (hGU : g ∈ GU E n) (hi
 lemma isOpen_comap_conjAtSplit (h𝔑 : 𝔑 ≠ 0) :
     IsOpen ((levelGU n 𝔑).comap (conjAtSplit w)).carrier := by
   have h_cont : Continuous (conjAtSplit (n := n) w) := .of_coeHom_comp
-    (Units.continuous_coe_inv.comp (continuous_ofSplitPlace w.2).subtype_val).matrix_transpose
+    (Units.continuous_coe_inv.comp (continuous_ofSplitPlace w.2).subtypeVal).matrix_transpose
   exact .and (by simp) ((isOpen_congruenceGL_span h𝔑).preimage h_cont)
 
 /-- Let w be split with 𝔑 ∉ w̄, and let κ ∈ K(𝔑). Then `conjAtSplit w (dualComponent w κ)`, the

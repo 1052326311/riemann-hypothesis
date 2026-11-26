@@ -229,7 +229,7 @@ lemma pairing_mem_smoothInvariants
   obtain ⟨ψ, hψ_smooth, hψ_equivariant⟩ := ψ
   refine ⟨Set.forall_mem_range.2 ?_, ?_⟩
   · -- Both forms transform under `V.weightRep`, which preserves `B`.
-    show ∀ (γ : U V.J) (g : Gf E n), B (φ (V.embFin γ * g)) (ψ (V.embFin γ * g)) = B (φ g) (ψ g)
+    change ∀ (γ : U V.J) (g : Gf E n), B (φ (V.embFin γ * g)) (ψ (V.embFin γ * g)) = B (φ g) (ψ g)
     simp [hφ_equivariant _, hψ_equivariant _, hB]
   · -- The pairing is fixed by every translation that fixes both forms.
     have h_open : (rightStabilizer φ ⊓ rightStabilizer ψ).IsOpen := .inter hφ_smooth hψ_smooth
