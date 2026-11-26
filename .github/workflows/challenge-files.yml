@@ -49,6 +49,13 @@ permissions:
   contents: read
   pull-requests: read
 
+# Only the result for a pull request's newest head matters, and the job reads the pull request's
+# current base and head from the API, so a newer run, whether from a push or a dispatch, makes an
+# older one for the same pull request redundant.
+concurrency:
+  group: challenge-files-${{ github.event.pull_request.number || inputs.pr_number }}
+  cancel-in-progress: true
+
 jobs:
   frozen:
     name: Comparator challenge files and build configuration are unchanged
