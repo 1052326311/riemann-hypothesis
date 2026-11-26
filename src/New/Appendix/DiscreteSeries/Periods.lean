@@ -469,7 +469,6 @@ lemma measure_large_ball_le_pow_mul_small_ball {ι : Type} [Fintype ι] [Decidab
     {ζ : ι → ℤˣ} (J : S →* USign ζ) (hβ : 10 ^ 12 ≤ β) :
     ν {s : S | ‖(J s : Matrix ι ι ℂ)‖ ≤ β + 1} ≤ ENNReal.ofReal (β ^ (16 * card ι ^ 2)) *
       ν {s : S | ‖(J s : Matrix ι ι ℂ) - 1‖ ≤ (200 * β ^ 5)⁻¹} := by
-  have hβ16 : 16 ≤ β := le_trans (by norm_num) hβ
   have h_radii : 3 * (200 * β ^ 5) * (β + 1) ^ 2 ≤ β ^ 8 := by
     field_simp
     nlinarith
