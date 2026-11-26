@@ -629,8 +629,9 @@ lemma HodgeTatePair.contractionPow_cup {a : ℕ} {M L : AbFunctor HodgeTatePair}
     -- agree because the degree-zero component `algebraMapInv` is multiplicative.
     simp [cross, cup_comp_homClass_right, ← homClass_comp, contractionPow, comp_assoc,
       cup_comp_homClass_left]
-    erw [← homClass_comp, ← homClass_comp]
-    refine congrArg (comp (x.toTotalH.cup y)) (congrArg TotalH.homClass ?_)
+    refine congrArg (comp (x.toTotalH.cup y)) ?_
+    refine Eq.trans ?_ ((homClass_comp ..).trans (congrArg (comp _) (homClass_comp ..)))
+    apply congrArg TotalH.homClass
     exact abTensor_hom_ext fun X _ _ ↦ congrArg _ ((algebraMapInv (R := X.GenericRing)).map_mul ..)
   | succ l ih =>
     -- By the Leibniz rule the class of `contractionCocycle` after the wedge product splits into the
