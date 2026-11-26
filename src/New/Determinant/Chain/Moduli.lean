@@ -1,6 +1,8 @@
-import New.Determinant.AuxiliaryForms.GridPaths
-import New.OneLift.ComparisonOperator.ExchangeData
-import New.OneLift.HeckeValues.TwistedRatio
+module
+
+public import New.Determinant.AuxiliaryForms.GridPaths
+public import New.OneLift.ComparisonOperator.ExchangeData
+public import New.OneLift.HeckeValues.TwistedRatio
 
 /-!
 # Ratios of Hecke values and heights of functions of the twist
@@ -25,6 +27,8 @@ Notions from other files:
 * `New.Data.CriticalPair`: an integer 1 ≤ z ≤ t and a character ν of weight −c, z ≤ c ≤ 4b, with
   tame part supported on the chosen places.
 -/
+
+@[expose] public section
 
 noncomputable section
 

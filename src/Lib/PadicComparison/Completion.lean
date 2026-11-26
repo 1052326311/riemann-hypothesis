@@ -1,4 +1,6 @@
-import Lib.General.Algebra.CohomologyBaseChange
+module
+
+public import Lib.General.Algebra.CohomologyBaseChange
 
 /-!
 # Derived completeness, adic approximation of comparisons and completed base change
@@ -45,6 +47,8 @@ discrete valuation ring, with bounded torsion shown by hand. Source: Stacks Proj
 0G1U, 09BA, 0CQY; B. Bhatt, Torsion completions are bounded, JPAA (2019); L. Positselski,
 Contraadjusted modules, contramodules, and reduced cotorsion modules, arXiv 1605.03934.
 -/
+
+@[expose] public section
 
 noncomputable section
 

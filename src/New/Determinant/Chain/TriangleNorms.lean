@@ -1,4 +1,6 @@
-import New.UpperBound.Objects.RowChain
+module
+
+public import New.UpperBound.Objects.RowChain
 
 /-!
 # Orders of block triangular groups and Gram forms of chains in triangles
@@ -37,6 +39,8 @@ Notions from other files:
 * `New.compUpTo L j`: for linear maps `L i : M i → M (i + 1)`, the composite
   `L (j - 1) ∘ ⋯ ∘ L 0 : M 0 → M j`.
 -/
+
+@[expose] public section
 
 /-! ## Order of a group of block triangular matrices -/
 

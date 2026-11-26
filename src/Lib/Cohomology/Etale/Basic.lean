@@ -1,4 +1,6 @@
-import Lib.General.Algebra.AbsIntegrallyClosed
+module
+
+public import Lib.General.Algebra.AbsIntegrallyClosed
 
 /-!
 # Cohomology of functors as Ext: test rings, points, functoriality, coefficients
@@ -37,6 +39,8 @@ Notions from other files:
 
 Known; see `Lib.Cohomology.Etale.FilteredLimits` and `Lib.Cohomology.WoodsHole` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

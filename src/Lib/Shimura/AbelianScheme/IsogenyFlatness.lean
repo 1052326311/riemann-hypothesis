@@ -1,5 +1,7 @@
-import Lib.General.Geometry.GeometricPoints
-import Lib.General.Geometry.PointsOfProperSchemes
+module
+
+public import Lib.General.Geometry.GeometricPoints
+public import Lib.General.Geometry.PointsOfProperSchemes
 
 /-!
 # Isogenies: factorisation of homomorphisms, finiteness and flatness
@@ -28,6 +30,8 @@ result and a local ring for the second. Source: B. Edixhoven, G. van der Geer, B
 Varieties (draft), ch. IV §3; The Stacks project, Section 0BF9; EGA IV and S. Bosch, W.
 Lütkebohmert, M. Raynaud, Néron Models (1990) 7.3, 8.1.
 -/
+
+@[expose] public section
 
 open CategoryTheory Category AlgebraicGeometry Limits MonoidalCategory CartesianMonoidalCategory
   Algebra TensorProduct HasRingHomProperty MorphismProperty RingHom Module Flat LinearMap

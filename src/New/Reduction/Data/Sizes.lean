@@ -1,4 +1,6 @@
-import New.Reduction.Data.LevelAndTwists
+module
+
+public import New.Reduction.Data.LevelAndTwists
 
 /-!
 # Sizes of the data
@@ -32,6 +34,8 @@ Notions from other files:
   discriminant `rd_E = D.rootDisc`.
 * `P.bigOmega s`: the real number `Ω = exp (γ - Re L'/L(1, χ_K)) · 2π / rd_E`.
 -/
+
+@[expose] public section
 
 namespace New.Data
 
