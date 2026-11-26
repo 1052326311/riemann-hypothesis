@@ -147,7 +147,7 @@ lemma AgreeModEps.ringChar_smul_and_smul_eq_zero (hq : IsPullbackAlong (sqZeroRe
     have h_tiny : IsInfinitesimal ψ (τ ≫ y) := by
       simpa [IsInfinitesimal, eq_zero_iff_factors_zero_section] using
         h_agree B b (homMk _ h_over ≫ τ)
-    show (τ ≫ y').left = (τ ≫ 0).left
+    change (τ ≫ y').left = (τ ≫ 0).left
     rw [hy' _ ψ τ h_tiny, AddMonObj.comp_zero]
   constructor
   · refine h_test fun {C B} s ψ _ τ h_tiny ↦ ?_

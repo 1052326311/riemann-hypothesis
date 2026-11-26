@@ -102,7 +102,7 @@ lemma Variety.locallyQuasiFinite_of_pull_picClass [IsSeparated B.hom] {ι : Type
       ← Category.assoc] at ha hi hj ⊢
     have h_one : PointFn.ofSection (a i) R (t ≫ y) * u i R (t ≫ y) = 1 := by
       rw [← ha i i R (t ≫ y) hi, (N.pow m).transition_self i R _ hi]
-    show (N.pow m).transition j k R ((t ≫ x) ≫ p) =
+    change (N.pow m).transition j k R ((t ≫ x) ≫ p) =
       (N.pow m).transition j i R ((t ≫ x) ≫ p) * (N.pow m).transition i k R ((t ≫ y) ≫ p)
     rw [ha k j R (t ≫ x) hj, ha i j R (t ≫ x) hj, ha k i R (t ≫ y) hi, h_val k, h_val i]
     linear_combination -(PointFn.ofSection (a k) R (t ≫ y) * u j R (t ≫ x)) * h_one
