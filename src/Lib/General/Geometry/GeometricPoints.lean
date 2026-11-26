@@ -206,7 +206,7 @@ end GeometricPoints
 ## Geometric reducedness of smooth morphisms and integral abelian varieties
 
 Two instances. A smooth morphism of schemes is geometrically reduced (locally it is étale over a
-polynomial ring, `New.Variety.isReduced_of_algebra_etale`). An abelian scheme over an algebraically
+polynomial ring, `New.Variety.isReduced_of_etale`). An abelian scheme over an algebraically
 closed field is integral. Here `New.IsAbelianScheme` asks a commutative group scheme to be smooth,
 proper and divisible (multiplication by each `m ≠ 0` is onto); divisibility takes the place of the
 usual connectedness of the fibres, and the second instance recovers it.
@@ -218,20 +218,15 @@ open CategoryTheory AlgebraicGeometry Algebra MorphismProperty TensorProduct Set
 
 namespace New.Variety
 
-/-- An étale algebra over an integral domain is reduced. -/
+/-- An étale algebra over an integral domain is reduced. Étaleness of `B` over the domain `A` is
+an explicit hypothesis, from which the algebra structure is inferred. -/
 @[stacks 033B "for an étale algebra over a domain"]
-lemma isReduced_of_algebra_etale (A B : Type*) [CommRing A] [CommRing B] [IsDomain A]
-    [Algebra A B] [Algebra.Etale A B] : IsReduced B := by
+lemma isReduced_of_etale {A B : Type*} [CommRing A] [CommRing B] [IsDomain A] {alg : Algebra A B}
+    (h_etale : Algebra.Etale A B) : IsReduced B := by
   -- `B` is flat over `A`, so it embeds in `K ⊗[A] B`, which is unramified over the field `K`.
   let K : Type _ := FractionRing A
   have : IsReduced (K ⊗[A] B) := FormallyUnramified.isReduced_of_field K _
   exact isReduced_of_injective _ (includeRight_injective (IsFractionRing.injective A K))
-
-/-- The form of `New.Variety.isReduced_of_algebra_etale` in which étaleness of `B` over the domain
-`A` is an explicit hypothesis, from which the algebra structure is inferred. -/
-lemma isReduced_of_etale {A B : Type*} [CommRing A] [CommRing B] [IsDomain A] {alg : Algebra A B}
-    (h_etale : Algebra.Etale A B) : IsReduced B :=
-  isReduced_of_algebra_etale A B
 
 /-- A smooth morphism of schemes is geometrically reduced. -/
 instance {X Y : Scheme.{0}} (s : X ⟶ Y) [hs : Smooth s] : GeometricallyReduced s := by
@@ -351,6 +346,15 @@ namespace New
 
 open CategoryTheory AlgebraicGeometry Limits pullback Set Scheme Spec Pullback Over PointFn Filter
 
+/-- The base change of a reduced scheme along a flat preimmersion is reduced: its stalks are those
+of the scheme. -/
+lemma Variety.isReduced_pullback_of_flat {X Y T : Scheme} (f : X ⟶ T) (g : Y ⟶ T)
+    [IsReduced X] [Flat g] [IsPreimmersion g] : IsReduced (pullback f g) := by
+  have (x : ↥(pullback f g)) : IsReduced ((pullback f g).presheaf.stalk x) := ⟨fun a ha ↦ by
+    obtain ⟨b, rfl⟩ := (fst f g).stalkMap_surjective x a
+    simp [((IsNilpotent.map_iff (stalkMap_injective_of_flat _ _)).1 ha).eq_zero]⟩
+  exact isReduced_of_isReduced_stalk _
+
 /-- The points of a finite set `C` that lie near `s` specialise to `s`. -/
 lemma eventually_specializes_of_finite {T : Type*} [TopologicalSpace T] {C : Set T}
     (hC : C.Finite) (s : T) : ∀ᶠ t in nhds s, t ∈ C → t ⤳ s := by
@@ -372,13 +376,8 @@ lemma isSeparatingFamily_stalk {S : Scheme} {W : Type} {A : Scheme} {z : A ⟶ S
         Spec (.of ℂ) ⟶ pullback z (S.fromSpecStalk s)) := by
   let P : Scheme := pullback z (S.fromSpecStalk s)
   let π : P ⟶ A := fst z (S.fromSpecStalk s)
-  refine ⟨?_, π.isEmbedding.dense_iff.2 fun y ↦ ?_⟩
-  · -- The stalk maps of `π` are bijective, and the stalks of `A` are reduced.
-    suffices ∀ y : P, _root_.IsReduced (P.presheaf.stalk y) from isReduced_of_isReduced_stalk P
-    intro y
-    let e : A.presheaf.stalk (π y) ≃+* P.presheaf.stalk y := .ofBijective (π.stalkMap y).hom
-      ⟨stalkMap_injective_of_flat π y, π.stalkMap_surjective y⟩
-    exact isReduced_of_injective e.symm e.symm.injective
+  refine ⟨Variety.isReduced_pullback_of_flat z (S.fromSpecStalk s),
+    π.isEmbedding.dense_iff.2 fun y ↦ ?_⟩
   -- Of the finitely many images in `S`, only those that specialise to `s` lie near `s`, and so
   -- near `z (π y)`, which specialises to `s`.
   let c : Spec (.of ℂ) := IsLocalRing.closedPoint ℂ

@@ -417,7 +417,8 @@ lemma New.Orbital.integrable_mul_dsCoeff_conj [Nonempty n] (hg : l.HasLargeGap (
   -- the decay |l.dsCoeff g| ≤ (2 / ‖g‖)^(mN) of `norm_dsCoeff_le_pow`.
   set N : ℕ := 4 * card n ^ 2 + 1
   refine ((DiscreteSeries.integral_decay_le _ .monoidHom_id (c := 2 * N) (by omega) 1).1.const_mul
-    (2 ^ (#(oppositePairs ε) * N * 2))).mono' (by fun_prop)
+    (2 ^ (#(oppositePairs ε) * N * 2))).mono'
+    (continuous_const.mul ψ.continuous).aestronglyMeasurable
     (.of_forall fun x ↦ (norm_le_of_nonempty _).2 fun k ↦ ?_)
   obtain ⟨y, t, rfl⟩ := exists_conj_diagTorusK k
   let u : USign ε := y⁻¹ * x
@@ -443,7 +444,7 @@ lemma New.Orbital.integrable_mul_dsCoeff_conj [Nonempty n] (hg : l.HasLargeGap (
     _ ≤ ((2 * ‖g.val.val‖) ^ #(oppositePairs ε) / (‖u.val.val‖ / 2) ^ 2) ^ N *
         (2 / ‖g.val.val‖) ^ (#(oppositePairs ε) * N) := by
       grw [minor, DiscreteSeries.norm_dsCoeff_le_pow hg gap]
-    _ = _ := by simp [norm_u, div_pow, field, mul_pow, ← pow_mul, mul_comm]
+    _ = _ := by simp [norm_u, div_pow, field, mul_pow, ← pow_mul]
 
 /-- If all coefficients of a vector against an orthonormal family are integers, only finitely many
 are not zero: they tend to zero by Bessel's inequality. -/

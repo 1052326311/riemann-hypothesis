@@ -1108,10 +1108,10 @@ The heads of these files give an overview of a theory: `Lib/ClassField/Global/Ar
 ### SiegelWeil: Siegel–Weil and Rallis formulas
 
 - `Lib/SiegelWeil/Mass` (292): Masses of definite hermitian lattices and ideal zeta bounds for adelic Gauss sums
-- `Lib/SiegelWeil/UnramifiedSeries/VacuumCoefficients` (145): Vacuum coefficients and coset representatives
+- `Lib/SiegelWeil/UnramifiedSeries/VacuumCoefficients` (144): Vacuum coefficients and coset representatives
 - `Lib/SiegelWeil/RallisInner/Doubling` (435): Doubling: clean data, the doubling identity and the inner product formula
 - `Lib/SiegelWeil/RallisInner/VacuumSummability` (93): Summability of the vacuum coefficients from the doubling formula
-- `Lib/SiegelWeil/UnramifiedSeries/RallisSeries` (294): The series of translates weighted by the coefficients of the vacuum
+- `Lib/SiegelWeil/UnramifiedSeries/RallisSeries` (293): The series of translates weighted by the coefficients of the vacuum
 - `Lib/SiegelWeil/RallisInner/DualDatum` (274): The dual datum of a vacuum
 - `Lib/SiegelWeil/RallisInner/SharpData` (645): Rallis' inner product formula for sharp data and injectivity of the theta lift
 - `Lib/SiegelWeil/Reproduction` (288): Holomorphic Fock vectors and a reproducing formula by theta lifts

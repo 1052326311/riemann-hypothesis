@@ -442,9 +442,9 @@ lemma inducesPlacePair_mk (σ : E →+* ℂ) (h : inducedPrime σ = w) :
   · -- `ιℓ ∘ Φ ∘ conj` is `ιℓ ∘ star Φ`, and `star Φ = σ` induces `w`
     right
     show placeOfEmb (weightEmbedding ιℓ.toRingHom (InfinitePlace.mk σ)) = w
-    -- elaborator: `isConj_complexConj` is stated with `complexConj E`, which matches
-    -- `starRingEnd E` only up to unfolding, hence `erw`
-    erw [weightEmbedding, comp_assoc, ← isConj_complexConj]
+    -- `isConj_complexConj` is stated with `complexConj E`, which is `starRingEnd E` by unfolding
+    rw [weightEmbedding, comp_assoc, show starRingEnd E = (complexConj E : E →+* E) from rfl,
+      ← isConj_complexConj]
     exact (congrArg inducedPrime hσ).trans h
 
 /-- An element supported at `w` and its conjugate has component `1` over `τ`, unless `w` lies above
@@ -464,8 +464,9 @@ lemma padicComponents_ofSplitPlace {τ : InfinitePlace E}
   have h_ne : u ≠ w := fun h_eq ↦ h_not (.inr h_eq)
   have h_star_ne : star u ≠ w := fun h_eq ↦ h_not (.inl (by rw [← h_eq, star_star]))
   have h_one : (ofSplitPlace hw g).atPlace u = 1 := atPlace_ofSplitPlace_of_ne hw g h_ne h_star_ne
-  -- `erw` is needed, as the component is the one at `u` only after unfolding `padicComponents`
-  erw [padicComponents_toFun, h_one, map_one]
+  -- the component is the one at `u` after unfolding `padicComponents` and `u`
+  rw [padicComponents_toFun]
+  exact (congrArg _ h_one).trans (map_one _)
 
 /-- If `v` induces `w` or its conjugate and the component of `g` over `v` is `1`, then `g` is `1`
 at `w`. -/
@@ -553,7 +554,9 @@ lemma GaloisRep.exists_padicModel_hecke_contraction (j : ℕ) :
         congrArg (padicModel κ κ' M · z) (h_eig (N - j))
     -- `P` is the Hecke polynomial, whose coefficient of degree `j` is `c` times `t (N - j)`
     have h_coeff : P.coeff j = c * t (N - j) := by rw [hP, coeff_heckePoly, Fintype.card_fin]
-    simp [funext_iff, h_hecke, h_coeff, mul_left_comm, mul_assoc]
+    rw [LinearMap.smul_apply, LinearMap.smul_apply, h_hecke, h_coeff, map_mul, map_intCast, mul_smul,
+      mul_smul, Int.cast_smul_eq_zsmul]
+    exact smul_comm _ _ _
 
 attribute [local fun_prop] Continuous.if_const
 

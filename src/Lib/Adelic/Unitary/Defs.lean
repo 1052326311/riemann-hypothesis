@@ -198,11 +198,6 @@ deriving instance Subsingleton for Gf E n
 @[simp]
 lemma Gf.coe_mul (g k : Gf E n) : (g * k).val = g.val * k.val := rfl
 
-/-- The matrix of the product of an element of G_f and an element of `U 1`, which is the same
-group, is the product of the matrices. -/
-@[simp]
-lemma Gf.coe_mul_U (g : Gf E n) (k : U 1) : (g * k).val = g.val * k.val := rfl
-
 @[simp]
 lemma Gf.coe_inv (g : Gf E n) : g⁻¹.val = g.val⁻¹ := rfl
 

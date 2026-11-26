@@ -179,8 +179,7 @@ lemma thetaShift_thetaProduct {p : K → 𝓞 E × 𝓞 E} (hp : IsRiemannTuple 
   have h_translate : (D.paddedNorm • x.automorphyForm).thetaShift u (x.thetaProduct p μ w) z =
       ∏ k, x.automorphyForm.thetaShift (x.intAction (p k).1 u) (x.thetaCoord (μ k))
         (x.intAction (p k).1 z + x.intAction (p k).2 w) := by
-    simp [mul_left_comm, adjoint, div_eq_inv_mul, thetaShift_apply, exp_add,
-      exp_neg, thetaProduct]
+    simp [adjoint, div_eq_inv_mul, thetaShift_apply, exp_add, exp_neg, thetaProduct]
     simp only [prod_mul_distrib, prod_inv_distrib, ← exp_sum, ← mul_sum, h_orth, h_norm, exp_zero,
       inv_one, one_mul, mul_left_comm (2⁻¹ : ℂ), add_right_comm]
   rw [h_translate, prod_congr rfl fun k _ ↦ congrFun (h_shift k) _]

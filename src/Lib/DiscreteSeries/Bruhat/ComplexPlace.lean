@@ -143,10 +143,10 @@ lemma lintegral_eq_polar (k : κ) {g : (κ → ℂ) → ENNReal} (hg : Measurabl
       rw [← lintegral_mul_right_eq_self _ u]
       simp [← mulVec_mulVec, hu]
     _ = _ := by
-      -- pass from `ω` to `r = |ω|²` (`erw`: the integrand is a product and a composite up to defeq)
-      erw [← lintegral_withDensity_eq_lintegral_mul,
-          ← measurePreserving_normSq_sphereDensity.lintegral_comp] <;>
-        fun_prop
+      -- pass from `ω` to `r = |ω|²`
+      refine ((measurePreserving_normSq_sphereDensity (κ := κ)).lintegral_comp
+        (f := fun r : ℝ ↦ ∫⁻ h : U 1, g (h.1.1 *ᵥ √r • Pi.single k 1)) (by fun_prop)).trans ?_
+      exact lintegral_withDensity_eq_lintegral_mul _ (by fun_prop) (by fun_prop)
 
 /-- The boost in the plane of k₀ and z with parameter a, for 1 ≤ |a|. With s = √(|a|² - 1) it acts
 on that plane by the matrix with rows (conj a, s) and (-s, -a), and it fixes the other basis
@@ -303,7 +303,7 @@ lemma lintegral_hyperboloidMeasure (Γ : ℝ) {g : (𝔰.BesselIndex → ℂ) �
     ∫⁻ v : 𝔰.BesselIndex → ℂ, g v ∂hyperboloidMeasure Γ =
       ∫⁻ c : ℂ, .ofReal (sphereDensity 𝔰.k (Γ + ‖c‖ ^ 2)⁺) *
         ∫⁻ h : U (1 : Matrix 𝔰.κ 𝔰.κ ℂ), g (hyperboloidPoint Γ (c, h)) := by
-  simp (disch := with_unfolding_all fun_prop) only [lintegral_map, volume_eq_prod, lintegral_prod,
+  simp (disch := fun_prop) only [lintegral_map, volume_eq_prod, lintegral_prod,
     lintegral_const_mul, lintegral_withDensity_eq_lintegral_mul, Pi.mul_apply]
 
 /-- For Γ + |c|² ≥ 0 the point `hyperboloidPoint Γ (c, u)` has h(v, v) = Γ. -/
@@ -374,7 +374,7 @@ lemma isDisintegration_hyperboloidMeasure (hk : 1 < 𝔰.k) :
       fun β : skewAdjoint ℂ ↦ hyperboloidMeasure (2 * im (β : ℂ)) := by
   refine ⟨fun {g} (hg_cont : Continuous g) (hg_supp : HasCompactSupport g) ↦ ?_, fun f hf ↦ ?_⟩
   · -- the integrands vanish off one compact set of `(c, h)`, as `c` is the coordinate at `z`
-    simp (disch := with_unfolding_all fun_prop) only [lintegral_map,
+    simp (disch := fun_prop) only [lintegral_map,
       lintegral_withDensity_eq_lintegral_mul, Pi.mul_apply]
     have h_compact : IsCompact
         (((· 𝔰.z) '' tsupport g) ×ˢ (univ : Set (U (1 : Matrix 𝔰.κ 𝔰.κ ℂ)))) :=
@@ -389,7 +389,7 @@ lemma isDisintegration_hyperboloidMeasure (hk : 1 < 𝔰.k) :
       volume_eq_prod, lintegral_prod_symm _ (by fun_prop),
       ← (volume_preserving_funUnique Unit ℂ).symm.lintegral_comp (by fun_prop)]
     rfl
-  simp (disch := with_unfolding_all fun_prop) only [lintegral_hyperboloidMeasure]
+  simp (disch := fun_prop) only [lintegral_hyperboloidMeasure]
   rw [lintegral_map (by fun_prop) (by fun_prop), lintegral_lintegral_swap (by fun_prop),
     h_split _ (by fun_prop)]
   refine lintegral_congr fun c ↦ ?_
@@ -415,8 +415,10 @@ lemma map_orbitPoint_cellLaw_top (hk : 1 < 𝔰.k) :
     simp [splitGram, middleGram]
   refine ext_of_lintegral _ fun f hf ↦ ?_
   rw [h_quadric, lintegral_hyperboloidMeasure _ hf]
-  simp (disch := with_unfolding_all fun_prop) only [lintegral_map, lintegral_mconv,
-    lintegral_withDensity_eq_lintegral_mul, Pi.mul_apply]
+  rw [lintegral_map (by fun_prop) (by fun_prop), lintegral_mconv (by fun_prop),
+    cellLaw, lintegral_map (by fun_prop) (by fun_prop),
+    lintegral_withDensity_eq_lintegral_mul _ (by fun_prop) (by fun_prop)]
+  simp (disch := fun_prop) only [lintegral_map, Pi.mul_apply]
   change ∫⁻ c : ℂ, cellDensity 𝔰 𝔰.ϱ c *
       ∫⁻ h : U (1 : Matrix 𝔰.κ 𝔰.κ ℂ), f (orbitPoint 𝔰.top ((cellChart 𝔰 𝔰.ϱ c)⁻¹ * embedH h)) =
     ∫⁻ c : ℂ, .ofReal (sphereDensity 𝔰.k (-1 + ‖c‖ ^ 2)⁺) *

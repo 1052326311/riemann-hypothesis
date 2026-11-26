@@ -137,7 +137,7 @@ abbrev reductionGL : GL n (O (F := LocProd P)) →* GL n (P → ZMod N) := map �
 
 /-- A section of `reductionGL`. -/
 abbrev liftGL : GL n (P → ZMod N) → GL n (O (F := LocProd P)) :=
-  surjInv (GL_map_surjective Λ.reduction reduction_surjective)
+  surjInv (Matrix.GeneralLinearGroup.map_surjective Λ.reduction reduction_surjective)
 
 lemma reductionGL_liftGL (k : GL n (P → ZMod N)) : reductionGL (Λ.liftGL k) = k := surjInv_eq _ k
 
@@ -521,9 +521,10 @@ lemma commute_upOperator {T : Module.End ℂ π}
   (hT _).mul_right (Commute.sum_right _ _ _ fun _ _ ↦ (hT _).smul_right _)
 
 lemma scalar_commute_upOperator (x : (O (F := LocProd P))ˣ) :
-    Commute (π.ρ (inclGL (scalar (n ⊕ Unit) x))) (upOperator π) := by
-  simp [upOperator, commute_iff_eq, mul_sum, sum_mul, ← map_mul, map_scalar,
-    GeneralLinearGroup.scalar_commute]
+    Commute (π.ρ (inclGL (scalar (n ⊕ Unit) x))) (upOperator π) :=
+  commute_upOperator fun g ↦ by
+    rw [map_scalar]
+    exact (show Commute _ g from GeneralLinearGroup.scalar_commute _ g).map π.ρ
 
 omit [WeilData E] in
 /-- A linear map `T` from `π` to `π'` that commutes with integral unit scalars sends ramified

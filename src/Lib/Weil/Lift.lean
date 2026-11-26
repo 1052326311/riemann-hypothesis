@@ -513,7 +513,9 @@ theorem lift_piTensor_integratedRep {T : InfinitePlace E → FockDualPair s t ι
         simp only [Space.lift, integral_const_mul]
     _ = ∫ a : G E s, (∫ x : GInf E s, F x a) ∂S.quotMeasure := integral_integral_swap h_int
     _ = S.lift Θ φ (realConv e y) g := by
-        simp only [F, Space.lift, realConv, ← integral_const_mul, mul_left_comm]
+        simp only [F, Space.lift, realConv, ← integral_const_mul]
+        exact integral_congr_ae (.of_forall fun _ ↦ integral_congr_ae (.of_forall fun _ ↦
+          mul_left_comm ..))
     _ = S.lift Θ φ y g := by rw [hy.realConv_eq cusp.integrable]
 
 variable [Nonempty n']
@@ -569,7 +571,7 @@ theorem integral_mul_lift_eq_lift_piTensor {T : InfinitePlace E → FockDualPair
     rw [← hL, lift_piTensor_integratedRep hp hΦ hΩ_left Θ hΘ hy]
   simpa only [h_translate, h_target] using h_mean
 
-omit [WeilData E] in
+omit [WeilData E] [Nonempty n'] in
 /-- Let `s`, `t` be the signs of two real unitary groups over the infinite places of `E`. At each
 place `w`, let `π w`, `π' w` be commuting oscillator representations of `U(diag s)`, `U(diag t)` on
 the rows and columns of the dual pair data `T w`, and let `Φ w` be a joint harmonic for `T w` of

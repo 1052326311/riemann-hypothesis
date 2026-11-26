@@ -176,10 +176,6 @@ def relations (T : Finset (FinPlace K)) : Submodule R (Gal(Ω/K) → CharacterMo
       sum_eq_zero := fun p hp hT z hz ↦ by
         simpa using hy.sum_eq_zero p hp hT (r • z) (Submodule.smul_mem _ r hz) }
 
-/-- Membership in `relations T` is the predicate `IsRelation T`. -/
-@[simp] lemma mem_relations {T : Finset (FinPlace K)} {y : Gal(Ω/K) → CharacterModule M} :
-    y ∈ D.relations T ↔ D.IsRelation T y := Iff.rfl
-
 /-- There are finitely many relations off `T`, by the finiteness of cocycles with bounded
 ramification for the group `U`. -/
 instance finite_relations [Finite M] (T : Finset (FinPlace K)) : Finite (D.relations T) := by
