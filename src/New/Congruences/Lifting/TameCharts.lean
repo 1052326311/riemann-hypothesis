@@ -528,7 +528,7 @@ lemma exists_inertia_smul_z_eq_teichmuller {p : ℕ} [ThePrime p] (c : Chart)
     ∃ s ∈ inertiaGroup (Gp p) (intQpBar p), s • c.z.val = teichmuller p x := by
   have h_trans {a b : PadicAlgCl p} {n : ℕ} (hn : 0 < n) (ha : a ^ n = p) (hb : b ^ n = a ^ n) :
       ∃ g ∈ inertiaGroup (Gp p) (intQpBar p), g • a = b :=
-    isLocalGalois_padic.exists_inertia_smul_eq_of_pow_eq isUniformiser_ell hn (by simpa) hb
+    isLocalGalois_padic.exists_inertia_smul_eq_of_pow_eq isUniformizer_ell hn (by simpa) hb
   rw [c.z_eq_teichmuller]
   exact exists_smul_teichmuller_eq _ h_trans c.varpiFlat x c.e (by simp [hc_untilt_pow])
     (hx_untilt_pow.trans hc_untilt_pow.symm)
