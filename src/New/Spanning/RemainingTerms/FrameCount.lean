@@ -520,7 +520,7 @@ variable {S : Filling E 𝔰} {j : Fin (𝔰.ϱ + 2)} {Z : Matrix (Fin (𝔰.ϱ 
 
 /-- The elements of `E` that are integral at every finite place, the preimage of the ring `Ô E` of
 integral finite adeles, form a subring stable under conjugation. -/
-lemma isStarStable_comap_Ô [HasPrimitiveRoot5040 E] :
+lemma isStarStable_comap_Ô :
     IsStarStable ((Ô E).comap (algebraMap E (𝔸f E))) :=
   ⟨fun hx ↦ by simpa using star_mem_Ô hx⟩
 
