@@ -90,10 +90,6 @@ def evalClassReps [IsTopologicalGroup G] (r : DoubleCosets e.range K → G) :
     levelSpace (smoothFormRep e ρ) K χ →ₗ[ℂ] DoubleCosets e.range K → W :=
   ((funLeft ℂ W r).domRestrict (SmoothForm e ρ)).domRestrict (levelSpace (smoothFormRep e ρ) K χ)
 
-lemma evalClassReps_apply [IsTopologicalGroup G] (r : DoubleCosets e.range K → G)
-    (φ : levelSpace (smoothFormRep e ρ) K χ) (c : DoubleCosets e.range K) :
-    evalClassReps e ρ χ r φ c = φ.val.val (r c) :=
-  rfl
 
 /-- Evaluation of forms of level `(K, χ)` at representatives `r c` of the double cosets `c` in
 `e(Γ) \ G / K` is injective. -/

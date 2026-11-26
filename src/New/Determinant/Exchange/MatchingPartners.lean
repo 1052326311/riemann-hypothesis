@@ -144,12 +144,10 @@ lemma exists_linearMap_eq_sum (ι : Type*) :
 
 variable (n) in
 /-- Let `O` be the ring of integers of the semilocal field `F` (`SemilocalField.O`), and `intGL b O`
-the subgroup `GL_b(O)` of `GL_b(F)`. The matrices `r q` represent the cosets `q` in
+the subgroup `GL_b(O)` of `GL_b(F)`. The matrices `r q` are indexed by the cosets `q` in
 `GL_b(F)/GL_b(O)`, and each `n × b` matrix `y` with a left inverse has `y * r q` primitive (entries
 in `O`, with a left inverse over `O`) for exactly one `q`, and likewise `y * (r q)⁻¹`. -/
 structure IsCommonCosetRep (r : GL b F ⧸ intGL b (O : Subring F) → GL b F) : Prop where
-  /-- `r q` lies in the coset `q`. -/
-  coe_eq (q : GL b F ⧸ intGL b O) : (r q : GL b F ⧸ intGL b O) = q
   /-- If `y` has a left inverse, exactly one representative makes `y * r q` primitive. -/
   existsUnique_mul (y : Matrix n b F) (hy : HasLeftInv y) :
     ∃! q : GL b F ⧸ intGL b O, IsPrimitiveMatrix O (y * (r q).val)
@@ -180,7 +178,7 @@ lemma exists_isCommonCosetRep : ∃ r : GL b F ⧸ intGL b O → GL b F, IsCommo
     obtain ⟨u, -, hu⟩ := isValuationPair.exists_isPrimitiveMatrix_mul hy
     refine ⟨u, fun g ↦ ?_⟩
     simpa [y.mul_assoc] using hu.mul_iff.trans (isPrimitiveMatrix_iff_mem_intGL (u⁻¹ * g))
-  refine ⟨r, r_mk, fun y hy ↦ ?_, fun y hy ↦ ?_⟩
+  refine ⟨r, fun y hy ↦ ?_, fun y hy ↦ ?_⟩
   · obtain ⟨u, prim_iff⟩ := exists_coset y hy
     have mul_iff (q : GL b F ⧸ intGL b O) : IsPrimitiveMatrix O (y * (r q).val) ↔ q = ↑u := by
       rw [prim_iff, ← QuotientGroup.eq, r_mk, eq_comm]
@@ -228,9 +226,9 @@ lemma commonCosetSum_eq_sum (f : GL b F → ℂ) (t : Finset (GL b F ⧸ intGL b
     commonCosetSum F b n f = ∑ q ∈ t, f (commonCosetRep F b n q) :=
   (exists_linearMap_eq_sum_and_isCommonCosetRep (n := n)).choose_spec.choose_spec.left t f ht
 
-/-- The chosen matrices `commonCosetRep` represent the cosets of `GL_b(O)` in `GL_b(F)`. For each
-`n × b` matrix `y` with a left inverse, exactly one of them, `r`, makes `y * r` primitive, and
-exactly one makes `y * r⁻¹` primitive (`IsCommonCosetRep`). -/
+/-- For each `n × b` matrix `y` with a left inverse, exactly one of the chosen matrices
+`commonCosetRep`, `r`, makes `y * r` primitive, and exactly one makes `y * r⁻¹` primitive
+(`IsCommonCosetRep`). -/
 lemma isCommonCosetRep_commonCosetRep : IsCommonCosetRep n (commonCosetRep F b n) :=
   exists_linearMap_eq_sum_and_isCommonCosetRep.choose_spec.choose_spec.right
 
