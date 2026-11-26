@@ -411,7 +411,6 @@ lemma HasCellRank.norm_sharedVectors_le [S.IsAdmissible] [HasPrimitiveRoot5040 E
     h_near.norm_adjugate_paddedLeading_le j v i k
   obtain ⟨y, hy, hγy⟩ := h_near
   have h_box : y v ∈ frameBox S.frameBoxRadius := mem_frameBox_of_mem_boxedPoints hy v
-  have h_cut : InCut (y v) S.b := inCut_of_mem_boxedPoints hy v
   set z : 𝔰.G₁ := ((S.ratToInf γ)⁻¹ * y) v
   have hz_box : z ∈ frameBox S.frameBoxRadius := mem_frameBox_of_mem_boxedPoints hγy v
   obtain ⟨w, hw⟩ : ∃ w : Fin (𝔰.ϱ + 1) → E,
