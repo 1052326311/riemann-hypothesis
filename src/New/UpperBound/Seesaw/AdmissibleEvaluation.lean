@@ -331,7 +331,7 @@ lemma latticeLift_eq_latticeUnitary_add_isotropic (hP : IsSplitLevel P N)
     transpose_mul, transpose_transpose]
   simp [M, R, Matrix.mul_add, Matrix.mul_assoc, add_kronecker, ← mul_kronecker_mul]
 
-omit [Fintype X'] in
+omit [Fintype X'] [Fact (Nat.Prime N)] in
 /-- Let `P` contain one place of each conjugate pair above `N`, let `π` be the matching idele and
 `κ` scaling factors with values `1` or `δ`. Suppose that the point of `V'` spans the lattice of
 its grading `Y'` and that all neighbour vectors lift to the lattice of `V⁻ ⊕ V''`. Then the matrix
