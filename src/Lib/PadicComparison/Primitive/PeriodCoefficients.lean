@@ -533,7 +533,7 @@ def locConstToTilt : genericTest ⋙ testIncl ⋙ locConstAlg ⟶ tilt ⋙ restr
   refine (NatIso.ofComponents (F := ringFunctor ⋙ locConstAlg)
       (G := genericTest ⋙ testIncl ⋙ locConstAlg)
       (fun c ↦ isoMk (.ofBijective
-        (locConstAlg.map (ofHom (algebraMap c.ProdRing c.GenericRing))).1
+        (locConstAlg.map (ofHom (algebraMap c.ProdRing c.GenericRing))).hom'
         c.bijective_locConstAlg_map_algebraMap))
       fun _ ↦ ?restrict).inv ≫
     { app c := ConcreteCategory.ofHom (.mk'

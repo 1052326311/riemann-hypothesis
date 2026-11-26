@@ -435,7 +435,7 @@ lemma map_cyclotomicGp_smul [Module ℤ_[p] μ] (f : μ →+ DiscreteUnits (Padi
     (h : ∀ x : μ, p ^ n • f x = 0) (x : μ) (g : Gp p) :
     f ((cyclotomicGp g).val • x) = unitsRep g (f x) := by
   -- On `p ^ n`-torsion both sides are multiplication by the cyclotomic character modulo `p ^ n`.
-  calc _ = (cyclotomicCharMod (PadicAlgCl p) (p ^ n) g).1.val • f x :=
+  calc _ = (cyclotomicCharMod (PadicAlgCl p) (p ^ n) g).val.val • f x :=
          map_cyclotomicChar_smul f n h x
     _ = unitsRep g (f x) :=
       (cyclotomicCharMod_eq_iff_unitsRep.1 (ZMod.natCast_zmod_val _).symm (h x)).symm
@@ -743,10 +743,10 @@ lemma rank_comap_frob_sub_prod_eq {ι : Type} {k : ι → ℤ}
   have h_ker : (Z.subtype.prodMap (P.mkQ ∘ₗ w)).ker = neg.ker := by
     ext ⟨z, a⟩
     rw [mem_ker, mem_ker, prodMap_apply, prodMap_apply, Prod.mk_eq_zero, Prod.mk_eq_zero]
-    change (z : ι → Bmax) = 0 ∧ P.mkQ (w a) = 0 ↔ z = 0 ∧ (fun i : {i // k i < 0} ↦ a i.1) = 0
+    change (z : ι → Bmax) = 0 ∧ P.mkQ (w a) = 0 ↔ z = 0 ∧ (fun i : {i // k i < 0} ↦ a i.val) = 0
     rw [ZeroMemClass.coe_eq_zero, Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero]
     refine and_congr_right fun _ ↦ ?_
-    change (∃ x : ι → BdRPlus, N ((↑) ∘ x) = w a) ↔ (fun i : {i // k i < 0} ↦ a i.1) = 0
+    change (∃ x : ι → BdRPlus, N ((↑) ∘ x) = w a) ↔ (fun i : {i // k i < 0} ↦ a i.val) = 0
     rw [hP (w a), funext_iff]
     refine ⟨fun hi ⟨i, hk⟩ ↦ Subtype.ext ((coe_mem_hodgeFil_iff.mp (hi i)) (neg_pos.mpr hk)),
       fun hi i ↦ coe_mem_hodgeFil_iff.mpr fun hk ↦ congrArg Subtype.val (hi ⟨i, neg_pos.mp hk⟩)⟩
@@ -852,7 +852,7 @@ lemma crysCocycles.finrank_eq (h : IsPotentiallyCrystalline ρ) {J : Multiset �
     have h_eq (g : Γ) : u (D y g) = N ((↑) ∘ coboundaryMap (coordAction ρ ε) x g) := by
       have hwa : toGp g • w a = w a := funext fun i ↦
         (BdR.smul_algebraMap_padicAlgCl (toGp g) (a i : PadicAlgCl p)).trans
-          (congrArg (algebraMap (PadicAlgCl p) BdR) (mem_localFieldOf.1 (a i).2 g))
+          (congrArg (algebraMap (PadicAlgCl p) BdR) (mem_localFieldOf.1 (a i).property g))
       have h_lhs : toGp g • (u y - w a) - (u y - w a) = u (D y g) := by
         rw [smul_sub, hwa, sub_sub_sub_cancel_right, hu]
       have h_rhs : toGp g • N ((↑) ∘ x) - N ((↑) ∘ x) =
