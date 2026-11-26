@@ -735,7 +735,7 @@ the absolute norm of `S.subframeMinor j γ`, the minor of `Z` on the first `j` r
 the last one, is `N ^ (2 r) * S.minorNorm j γ`. Here `N = S.N` is the prime of the data `S`, and
 `S.minorNorm j γ` is the absolute norm of `D_j`, divided by `N ^ (2 r)` when `j = ϱ + 1`. -/
 lemma HasCellRank.abs_norm_subframeMinor {S : Filling E 𝔰} {j : Fin (𝔰.ϱ + 2)} {γ : S.G E}
-    [HasPrimitiveRoot5040 E] (hγ : S.HasCellRank j γ) :
+    (hγ : S.HasCellRank j γ) :
     |(Algebra.norm ℚ (S.subframeMinor j γ) : ℝ)| = S.N ^ (2 * numInfPlaces E) * S.minorNorm j
       γ := by
   -- Completing the rows of the subframe by rows of the identity matrix keeps the determinant.
