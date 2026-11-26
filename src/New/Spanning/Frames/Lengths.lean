@@ -386,15 +386,10 @@ def InducedLengthLe (g : T.G) (l i : ℕ) (y : 𝔰.BesselIndex → A) : Prop :=
   ∃ y' : 𝔰.BesselIndex → A, CongrBelow l y y' ∧ S.LengthLeAt g i y'
 
 /-- The vector e_a is balanced in Y^(a) at g, with bound L^i: its class has induced length at most
-L^i, and it has a dual of length at most L^i, a vector ζ orthogonal to the e_b, b < a, with
-⟨e_a, ζ⟩ = 1. The short dual stands for a lower bound on the length at a real place and for
-primitivity at the finite places. -/
+L^i. -/
 structure IsBalanced (g : T.G) (a : Fin 𝔰.ϱ) (i : ℕ) : Prop where
   /-- The class of e_a in Y^(a) has induced length at most L^i. -/
   inducedLengthLe : S.InducedLengthLe g a i (Pi.single (inl a) 1)
-  /-- Some ζ orthogonal to the e_b, b < a, with ⟨e_a, ζ⟩ = 1 has length at most L^i. -/
-  exists_dual : ∃ ζ : 𝔰.BesselIndex → A, IsOrthogonalBelow a ζ ∧ ζ (eStar a) = 1 ∧ S.LengthLeAt g i
-    ζ
 
 /-- The vector ω read at g agrees modulo r with a vector ω' read at g', where ω' is congruent to ω
 modulo the e_b, b < l: the vector (g⁻¹ ω - g'⁻¹ ω') / r has size i. -/
