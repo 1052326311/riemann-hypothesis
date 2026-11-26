@@ -16,8 +16,6 @@ losses are powers of `Γ.loss = 2 / modulus α`.
 
 ## Main definitions and results
 
-* `New.Floors.IntegralPlace.IsLargeLatticeData.exists_ideal_depth_eq`: at a near point the products
-  with the stable vectors form an ideal of `R`, and the depth is its index.
 * `New.Floors.IntegralPlace.IsLargeLatticeData.prod_mem_of_formMajorant_ne_zero`: the forms vanish
   unless the leading products of both heads are integral.
 * `New.Floors.IntegralPlace.IsLargeLatticeData.exists_gauge_of_formMajorant_ne_zero`: a scale
