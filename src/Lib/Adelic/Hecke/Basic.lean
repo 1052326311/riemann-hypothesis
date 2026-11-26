@@ -1,8 +1,6 @@
 module
 
 import TauCeti.RepresentationTheory.Induction.Mackey.Subgroup
-public import Mathlib.Algebra.FiniteSupport.Basic
-public import Mathlib.CategoryTheory.Shift.Basic
 public import Mathlib.GroupTheory.DoubleCoset
 public import Mathlib.RepresentationTheory.Coinduced
 import Mathlib.Algebra.FiniteSupport.Basic
