@@ -351,7 +351,8 @@ lemma isIntMatrix_latticeLift
   exact mul_mem h_entry
     (Y'.isIntMatrix_gradeZeroRows hL (Nat.not_odd_iff_even.2 D.even_length_middle) j.2 i.2)
 
-/-- Let `P` contain one place of each conjugate pair above the prime `N` (`hP`), let `N = π π̄`
+omit [Fact N.Prime] in
+/-- Let `P` contain one place of each conjugate pair above `N` (`hP`), let `N = π π̄`
 with `π` a uniformiser at the places of `P` and a unit elsewhere (`hπ`), and let `κ` be scaling
 factors with values `1` or `δ`, trivial above `N`, with denominators bounded by the integral adele
 `β` and its conjugate (`hκ`).
