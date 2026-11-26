@@ -5,8 +5,9 @@ This branch is the readable edition (`grh/`) of https://github.com/lsernau/grh-l
 scripts for a shared build cache. No file under `src`, and no `Challenge.lean`, `comparator.json`,
 `lake-manifest.json` or `lean-toolchain`, is changed. The additions are `CACHE.md`, a note at the
 top of `README.md`, the marked lines in `lakefile.toml`, `Cache.lean`, `lake-cache-get.sh`,
-`ci-cache-get.py`, `fetch-artifacts.py`, `cache-baseline.json` and `tests/` in `scripts`, and the
-workflow `.github/workflows/build.yml`. The scripts are copied or adapted from
+`ci-cache-get.py`, `fetch-artifacts.py`, `tauceti-cache-get.py`, `cache-baseline.json` and `tests/`
+in `scripts`, and the workflow `.github/workflows/build.yml`. The Tau Ceti dependency (below) adds
+one entry to `lake-manifest.json`. The scripts are copied or adapted from
 `scripts/` of the earlier `main` branch of https://github.com/leanprover-community/riemann-hypothesis
 (now the branch `alpoge`).
 
@@ -20,7 +21,7 @@ for your exact build inputs. To check the proof, build it from source yourself, 
     lake build
 
 This needs Python 3.11 or newer and curl 7.71 or newer, and no credential. It fetches Mathlib's
-cache, then this project's, and unpacks it. It ends with `lake build --no-build`, which must report
+cache, then Tau Ceti's, then this project's, and unpacks them. It ends with `lake build --no-build`, which must report
 that nothing needs compiling. `lake exe mathlib/cache get` fetches Mathlib alone.
 
 A change to the sources, `lakefile.toml`, `lake-manifest.json` or `lean-toolchain` gives different
@@ -56,6 +57,32 @@ The proposed follow-up is a separate job that, on pushes to `main` only, builds 
 publishes its record, map, module manifest and artifacts with credentials that pull requests
 never see. After a publish by hand, `python3 scripts/ci-cache-get.py --print-identity`, run on the
 published commit, gives the new contents of `scripts/cache-baseline.json`.
+
+## Tau Ceti
+
+The project depends on [Tau Ceti](https://github.com/TauCetiProject/TauCeti), pinned at a
+toolchain tag in `lakefile.toml`. Tau Ceti publishes its oleans in its own public cache, the
+service `tauceti-public` in `lakefile.toml`, which neither Mathlib's cache nor this project's
+covers. `scripts/tauceti-cache-get.py`, which `lake exe cache get` (and CI) runs after Mathlib's
+cache:
+
+- stops unless Tau Ceti's own `lake-manifest.json` pins the same Mathlib commit as ours, since
+  otherwise none of its cached oleans match;
+- stops if `src/Statements.lean`, `src/Main.lean` or `Challenge.lean` imports a Tau Ceti module,
+  so that the five statements keep depending on Mathlib alone;
+- downloads Tau Ceti's mappings for the pinned revision (about 135 MB the first time);
+- runs `lake build` on the Tau Ceti modules imported under `src`, which downloads exactly the
+  oleans they need into `.lake/packages/TauCeti`.
+
+After adding an import of a new Tau Ceti module, rerun `lake exe cache get`; otherwise Lake
+compiles that module and its Tau Ceti dependencies from source. The Tau Ceti and Mathlib pins move
+together: pick the Tau Ceti tag for the new Lean release, and check that its manifest pins the
+Mathlib commit chosen here. A change of either pin changes the build inputs of every module that
+imports Tau Ceti, directly or not.
+
+For a con-leche `--compare` run, Tau Ceti's `.lake/packages/TauCeti/.lake/build/lib/lean` belongs
+on the untrusted `--search-path`, with the project's, so that its declarations are checked rather
+than trusted.
 
 ## Keys
 
