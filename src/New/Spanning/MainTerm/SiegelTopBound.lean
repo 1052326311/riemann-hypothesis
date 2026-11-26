@@ -820,7 +820,7 @@ omit [WeilData E] [S.IsAdmissible] [Fact (↑S.ideleM⁻¹ ∈ integralOff T)] i
 element `γ` of `floorGroup 𝔰.ϱ` are integral off `T`, then so is the `X₀`-part of the column of `γ`
 at `z`, moved by the inverse of the representative of `c`. -/
 lemma x₀Part_mem_integralOff (hT_basis : S.latticeBasis ∈ intGL 𝔰.BesselIndex (integralOff T))
-    [_P : IntegralPlace (LocProd T)] {c c' : S.Classes} {γ : S.G E} (hγ : γ ∈ floorGroup 𝔰.ϱ)
+    {c c' : S.Classes} {γ : S.G E} (hγ : γ ∈ floorGroup 𝔰.ϱ)
     (h_off : S.IsIntegralOff T (S.translateByClassReps c c' γ)) (i : 𝔰.κ) :
     (c.out⁻¹.val.val *ᵥ algebraMap E (𝔸f E) ∘ fun l : 𝔰.κ ↦ γ.val.val (𝔰.indexX₀ l) 𝔰.z) i ∈
       integralOff T := by
