@@ -734,7 +734,6 @@ lemma isLerayHirschBasis_lineBasis_of_injective
       congrArg (fun ξ ↦ comp ξ Θ.onElements.cupClass.toTotalH) map_pullbackAlong
     exact h_first.trans ((etaAt_swap Θ.onElements.onElements x' h_inf' a b).trans
       ((comp_assoc ..).trans (congrArg (pullbackAlong _) h_cup.symm)))
-
   -- Restriction `r` from the points of the line to the base point undoes the pull-back, and it
   -- corresponds to `at_inf` under `sliceEquiv`.
   let r {N : AbFunctor C} : TotalH (elementsProj (projLineAlong g) ⋙ N)
@@ -999,7 +998,6 @@ lemma exists_isTodaCancellation_etaClass [Algebra A ℂ_[ℓ]] :
           (map_sub (R.map j).hom _ _).trans
             (congrArg₂ (· - ·) (ρ_nat c d j x) (map_one (R.map j).hom))
         exact congrArg (fun a : R d ↦ F d (a, 1)) h_coordinate.symm)
-
   -- `α` sends a point `t` of the torus to `pow c t`, the untilts of the powers of the coordinate.
   let pow (c : PadicTest) (t : (PadicTest.tilt ⋙ reprBy (monoidAlg ℚ)).obj c) :
       (kummerSeq (genericTestOver A)).X₂ c :=
