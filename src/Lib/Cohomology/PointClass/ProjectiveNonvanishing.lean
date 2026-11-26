@@ -223,15 +223,21 @@ private lemma pull_mk₀_comp_contractionPow_one_eq_pull_extClass_oneSubMu
         (-ExteriorAlgebra.algebraMapInv (contraction f.2 (.ι _ w)))) = _ + _
     -- `mulMu` is linear over `B` (`mulMu_proj_mul`); `v 0 = (b, a + m)` with `proj b = a` (the
     -- fibre product condition) and `m = a • w` (`hw_smul`).
-    -- `erw`: `rw` finds no instance of `proj.naturality_apply`, which matches only up to unfolding.
     let a : X.GenericRing := (v 0).val.2.fst
     let m : Fin X.rank → X.GenericRing := (v 0).val.2.snd
     let w' : Fin X.rank → X.GenericRing := w
     change a • w' = m at hw_smul
     erw [freeAb.desc_of]
-    erw [mul_one_sub, ← mulMu_proj_mul, proj.naturality_apply, (v 0).property]
+    have h_proj : (proj.app Y.test) (thickeningOver.map f.fst (v 0).val.fst) =
+        genericOver.map f.fst a :=
+      (proj.naturality_apply f.fst (v 0).val.fst).trans
+        (congrArg (genericOver.map f.fst) (v 0).property)
+    rw [mul_one_sub]
     let b : thickeningOver.obj X.test := (v 0).val.1
     let b' := thickeningOver.map f.fst b
+    change b' - b' * mulMu Y.test (-ExteriorAlgebra.algebraMapInv
+      (contraction f.snd (.ι _ w'))) = b' + mulMu Y.test (f.snd m).fst
+    rw [← mulMu_proj_mul, h_proj]
     let a' : Y.GenericRing := genericOver.map f.fst a
     change b' - mulMu Y.test (a' * -ExteriorAlgebra.algebraMapInv
       (contraction f.snd (.ι _ w'))) = b' + mulMu Y.test (f.snd m).fst
