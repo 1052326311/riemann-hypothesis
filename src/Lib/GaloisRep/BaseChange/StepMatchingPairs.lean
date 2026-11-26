@@ -412,10 +412,8 @@ lemma isMatchingPairAbove_of_mem_biInvariantPairs {μ : (𝔸f E)ˣ →* ℂˣ} 
       ((localLevel n A : Set (Gf E' n)).indicator 1 * F : Gf E' n → ℂ) δ
     simp_all [IsBiInvariantAt, indicator, leftTranslation, funext_iff, mul_mem_cancel_left,
       mul_mem_cancel_right]
-  have hμ_loc : ∀ w ∈ FinPlace.below E '' V, ∀ x : (LocField w)ˣ, μ (locIdele w x) = 1 := by
-    rintro _ ⟨v, hv, rfl⟩
-    obtain ⟨h_trivial, -⟩ := h_matched v hv
-    exact h_trivial
+  have hμ_loc : ∀ w ∈ FinPlace.below E '' V, ∀ x : (LocField w)ˣ, μ (locIdele w x) = 1 :=
+    forall_mem_image.2 fun v hv ↦ (h_matched v hv).1
   have h_one (u : FinPlace E') (hu : u.below E ∉ FinPlace.below E '' V) :
       (1 + idem V • (X - 1) : (𝔸f E')[X]).map (evalAt u) = 1 := by
     have huV : u ∉ V := fun huV ↦ hu ⟨u, huV, rfl⟩
