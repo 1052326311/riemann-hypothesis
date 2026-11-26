@@ -78,15 +78,9 @@ lemma aeval_smul_of_isHomogeneous {n : ℕ} (hF : F.IsHomogeneous n) :
 /-- If `χ` kills the kernel of `φ` and `φ ∘ v` lies on the cone of `g`, then so does `χ ∘ v`. -/
 lemma IsHomogeneousSolution.of_ker {D : Type} [CommRing D] [Algebra k D] (χ : A →ₐ[k] D)
     (h_ker : ∀ r : A, φ r = 0 → χ r = 0) (h_sol : IsHomogeneousSolution k g (φ ∘ v)) :
-    IsHomogeneousSolution k g (χ ∘ v) := by
-  intro n F hF h_g
+    IsHomogeneousSolution k g (χ ∘ v) := fun _ F hF h_g ↦
   -- `F (χ ∘ v) = χ (F v)`, and `φ (F v) = F (φ ∘ v) = 0`
-  have h_φ : φ (aeval v F) = 0 := by
-    rw [comp_aeval_apply v φ F]
-    exact h_sol hF h_g
-  have h_χ : χ (aeval v F) = 0 := h_ker _ h_φ
-  rw [comp_aeval_apply v χ F] at h_χ
-  exact h_χ
+  (comp_aeval_apply v χ F).symm.trans (h_ker _ ((comp_aeval_apply v φ F).trans (h_sol hF h_g)))
 
 lemma IsHomogeneousSolution.map : IsHomogeneousSolution k g v → IsHomogeneousSolution k g (φ ∘ v) :=
   of_ker 1 φ (by simp)
