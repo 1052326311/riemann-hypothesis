@@ -478,6 +478,7 @@ private lemma lift_labelChar_map_of_forall_eq_one [Algebra k' k']
     exact (lift_brauerLift_pow_of_forall_eq_one T h_gal h_roots _).rankPart_mulMoebius_mul_constOne
   simpa using h_lift_P.mul h_lift_c
 
+omit [Finite k'] in
 /-- Let `k'` be an algebra over itself with surjective structure map `s` (`h_surj`), and let `F`
 lift to `F'` over it. Then `F'` at `s(g)` is `F` at `g`: a common lift `Φ` is `F'` on `GL n k'`
 and descends to `F` on the coset of `1`, whose fixed field is `k'`. -/
