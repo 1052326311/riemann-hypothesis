@@ -469,6 +469,12 @@ def _root_.PeriodPair.σ (L : PeriodPair) : ℂ → ℂ :=
 lemma sigma_mem_thetaSpace : L.σ ∈ L.hermitianForm.thetaSpace (sigmaSign L) :=
   exists_odd_mem_thetaSpace_deriv_eq_one.choose_spec.1
 
+/-- The functional equation of the sigma function: for a lattice point `l` and
+`H = L.hermitianForm`, `σ (z + l) = sigmaSign L l * exp (H l z + H l l / 2) * σ z`. -/
+lemma sigma_add_of_mem_lattice {l : ℂ} (hl : l ∈ L.lattice) (z : ℂ) :
+    L.σ (z + l) = sigmaSign L l * exp (L.hermitianForm l z + L.hermitianForm l l / 2) * L.σ z :=
+  sigma_mem_thetaSpace.2 l hl z
+
 @[fun_prop]
 lemma differentiable_sigma : Differentiable ℂ L.σ := sigma_mem_thetaSpace.1
 
@@ -520,7 +526,7 @@ lemma sigma_add_mul_sigma_sub_mem_thetaSpace (v : ℂ) :
   change L.σ (z + l + v) * L.σ (z + l - v) = (sigmaSign L ^ 2) l *
     exp ((2 • L.hermitianForm) l z + (2 • L.hermitianForm) l l / 2) * (L.σ (z + v) * L.σ (z - v))
   simp only [Pi.pow_apply, add_right_comm z l v, add_sub_right_comm z l v,
-    sigma_mem_thetaSpace.2 _ hl, ← exponent, exp_add]
+    sigma_add_of_mem_lattice hl, ← exponent, exp_add]
   ring
 
 /-- The addition formula of the sigma function: for `u` and `v` off the lattice,
