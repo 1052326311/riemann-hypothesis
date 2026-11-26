@@ -1,6 +1,5 @@
 module
 
-public import Lib.Adelic.AutomorphicForms.PAdicGauge
 public import Lib.CM.ChowlaSelberg
 public import Lib.Shimura.Uniformisation.HolomorphicFamilies
 public import Lib.Weil.Construction.FourierInversion
