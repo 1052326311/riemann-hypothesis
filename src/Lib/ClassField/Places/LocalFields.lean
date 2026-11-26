@@ -82,15 +82,10 @@ private lemma New.isFrob_iff_forall_smul_residue_eq_pow {Γ Ω : Type*} [Group �
     Iff.trans (mk_eq_mk_iff_sub_mem y z)
       (Valuation.mem_maximalIdeal_iff Ω (A.valuation.comap (algebraMap Ω Ω)))
   unfold IsFrob
-  rw [and_iff_right (h_decomp g), residue_surjective.forall]
-  constructor
-  · intro h_close y
-    rw [h_smul_residue, ← map_pow, h_residue_eq_iff]
-    exact h_close y y.property
-  · intro h_res x hx
-    have h_y : g • residue B ⟨x, hx⟩ = residue B ⟨x, hx⟩ ^ q := h_res ⟨x, hx⟩
-    rw [h_smul_residue, ← map_pow, h_residue_eq_iff] at h_y
-    exact h_y
+  rw [and_iff_right (h_decomp g), residue_surjective.forall, Subtype.forall]
+  refine forall₂_congr fun x hx ↦ ?_
+  rw [h_smul_residue, ← map_pow, h_residue_eq_iff]
+  rfl
 
 /-- Let `Γ` be the absolute Galois group of a henselian local field `K`, `A` the valuation ring of
 the algebraic closure `Ω`, and `q` the order of the residue field of `A ∩ K`.
