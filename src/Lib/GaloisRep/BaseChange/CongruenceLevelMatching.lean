@@ -636,10 +636,9 @@ noncomputable def intAdeleMap {F : Type} [Field F] [NumberField F] (f : E →+* 
 /-- For a ring endomorphism `f` of `E`, the `i`-th iterate of `intAdeleMap f` is the restriction of
 `adeleMap f ^ i` to the integral adeles. -/
 @[simp] lemma intAdeleMap_iterate (i : ℕ) (x : Ô E) :
-    ((intAdeleMap f)^[i] x : 𝔸f E) = (adeleMap f ^ i) x := by
-  induction i generalizing x with
-  | zero => rfl
-  | succ i ih => exact ih (intAdeleMap f x)
+    ((intAdeleMap f)^[i] x : 𝔸f E) = (adeleMap f ^ i) x :=
+  Function.Semiconj.iterate_right (f := Subtype.val) (ga := intAdeleMap f) (gb := adeleMap f)
+    (fun _ ↦ rfl) i x
 
 omit [CMType E] [CMType E'] in
 /-- If `σ` moves the place `u`, then `σ` is not in the inertia group of `u`. -/
