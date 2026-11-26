@@ -383,9 +383,13 @@ left K-invariant. -/
 def heckeAlgebra : Subalgebra k (MonoidAlgebra k (GL n (𝔸f E))) :=
   (spanOn k (GUPlus E n) ⊓
     fixedToEigen (levelGU n 𝔑) (MonoidHom.id (GL n (𝔸f E))) (levelGU n 𝔑)).toSubalgebra
-    ⟨Submodule.subset_span ⟨1, by simp, rfl⟩, by simp [fixedToEigen]⟩ fun a b ha hb ↦
+    ⟨Submodule.subset_span ⟨1, by simp, rfl⟩, fun _ _ _ π v hv ↦ by
+      rw [map_one, one_apply_eq_self]
+      exact hv⟩ fun a b ha hb ↦
       -- `GUPlus E n` is closed under products, and `a * b` acts as `b` followed by `a`
-      ⟨spanOn.mul ha.1 hb.1 fun _ hg _ ↦ mul_mem hg, by simp_all [fixedToEigen, -mem_levelSpace]⟩
+      ⟨spanOn.mul ha.1 hb.1 fun _ hg _ ↦ mul_mem hg, fun _ _ _ π v hv ↦ by
+        rw [map_mul, mul_apply_eq_comp]
+        exact ha.2 (hb.2 hv)⟩
 
 end
 
