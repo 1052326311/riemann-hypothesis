@@ -374,31 +374,31 @@ lemma Pairing.nsmul_modPairing_eq_coboundary {e₁ e₂ e₃ r : ℕ} {c : S.par
       r • (charRep (QuotSpan ((p : ℤ_[p]) ^ P.exponent)) χ (g : Γ) (κ h) - κ (g * h) + κ g) := by
   -- Expand the coboundary of `f`, then replace `f` by the constants `1 ⊗ κ`: the error is a small
   -- constant, so it vanishes.
-  have h_cup : DiagTensor.mk 1 (p ^ (e₁ + e₂ + e₃) • P.modPairing ((S.cocycleMap c).1 g)
-      (S'.ρ g ((S'.cocycleMap c').1 h))) =
-        B (inr g.1 • x - x) (S'.wittFst (inr g.1 • (inr h.1 • x' - x'))) +
-          (inr g.1 • f (inr h.1) - f (inr (g * h).1) + f (inr g.1)) := by
+  have h_cup : DiagTensor.mk 1 (p ^ (e₁ + e₂ + e₃) • P.modPairing ((S.cocycleMap c).val g)
+      (S'.ρ g ((S'.cocycleMap c').val h))) =
+        B (inr g.val • x - x) (S'.wittFst (inr g.val • (inr h.val • x' - x'))) +
+          (inr g.val • f (inr h.val) - f (inr (g * h).val) + f (inr g.val)) := by
     -- `nsmul_eq_mul` would turn the multiples into products before `smul_smul` can collect them.
     simp [hB, hf, hx, hx', smul_smul_frobGroup_comm, apply_mul (S.cocycleMap c).property,
       apply_mul (S'.cocycleMap c').property, pow_add, mul_comm, mul_left_comm, mul_assoc,
       -nsmul_eq_mul, smul_sub, wittFst_smul, extensionRep, smul_smul, smul_wittPairing]
     abel
-  let δ (g : k.subgroup) := f (inr g.1) - DiagTensor.mk 1 (κ g)
-  have h_δ : inr g.1 • δ h - δ (g * h) + δ g ∈ smallPart P.exponent :=
-    add_mem (sub_mem (smul_mem_smallPart g.1 (hκ h)) (hκ (g * h))) (hκ g)
-  have h_diff : DiagTensor.mk 1 (p ^ (e₁ + e₂ + e₃) • P.modPairing ((S.cocycleMap c).1 g)
-      (S'.ρ g ((S'.cocycleMap c').1 h)) - (charRep _ χ g.1 (κ h) - κ (g * h) + κ g)) =
-        B (inr g.1 • x - x) (S'.wittFst (inr g.1 • (inr h.1 • x' - x'))) +
-          (inr g.1 • δ h - δ (g * h) + δ g) := by
+  let δ (g : k.subgroup) := f (inr g.val) - DiagTensor.mk 1 (κ g)
+  have h_δ : inr g.val • δ h - δ (g * h) + δ g ∈ smallPart P.exponent :=
+    add_mem (sub_mem (smul_mem_smallPart g.val (hκ h)) (hκ (g * h))) (hκ g)
+  have h_diff : DiagTensor.mk 1 (p ^ (e₁ + e₂ + e₃) • P.modPairing ((S.cocycleMap c).val g)
+      (S'.ρ g ((S'.cocycleMap c').val h)) - (charRep _ χ g.val (κ h) - κ (g * h) + κ g)) =
+        B (inr g.val • x - x) (S'.wittFst (inr g.val • (inr h.val • x' - x'))) +
+          (inr g.val • δ h - δ (g * h) + δ g) := by
     rw [map_sub, h_cup]
     simp [δ, smul_sub]
     abel
-  have h_small : B (inr g.1 • x - x) (S'.wittFst (inr g.1 • (inr h.1 • x' - x'))) ∈
+  have h_small : B (inr g.val • x - x) (S'.wittFst (inr g.val • (inr h.val • x' - x'))) ∈
       smallPart P.exponent := by
     rw [hB]
     exact h_cocycles ⟨_, h, rfl⟩ ⟨_, g, rfl⟩
-  have h_eq : p ^ (e₁ + e₂ + e₃) • P.modPairing ((S.cocycleMap c).1 g)
-      (S'.ρ g ((S'.cocycleMap c').1 h)) = charRep _ χ g.1 (κ h) - κ (g * h) + κ g := by
+  have h_eq : p ^ (e₁ + e₂ + e₃) • P.modPairing ((S.cocycleMap c).val g)
+      (S'.ρ g ((S'.cocycleMap c').val h)) = charRep _ χ g.val (κ h) - κ (g * h) + κ g := by
     refine eq_of_sub_eq_zero (TateTwist.eq_zero_of_mk_one_mem_smallPart ?_)
     simpa only [h_diff] using add_mem h_small h_δ
   rw [hr, mul_comm (p ^ (e₁ + e₂ + e₃)) r, mul_smul, h_eq]
@@ -441,9 +441,9 @@ lemma Pairing.IsScaledCupCoboundary.of_isSafePath {e₁ e₂ e₃ : ℕ} {c : S.
     TateTwist.exists_sub_mk_one_mem_smallPart_of_phi_smul_sub_mem <|
       P.phi_smul_sub_mem_smallPart hx hw hx' hw' h_path B (fun _ ↦ rfl) y hy f (fun _ ↦ rfl) g
   choose κ hκ using h_const
-  have h_coboundary (g h : k.subgroup) : P.modPairing ((S.cocycleMap c).1 g)
-    (S'.ρ g ((p ^ e • S'.cocycleMap c').1 h)) =
-      charRep _ χ g.1 ((r • κ) h) - (r • κ) (g * h) + (r • κ) g := by
+  have h_coboundary (g h : k.subgroup) : P.modPairing ((S.cocycleMap c).val g)
+    (S'.ρ g ((p ^ e • S'.cocycleMap c').val h)) =
+      charRep _ χ g.val ((r • κ) h) - (r • κ) (g * h) + (r • κ) g := by
     simpa [smul_sub, -nsmul_eq_mul] using P.nsmul_modPairing_eq_coboundary hr hx hx' h_cocycles
       B (fun _ ↦ rfl) y f (fun _ ↦ rfl) κ hκ g h
   have h_smallB : ∀ᶠ g : Γ in nearOne Γ,
@@ -458,12 +458,12 @@ lemma Pairing.IsScaledCupCoboundary.of_isSafePath {e₁ e₂ e₃ : ℕ} {c : S.
       h_restrict (h_dvd (S'.cocycleMap c').property), h_restrict h_smallB,
       h_restrict (eventually_smul_sub_mem_smallPart y)] with h ⟨z, hz⟩ ⟨z', hz'⟩ hB hy'
     -- The cocycle terms are multiples of `p ^ m`, which kills the target of `B x`.
-    have h_f : f (inr h.1) = inr h.1 • y - y -
-        B x (inr h.1 • S'.wittFst x' - S'.wittFst x') := by
+    have h_f : f (inr h.val) = inr h.val • y - y -
+        B x (inr h.val • S'.wittFst x' - S'.wittFst x') := by
       simp +zetaDelta [hx, hx', smul_smul_frobGroup_comm, hz, hz', TateTwist.pow_smul_eq_zero,
         smul_sub, wittFst_smul, extensionRep, smul_wittPairing]
       abel
-    have hf_small : f (inr h.1) ∈ smallPart P.exponent := by
+    have hf_small : f (inr h.val) ∈ smallPart P.exponent := by
       simpa only [h_f] using sub_mem hy' hB
     have h_small : DiagTensor.mk 1 (κ h) ∈ smallPart P.exponent := by
       simpa using sub_mem hf_small (hκ h)
@@ -759,8 +759,8 @@ lemma exists_lift_of_mem_liftIdeal {S : PairingSide O} {r l : ℕ} {i : Letter} 
     hs ⟨y, ⟨y, hy_lat, hy_proj⟩, rfl⟩
   refine ⟨coordRetract ⟨x, (mem_withOrders_iff.1 hx).1⟩,
     ⟨coe_mem _, coordRetract_mem_withOrders _ hx⟩, ?_⟩
-  calc S.projTrivial.wittMap (coordRetract _).1
-      = (coordRetract ⟨s • y, smul_mem _ s hy_loc.1⟩).1 :=
+  calc S.projTrivial.wittMap (coordRetract _).val
+      = (coordRetract ⟨s • y, smul_mem _ s hy_loc.1⟩).val :=
         S.projTrivial.wittMap_coordRetract _ _ hx_pr
     _ = k.coord₀ s • y := coordRetract_smul s hy_loc _
     _ = (f - r • k.coord₀ t) • y := by
@@ -965,7 +965,7 @@ lemma mem_liftIdeal_of_mul_E_pow {S : PairingSide O} {r : ℕ} {i : Letter} {a c
           k.zTau * q = (ω : Ainf) ^ (n + 1) - 1 :=
       exists_smul_frobE_eq_mul_and_zTau_mul_eq 0 n.cast_add_one_ne_zero
     obtain ⟨b₁, hb₁⟩ := h_div
-    have hE' : g • k.E.1 = ω * k.E := by simpa [Chart.frobE] using hE
+    have hE' : g • k.E.val = ω * k.E := by simpa [Chart.frobE] using hE
     have hb₁' : υ * q - p ^ cost 0 (n + 1) = k.E * b₁ := by simpa [Chart.frobE] using hb₁
     -- `g` multiplies `z` by `1 + τ E v`, hence `z ^ a` by `1 + τ E v b₂`.
     obtain ⟨v, hv⟩ : k.zTau * k.E ∣ g • k.z - k.z := zTau_mul_E_dvd_smul_sub g k.z
@@ -975,9 +975,9 @@ lemma mem_liftIdeal_of_mul_E_pow {S : PairingSide O} {r : ℕ} {i : Letter} {a c
     obtain ⟨b₂, hb₂⟩ : (1 + tau * k.E * v) - 1 ∣ (1 + tau * k.E * v) ^ a - 1 :=
       sub_one_dvd_pow_sub_one _ a
     have h_smul : g • (↑(p ^ c * k.z ^ a * k.E ^ (n + 1) : k.S) : Ainf) =
-        p ^ c * (k.z.1 ^ a * (1 + tau * k.E * v * b₂)) * (ω ^ (n + 1) * k.E.1 ^ (n + 1)) := by
+        p ^ c * (k.z.val ^ a * (1 + tau * k.E * v * b₂)) * (ω ^ (n + 1) * k.E.val ^ (n + 1)) := by
       simp [hE', hz, mul_pow, eq_add_of_sub_eq hb₂, add_comm]
-    have hq' : k.z.1 * tau * q = (ω : Ainf) ^ (n + 1) - 1 := by
+    have hq' : k.z.val * tau * q = (ω : Ainf) ^ (n + 1) - 1 := by
       simpa [zTau, mul_comm tau] using hq
     -- The derivation by `g`, with multiplier `z υ`, trades one `E` for `p ^ cost z`.
     let β : Ainf := k.z * b₁ + υ * v * b₂ * ω ^ (n + 1)
@@ -989,8 +989,8 @@ lemma mem_liftIdeal_of_mul_E_pow {S : PairingSide O} {r : ℕ} {i : Letter} {a c
       simp only [h_smul, zTau, β]
       push_cast
       -- The `b₂` terms cancel; what is left is `υ * hq'` rewritten by `hb₁'`.
-      linear_combination ↑p ^ c * k.z.1 ^ (a + 1) * k.E.1 ^ (n + 1) *
-        (υ * hq' - tau * k.z.1 * hb₁')
+      linear_combination ↑p ^ c * k.z.val ^ (a + 1) * k.E.val ^ (n + 1) *
+        (υ * hq' - tau * k.z.val * hb₁')
     have h_step :
         ↑(p ^ (c + cost 0 (n + 1)) * k.z ^ (a + 1) * k.E ^ n : k.S) ∈ S.liftIdeal r 1 i :=
       mem_liftIdeal_of_eq_mul_smul_sub _ β g h_mem h_der
@@ -1153,14 +1153,14 @@ lemma killsCokernel_of_isUnramified {S : PairingSide O} {i : Letter} (s t : ℕ)
     nlinarith [Nat.cast_nonneg (α := ℤ) (padicValNat p b.factorial)]
   -- Lowering `z ^ max b m` to `z ^ m` costs `b + v_p(b!) - (m + v_p(m!)) ≤ s + t - m` if `m < b`.
   have monomial_mem (m : ℕ) :
-      p ^ (s + t - m) * k.z.1 ^ m ∈ S.liftIdeal (p ^ (s + t + 1)) 0 i := by
+      p ^ (s + t - m) * k.z.val ^ m ∈ S.liftIdeal (p ^ (s + t + 1)) 0 i := by
     refine p_pow_mul_z_pow_mem_liftIdeal_of_le (c := 0) (le_max_right b m)
       (mem_of_dvd _ (by simp [pow_dvd_pow]) (hb_mem i)) ?_
     rcases max_cases b m with ⟨h, -⟩ | ⟨h, -⟩ <;>
       · rw [h]
         omega
   apply liftIdeal_le_of_p_pow_mem (c := s + t) (by simpa using monomial_mem 0)
-  suffices h_sum : ∑ m ∈ Finset.range (t + 1), p ^ s * (k.z.1 ^ m * p ^ (t - m) * t.choose m) ∈
+  suffices h_sum : ∑ m ∈ Finset.range (t + 1), p ^ s * (k.z.val ^ m * p ^ (t - m) * t.choose m) ∈
       S.liftIdeal (p ^ (s + t + 1)) 0 i by
     simpa [hE, add_pow, Finset.mul_sum] using h_sum
   refine sum_mem fun m _ ↦ mem_of_dvd _ ?_ (monomial_mem m)

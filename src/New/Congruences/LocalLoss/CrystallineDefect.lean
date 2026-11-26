@@ -620,7 +620,7 @@ lemma New.Selmer.normLength_dualDefect_le_of_isSummandClass {P : Parameters} {�
     | some c =>
       -- A character: the only jump is `-c - 1`, which is low and negative.
       exact .inr fun γ ↦ subset_Icc_of_jump_eq_single h_in.isPotentiallyCrystalline
-        (c.2.trans_le hJ.t_le) (h_count (some c)) (hU' γ)
+        (c.isLt.trans_le hJ.t_le) (h_count (some c)) (hU' γ)
   · simpa only [finrank_linearMap_self] using
       crystalline_bound_le_defectBound D ℓ (finrank O (L c)) hx_pos hx_le
 
