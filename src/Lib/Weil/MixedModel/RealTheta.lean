@@ -21,8 +21,6 @@ The last part computes the real vacuum and the map `T 0` in a mixed Schrödinger
 * `New.Space.entireTheta_eq_integral`, `New.Space.differentiable_entireTheta`: if all signs are +1
   and inserting the Gaussian as real vector (`New.Space.projReal`) fixes f, then Θ_f is an integral
   against the kernel exp(∑ y_p conj w_p), hence entire.
-* `New.Space.theta_integrated_polyVector_eq_integral_entireTheta`: if all signs are +1, the theta
-  value of v_P ⊗ f for a polynomial vector v_P is ∫ P(conj y) Θ_f(y) exp(−|y|²) dy.
 * `New.Space.Splitting.IsAdapted.omega_projReal_of_isMixedLaw`: in a mixed Schrödinger model `T`,
   the value `T x (ω(g) P f)` is a Gaussian in the real point `x`, for `P` the real vacuum projection
   and `g` adapted to the splitting.

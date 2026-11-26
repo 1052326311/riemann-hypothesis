@@ -225,7 +225,7 @@ lemma selfDualAddChar_congr {a b o : 𝔸f E} (t : 𝔸f E) (ho : o ∈ Ô E)
 /-! ### The vacuum and the Heisenberg datum -/
 
 /-- For a finite adelic vector x, the complex number ψ₀(c₀ x* x / 2). It equals ψ_f(−y* y / 4) at
-y = αx (`New.stdLattice.semichar_eq_ψf`) and is a sign on the lattice Ô^ι. -/
+y = αx and is a sign on the lattice Ô^ι. -/
 def semichar (x : ι → 𝔸f E) : ℂ := selfDualAddChar E (traceOneAdele * half * star x ⬝ᵥ x)
 
 lemma isOfFinOrder_semichar (x : ι → 𝔸f E) : IsOfFinOrder (semichar x) := by
