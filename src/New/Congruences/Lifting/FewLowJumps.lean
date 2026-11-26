@@ -135,8 +135,16 @@ lemma exists_isOperatorOfCost_zero_mem_deepElements (hk : k.IsUnramified) {N : �
     obtain ⟨v, -, hn_mem⟩ := mem_biUnion.1 hn
     exact Nat.le_zero.1 (cost_le_of_isUnramified hk fun h ↦ absurd h (h_free v n hn_mem))
   refine ⟨A, by rwa [h_cost] at h_reach, fun w hw ↦ h_raise hw _ fun l v hv n hn_ge hn_lt ↦ ?_⟩
-  obtain ⟨rfl, hn⟩ : l = 0 ∧ n ∈ Ioo (c l v) (c l v + N) := by grind [raiseOrdersAt]
-  exact mem_sigma.2 ⟨mem_singleton_self 0, mem_biUnion.2 ⟨v, hv, hn⟩⟩
+  have h_ge : c l v + (if l = 0 then 1 else 0) ≤ n := hn_ge
+  have h_lt : n < c l v + if 0 = l then N else 0 := hn_lt
+  obtain rfl : l = 0 := by
+    by_contra hl
+    rw [ite_eq_right hl] at h_ge
+    rw [ite_eq_right (Ne.symm hl)] at h_lt
+    exact lt_irrefl _ (h_lt.trans_le h_ge)
+  rw [ite_eq_left rfl] at h_ge h_lt
+  exact mem_sigma.2 ⟨mem_singleton_self 0,
+    mem_biUnion.2 ⟨v, hv, mem_Ioo.2 ⟨Int.lt_of_add_one_le h_ge, h_lt⟩⟩⟩
 
 /-- Division by `p`. Suppose the chart is unramified, and no multiple of `p` lies strictly between
 `c 0 v` and `c 0 v + p ^ a` for any `v`. Let `x` have depth `c`, and let `w` lie over `0` with
@@ -197,8 +205,12 @@ lemma exists_sub_mem_deepElements_of_smul_sub_mem (hk : k.IsUnramified) {a : ℕ
     obtain ⟨-, h_deep_inv⟩ := h_reach.apply_mem_of_kerWithOrders_le
       locKisinPart_kerWithOrders_le_deepElements h_deep h_deep
     have h_le (l : ℕ) (v : ℤ) : raiseOrder c a u l v ≤ c l v + if a = l then 1 else 0 := by
-      unfold raiseOrder
-      lia
+      refine Int.add_le_add_left ?_ _
+      split_ifs with h₁ h₂ h₂'
+      · exact le_rfl
+      · exact absurd h₁.1.symm h₂
+      · exact zero_le_one
+      · exact le_rfl
     rw [h_smul_eq, Submodule.coe_add, hAw_sub]
     exact add_mem h_deep_inv (smul_sub_mem_withOrders
       (frobEUnit_zpow_smul_mem_withOrders a 1 hw'_exp fun l v _ ↦ h_le l v))
@@ -219,8 +231,12 @@ lemma exists_isOperatorOfCost_mem_deepElements_raiseOrder (a : ℕ) (u : ℤ) :
       ∀ x ∈ S.deepElements i c, A x ∈ S.deepElements i (raiseOrder c a u) := by
   obtain ⟨A, h_reach, h_raise⟩ := S.exists_isOperatorOfCost_and_mem_deepElements {⟨a, c a u⟩}
   refine ⟨A, by simpa using h_reach, fun x hx ↦ h_raise hx _ fun l v _ n hn_ge hn_lt ↦ ?_⟩
-  obtain ⟨rfl, rfl, rfl⟩ : l = a ∧ v = u ∧ n = c l v := by grind [raiseOrder]
-  exact mem_singleton_self _
+  rw [raiseOrder] at hn_lt
+  split_ifs at hn_lt with h
+  · obtain ⟨rfl, rfl⟩ := h
+    obtain rfl : n = c l v := le_antisymm (Int.le_of_lt_add_one hn_lt) hn_ge
+    exact mem_singleton_self _
+  · exact absurd ((hn_ge.trans_lt hn_lt).trans_eq (add_zero _)) (lt_irrefl _)
 
 /-- A primitive relation for one step. Let `S` be a side on an unramified chart `k` and `i` a
 letter. Let `c a u < c a v` for the jumps `v < u` at `i.stepBack a`, and let no multiple of `p` lie
