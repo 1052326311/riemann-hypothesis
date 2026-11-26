@@ -291,7 +291,10 @@ is the length of y. -/
 def archCoords : (n → E) →+ EuclideanSpace ℂ (InfinitePlace E × n) :=
   AddMonoidHom.mk'
     (fun y : n → E ↦ WithLp.toLp 2 fun p : InfinitePlace E × n ↦ (V.vecAtPoint y p.2).1 p.1)
-    (by aesop)
+    (by
+      intro x y
+      ext p
+      simp)
 
 /-- The set of vectors `y` of the lattice `V.baseLattice` whose length `‖V.archCoords y‖` is at most
 `r`. -/
