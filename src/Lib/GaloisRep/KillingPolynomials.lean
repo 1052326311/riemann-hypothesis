@@ -63,7 +63,7 @@ variable {k K N R S A : Type} [NormedField k] [Fintype N] [DecidableEq N] [CommR
 `N × N` whose column `j < m` lists the entries of the square matrix `y ^ j`: its entry at `(i, j)`
 is the entry of `y ^ j` at the place `a i`. -/
 noncomputable abbrev powMinor (m : ℕ) (a : Fin m → N × N) : R :=
-  (of (flip (fun j : Fin m ↦ uncurry (y ^ j.1)) ∘ a)).det
+  (of (flip (fun j : Fin m ↦ uncurry (y ^ j.val)) ∘ a)).det
 
 @[simp]
 lemma map_powMinor (a : Fin m → N × N) (φ : R →ₐ[A] S) :
