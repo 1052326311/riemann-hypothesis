@@ -1,7 +1,13 @@
 module
 
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.RingTheory.PicardGroup
+import Mathlib.Tactic.Monotonicity.Lemmas
+import Mathlib.Topology.Sheaves.Presheaf
 public import New.Spanning.RemainingTerms.Count
 public import New.Spanning.RemainingTerms.Size
+public import New.Spanning.Unfolding.Climbing
+import New.Spanning.RemainingTerms.Gain
 
 /-!
 # The remaining terms: a bound for their sum
@@ -168,13 +174,13 @@ lemma termSize_sq_le {E : Type} [Field E] [CMType E] {𝔰 : Shape} {S : Filling
 
 -- Keeps definitional checks from unfolding the finite sums.
 seal Finset.univ in
-/-- Let `S` be data of the filling theorem that satisfy the standing hypotheses `S.IsAdmissible`.
+/-- Let `S` be data of the filling theorem.
 Let `(γ, γ')` be a near pair over the classes `c`, `c'` and `d` the discriminant of its common
 lattice `S.pairLattice`. Let `η > 0`. If `(d η)²` is at most the product of the two gauges and the
 constants `S.cellRankSecondMoment` of both cell ranks are at most `D`, then the product of the sizes
 `S.termSize` is at most `τ⁴ D η ^ (-k) d ^ (-k) / n_p`. -/
 lemma IsNearPairOverAgreeingBlock.termSize_mul_le {E : Type} [Field E] [CMType E]
-    {𝔰 : Shape} {S : Filling E 𝔰} [HasPrimitiveRoot5040 E] [S.IsAdmissible] {c c' : S.Classes}
+    {𝔰 : Shape} {S : Filling E 𝔰} [HasPrimitiveRoot5040 E] {c c' : S.Classes}
     {γ γ' : S.G E} (hq : S.IsNearPairOverAgreeingBlock c c' (γ, γ')) {η D : ℝ} (hη : 0 < η)
     (h_gain : (S.pairDiscriminant c c' γ γ' * η) ^ 2 ≤
       S.levelGauge (S.cellRank γ) c c' γ * S.levelGauge (S.cellRank γ') c c' γ')
