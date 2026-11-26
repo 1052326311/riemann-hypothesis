@@ -504,6 +504,9 @@ private lemma span_n_eq_kisinAinf (F : Frame L) : span Ainf (Set.range F.n) = L.
   simpa [mem_span_range_iff_exists_fun, comb, Fintype.linearCombination_apply] using
     F.exists_comb_eq_of_exists_comb_eq_tau_pow_smul hx (L.jumpBound + N) h_comb
 
+private lemma range_comb_zero (F : Frame L) : (F.comb 0).range = L.kisinAinf := by
+  simpa [comb, Fintype.range_linearCombination] using F.span_n_eq_kisinAinf
+
 /-- The vectors `φ ^ l • F.n i` span `L.valueFieldPoints (L.frobKisinAinf l)` over `S`. -/
 private lemma span_phi_pow_smul_n_eq_valueFieldPoints (F : Frame L) (l : ℕ) :
     span k.S (Set.range fun i : Fin (finrank ℤ_[p] L.Carrier) ↦ φ ^ l • F.n i) =
@@ -621,11 +624,11 @@ private lemma mem_smul_kisinAinf_of_forall_crysForms (F : Frame L) (d : Ainf)
     (h_forms : ∀ μ ∈ L.crysForms, k.E.val ^ n • μ x ∈ BPlus ∙ algebraMap Ainf BdR d) :
     x ∈ d • L.kisinAinf := by
   -- Read off the coefficients of `x` modulo `d`; the two powers of `E` are dropped by `hd`.
-  obtain ⟨t, rfl⟩ := (mem_span_range_iff_exists_fun Ainf).mp (F.span_n_eq_kisinAinf.ge hx)
+  obtain ⟨t, rfl⟩ := F.range_comb_zero.ge hx
   have h_dvd (i : Fin (finrank ℤ_[p] L.Carrier)) : d ∣ t i := by
     have h_forms' (μ : L.Functional) (hμ : μ ∈ L.crysForms) :
         μ (F.comb 0 (k.E.val ^ n • t)) ∈ BPlus ∙ algebraMap Ainf BdR d := by
-      rw [map_smul, map_smul, F.comb_zero_apply]
+      rw [map_smul, map_smul]
       exact h_forms μ hμ
     obtain ⟨y, hy⟩ := mem_span_singleton.mp
       (F.phiInvToBdR_frobE_pow_mul_mem_of_forall_crysForms 0 _ (k.E.val ^ n • t) h_forms' i)
@@ -636,8 +639,8 @@ private lemma mem_smul_kisinAinf_of_forall_crysForms (F : Frame L) (d : Ainf)
         hy.symm
     exact hd (map_dvd ainfToBPlus (hd h_dvd_E))
   obtain ⟨u, hu⟩ := F.exists_smul_comb_eq_of_dvd d t h_dvd
-  rw [← F.comb_zero_apply t, ← hu, F.comb_zero_apply, ← F.span_n_eq_kisinAinf]
-  exact smul_mem_pointwise_smul _ d _ ((mem_span_range_iff_exists_fun Ainf).mpr ⟨u, rfl⟩)
+  rw [← hu]
+  exact smul_mem_pointwise_smul _ d _ (F.range_comb_zero.le ⟨u, rfl⟩)
 
 /-- Clause (f) of `frame_theorem`: `τ ^ a`, with `a = L.jumpBound`, carries `L.kisinAinf` into
 `L.ainfLattice`. -/
@@ -651,8 +654,7 @@ private lemma tau_pow_smul_mem_ainfLattice_of_mem_kisinAinf (F : Frame L) {x : L
 private lemma tau_pow_smul_mem_kisinAinf_of_mem_ainfLattice (F : Frame L) {x : L.Ambient}
     (hx : x ∈ L.ainfLattice) : tau ^ L.jumpBound • x ∈ L.kisinAinf := by
   obtain ⟨t, ht⟩ := F.exists_comb_eq_tau_pow_smul_of_mem_ainfLattice hx
-  rw [← ht, ← F.span_n_eq_kisinAinf, F.comb_zero_apply]
-  exact (mem_span_range_iff_exists_fun Ainf).mpr ⟨t, rfl⟩
+  exact F.range_comb_zero.le ⟨t, ht⟩
 
 /-- Clause (h) of `frame_theorem`: `E ^ a • φ`, with `a = L.jumpBound` and `E` the unit
 `k.frobEUnit 0` of `W(C♭)`, maps the Kisin module into itself. -/
