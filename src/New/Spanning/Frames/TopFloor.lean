@@ -72,7 +72,7 @@ def PlaceData.fiberPairing (e : 𝔰.BesselIndex → A) : ℂ :=
 /-- Two elements `l`, `l'` of the floor group G^(ϱ) with `l'⁻¹ z = l⁻¹ z` differ on the left by an
 element of `besselH`, the fixer in G^(ϱ) of the last frame vector `z`. -/
 lemma mul_inv_mem_besselH_of_orbitPoint_eq {A : Type} {𝔰 : Shape} [SemilocalField A] [StarRing A]
-    {T : 𝔰.Form A} [IsHermitianUnit T.splitGram] {l l' : T.G} (hl : l ∈ T.floorGroup 𝔰.ϱ)
+    {T : 𝔰.Form A} {l l' : T.G} (hl : l ∈ T.floorGroup 𝔰.ϱ)
     (hl' : l' ∈ T.floorGroup 𝔰.ϱ) (h_point : orbitPoint 𝔰.top l' = orbitPoint 𝔰.top l) :
     l' * l⁻¹ ∈ T.besselH := by
   simpa only [inv_inv] using partialUnitriangularGroup_inf_floorGroup_last.le
