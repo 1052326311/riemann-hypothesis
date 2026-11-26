@@ -362,7 +362,7 @@ lemma exists_algebraic_of_fixed_near_one {x : ℂ_[p]} (hx : ∀ᶠ g : Gp p in 
     simpa only [InfiniteGalois.fixedField_fixingSubgroup] using
       ax_mem_closure_fixedField E.fixingSubgroup hE
   obtain ⟨y, -, hy⟩ : ∃ y ∈ E.toSubmodule, (toComplL y : ℂ_[p]) = x :=
-    (E.toSubmodule.map toComplL.toLinearMap).closed_of_finiteDimensional.closure_subset h_closure
+    (E.toSubmodule.map toComplL.toLinearMap).isClosed_of_finiteDimensional.closure_subset h_closure
   exact ⟨y, hy.symm⟩
 
 end New.Period

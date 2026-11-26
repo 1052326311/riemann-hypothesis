@@ -288,7 +288,7 @@ lemma isUnit_smul_of_dvd_mu {a : Ainf} (ha : a ∣ mu) : IsUnit (↑(m • a) : 
       have h_unit : IsUnit (algebraMap _ BPlus (algebraMap _ Amax (frobEnd xi))) :=
         isUnit_of_dvd _ associated_p_frobEnd_xi.symm.dvd
       rw [← h_unit.dvd_mul_left, iterate_succ_apply']
-      show algebraMap Ainf BPlus (frobEnd (frobEnd^[k] (g • a))) ∣
+      change algebraMap Ainf BPlus (frobEnd (frobEnd^[k] (g • a))) ∣
         algebraMap Amax BPlus (algebraMap Ainf Amax (frobEnd xi)) * algebraMap Ainf BPlus mu
       simpa [← xi_mul_tau, Algebra.cast, ← IsScalarTower.algebraMap_apply, -isUnit_map_iff] using
         map_dvd frobEnd ih
