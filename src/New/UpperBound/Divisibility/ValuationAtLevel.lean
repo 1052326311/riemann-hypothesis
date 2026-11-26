@@ -292,7 +292,8 @@ lemma lift_schrodingerOpAt_comp (j : ℕ) (v : (D.homX j).finitePart)
     simp only [Matrix.coe_units_inv, liftKernel_ω, pairWeilFinite_schrodingerOpAt,
       ↓spaceChar_rankTwist, ↓card_X, smul_smul, div_mul_mul_cancel, mul_inv_cancel, one_smul]
   rw [h_datum, ← (D.liftKernel ϑ j).lift_equivariant (embedGL g)]
-  simp [Units.smul_def]
+  simp only [Units.smul_def, Units.val_div_eq_div_val, map_smul, LinearMap.smul_apply,
+    Representation.self_inv_apply]
 
 /-- Put a function `Ψ` of matrices at `Σ_N`, written in bases of `L_j` and `L_{j+1}`, on a finite
 datum. -/
