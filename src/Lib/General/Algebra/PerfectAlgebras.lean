@@ -452,6 +452,7 @@ variable [ThePrime p] (C D : Type) [CommRing C] [CommRing D] [Algebra C D]
 
 /-- Étale algebras lift along surjections: if C → D is onto and B is étale over D, then
 B ≅ D ⊗_C T as D-algebras for some étale C-algebra T. -/
+@[stacks 04D1 "stated for a surjective ring map"]
 lemma exists_etale_lift (B : Type*) [CommRing B] [Algebra D B] [h_etale : Etale D B]
     (h_surj : Surjective (algebraMap C D)) :
     ∃ T : CommAlg C, Algebra.Etale C T ∧ Nonempty (D ⊗[C] T ≃ₐ[D] B) := by
