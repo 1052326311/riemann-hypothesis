@@ -110,7 +110,7 @@ theorem isLargeDegree_of_le_card {P : Parameters} (D : Data P) {N : ℕ} [NeZero
 `0 < T.frobExp ≤ r` and `r = D.ceilLogLifts p` is the least natural number with `D.m ≤ p ^ r`, the
 divisor constant `c = T.divisorConstant D.k a r = N a (P ^ (-2 r) + r ^ 2 / (k P))` for `k = D.k`
 and `a = D.a` satisfies `3 c ≤ 12 a ℓ / (m p)`, with `m = D.m`. -/
-theorem three_mul_divisorConstant_le {P : Parameters} (D : Data P) {N ℓ : ℕ} [NeZero N] {W O : Type}
+theorem three_mul_divisorConstant_le {P : Parameters} (D : Data P) {N ℓ : ℕ} {W O : Type}
     [CommRing W] [IsLocalRing W] [CommRing O] (T : FrobeniusCycle N W O)
     (hfrobExp_pos : 0 < T.frobExp) (hfrobExp_le : T.frobExp ≤ D.ceilLogLifts T.p) (hℓ : ℓ + ℓ = N) :
     3 * T.divisorConstant D.k D.a (D.ceilLogLifts T.p) ≤ 12 * (D.a * ℓ : ℕ) / (D.m * T.p) := by
