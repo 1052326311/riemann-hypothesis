@@ -291,7 +291,7 @@ lemma classSum_eq_relIndex_smul [H : HasFiniteType Γ K] [J : HasFiniteType Γ K
         simp_rw [card_eq_sum_ones]
         refine sum_comm' fun γ q ↦ ?_
         have h_mem : q.out⁻¹ * (y⁻¹ * γ * (x * a)) ∈ L → γ ∈ Γ → y⁻¹ * γ * (x * a) ∈ K :=
-          fun h_mem_L _ ↦ (K.mul_mem_cancel_left (K.inv_mem q.out.2)).1 (hLK h_mem_L)
+          fun h_mem_L _ ↦ (K.mul_mem_cancel_left (K.inv_mem q.out.property)).1 (hLK h_mem_L)
         simpa [hT, hL, mul_assoc] using h_mem
   -- Only the class of `x * a` contributes to this class sum, and its weight cancels.
   have hF (x : G) : F x = classSum Γ K fun y ↦ (#(T K y (x * a)) : ℚ) • f y := by

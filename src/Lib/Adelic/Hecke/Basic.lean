@@ -250,7 +250,7 @@ lemma map_heckeFun (L : W →ₗ[A] W') (h : HasFiniteCosets K f)
     L (heckeFun π K f v) = heckeFun π' K f (L v) := by simp [heckeFun_eq_sum_toFinset h, hL]
 
 lemma levelSpace_anti (hK : K ≤ K') : levelSpace π K' ≤ levelSpace π K :=
-  fun v hv k ↦ by simpa using hv ⟨k, hK k.2⟩
+  fun v hv k ↦ by simpa using hv ⟨k, hK k.property⟩
 
 /-- For a compact open subgroup K of a topological group G and g in G, the indicator function of KgK
 is K-invariant on both sides and supported on finitely many left cosets of K. -/
@@ -399,8 +399,8 @@ vectors fixed by `K`. -/
 lemma IsHeckeFunction.heckeFun_mem (hv : v ∈ levelSpace (A := A) π K) (hb : IsHeckeFunction K f) :
     heckeFun π K f v ∈ levelSpace π K := by
   obtain ⟨h_finite, h_inv⟩ := hb
-  exact heckeFun_mem_levelSpace h_finite (fun g k ↦ (h_inv g k k.2).1)
-    (fun g k ↦ by simp [(h_inv g k k.2).2]) hv
+  exact heckeFun_mem_levelSpace h_finite (fun g k ↦ (h_inv g k k.property).1)
+    (fun g k ↦ by simp [(h_inv g k k.property).2]) hv
 
 end HeckeBasic
 
