@@ -510,11 +510,6 @@ lemma TameChart.differentBound_le_one (d : TameChart Γ) : d.differentBound ≤ 
 lemma noMultipleNear_of_add_lt {q n b : ℕ} (h_lt : b + n < q) : NoMultipleNear q n b :=
   fun _ hy_ne hy_near h_dvd ↦ hy_ne (Int.eq_zero_of_abs_lt_dvd h_dvd (by grind))
 
-/-- An element of `[-η, η] ∪ ε [b, b + W]` is at most `b + W + η`. -/
-lemma FitsWindows.le_add_add {η b W : ℕ} {ε : ℤˣ} {V : Finset ℤ}
-    (hV : FitsWindows η ε b W V) {u : ℤ} (hu : u ∈ V) : u ≤ b + W + η := by
-  grind
-
 /-- Let `Γ → Gp p = Gal(ℚ̄_p / ℚ_p)` be a surjective open embedding. For each `s` in inertia let
 `K s` be a tame type: it holds for `X ^ e - 1`, with `e` the least common multiple of the
 `p ^ i - 1` for `1 ≤ i ≤ r`, and for a monic polynomial over `ℤ_[p]` of degree at most `N`. A
@@ -569,7 +564,8 @@ lemma hasCupExponent_of_isTameType [TopologicalSpace Γ] (ho : IsOpenEmbedding �
     d.fitsWindows_letterJumps ζ hU' i
   -- All jumps of the three sides are at most `b + 6 (W + η)`.
   have window_le {s : ℤˣ} {V : Finset ℤ} (hV : FitsWindows η s b W V) :
-      ∀ u ∈ V, u ≤ (b + 6 * (W + η) : ℕ) := fun u hu ↦ (hV.le_add_add hu).trans (by omega)
+      ∀ u ∈ V, u ≤ (b + 6 * (W + η) : ℕ) := fun u hu ↦
+        (hV.le_add (W := W + η) le_rfl hu).trans (by lia)
   -- The jumps of the Tate dual side are `0` and the `-(v + v') - 1`.
   have tateDual_le (i : d.Letter) :
       ∀ u ∈ P.tateDualSide.jumpSet i, u ≤ (b + 6 * (W + η) : ℕ) := by
