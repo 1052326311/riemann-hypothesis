@@ -72,7 +72,7 @@ lemma copyExponent_apply {X : Type} {k : ℕ} (α : Fin k → X × Unit →₀ �
 
 /-- The coefficient at `copyExponent α` of a product of series, each in the variables of its own
 copy, is the product of the coefficients at the exponents `α b` of the copies. -/
-lemma coeff_prod_rename_copyEmbedding {X R : Type} [Fintype X] [CommRing R] {k : ℕ}
+lemma coeff_prod_rename_copyEmbedding {X R : Type} [CommRing R] {k : ℕ}
     (α : Fin k → X × Unit →₀ ℕ) (Ψ : Fin k → MvPowerSeries (X × Unit) R) :
     coeff (copyExponent α) (∏ b : Fin k, rename (copyEmbedding b) (Ψ b)) =
       ∏ b : Fin k, coeff (α b) (Ψ b) := by
