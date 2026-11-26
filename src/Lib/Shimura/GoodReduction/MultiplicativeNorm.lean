@@ -3,6 +3,7 @@ module
 public import Lib.General.NumberTheory.SUnitsAndClassNumber
 public import Lib.Shimura.GoodReduction.GaussSums
 public import Lib.Shimura.ThetaModuli.PELThetaTori
+public import Mathlib.Analysis.Fourier.FiniteAbelian.PontryaginDuality
 
 /-!
 # Good reduction of theta tori from shift bounds on kernels of multiplications

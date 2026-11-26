@@ -1,6 +1,7 @@
 module
 
 public import Lib.General.NumberTheory.GaussValuation
+public import Mathlib.Data.NNRat.BigOperators
 
 /-!
 # Roots of unity `ζ` with polynomials hardly more divisible at `ζ - 1` than at given points

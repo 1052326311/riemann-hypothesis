@@ -2,6 +2,8 @@ module
 
 public import Lib.Shimura.ThetaModuli.PELThetaTori
 public import Lib.Shimura.Transfer.MarkedPairs
+public import Mathlib.Algebra.Order.Ring.Opposite
+public import Mathlib.Topology.Algebra.Algebra.Rat
 
 /-!
 # Period signatures, analytic families of theta tori and the ball chart of moduli points

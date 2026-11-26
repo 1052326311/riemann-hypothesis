@@ -1,6 +1,8 @@
 module
 
 public import Lib.LocalGL.Green.CuspidalFunctions
+public import Mathlib.NumberTheory.MulChar.Duality
+public import Mathlib.RingTheory.RootsOfUnity.AlgebraicallyClosed
 
 /-!
 # Green's characters of GL_n over a finite field: θ_x, τ_P, labels and their degrees

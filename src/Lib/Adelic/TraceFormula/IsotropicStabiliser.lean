@@ -1,6 +1,7 @@
 module
 
 public import Lib.Adelic.Reduction.FirstMinimumShortBases
+public import Mathlib.Algebra.AffineMonoid.UniqueSums
 
 /-!
 # The stabiliser of an isotropic subspace

@@ -2,6 +2,8 @@ module
 
 public import Lib.LocalGL.Iwahori.QuadraticRelation
 public import Lib.Weil.Unramified.HeckeGL
+public import Mathlib.Tactic.Monotonicity.Lemmas
+public import TauCeti.Analysis.Normed.Ring.Ultra
 
 /-!
 # Iwahori degrees, partial Hecke sums and Satake's formula

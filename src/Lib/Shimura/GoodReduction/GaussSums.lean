@@ -2,6 +2,9 @@ module
 
 public import Lib.Shimura.GoodReduction.TorsionSizes
 public import Lib.Shimura.Uniformisation.HolomorphicFamilies
+public import Lib.PadicComparison.Descent.TestCategory
+public import Mathlib.LinearAlgebra.Matrix.Module
+public import Mathlib.NumberTheory.SumFourSquares
 
 /-!
 # Hermitian tori with multiplications, Gauss sums and unfolding of the Poincaré kernel

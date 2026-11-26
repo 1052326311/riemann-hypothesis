@@ -3,6 +3,8 @@ module
 public import Lib.General.Analysis.FourierTransforms
 public import Lib.General.Analysis.MeanValueAndTaylor
 public import Lib.Weil.Fock.WeightedNorms
+public import Mathlib.Analysis.Calculus.ContDiff.WithLp
+public import Mathlib.Topology.Algebra.Module.FiniteDimensionBilinear
 
 /-!
 # Mixed Schrödinger–Fock models and rapid sections with prescribed values

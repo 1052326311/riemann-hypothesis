@@ -4,6 +4,8 @@ public import Lib.General.Algebra.MultivariatePolynomials
 public import New.UpperBound.ElementaryDivisors.TwistingData
 import TauCeti.Algebra.BigOperators.Finset.LayerCake
 import TauCeti.RingTheory.MvPolynomial.Symmetric.Alternant
+public import Mathlib.RingTheory.PiTensorProduct
+public import Std.Tactic.BVDecide.Normalize.Bool
 
 /-!
 # Few forms have only deep translates

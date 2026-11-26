@@ -3,6 +3,7 @@ module
 public import Lib.Adelic.Adeles.StrongApproximation
 public import Lib.General.Groups.ProfiniteCharacters
 public import Lib.General.Measure.HaarModulus
+public import Mathlib.NumberTheory.NumberField.ClassNumber
 
 /-!
 # Finite ideles, principal ideles and the class group; finite index of open subgroups

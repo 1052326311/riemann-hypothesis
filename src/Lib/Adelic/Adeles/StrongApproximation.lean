@@ -3,6 +3,9 @@ module
 public import Lib.Adelic.Unitary.Defs
 public import Lib.General.Analysis.FourierTransforms
 public import Lib.General.NumberTheory.EmbeddingsAndDifferent
+public import Mathlib.Analysis.CStarAlgebra.CStarMatrix
+public import Mathlib.NumberTheory.Padics.HeightOneSpectrum
+public import Mathlib.Topology.Algebra.ProperConstSMul
 
 /-!
 # Standard character, self-duality, strong approximation and one-sided Poisson summation

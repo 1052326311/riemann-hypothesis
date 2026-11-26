@@ -1,8 +1,19 @@
 module
 
-public import Lib.Base
 public import TauCeti.Analysis.Matrix.IndefiniteUnitaryGroup
 public import TauCeti.Topology.Algebra.Group.Units
+public import Aesop.Frontend.Tactic
+public import Aesop.Main
+public import Lib.Speed
+public import Mathlib.RingTheory.WittVector.IsPoly
+public import Mathlib.Tactic.Basify
+public import Mathlib.Tactic.ENatToNat
+public import Mathlib.Tactic.Polynomial.Basic
+public import Mathlib.Tactic.ReduceModChar
+public import Mathlib.Topology.Algebra.Group.Matrix
+public import Mathlib.Topology.Separation.CompletelyRegular
+public import Std.Internal.Order.Automation
+public import Std.Tactic.BVDecide.Normalize.Prop
 
 /-!
 # Integral, congruence and unitary matrix groups over a ring, with their topology

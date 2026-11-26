@@ -2,6 +2,7 @@ module
 
 public import New.Spanning.Bessel.Basic
 public import New.Spanning.Frames.Depth
+public import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
 
 /-!
 # The densities as integrals over pairs of frames

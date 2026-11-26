@@ -3,6 +3,7 @@ module
 public import Lib.ClassField.GaloisCohomology.ClassCounts
 public import TauCeti.RepresentationTheory.Homological.ContCohomology.Additive
 public import TauCeti.RepresentationTheory.Homological.ContCohomology.ContinuousCohomologyIso
+public import Mathlib.Combinatorics.Quiver.ReflQuiver
 
 /-!
 # The cohomology of a discrete module

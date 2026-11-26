@@ -2,6 +2,10 @@ module
 
 public import Lib.Adelic.Hecke.Basic
 public import Lib.Adelic.QuotientMeasure.Basic
+public import Mathlib.Algebra.Order.Star.Rat
+public import Mathlib.Algebra.Order.Star.Real
+public import Mathlib.RingTheory.PiTensorProduct
+public import Mathlib.RingTheory.SimpleRing.Principal
 
 /-!
 # Class sums as integrals over Γ\G, orbit unfolding and means over compact subgroups

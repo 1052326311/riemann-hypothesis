@@ -1,6 +1,7 @@
 module
 
 public import New.Reduction.Data.AdmissibleData
+public import Mathlib.Data.Rat.Cast.OfScientific
 
 /-!
 # Logarithmic bounds for the sizes of the data

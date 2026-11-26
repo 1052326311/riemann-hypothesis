@@ -1,6 +1,7 @@
 module
 
 public import Lib.General.Algebra.FittingIdealsAndLengths
+public import Mathlib.RingTheory.PicardGroup
 
 /-!
 # A matrix of relations with small block determinant valuation

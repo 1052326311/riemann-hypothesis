@@ -2,6 +2,9 @@ module
 
 public import Lib.Shimura.Uniformisation.HolomorphicFamilies
 public import New.Spanning.SecondMoment.PositiveType
+public import Lib.PadicComparison.Descent.TestCategory
+public import Mathlib.Algebra.Order.Star.Int
+public import Mathlib.Analysis.InnerProductSpace.Trace
 
 /-!
 # Few translates fill

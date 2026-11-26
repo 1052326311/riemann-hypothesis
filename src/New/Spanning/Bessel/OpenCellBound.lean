@@ -2,6 +2,7 @@ module
 
 public import New.Spanning.Bessel.SobolevBound
 public import New.Spanning.Unfolding.Link
+public import Mathlib.MeasureTheory.SpecificCodomains.WithLp
 
 /-!
 # Bounds near a point of Ω and the open cell bound for a Bessel system

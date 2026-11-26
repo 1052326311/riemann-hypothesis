@@ -4,6 +4,7 @@ public import Lib.General.Combinatorics
 public import Lib.General.LinearAlgebra.IdempotentRadical
 public import Lib.Shimura.HeckeTower.Model
 public import Lib.Shimura.Transfer.MarkedPairs
+public import Mathlib.Algebra.Polynomial.Eval.Irreducible
 
 /-!
 # For a function with a cuspidal type at one place, marked and definite orbit sums agree

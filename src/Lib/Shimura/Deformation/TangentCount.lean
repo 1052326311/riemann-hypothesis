@@ -1,6 +1,8 @@
 module
 
 public import Lib.Shimura.CongruenceRelation.KernelReduction
+public import Mathlib.Algebra.AffineMonoid.UniqueSums
+public import Mathlib.LinearAlgebra.FixedSubmodule
 
 /-!
 # Counting w-torsion points bounds a space of natural semilinear functions by n − 1

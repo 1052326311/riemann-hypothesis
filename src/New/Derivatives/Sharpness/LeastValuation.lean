@@ -1,6 +1,7 @@
 module
 
 public import New.Derivatives.Sharpness.OneCurve
+public import Mathlib.NumberTheory.SumFourSquares
 
 /-!
 # Least valuations of coefficients of theta products

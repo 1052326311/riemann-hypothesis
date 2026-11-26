@@ -3,6 +3,7 @@ module
 public import Lib.Cohomology.Hodge.DiagonalClass
 public import Lib.Cohomology.Hodge.Kunneth
 public import Lib.General.Algebra.MultivariatePolynomials
+public import Mathlib.Tactic.Monotonicity.Lemmas
 
 /-!
 # Reduced coincidences and the fixed point formula in Hodge cohomology

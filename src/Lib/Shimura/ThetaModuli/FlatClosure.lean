@@ -3,6 +3,7 @@ module
 public import Lib.General.Algebra.MultivariatePolynomials
 public import Lib.General.Geometry.GeometricPoints
 public import Lib.General.LinearAlgebra.MatrixPolynomials
+public import Mathlib.Algebra.Order.Group.Ideal
 
 /-!
 # Flat families of ideals cut out by points and the flat closure of theta points

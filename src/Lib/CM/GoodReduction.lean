@@ -1,6 +1,7 @@
 module
 
 public import Lib.CM.Sigma.ThetaSections
+public import Mathlib.NumberTheory.Padics.Complex
 
 /-!
 # CM lattices as multiples of fractional ideals, and good reduction of CM curves

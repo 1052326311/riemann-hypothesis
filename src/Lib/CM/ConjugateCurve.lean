@@ -2,6 +2,7 @@ module
 
 public import Lib.CM.GoodReduction
 import TauCeti.Analysis.SpecialFunctions.Elliptic.LatticeClassification
+public import Mathlib.RingTheory.PowerSeries.Ideal
 
 /-!
 # Galois conjugates of CM curves: conjugate sections, isogenies and translates of θ

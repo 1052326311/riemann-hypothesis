@@ -2,6 +2,7 @@ module
 
 public import Lib.Adelic.Adeles.SemilocalProducts
 public import New.Spanning.Unfolding.Setup
+public import Mathlib.MeasureTheory.Constructions.Polish.EmbeddingReal
 
 /-!
 # The box

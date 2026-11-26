@@ -3,6 +3,7 @@ module
 public import Lib.GaloisRep.BaseChange.Defs
 import TauCeti.LinearAlgebra.Matrix.Charpoly.Resultant
 import TauCeti.LinearAlgebra.Matrix.Polynomial
+public import Mathlib.LinearAlgebra.PiTensorProduct.Generators
 
 /-!
 # Minors, polynomials of matrices and twisted norms

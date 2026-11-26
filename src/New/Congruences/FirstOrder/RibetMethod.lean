@@ -1,6 +1,7 @@
 module
 
 public import Lib.General.LinearAlgebra.Eigenvalues
+public import Mathlib.RingTheory.TwoSidedIdeal.Instances
 
 /-!
 # Amitsur's formula and Ribet's method for matrices over an algebra

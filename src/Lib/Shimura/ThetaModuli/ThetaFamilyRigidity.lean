@@ -3,6 +3,8 @@ module
 public import Lib.Shimura.AbelianScheme.TangentCoordinates
 public import Lib.Shimura.ThetaGroup
 public import Lib.Shimura.ThetaModuli.PELThetaTori
+public import Lib.Shimura.AbelianScheme.Pairings
+public import Mathlib.RingTheory.Polynomial.Chebyshev
 
 /-!
 # Theta objects of PEL moduli problems, their pull-backs, and rigidity over local rings

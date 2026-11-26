@@ -2,6 +2,7 @@ module
 
 public import Lib.Adelic.AutomorphicForms.PAdicGauge
 public import Lib.GaloisRep.Pseudocharacter.Pseudorepresentations
+public import Mathlib.Topology.Algebra.Group.CompactOpen
 
 /-!
 # ℓ-adic models of algebraic forms and congruences that change the weight

@@ -1,7 +1,7 @@
 module
 
-public import Lib.DiscreteSeries.Bruhat.FloorGroups
 public import Lib.General.Measure.QuadricDisintegration
+public import Mathlib.Probability.Kernel.Deterministic
 
 /-!
 # Solving the equation of a quadric in a block of coordinates

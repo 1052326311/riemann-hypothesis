@@ -1,6 +1,7 @@
 module
 
 public import Lib.PadicHodge.PeriodRings.Ainf
+public import Mathlib.Algebra.AffineMonoid.UniqueSums
 
 /-!
 # The period rings A, B⁺, B and B_dR⁺: θ, Frobenius, domains and contraction

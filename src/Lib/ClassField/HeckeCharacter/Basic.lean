@@ -3,6 +3,7 @@ module
 public import Lib.ClassField.GaloisCohomology.KummerCyclicClasses
 public import Lib.ClassField.Places.Ideles
 public import Lib.GaloisRep.Hilbert90.UnitaryGroups
+public import Mathlib.NumberTheory.MulChar.Duality
 
 /-!
 # Characters of U(1) of a CM field: existence, weights and conjugates

@@ -2,6 +2,8 @@ module
 
 public import Lib.Adelic.Reduction.FirstMinimumShortBases
 public import Lib.General.LinearAlgebra.HermitianMatrices
+public import Mathlib.MeasureTheory.Function.LpSpace.DomAct.Continuous
+public import Mathlib.Tactic.Monotonicity.Lemmas
 
 /-!
 # Kernels kill bounded radical-invariant functions; dilations along isotropic subspaces

@@ -3,6 +3,7 @@ module
 public import Lib.DiscreteSeries.FlenstedJensen.CasimirEigenfunction
 public import Lib.DiscreteSeries.Theta.FockDualPair
 public import TauCeti.Algebra.Lie.GeneralLinear.Oscillator.Casimir
+public import Mathlib.Data.Finset.Slice
 
 /-!
 # The Casimir elements of an oscillator pair

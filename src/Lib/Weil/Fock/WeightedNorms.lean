@@ -1,6 +1,7 @@
 module
 
 public import Lib.Weil.Fock.Basic
+public import Mathlib.Analysis.Distribution.TemperateGrowth
 
 /-!
 # Moments on Fock space, approximation by polynomial vectors, bounds for functionals

@@ -1,6 +1,10 @@
 module
 
 public import Lib.General.Geometry.ProjectiveSpace
+public import Mathlib.Algebra.GroupWithZero.Submonoid.CancelMulZero
+public import Mathlib.Analysis.CStarAlgebra.Classes
+public import Mathlib.RingTheory.Ideal.KrullsHeightTheorem
+public import Mathlib.RingTheory.PicardGroup
 
 /-!
 # Dense families of complex points: reduced closures, separation of maps, and arcs

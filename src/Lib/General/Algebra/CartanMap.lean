@@ -1,6 +1,11 @@
 module
 
 public import Lib.ClassField.GaloisCohomology.ContinuousCocycles
+public import Mathlib.Algebra.Order.Star.Rat
+public import Mathlib.CategoryTheory.Shift.Basic
+public import Mathlib.GroupTheory.Nilpotent
+public import Mathlib.RingTheory.Coalgebra.CoassocSimps
+public import Mathlib.Tactic.ENatToNat
 
 /-!
 # Higman's criterion, dévissage and multiplicative functions on finite modules (Cartan map)

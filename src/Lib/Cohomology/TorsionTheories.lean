@@ -4,6 +4,8 @@ public import Lib.Cohomology.Etale.RelativeChains
 public import Lib.Cohomology.LerayHirsch
 public import Lib.General.Algebra.CohomologyBaseChange
 public import Lib.PadicComparison.HodgeTate.ExtCocycles
+public import Aesop.BuiltinRules
+public import Mathlib.GroupTheory.Nilpotent
 
 /-!
 # Tensoring degree-two classes; cohomology theories with ℓ-torsion coefficients

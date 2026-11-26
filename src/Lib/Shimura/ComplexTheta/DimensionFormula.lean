@@ -2,6 +2,12 @@ module
 
 public import Lib.General.Analysis.HolomorphicIntegrals
 public import Lib.Shimura.ComplexTheta.AppellHumbertData
+public import Mathlib.Algebra.Azumaya.Basic
+public import Mathlib.Algebra.Central.End
+public import Mathlib.Algebra.Module.ZLattice.Summable
+public import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
+public import Mathlib.RingTheory.Etale.Weakly
+public import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
 
 /-!
 # Theta functions on complex tori: dimension formula, base points, multipliers

@@ -3,6 +3,7 @@ module
 public import Lib.Cohomology.Etale.Basic
 public import Lib.General.Geometry.ProjectiveSpace
 public import Lib.Shimura.AbelianScheme.Basic
+public import Mathlib.AlgebraicGeometry.AffineSpace
 
 /-!
 # Pairings of line bundle classes on abelian schemes and their fpqc descent

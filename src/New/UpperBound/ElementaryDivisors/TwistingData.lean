@@ -2,6 +2,7 @@ module
 
 public import Lib.GLn.SchurModule.Basic
 public import Lib.General.Groups.BesselGroups
+public import Mathlib.Algebra.Order.Star.Int
 
 /-!
 # Frobenius cycles, the twisted action of GL_k(W), depth and defect

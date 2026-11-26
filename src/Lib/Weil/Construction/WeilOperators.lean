@@ -1,6 +1,8 @@
 module
 
 public import Lib.Weil.Construction.HeisenbergModel
+public import Mathlib.Order.CompletePartialOrder
+public import Mathlib.Topology.Sheaves.Presheaf
 
 /-!
 # Weil operators, orthogonal sums and transport of the reproducing model

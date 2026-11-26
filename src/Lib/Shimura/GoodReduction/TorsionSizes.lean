@@ -1,6 +1,8 @@
 module
 
 public import Lib.Shimura.ComplexTheta.DimensionFormula
+public import Mathlib.Algebra.GroupWithZero.Torsion
+public import Mathlib.GroupTheory.FiniteAbelian.Basic
 
 /-!
 # Sizes of theta functions at torsion points: products, bounds and shift bounds

@@ -3,6 +3,7 @@ module
 public import Lib.General.Geometry.SerreTheorem
 public import Lib.Shimura.ThetaNormality.RiemannRelation
 public import Lib.Shimura.Uniformisation.TorusModel
+public import Mathlib.AlgebraicGeometry.Morphisms.LocalFlatDescent
 
 /-!
 # Linear systems and theta families from dense complex points carrying theta tori

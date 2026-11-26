@@ -2,6 +2,7 @@ module
 
 public import New.Appendix.DiscreteSeries.GaussianShape
 public import New.Appendix.DiscreteSeries.Localization
+public import Mathlib.Analysis.Complex.ExponentialBounds
 
 /-!
 # Lower bounds for periods by Laplace's method

@@ -2,6 +2,7 @@ module
 
 public import Lib.Cohomology.Hodge.CupProduct
 public import Lib.General.Geometry.EtaleCharts
+public import Mathlib.LinearAlgebra.ExteriorAlgebra.Basis
 
 /-!
 # Hodge cohomology on algebras with free modules; universal points of charts

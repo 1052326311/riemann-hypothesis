@@ -1,6 +1,8 @@
 module
 
 public import Lib.General.Groups.CongruenceSubgroups
+public import Aesop.BuiltinRules
+public import Mathlib.Data.Matrix.ColumnRowPartitioned
 
 /-!
 # Block triangular groups, unipotent Bessel groups, Levi and parahoric subgroups

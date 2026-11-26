@@ -1,6 +1,7 @@
 module
 
 public import New.Congruences.Lifting.CupProductBound
+public import Mathlib.Order.Interval.Finset.Box
 
 /-!
 # Jump windows, the gap condition and points of the sides of a Kummer chart

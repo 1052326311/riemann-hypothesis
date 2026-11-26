@@ -2,6 +2,7 @@ module
 
 public import Lib.General.Analysis.HolomorphicIntegrals
 public import New.Spanning.Bessel.Basic
+public import Mathlib.Analysis.Complex.SqrtDeriv
 
 /-!
 # The Gram section γ_Z of the frame Gram matrix map on the unitary group G₁

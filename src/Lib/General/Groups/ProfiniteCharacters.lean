@@ -2,6 +2,11 @@ module
 
 public import Lib.ClassField.GaloisCohomology.ContinuousCocycles
 public import Lib.General.Topology
+public import Mathlib.Analysis.SpecialFunctions.Complex.CircleAddChar
+public import Mathlib.GroupTheory.FiniteAbelian.Duality
+public import Mathlib.Tactic.ENatToNat
+public import Mathlib.Topology.Instances.ZMod
+public import Mathlib.Topology.Separation.CompletelyRegular
 
 /-!
 # ℚ/ℤ, characters of profinite groups, and extension of homomorphisms

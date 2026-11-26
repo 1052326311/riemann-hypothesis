@@ -2,6 +2,7 @@ module
 
 public import Lib.ClassField.Global.Chebotarev
 public import Lib.ClassField.GreenbergWiles.SplitPrimeReciprocity
+public import Mathlib.Data.Set.Finite.Monad
 
 /-!
 # Relations at split primes and their number (Greenberg–Wiles)

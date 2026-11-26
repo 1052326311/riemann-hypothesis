@@ -1,6 +1,7 @@
 module
 
 public import Lib.Adelic.QuotientMeasure.Basic
+public import Mathlib.RingTheory.SimpleRing.Principal
 
 /-!
 # Pushing forward quotient measures, unfolding in stages and vanishing criteria

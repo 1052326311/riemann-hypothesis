@@ -1,6 +1,9 @@
 module
 
 public import Lib.Cohomology.Hodge.Site
+public import Mathlib.LinearAlgebra.CliffordAlgebra.Contraction
+public import Mathlib.RingTheory.Flat.Equalizer
+public import Mathlib.RingTheory.PiTensorProduct
 
 /-!
 # Ext¹ classes of cocycles of functors, and contraction on exterior algebras

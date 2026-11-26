@@ -1,6 +1,7 @@
 module
 
 public import Lib.PadicComparison.Primitive.PeriodCoefficients
+public import Mathlib.RingTheory.LocalRing.Pullback
 
 /-!
 # The Hodge–Tate maps λ_h on pairs (S, M): construction, properties and restriction

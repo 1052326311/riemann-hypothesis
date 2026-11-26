@@ -1,6 +1,10 @@
 module
 
 public import Lib.GLn.SchurModule.Basic
+public import Mathlib.Algebra.Order.Sub.Prod
+public import Mathlib.Algebra.Polynomial.Bivariate
+public import Mathlib.Data.Finsupp.Pointwise
+public import Mathlib.Order.Grade
 
 /-!
 # A basis of minor products for Borel semi-invariants over any ring, by induction on rows

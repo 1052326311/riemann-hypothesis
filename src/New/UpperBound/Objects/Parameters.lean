@@ -3,6 +3,7 @@ module
 public import Lib.Weil.Lift
 public import New.UpperBound.Objects.InsertBlock
 public import New.UpperBound.Objects.LabelsAndIndexTypes
+public import Std.Tactic.BVDecide.Normalize.Bool
 
 /-!
 # Index sets, signs and parameters of the grids; the parameters of every step correspond

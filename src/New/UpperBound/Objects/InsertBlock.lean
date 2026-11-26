@@ -1,6 +1,7 @@
 module
 
 public import Lib.DiscreteSeries.Theta.BlockRule
+public import Mathlib.Data.Finset.Slice
 
 /-!
 # Inserting a block into a parameter

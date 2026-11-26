@@ -2,6 +2,7 @@ module
 
 public import Lib.General.Geometry.GaloisCovers
 public import Lib.LocalGL.Shintani.CosetDescent
+public import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
 
 /-!
 # Label characters Ξ_c: orthonormality, central idempotents and twisting by χ∘det

@@ -4,6 +4,8 @@ public import Lib.General.Algebra.IntegralPowerSeries
 public import New.Congruences.Lifting.CutExponentBounds
 public import New.Congruences.Lifting.FewLowJumps
 public import New.Congruences.Lifting.TameCharts
+public import Mathlib.Algebra.GCDMonoid.FinsetLemmas
+public import Mathlib.RingTheory.Finiteness.Quotient
 
 /-!
 # From sides to lattices: few low jumps, b-letters and tame types

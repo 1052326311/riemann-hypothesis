@@ -1,6 +1,7 @@
 module
 
 public import Lib.SiegelWeil.Tower.RealConeIntegral
+public import Mathlib.LinearAlgebra.AffineSpace.MidpointZero
 
 /-!
 # Determinant vectors: the test vectors of the cone integral

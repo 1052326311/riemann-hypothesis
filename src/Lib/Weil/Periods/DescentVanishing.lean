@@ -3,6 +3,7 @@ module
 public import Lib.Adelic.QuotientMeasure.UnfoldingInStages
 public import Lib.SiegelWeil.SingularForms.UnimodularCoefficients
 public import Lib.Weil.DualPair.ThetaIntegrals
+public import Mathlib.Analysis.Complex.Tietze
 
 /-!
 # Vanishing theta descents for unitary groups: Fourier coefficients and periods

@@ -2,6 +2,9 @@ module
 
 public import Lib.DiscreteSeries.FlenstedJensen.PsiKTypes
 public import Lib.DiscreteSeries.Rigidity.HighestVectorsAndFiltration
+public import Mathlib.MeasureTheory.Function.LpSpace.ContinuousCompMeasurePreserving
+public import Mathlib.MeasureTheory.Function.LpSpace.DomAct.Basic
+public import Mathlib.MeasureTheory.Measure.RegularityCompacts
 
 /-!
 # Decay, tail bounds and the L² model of the discrete series coefficient c_λ

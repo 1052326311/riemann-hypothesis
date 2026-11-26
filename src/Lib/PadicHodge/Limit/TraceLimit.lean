@@ -3,6 +3,7 @@ module
 public import Lib.GaloisRep.Main.LocalConditions
 public import Lib.General.LinearAlgebra.TensorChains
 public import Lib.PadicHodge.Limit.CrystallineLimit
+public import Mathlib.RingTheory.Finiteness.Nilpotent
 
 /-!
 # Hodge–Tate jumps with bounded denominators and local conditions at limits of traces

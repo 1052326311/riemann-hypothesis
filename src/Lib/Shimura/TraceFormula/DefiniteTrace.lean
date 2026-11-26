@@ -2,6 +2,7 @@ module
 
 public import Lib.Adelic.Reduction.FiniteVolume
 public import Lib.Shimura.Transfer.MarkedPairs
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
 
 /-!
 # Trace formula for algebraic forms, finiteness of signed frame classes, the definite side

@@ -3,6 +3,9 @@ module
 public import Lib.Adelic.Hecke.ClassSums
 public import Lib.Adelic.Unitary.Defs
 public import Lib.General.LinearAlgebra.HermiteForm
+public import Mathlib.Algebra.Order.Star.Int
+public import Mathlib.Topology.Algebra.Ring.Compact
+public import Mathlib.Topology.Algebra.Valued.WithZeroMulInt
 
 /-!
 # Parahoric and pro-p Iwahori subgroups of GL_n over a local field and U_t operators

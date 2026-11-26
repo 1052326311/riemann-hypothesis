@@ -2,6 +2,7 @@ module
 
 public import Lib.Cohomology.Etale.Basic
 public import Lib.General.Algebra.SeriesCongruences
+public import Std.Tactic.BVDecide.Normalize.BitVec
 
 /-!
 # The change of directions

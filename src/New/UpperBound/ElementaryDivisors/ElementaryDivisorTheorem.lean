@@ -4,6 +4,7 @@ public import New.Reduction.Lattices.Colength
 public import New.UpperBound.ElementaryDivisors.AveragingMap
 public import New.UpperBound.ElementaryDivisors.DefectCount
 public import New.UpperBound.ElementaryDivisors.Depth
+public import Mathlib.Analysis.Complex.ExponentialBounds
 
 /-!
 # Elementary divisors of the edge Hecke operator

@@ -2,6 +2,8 @@ module
 
 public import Lib.DiscreteSeries.Bruhat.FloorMeasures
 public import Lib.DiscreteSeries.Bruhat.QuadricBlocks
+public import Mathlib.Probability.Kernel.Composition.IntegralCompProd
+public import Mathlib.Tactic.Monotonicity.Lemmas
 
 /-!
 # Fourier kernels between solved measures

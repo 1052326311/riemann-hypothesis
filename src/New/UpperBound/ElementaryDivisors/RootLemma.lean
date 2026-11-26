@@ -1,6 +1,12 @@
 module
 
 public import New.UpperBound.ElementaryDivisors.TwistingData
+public import Mathlib.Algebra.Order.Star.Real
+public import Mathlib.Algebra.Ring.IsFormallyReal
+public import Mathlib.Data.Finsupp.Pointwise
+public import Mathlib.LinearAlgebra.Matrix.Swap
+public import Mathlib.RingTheory.PiTensorProduct
+public import Mathlib.RingTheory.SimpleRing.Principal
 
 /-!
 # Gauss filtrations, Stepanov's count and the root lemma

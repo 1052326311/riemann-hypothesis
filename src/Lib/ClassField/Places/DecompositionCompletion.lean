@@ -2,6 +2,10 @@ module
 
 public import Lib.ClassField.Places.LocalFields
 public import Lib.PadicHodge.PeriodRings.AxTheorem
+public import Mathlib.Algebra.Order.Star.Rat
+public import Mathlib.Analysis.Normed.Algebra.Basic
+public import Mathlib.Tactic.Linter.Style
+public import Mathlib.Topology.Algebra.Ring.Compact
 
 /-!
 # Decomposition groups of places above p as Galois groups of local fields in ℚ̄_p

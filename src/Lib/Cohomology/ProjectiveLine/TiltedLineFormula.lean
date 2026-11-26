@@ -2,6 +2,7 @@ module
 
 public import Lib.Cohomology.ProjectiveLine.PerfectLine
 public import Lib.Cohomology.ProperBaseChange.Theorem
+public import Mathlib.CategoryTheory.Limits.Shapes.Pullback.IsPullback.Kernels
 
 /-!
 # Leray–Hirsch bases and the projective line formula for the tilted theory

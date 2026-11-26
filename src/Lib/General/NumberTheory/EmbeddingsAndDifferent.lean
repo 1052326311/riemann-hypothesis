@@ -1,6 +1,8 @@
 module
 
 public import Lib.Adelic.Adeles.AdditiveCharacter
+public import Mathlib.Algebra.AffineMonoid.Basic
+public import Mathlib.RingTheory.Ideal.Int
 
 /-!
 # Embeddings, differents and the maximal real subfield of a CM field

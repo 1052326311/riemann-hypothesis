@@ -8,6 +8,16 @@ public import TauCeti.Analysis.MvPolynomial.Jacobian
 import TauCeti.Analysis.Complex.CauchyIntegralPolydisc
 import TauCeti.Analysis.Complex.WeaklyHolomorphic
 import TauCeti.MeasureTheory.Function.StronglyMeasurable.FiniteDimensional
+public import Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected
+public import Mathlib.Analysis.CStarAlgebra.ContinuousMap
+public import Mathlib.Analysis.Calculus.LineDeriv.Basic
+public import Mathlib.Analysis.Complex.Schwarz
+public import Mathlib.Analysis.Convex.Contractible
+public import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
+public import Mathlib.Analysis.Real.Pi.Bounds
+public import Mathlib.MeasureTheory.Function.LpSpace.ContinuousFunctions
+public import Mathlib.RingTheory.Coalgebra.IsFrobenius
+public import Mathlib.RingTheory.HopfAlgebra.Basic
 
 /-!
 # Strong operator integrals, analyticity of parameter integrals, and Hua's integral bound

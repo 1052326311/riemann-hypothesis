@@ -1,6 +1,12 @@
 module
 
 public import Lib.ClassField.Places.GaloisDefs
+public import Aesop.Frontend.Tactic
+public import Aesop.Main
+public import Mathlib.Algebra.Order.Star.Int
+public import Mathlib.FieldTheory.Galois.IsGaloisGroup
+public import Mathlib.RepresentationTheory.Invariants
+public import Mathlib.Topology.Algebra.Group.TopologicalAbelianization
 
 /-!
 # Continuous cohomology of discrete modules: cocycles, H², cyclic classes, local Artin map

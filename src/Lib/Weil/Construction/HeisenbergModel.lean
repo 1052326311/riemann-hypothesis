@@ -1,6 +1,10 @@
 module
 
 public import Lib.General.Analysis.HolomorphicIntegrals
+public import Mathlib.Analysis.Normed.Group.Completeness
+public import Mathlib.MeasureTheory.Function.L2Space
+public import Mathlib.MeasureTheory.Function.LpSpace.InfiniteSum
+public import Mathlib.Tactic.Monotonicity.Lemmas
 
 /-!
 # Heisenberg cocycles, vacua, the reproducing model and Schur's lemma

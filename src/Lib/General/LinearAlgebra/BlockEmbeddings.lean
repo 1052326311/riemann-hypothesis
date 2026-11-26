@@ -2,6 +2,7 @@ module
 
 public import Lib.Weil.DualPair.Defs
 public import Lib.Weil.Unramified.HeckeGL
+public import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Card
 
 /-!
 # Extending columns, block matrices and block embeddings

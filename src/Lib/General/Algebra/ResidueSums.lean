@@ -1,6 +1,8 @@
 module
 
-public import Lib.Base
+public import Lib.Speed
+public import Mathlib.LinearAlgebra.Lagrange
+public import Std.Internal.Order.Automation
 
 /-!
 # Sums of residues at simple real poles

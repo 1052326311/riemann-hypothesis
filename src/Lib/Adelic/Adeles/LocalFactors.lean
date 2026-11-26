@@ -3,6 +3,7 @@ module
 public import Lib.Adelic.Unitary.CongruenceLevels
 public import Lib.General.Analysis.FiniteFourier
 public import Lib.Weil.Construction.WeilData
+public import Mathlib.Topology.Algebra.Valued.WithZeroMulInt
 
 /-!
 # Idelic generators of ideals, semilocal fields and tame local characters

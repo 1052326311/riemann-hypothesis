@@ -1,6 +1,8 @@
 module
 
 public import Lib.ClassField.Global.ExistenceTheorem
+public import Mathlib.Algebra.Group.Action.Sum
+public import Mathlib.LinearAlgebra.Matrix.Gershgorin
 
 /-!
 # Selmer cocycles, N-units, split places and the equivariant S-unit theorem

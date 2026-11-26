@@ -1,6 +1,9 @@
 module
 
 public import Lib.PadicComparison.Descent.AlmostDescent
+public import Aesop.BuiltinRules
+public import Mathlib.Algebra.AddConstMap.Basic
+public import Mathlib.CategoryTheory.SingleObj
 
 /-!
 # Wang sequence on C × Bℕ, lines, and root systems of units via periodic sequences

@@ -3,6 +3,8 @@ module
 public import Lib.Adelic.Unitary.RationalPoints
 public import Lib.Weil.Construction.FiniteCocycle
 public import Lib.Weil.Fock.Basic
+public import Mathlib.Analysis.LocallyConvex.Barrelled
+public import Mathlib.Data.Finset.Functor
 
 /-!
 # The adelic Weil representation on 𝒮(V) and its theta functional

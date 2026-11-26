@@ -2,6 +2,7 @@ module
 
 public import Lib.Cohomology.Etale.DenseSubfunctors
 public import Lib.Cohomology.Hodge.CupProduct
+public import Mathlib.GroupTheory.FreeGroup.GeneratorEquiv
 
 /-!
 # Relative chains ℤ[V]/ℤ[U]: local isomorphisms, transfer, excision and gluing

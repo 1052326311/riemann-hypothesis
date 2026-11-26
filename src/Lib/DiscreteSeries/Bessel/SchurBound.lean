@@ -1,6 +1,9 @@
 module
 
 public import Lib.DiscreteSeries.Bessel.Basic
+public import Mathlib.MeasureTheory.Function.Holder
+public import Mathlib.MeasureTheory.Function.LpSpace.DomAct.Continuous
+public import Mathlib.MeasureTheory.Measure.RegularityCompacts
 
 /-!
 # Traces and L² bounds for Bessel functions

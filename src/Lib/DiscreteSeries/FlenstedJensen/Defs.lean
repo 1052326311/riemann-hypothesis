@@ -1,6 +1,8 @@
 module
 
 public import Lib.DiscreteSeries.Haar.CayleyChart
+public import Mathlib.Algebra.Order.Star.Int
+public import Mathlib.Analysis.Normed.Algebra.MatrixExponential
 
 /-!
 # Harish-Chandra parameters, c_λ, deg_λ, e_λ and holomorphic discrete series

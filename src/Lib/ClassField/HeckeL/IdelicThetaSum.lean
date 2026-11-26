@@ -1,6 +1,7 @@
 module
 
 public import Lib.Adelic.Adeles.IdeleModulus
+public import Mathlib.Analysis.Convex.Integral
 
 /-!
 # Idelic theta sums over principal ideles as Riemann sums

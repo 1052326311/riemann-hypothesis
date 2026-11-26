@@ -3,6 +3,12 @@ module
 public import Lib.General.Geometry.GeometricPoints
 public import Lib.LocalGL.Green.TauFunctions
 public import Lib.Shimura.Uniformisation.HolomorphicFamilies
+public import Lib.PadicComparison.Descent.TestCategory
+public import Mathlib.Algebra.Module.Card
+public import Mathlib.Algebra.MvPolynomial.Cardinal
+public import Mathlib.RingTheory.Localization.Cardinality
+public import Mathlib.Topology.Baire.BaireMeasurable
+public import Mathlib.Topology.Baire.LocallyCompactRegular
 
 /-!
 # Complex points over countable rings, Zariski generic members and Galois coverings

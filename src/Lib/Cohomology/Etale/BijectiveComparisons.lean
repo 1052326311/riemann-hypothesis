@@ -1,6 +1,10 @@
 module
 
 public import Lib.General.Algebra.LongExactSequences
+public import Mathlib.AlgebraicTopology.AlternatingFaceMapComplex
+public import Mathlib.CategoryTheory.EffectiveEpi.Comp
+public import Mathlib.CategoryTheory.ExtremalEpi
+public import Mathlib.CategoryTheory.Subfunctor.Equalizer
 
 /-!
 # Criteria for comparison maps of Ext cohomology of functors of points to be bijective

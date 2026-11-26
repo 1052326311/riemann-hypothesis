@@ -2,6 +2,7 @@ module
 
 public import Lib.GaloisRep.Main.DivisibleSelmerModules
 public import New.Congruences.Selmer.Mirror
+public import Mathlib.Data.ENat.BigOperators
 
 /-!
 # The descent

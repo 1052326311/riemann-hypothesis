@@ -2,6 +2,7 @@ module
 
 public import Lib.General.LinearAlgebra.PolarDecomposition
 public import Lib.General.NumberTheory.FrobeniusOrbits
+public import Mathlib.Data.Int.Log
 
 /-!
 # Adelic Minkowski theorems and counts of rational points in boxes

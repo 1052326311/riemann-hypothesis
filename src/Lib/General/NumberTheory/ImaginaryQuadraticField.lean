@@ -1,6 +1,14 @@
 module
 
 public import Lib.General.NumberTheory.EmbeddingsAndDifferent
+public import Mathlib.Algebra.Order.Star.Int
+public import Mathlib.Algebra.Order.Star.Rat
+public import Mathlib.Algebra.Order.Star.Real
+public import Mathlib.GroupTheory.Nilpotent
+public import Mathlib.NumberTheory.Harmonic.EulerMascheroni
+public import Mathlib.NumberTheory.LSeries.DirichletContinuation
+public import Mathlib.NumberTheory.Multiplicity
+public import Mathlib.RingTheory.KrullDimension.PID
 
 /-!
 # The imaginary quadratic field ℚ(√−d): characters, Frobenius and splitting of primes

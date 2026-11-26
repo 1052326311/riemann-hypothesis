@@ -1,6 +1,12 @@
 module
 
 public import Lib.Cohomology.Etale.DenseSubfunctors
+public import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
+public import Mathlib.RingTheory.RegularLocalRing.Defs
+public import Mathlib.RingTheory.RingHom.Etale
+public import Mathlib.RingTheory.TensorProduct.IsBaseChangeFree
+public import Mathlib.RingTheory.TotallySplit
+public import Mathlib.Tactic.Polynomial.Basic
 
 /-!
 # Functors of points on algebras: open subfunctors, étale charts, atlases, charted schemes

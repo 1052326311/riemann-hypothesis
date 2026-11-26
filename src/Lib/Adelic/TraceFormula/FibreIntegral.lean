@@ -1,6 +1,7 @@
 module
 
 public import Lib.Adelic.TraceFormula.TestFunction
+public import Mathlib.Topology.Algebra.Nonarchimedean.TotallyDisconnected
 
 /-!
 # Integration over the fibres of a conjugation map

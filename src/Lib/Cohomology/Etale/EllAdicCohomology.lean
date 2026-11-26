@@ -2,6 +2,7 @@ module
 
 public import Lib.Cohomology.Etale.FilteredLimits
 public import Lib.PadicComparison.Completion
+public import Mathlib.GroupTheory.Nilpotent
 
 /-!
 # ℓ-adic cohomology with its Galois action; finiteness and bijectivity from coefficients mod ℓ

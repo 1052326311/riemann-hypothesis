@@ -2,6 +2,7 @@ module
 
 public import Lib.General.Algebra.SharpMinors
 public import New.Congruences.Selmer.SelmerData
+public import Mathlib.RingTheory.MvPolynomial.IrreducibleQuadratic
 
 /-!
 # The universal twist and one system of equations for all twists

@@ -3,6 +3,7 @@ module
 public import Lib.Adelic.TraceFormula.FibreIntegral
 public import Lib.General.LinearAlgebra.Eigenvalues
 public import TauCeti.LinearAlgebra.Trace.Idempotent
+public import Mathlib.Algebra.AffineMonoid.UniqueSums
 
 /-!
 # Coprime factors

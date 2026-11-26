@@ -4,6 +4,10 @@ public import Lib.Adelic.Adeles.Basic
 public import Lib.ClassField.Places.ProfiniteGalois
 public import Lib.General.Algebra.AdicCompletion
 public import Lib.General.Topology
+public import Mathlib.RingTheory.Invariant.Profinite
+public import Mathlib.RingTheory.Valuation.Extension
+public import Mathlib.RingTheory.Valuation.IsTrivialOn
+public import Mathlib.RingTheory.Valuation.LocalSubring
 
 /-!
 # Valuation subrings over primes, primes from p-adic embeddings, and the efg formula

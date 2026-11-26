@@ -1,6 +1,7 @@
 module
 
 public import Lib.Cohomology.ProjectiveLine.ChernClass
+public import Mathlib.CategoryTheory.Limits.Final.Type
 
 /-!
 # Integration over ℙ¹, compared cohomology theories, and moving kernel classes in (ℙ¹)^d

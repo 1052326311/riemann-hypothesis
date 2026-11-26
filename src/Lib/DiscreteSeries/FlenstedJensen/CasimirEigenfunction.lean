@@ -1,6 +1,10 @@
 module
 
 public import Lib.DiscreteSeries.FlenstedJensen.FlagDensities
+public import Mathlib.Analysis.Calculus.Deriv.Prod
+public import Mathlib.Geometry.Manifold.PartitionOfUnity
+public import Mathlib.Topology.Compactness.CompactlyGeneratedSpace
+public import Mathlib.Topology.Germ
 
 /-!
 # Flensted-Jensen's integral, analyticity of c_λ and its Casimir eigenvalue

@@ -4,6 +4,7 @@ public import Lib.Adelic.AutomorphicForms.PAdicGauge
 public import Lib.General.LinearAlgebra.BlockEmbeddings
 public import Lib.Weil.DualPair.KernelDecay
 public import Lib.Weil.DualPair.KernelLaws
+public import Mathlib.LinearAlgebra.PiTensorProduct.Finite
 
 /-!
 # Level moduli, residue data as Schwartz–Bruhat functions, and descent in positive degree

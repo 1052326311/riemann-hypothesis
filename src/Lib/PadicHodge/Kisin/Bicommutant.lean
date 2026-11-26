@@ -1,6 +1,7 @@
 module
 
 public import Lib.PadicHodge.Kisin.Charts
+public import Mathlib.Algebra.Module.Torsion.PrimaryComponent
 
 /-!
 # The ring S_B of a chart and extension of S-linear maps of A_inf to B^+

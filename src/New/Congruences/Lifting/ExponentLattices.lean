@@ -1,6 +1,7 @@
 module
 
 public import Lib.PadicHodge.Kisin.FrameTheorem
+public import Mathlib.LinearAlgebra.Span.TensorProduct
 
 /-!
 # Lattices with prescribed orders, depth steps and the depth lemma

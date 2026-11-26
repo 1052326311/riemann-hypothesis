@@ -1,6 +1,8 @@
 module
 
 public import Lib.DiscreteSeries.FlenstedJensen.Defs
+public import Mathlib.Analysis.CStarAlgebra.Module.Constructions
+public import Mathlib.Order.CompletePartialOrder
 
 /-!
 # gl_n-modules, unitary representations of U(J) and a Casimir bound on K-highest vectors

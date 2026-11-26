@@ -6,6 +6,7 @@ public import New.Spanning.Unfolding.PoincareSeries
 public import New.Spanning.Unfolding.ReducedGroups
 public import New.UpperBound.Seesaw.EdgePairEvaluation
 public import New.UpperBound.Size.ShortColumns
+public import Mathlib.Algebra.Order.Antidiag.FinsuppEquiv
 
 /-!
 # Filling data for admissible data: fit to Y₀, Bessel bounds, standing hypotheses

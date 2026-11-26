@@ -2,6 +2,7 @@ module
 
 public import Lib.Adelic.AutomorphicForms.RealConvolution
 public import Lib.DiscreteSeries.CuspKernel
+public import Mathlib.Analysis.Convex.Integral
 
 /-!
 # The mean along a unipotent radical vanishes; reduction in the radical

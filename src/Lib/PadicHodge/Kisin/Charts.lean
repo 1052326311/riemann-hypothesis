@@ -1,6 +1,11 @@
 module
 
 public import Lib.PadicHodge.PeriodRings.DeRhamPeriods
+public import Mathlib.Algebra.CharP.Subring
+public import Mathlib.RingTheory.Polynomial.DegreeLT
+public import Mathlib.RingTheory.PowerSeries.Expand
+public import Mathlib.RingTheory.PowerSeries.Ideal
+public import Mathlib.RingTheory.PowerSeries.WeierstrassPreparation
 
 /-!
 # Power series charts Λ⟦z⟧ in A_inf: Weierstrass division and fixed elements

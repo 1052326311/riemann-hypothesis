@@ -4,6 +4,7 @@ public import Lib.SiegelWeil.SingularForms.UnimodularCoefficients
 public import Lib.SiegelWeil.Tower.LineTerms
 public import Lib.SiegelWeil.Tower.PrincipalIdeles
 public import Lib.Weil.DualPair.ThetaIntegrals
+public import Mathlib.LinearAlgebra.Matrix.CharP
 
 /-!
 # The constant term of a theta integral, unfolded along isotropic lines

@@ -1,6 +1,8 @@
 module
 
 public import Lib.GaloisRep.Main.Defs
+public import Mathlib.Algebra.MvPolynomial.NoZeroDivisors
+public import Mathlib.FieldTheory.PurelyInseparable.Exponent
 
 /-!
 # Free cocharacter weights force rank n and identify killing polynomials

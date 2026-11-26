@@ -2,6 +2,8 @@ module
 
 public import Lib.GLn.SchurModule.SchurOrthogonality
 public import Lib.General.LinearAlgebra.Eigenvalues
+public import Mathlib.Analysis.Fourier.AddCircleMulti
+public import Mathlib.Data.Finset.CastCard
 
 /-!
 # Laurent polynomials on the torus and Weyl's character and dimension formulas

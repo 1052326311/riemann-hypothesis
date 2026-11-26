@@ -2,6 +2,16 @@ module
 
 public import Lib.General.Analysis.FiniteFourier
 public import Lib.General.LinearAlgebra.IntegralLattices
+public import Mathlib.Algebra.Order.Star.Rat
+public import Mathlib.Algebra.Order.Star.Real
+public import Mathlib.Algebra.Ring.IsFormallyReal
+public import Mathlib.Analysis.CStarAlgebra.Module.Constructions
+public import Mathlib.Analysis.InnerProductSpace.TensorProduct
+public import Mathlib.NumberTheory.LegendreSymbol.Complex
+public import Mathlib.RingTheory.Etale.Weakly
+public import Mathlib.RingTheory.Henselian
+public import Mathlib.RingTheory.RegularLocalRing.Defs
+public import Mathlib.RingTheory.TotallySplit
 
 /-!
 # Functions of positive type and singular minors

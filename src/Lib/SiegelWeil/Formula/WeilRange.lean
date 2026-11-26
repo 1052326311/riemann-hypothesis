@@ -2,6 +2,7 @@ module
 
 public import Lib.SiegelWeil.Formula.LagrangianZeroTerms
 public import Lib.Weil.DualPair.ThetaIntegrals
+public import Mathlib.Order.Interval.Finset.Box
 
 /-!
 # Siegel sets and the Siegel–Weil formula in Weil's range

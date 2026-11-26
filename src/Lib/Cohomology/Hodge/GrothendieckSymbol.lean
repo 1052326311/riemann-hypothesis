@@ -2,6 +2,7 @@ module
 
 public import Lib.Cohomology.Hodge.DepthVanishing
 public import Lib.PadicComparison.HodgeTate.ExtCocycles
+public import Aesop.BuiltinRules
 
 /-!
 # Grothendieck's symbol [dT/T], cut-out loci and Hodge classes of points

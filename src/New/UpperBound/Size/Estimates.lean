@@ -2,6 +2,7 @@ module
 
 public import New.UpperBound.Size.ClassCount
 public import New.UpperBound.Size.ShortColumns
+public import Mathlib.NumberTheory.Harmonic.Bounds
 
 /-!
 # Numerical inequalities between the parameters of the data

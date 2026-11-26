@@ -1,6 +1,10 @@
 module
 
 public import Lib.Cohomology.Etale.BijectiveComparisons
+public import Mathlib.CategoryTheory.Abelian.CommSq
+public import Mathlib.CategoryTheory.Limits.FunctorCategory.BinaryBiproducts
+public import Mathlib.CategoryTheory.Limits.Types.Multicoequalizer
+public import Mathlib.Order.CompletePartialOrder
 
 /-!
 # Dense subfunctors, Mayer–Vietoris and partitions along idempotents

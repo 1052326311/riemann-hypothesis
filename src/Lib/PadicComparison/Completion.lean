@@ -1,6 +1,8 @@
 module
 
 public import Lib.General.Algebra.CohomologyBaseChange
+public import Mathlib.Algebra.Category.Grp.Ulift
+public import Mathlib.RingTheory.Regular.Category
 
 /-!
 # Derived completeness, adic approximation of comparisons and completed base change

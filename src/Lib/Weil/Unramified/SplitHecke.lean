@@ -2,6 +2,7 @@ module
 
 public import Lib.General.LinearAlgebra.Eigenvalues
 public import Lib.Weil.Unramified.HeckeGL
+public import Mathlib.RingTheory.PowerSeries.Inverse
 
 /-!
 # Hecke operators and Hecke polynomials at split places; spherical eigenvectors

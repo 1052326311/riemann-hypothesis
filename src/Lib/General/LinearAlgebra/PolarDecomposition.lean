@@ -3,6 +3,8 @@ module
 public import Lib.DiscreteSeries.Holomorphic.MaximalCompactMinors
 public import Lib.Weil.Construction.WeilData
 import TauCeti.Analysis.Matrix.LDL
+public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
+public import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
 
 /-!
 # Gram–Schmidt, tight frames, polar decomposition in U(p,q), forms representing one

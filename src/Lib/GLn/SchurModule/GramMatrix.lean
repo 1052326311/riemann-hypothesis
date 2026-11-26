@@ -1,7 +1,9 @@
 module
 
-public import Lib.Adelic.Witt.WittTheorem
 public import Lib.GLn.SchurModule.WeylKernel
+public import Lib.General.LinearAlgebra.IntegralLattices
+public import Mathlib.LinearAlgebra.Matrix.Integer
+public import Mathlib.Tactic.Monotonicity.Lemmas
 
 /-!
 # Fock pairing, Hermitian norm and Cartan products for the Gram matrix of the Weyl kernel

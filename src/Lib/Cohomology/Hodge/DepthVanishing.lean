@@ -3,6 +3,8 @@ module
 public import Lib.Cohomology.Hodge.Site
 public import Lib.PadicComparison.Descent.AlmostDescent
 import TauCeti.RingTheory.MvPolynomial.RegularSequence
+public import Mathlib.RingTheory.Regular.Category
+public import Mathlib.RingTheory.Regular.Flat
 
 /-!
 # Vanishing of Hodge cohomology with supports below the depth, and Zariski descent

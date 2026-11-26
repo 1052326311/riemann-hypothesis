@@ -2,6 +2,11 @@ module
 
 public import Lib.General.Algebra.MultivariatePolynomials
 public import Lib.PadicComparison.Descent.TestCategory
+public import Mathlib.Algebra.Order.Star.Int
+public import Mathlib.Data.Finset.Functor
+public import Mathlib.GroupTheory.Nilpotent
+public import Mathlib.Order.Filter.AtTopBot.Interval
+public import Mathlib.Tactic.Linter.Style
 
 /-!
 # Mayer–Vietoris for two charts of a line modulo an ideal

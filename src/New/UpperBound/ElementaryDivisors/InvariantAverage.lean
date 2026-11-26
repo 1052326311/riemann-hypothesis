@@ -3,6 +3,15 @@ module
 public import Lib.GLn.SchurModule.Basic
 public import Lib.General.Groups.BesselGroups
 public import TauCeti.Algebra.BigOperators.ZPow
+public import Mathlib.Algebra.Module.StablyFree.Basic
+public import Mathlib.Algebra.MvPolynomial.Coeff
+public import Mathlib.Order.CompletePartialOrder
+public import Mathlib.RingTheory.Coalgebra.IsFrobenius
+public import Mathlib.RingTheory.Etale.Weakly
+public import Mathlib.RingTheory.Finiteness.Lattice
+public import Mathlib.RingTheory.HopfAlgebra.Basic
+public import Mathlib.RingTheory.SimpleRing.Principal
+public import Mathlib.RingTheory.TotallySplit
 
 /-!
 # An average on polynomials in the entries of a matrix

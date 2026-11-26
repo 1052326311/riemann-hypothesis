@@ -3,6 +3,7 @@ module
 public import Lib.DiscreteSeries.Bessel.SchurBound
 public import Lib.DiscreteSeries.Bessel.UnipotentHaarMeasure
 public import New.Spanning.Bessel.Basic
+public import Mathlib.MeasureTheory.SpecificCodomains.WithLp
 
 /-!
 # Normalisation of a Bessel function and of its cut
