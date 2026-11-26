@@ -334,8 +334,11 @@ lemma unipotentBelow_le_partialUnitriangularGroup :
   fun _ hg ↦ mem_partialUnitriangularGroup_of_mem_besselU (unipotentBelow_le_besselU hg)
 
 /-- The groups `𝒩_{<j} = unipotentBelow j` increase with `j`. -/
-lemma unipotentBelow_le_succ : T.unipotentBelow j ≤ unipotentBelow (j + 1) := by
-  grind [IsConcreteLE.le_iff]
+lemma unipotentBelow_le_succ : T.unipotentBelow j ≤ unipotentBelow (j + 1) :=
+  fun _ hg ↦ mem_unipotentBelow.2 fun i k h_level ↦ mem_unipotentBelow.1 hg i k <| by
+    have := floorOf_level_cases i
+    have := floorOf_level_cases k
+    split_ifs at h_level ⊢ <;> lia
 
 /-- The groups `Q_l = partialUnitriangularGroup l` decrease as `l` grows. -/
 lemma partialUnitriangularGroup_anti : Antitone T.partialUnitriangularGroup := by
@@ -721,8 +724,9 @@ lemma leadingMinor_frameGram_weylElem {l : ℕ} (hl : l ≤ 𝔰.ϱ) (p : ℕ �
       (Fin.castLE j.is_le) = diagonal fun a : Fin j ↦ (p a).val := by
     ext a b
     have hb : b.val < l := by lia
-    simp +contextual [frameGram, h_frame, weylElem, weylOn, level, Matrix.mul_apply, diagonal_apply,
-      hb, hb.trans_le hl, Fin.ext_iff]
+    simp [frameGram, h_frame, weylElem, weylOn, level, Matrix.mul_apply, diagonal_apply, hb,
+      hb.trans_le hl, Fin.ext_iff]
+    split_ifs with h_eq <;> simp [h_eq]
   rw [leadingMinor, h_block, det_diagonal, Units.coe_prod, Finset.prod_range]
 
 /-! ### Action on coordinates of vectors -/
@@ -956,8 +960,21 @@ lemma simpleRootSum_eq_zero_of_mem_besselH (hh : h ∈ besselH) : simpleRootSum 
 of `1`. -/
 lemma besselH_apply_eq_or (hu : u ∈ besselU) (hh : h ∈ besselH) (i j : 𝔰.BesselIndex) :
     h.val i j = (u * h).val i j ∨ h.val i j = (1 : Matrix 𝔰.BesselIndex 𝔰.BesselIndex R) i j := by
-  revert i j
-  simp [apply_eq_one_apply_of_mem_floorGroup hh, apply_inr_of_mem_besselU hu, Matrix.mul_apply]
+  have h_lt : 𝔰.ϱ < 𝔰.n := Nat.lt_succ_self _
+  by_cases h_col : floorOf j < 𝔰.n
+  · exact .inr (apply_eq_one_apply_of_mem_floorGroup hh i j (.inr h_col))
+  by_cases h_row : floorOf i < 𝔰.ϱ
+  · exact .inr (apply_eq_one_apply_of_mem_floorGroup hh i j (.inl ⟨h_row.trans h_lt, h_row⟩))
+  -- Now `i` lies in the middle block, of level `ϱ`, and only the term `x = i` of the product stays.
+  have h_level_i : BesselIndex.level i = 𝔰.ϱ := by have := floorOf_level_cases i; lia
+  refine .inl (Eq.symm ?_)
+  rw [Subgroup.coe_mul, Units.val_mul, Matrix.mul_apply, Fintype.sum_eq_single i fun x hx ↦ ?_,
+    mem_besselU.1 hu i i le_rfl, one_apply_eq, one_mul]
+  by_cases hx_floor : floorOf x < 𝔰.ϱ
+  · rw [apply_eq_one_apply_of_mem_floorGroup hh x j (.inl ⟨hx_floor.trans h_lt, hx_floor⟩),
+      one_apply_ne (by rintro rfl; lia), mul_zero]
+  · rw [mem_besselU.1 hu i x (by have := floorOf_level_cases x; lia), one_apply_ne (Ne.symm hx),
+      zero_mul]
 
 /-- Let `u` be block unitriangular (`besselU`) and let `h` fix the basis vectors outside `κ`
 (`besselH`). If `u * h` is integral over `Q` and congruent to `1` modulo `g` (`New.unitaryLevel`),
