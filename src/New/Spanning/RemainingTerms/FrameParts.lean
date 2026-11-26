@@ -657,7 +657,7 @@ lemma IsNear.genIndex_M_mul_leadingMinor_le {γ : S.G E} (j : Fin (𝔰.ϱ + 2))
         rw [← pow_mul, ← pow_add]
         exact pow_le_pow_right₀ S.one_le_b h_exponent
 
-omit [S.IsAdmissible] in
+omit [S.IsAdmissible] [HasPrimitiveRoot5040 E] in
 /-- If `Z` has integral entries, then the modulus `S.frameModulus j Z = M det (Y Yᴴ)` is integral,
 where `M = S.M` and `Y` consists of the first `j` rows of `Z` completed by rows of `1`. -/
 lemma frameModulus_mem_integralAdeles_of_isIntegral {j : Fin (𝔰.ϱ + 2)}
