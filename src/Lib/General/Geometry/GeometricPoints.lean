@@ -1,6 +1,8 @@
-import Lib.Cohomology.Etale.Basic
-import Lib.General.Geometry.DenseComplexPoints
-import Lib.Shimura.AbelianScheme.Basic
+module
+
+public import Lib.Cohomology.Etale.Basic
+public import Lib.General.Geometry.DenseComplexPoints
+public import Lib.Shimura.AbelianScheme.Basic
 
 /-!
 # Geometric points, specialisation, separating products and integral abelian varieties
@@ -42,6 +44,8 @@ Notions from other files:
 
 Known; see `Lib.Shimura.AbelianScheme.IsogenyFlatness` for sources.
 -/
+
+@[expose] public section
 
 /-! ## Points over algebraically closed fields -/
 

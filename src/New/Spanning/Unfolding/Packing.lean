@@ -1,4 +1,6 @@
-import New.Spanning.Unfolding.ReducedPoints
+module
+
+public import New.Spanning.Unfolding.ReducedPoints
 
 /-!
 # Class cutoffs and counting frames in boxes
@@ -30,6 +32,9 @@ Notions from other files:
 * `New.Filling.IsAdmissible`: the standing hypotheses, among them the size inequalities between
   `S.b`, `S.realM v` and `S.N`.
 -/
+
+@[expose] public section
+
 section BoxPartition
 
 open ENNReal Fin Matrix Module Set Norms.L2Operator Subgroup
@@ -344,9 +349,6 @@ lemma frameImage_eq_frameImage_one_of_close {g : S.G E} {d : S.Classes} {r : S.R
 
 variable [HasPrimitiveRoot5040 E]
 
--- Lean v4.37.0-rc1: side goals `0 < S.b ^ (c * 𝔰.n ^ 2)` of `bound`/`gcongr` (`Shape.n` is an
--- abbrev) exceed the default recursion depth.
-set_option maxRecDepth 2000 in
 omit [HasPrimitiveRoot5040 E] in
 /-- **Packing of frames.** Let `E` be a CM field, `𝔰` a shape (`𝔰.ϱ` hyperbolic planes), and `S`
 admissible data of the filling theorem over `E` (`IsAdmissible`), with parameter `b = S.b`. Let

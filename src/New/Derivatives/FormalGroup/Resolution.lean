@@ -1,5 +1,7 @@
-import Lib.CM.Integrality.LogTheta
-import Lib.Weil.Construction.ThetaJets
+module
+
+public import Lib.CM.Integrality.LogTheta
+public import Lib.Weil.Construction.ThetaJets
 
 /-!
 # Resolutions of the identity and power series in the compositions `y(μ_i z)`
@@ -37,6 +39,8 @@ The following imported notions occur in the statements.
 
 A resolution of the identity is a Parseval frame.
 -/
+
+@[expose] public section
 
 /-! ## Resolutions of the identity, integrality above a prime, and products of theta series -/
 
