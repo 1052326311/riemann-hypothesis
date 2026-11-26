@@ -264,7 +264,7 @@ lemma Core.exists_form_pos_and_unit {K : Matrix n n E} (z : Matrix n Unit (𝔸 
       h_mem.1 w (mem_univ w)
   · -- It is `0` at `w` and at its conjugate as well.
     have hw_conj : star w ∈ S.conjClosure := by simpa [conjClosure, or_comm] using hw
-    simpa [U, hw, hw_conj, idem_apply, -compl_union, -compl_sup, -mem_union, ← Matrix.map_mul,
+    simpa [U, hw, hw_conj, idem_apply, -compl_sup, -mem_union, ← Matrix.map_mul,
       Matrix.mul_assoc, Matrix.mul_add, Matrix.add_mul] using mem_iInter₂.1 h_mem.2 w hw
 
 /-- Hasse principle for representing `1`: let `E` satisfy `New.HasPrimitiveRoot5040` and let `K` be
