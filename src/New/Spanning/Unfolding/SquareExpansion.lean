@@ -408,18 +408,12 @@ lemma exists_unitary_besselFn_mul {side : FullOrCut} {γ : S.G E} (hγ : γ ∈ 
     ∃ M ∈ unitaryGroup S.BesselCoord ℂ, ∀ y : NumberField.InfinitePlace E → 𝔰.G₁,
       S.besselFn side (S.ratToInf γ * y) = M *ᵥ S.besselFn side y := by
   obtain ⟨u, hu, η, hη, rfl⟩ := mem_besselS.1 hγ
-  have h_comp (v : NumberField.InfinitePlace E) :
-      ∃ k : U (1 : Matrix 𝔰.κ 𝔰.κ ℂ), S.ratToInf η v = RealPlace.embedH k :=
-    exists_eq_toBesselH (hη.ratToInf_mem_agreeWithOneOn v) isUnit_one
-  choose k hk using h_comp
-  let M : Matrix S.BesselCoord S.BesselCoord ℂ := (S.unipotentChar (S.ratToFin u))⁻¹ •
-    kroneckerPi fun v : NumberField.InfinitePlace E ↦ ((S.besselSystem v).rep (k v)).1
-  refine ⟨M, ?_, besselFn_mul_of_eq_embedH hu hk⟩
+  choose k hk using fun v ↦ exists_eq_toBesselH (hη.ratToInf_mem_agreeWithOneOn v) isUnit_one
+  refine ⟨_, ?_, besselFn_mul_of_eq_embedH hu hk⟩
   -- A scalar of modulus one times a tensor product of unitary matrices is unitary.
   have h_star : star (kroneckerPi fun v ↦ ((S.besselSystem v).rep (k v)).1) =
-      kroneckerPi fun v ↦ star ((S.besselSystem v).rep (k v)).1 := by
-    ext
-    simp [kroneckerPi]
+      kroneckerPi fun v ↦ star ((S.besselSystem v).rep (k v)).1 :=
+    Matrix.ext fun _ _ ↦ by simp [kroneckerPi]
   have h_norm : ‖S.unipotentChar (S.ratToFin u)‖ = 1 := norm_selfDualChar
   rw [mem_unitaryGroup_iff, star_smul, smul_mul_smul_comm, h_star, ← kroneckerPi_mul,
     Complex.star_def, mul_conj', norm_inv, h_norm]
