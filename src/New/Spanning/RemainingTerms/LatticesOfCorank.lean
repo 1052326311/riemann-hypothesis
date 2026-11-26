@@ -301,7 +301,7 @@ lemma sub_mem_smul_intVectors_of_values {π : Type} [Fintype π] [DecidableEq π
   let z : π → 𝔸f E := d⁻¹ • (v - w)
   have h_first : z ᵥ* firstCols e U = s := by
     refine vecMul_injective_of_isUnit A.isUnit ?_
-    show (z ᵥ* firstCols e U) ᵥ* A.val = s ᵥ* A.val
+    change (z ᵥ* firstCols e U) ᵥ* A.val = s ᵥ* A.val
     rw [← mulVec_transpose A.val s, hs, vecMul_vecMul, smul_vecMul, sub_vecMul, smul_sub]
   have h_values : z ᵥ* U.val ∈ intVectors (Ô E) π := by
     intro p
@@ -723,7 +723,6 @@ lemma pow_mul_mul_rootDiscr_pow_le_tailScale (S : Filling E 𝔰) [S.IsAdmissibl
     lia
   refine le_of_pow_le_pow_left₀ (n := 1000) (by norm_num) S.tailScale_nonneg ?_
   set X : ℝ := 200 * (numInfPlaces E * 𝔰.k) * rootDiscr E
-  have hX : 0 ≤ X := by positivity
   calc (S.N ^ numInfPlaces E * X ^ (numInfPlaces E * (𝔰.k + 1))) ^ 1000
     _ = (S.N ^ 1000 * (X ^ 1000) ^ (𝔰.k + 1)) ^ numInfPlaces E := by
       simp only [mul_pow, ← pow_mul]
@@ -751,7 +750,6 @@ lemma mul_rootDiscr_pow_le_tailScale_pow_div (S : Filling E 𝔰) [S.IsAdmissibl
       S.tailScale ^ (l + 1) / S.b ^ numInfPlaces E := by
   have hb : 0 < S.b := by linarith [S.thousand_le_b]
   have h_rd : 0 < rootDiscr E := rootDiscr_pos E
-  have discriminantBound_nonneg : 0 ≤ S.discriminantBound := pow_nonneg hb.le _
   have hτ : 0 ≤ S.tailScale := S.tailScale_nonneg
   rw [le_div_iff₀ (by positivity)]
   calc _ = S.b ^ numInfPlaces E * S.discriminantBound ^ (2 * 𝔰.ϱ + 4 + 2) * 2 ^ 𝔰.k *

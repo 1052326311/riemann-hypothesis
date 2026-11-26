@@ -71,7 +71,7 @@ lemma New.Variety.cancels_moebius_of_factorsThrough_sup {E n : Type} {X : Type*}
     refine .trans ?_ (sum_fiberwise_eq_sum_filter ..).symm
     by_cases h : W ≤ B
     · simp [h, μ, ← Int.cast_inj (α := ℂ), prod_eq_zero (i := 0), q_binomial_submodule,
-        ← card_ResField, zero_lt_iff, ne_bot_of_le_ne_bot hW]
+        ← card_ResField, pos_iff_ne_zero, ne_bot_of_le_ne_bot hW]
     · simp [h]
   have F_eq_zero (B : Submodule (ResField w) (n → ResField w)) : F B = 0 := by
     simpa using moebius_inversion_bot F 0 sum_F B
@@ -195,7 +195,7 @@ lemma New.Variety.UniversalFamily.GraphClosure.isTangentPoly_localTerm_of_transl
   -- it remains to check its dimension and its base point, that `dc` is injective, and `dv = dc K`
   refine ⟨.of ℂ _, ⟨homMk σ ((hσ.comp_base_eq fun _ ↦ w _).trans (map_comp ..).symm)⟩, K, ?_, ?_,
     fun x y hxy ↦ ?_, fun x ↦ up_inj.mpr (OverMorphism.ext ?_), hdet⟩
-  · simp [(f.torus 0).isPeriodMap.finrank_eq_abelianDim, Module.finrank_pi_fintype]
+  · simp [finrank_eq_abelianDim (f.torus 0).realEquiv, Module.finrank_pi_fintype]
   · -- the jet `σ` lies over the point of `f.ballPoint a.markedPoint 0 = a`
     refine congrArg ULift.up (OverMorphism.ext (hσ.fst_comp.trans ?_))
     rw [hf.ballPoint_zero]
@@ -225,7 +225,7 @@ complex point in the closure `C` after `a` is translated by `κ⁻¹` for some `
 `levelGU D.Index D.level`. -/
 lemma New.Variety.UniversalFamily.GraphClosure.exists_point_act_eq {E : Type} [Field E] [CMBase E]
     {R : Subalgebra (𝓞 E) E} {D : PEL E} {U : UniversalFamily D R} {ν : ℕ}
-    [NeZero ν] {J : Type} [Finite J] {γ : J → nonZeroDivisors (𝓞 E) × GUPlus E D.Index}
+    {J : Type} [Finite J] {γ : J → nonZeroDivisors (𝓞 E) × GUPlus E D.Index}
     (C : U.GraphClosure γ ν) {a b : ModuliPoint E D.Index ν}
     (hab : U.datumPoint 1 a = U.datumPoint 1 b) :
     ∃ κ : levelGU D.Index D.level,
@@ -245,7 +245,7 @@ determined by the coset of `g` modulo `levelGU D.Index D.level`: there is one ma
 with `f = u ⟦g⟧` for every such `f`. The map `c` witnesses that maps to the base exist. -/
 lemma New.Variety.UniversalFamily.GraphClosure.exists_forall_eq_apply_mk_of_translate {E : Type}
     [Field E] [CMBase E] {R : Subalgebra (𝓞 E) E} {D : PEL E} {U : UniversalFamily D R} {ν : ℕ}
-    [NeZero ν] {J : Type} [Finite J] {γ : J → nonZeroDivisors (𝓞 E) × GUPlus E D.Index}
+    {J : Type} [Finite J] {γ : J → nonZeroDivisors (𝓞 E) × GUPlus E D.Index}
     (C : U.GraphClosure γ ν)
     (c : C.scheme ⟶ (Over.map U.base.hom).obj
       (ThetaFamily.fibrePower (X := U.family) (NonzeroTorsion (E := E) 1 D.Index ⊕ Fin ν))) :

@@ -341,7 +341,6 @@ variable {E : Type _} [Field E] [CMType E] [WeilData E]
   {n : Type _} [Fintype n] [DecidableEq n]
   {s : n → ℤˣ} (V : Space E n s) (g : G E s) (x y : n → 𝔸 E) (f f' : 𝒮 V)
 
-
 /-- Superposition: a bounded linear map `T` from `𝒮 V` to a complex Banach space is determined by
 its values on the translates ϱ(y) vac of the vacuum `vacElem`. Specifically, `T f` = ∫ ⟨ϱ(y) vac, f⟩
 T(ϱ(y) vac) dy, where ⟨·,·⟩ is `dataInner` and the integral over y ∈ 𝔸^n is taken against
@@ -571,7 +570,7 @@ lemma summable_modelInner (f' f : Model (adelicHeisenberg E s)) :
   have h_norm (z x : n → 𝔸 E) :
       ‖modelInner f' (heisenbergOp (z + ContinuousAddMonoidHom.id (n → 𝔸 E) x) IsVacuum.vacElem)‖ₑ =
         ‖f' (id z + x)‖ₑ := by
-    rw [← conj_modelInner, modelInner_heisenbergOp_vacElem, RCLike.enorm_conj]
+    rw [← conj_modelInner, modelInner_heisenbergOp_vacElem, RCLike.eNorm_conj]
     simp only [ContinuousAddMonoidHom.id_toFun, id_eq]
   obtain ⟨B, hB, M, hM⟩ :=
     wiener_bound (modelInner f') h_vac_ne (ContinuousAddMonoidHom.id (n → 𝔸 E)) h_int id h_norm
@@ -582,7 +581,7 @@ lemma summable_modelInner (f' f : Model (adelicHeisenberg E s)) :
   have h_fin : (V.vecAtPoint ⁻¹' B).Finite :=
     isCovolOneLattice_ratVectors.finite_preimage (hB.preimage_smul V.x⁻¹)
   rw [← h_fin.cast_ncard_eq] at h_bound
-  exact .of_enorm (ne_top_of_le_ne_top (by simp [ENNReal.mul_ne_top]) h_bound)
+  exact .of_eNorm (ne_top_of_le_ne_top (by simp [ENNReal.mul_ne_top]) h_bound)
 
 namespace IsRatInvariant
 
