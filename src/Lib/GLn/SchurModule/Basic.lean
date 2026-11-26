@@ -307,16 +307,6 @@ lemma jet_monomial :
   classical
   aesop
 
-/-- Raising the exponent at `i` by one multiplies `d!` by `d i + 1`. -/
-private lemma prod_factorial_add_single (d : σ →₀ ℕ) (i : σ) :
-    ((d + Finsupp.single i 1).prod fun (_k : σ) (j : ℕ) ↦ (j ! : R)) =
-      ((d i : R) + 1) * d.prod fun (_k : σ) (j : ℕ) ↦ (j ! : R) := by
-  rw [← mul_prod_erase' (d + Finsupp.single i 1) i _ (by simp), ← mul_prod_erase' d i _ (by simp),
-    Finsupp.erase_add, Finsupp.erase_single, add_zero, Finsupp.add_apply, Finsupp.single_eq_same,
-    factorial_succ]
-  push_cast
-  ring
-
 /-- For the pairing `jet R f F = f(∂) F (0)` of a polynomial with a power series, multiplication of
 `f` by `X i` is adjoint to the derivative of `F` in `X i`. -/
 @[local simp↓]
@@ -325,7 +315,11 @@ lemma jet_mul_X : jet R (f * X i) F = jet R f (F.pderiv i) := by
   rw [jet_eq_sum, jet_eq_sum, support_mul_X, sum_map]
   refine sum_congr rfl fun x _ ↦ ?_
   -- At the exponent `x + single i 1`: `(x i + 1)! = (x i + 1) * (x i)!` matches the derivative.
-  rw [addRightEmbedding_apply, coeff_mul_X, prod_factorial_add_single, F.coeff_pderiv]
+  rw [addRightEmbedding_apply, coeff_mul_X, F.coeff_pderiv,
+    ← mul_prod_erase' (x + Finsupp.single i 1) i _ (by simp), ← mul_prod_erase' x i _ (by simp),
+    Finsupp.erase_add, Finsupp.erase_single, add_zero, Finsupp.add_apply, Finsupp.single_eq_same,
+    factorial_succ]
+  push_cast
   ring
 
 /-- The Fock pairing `⟨a * X ^ α, g⟩` is `α! * a * g.coeff α`, where `α!` is the product of the
