@@ -167,8 +167,8 @@ noncomputable def lineRep (j : J) :
 omit [Nonempty n] in
 /-- If the auxiliary places `w j = Q.place j` are off the base level, the Hecke algebra commutes
 with `D.residueRep Q`, the action of `∏ GL_n(𝔽_{w j})` on the forms of principal level. -/
-lemma commute_heckeAction_residueRep (hQ : ∀ j : J, D.IsOffLevel ![] (Q.place j)) [V.IsStd]
-    [WeilData E] (s : D.heckeAlgebra Q.place)
+lemma commute_heckeAction_residueRep (hQ : ∀ j : J, D.IsOffLevel ![] (Q.place j))
+    (s : D.heckeAlgebra Q.place)
       (g : ∀ j : J, GL (Fin (card n)) (ResField (Q.place j))) :
     Commute (heckeAction s) (D.residueRep Q g) := by
   -- The elements that commute with `s` form a submonoid that contains each factor.
