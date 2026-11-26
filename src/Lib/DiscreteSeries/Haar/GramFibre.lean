@@ -193,6 +193,7 @@ theorem leFibreMeasure_conjTranspose_mul_mul {E : Matrix ι n₁ ℂ} {R : Matri
   exact .of_measurePreserving (measurePreserving_mul_mul_add_mul hE hR h_orth h_card)
     (by fun_prop) h_proj fun _ ↦ Continuous.continuousAt (by fun_prop)
 
+omit [DecidableEq n] [DecidableEq n₁] in
 /-- Choosing `g` with law `m` and completing `g E₁` by further columns with the Lebesgue measure, in
 the places given by `e` (`joinCols`), is the same as completing `E₁` first and then moving all
 columns by `g`. -/
