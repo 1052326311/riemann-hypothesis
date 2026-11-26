@@ -105,7 +105,7 @@ lemma mem_valRingCp {x : ℂ_[p]} : x ∈ valRingCp p ↔ ‖x‖ ≤ 1 := Iff.r
 @[simp]
 lemma valRingCp.algebraMap_apply (x : valRingCp p) : algebraMap (valRingCp p) ℂ_[p] x = x := rfl
 
-lemma valRingCp.dvd_iff_norm_le (x y : valRingCp p) : x ∣ y ↔ ‖(y : ℂ_[p])‖ ≤ ‖(x : ℂ_[p])‖ :=
+lemma valRingCp.dvd_iff_norm_le {x y : valRingCp p} : x ∣ y ↔ ‖(y : ℂ_[p])‖ ≤ ‖(x : ℂ_[p])‖ :=
   (Valuation.integer.integers (NormedField.valuation (K := ℂ_[p]))).dvd_iff_le
 
 instance : ValuationRing (valRingCp p) :=
@@ -427,12 +427,6 @@ lemma isHausdorff_of_injective_pi [IsHausdorff I F] {ι : Type*} (f : M →ₗ[S
   have h_coord : of I F ((LinearMap.proj i ∘ₗ f) x) = of I F ((LinearMap.proj i ∘ₗ f) y) := by
     rw [← map_of, ← map_of, hxy]
   exact of_inj.mp h_coord
-
-/-- A finite free module over an `I`-adically complete ring is `I`-adically complete. -/
-lemma isAdicComplete_of_free [IsAdicComplete I S] [Free S M] [Module.Finite S M] :
-    IsAdicComplete I M :=
-  have := isHausdorff_of_injective_pi I _ (Free.chooseBasis S M).equivFun.injective
-  {}
 
 /-- Let C be I-adically complete, β: F → M have I-adically dense image, and g: F → C satisfy
 g(f) ∈ I^n C whenever β(f) ∈ I^{2n} M. Then g = G ∘ β for some S-linear G: M → C. -/

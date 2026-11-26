@@ -832,10 +832,6 @@ lemma OFlat.shiftDiff_surjective_of_not_isUnit (h : ¬IsUnit t) :
   let y : ℕ → OFlat := fun n ↦ ⟨fun k ↦ u k n, fun k ↦ congrFun (h_frob k) n⟩
   exact ⟨y, funext fun n ↦ Perfection.ext fun k ↦ congrFun (hu k) n⟩
 
-lemma OFlat.isHausdorff_and_shiftDiff_surjective (h : ¬IsUnit t) :
-    IsHausdorff (span {t}) OFlat ∧ Surjective (shiftDiff OFlat t) :=
-  ⟨OFlat.isHausdorff_span_singleton_of_not_isUnit h, OFlat.shiftDiff_surjective_of_not_isUnit h⟩
-
 /-- Let `a ∈ A_inf` be killed by `θ ∘ φ ^ j` for every `j`, write `x₀` for the constant coefficient
 in `O^♭` of `x ∈ A_inf`, and let `μ₀ = a₀ * c` with `c ∈ O^♭`. Then `c ^ p ^ n` divides `μ₀` for
 every `n`. -/
@@ -979,11 +975,9 @@ lemma Ainf.shiftDiff_surjective (h : ¬IsUnit a) : Surjective (shiftDiff Ainf a)
 
 /-- `ξ` is a prime element of `A_inf`: it generates the kernel of `θ`, whose target `O_C` is a
 domain. -/
-lemma Ainf.prime_xi : Prime xi := by
-  refine ⟨fun h_zero ↦ not_p_dvd_xi (by simp [h_zero]),
-    fun h_unit ↦ (h_unit.map theta).ne_zero theta_xi, fun x y h_dvd ↦ ?_⟩
-  · rw [← theta_eq_zero_iff_xi_dvd, map_mul, mul_eq_zero] at h_dvd
-    rwa [← theta_eq_zero_iff_xi_dvd, ← theta_eq_zero_iff_xi_dvd]
+lemma Ainf.prime_xi : Prime xi :=
+  (span_singleton_prime (show xi ≠ 0 from fun h ↦ not_p_dvd_xi (by simp [h]))).mp
+    (ker_theta_eq_span_xi ▸ ker_isPrime theta)
 
 /-- Each `g ∈ G_p` commutes with `φ` and `θ`, so `τ` divides every conjugate `g' • τ` by
 `tau_dvd_of_theta_frobEnd`; hence `g • τ` is associated to `τ`. -/

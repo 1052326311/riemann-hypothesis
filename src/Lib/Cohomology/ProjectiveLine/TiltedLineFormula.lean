@@ -314,7 +314,7 @@ lemma exists_isLerayHirschBasis_of_isCohomDense [InvertsPrime A ℓ] (M : Torsio
       w.sum fun (i : b) (a : ZMod ℓ) ↦ pullbackAlong α (a • u i.val) :=
     sum_congr fun i _ ↦ h_summand i (w i)
   -- `using!`: the restriction of `ℤ[h_k]` along `g` is `ℤ[h_k ∘ g]` by definition.
-  simpa [lerayHirsch, mapThenComp, sum_mapRange_index, linearCombination, map_finsuppSum]
+  simpa [lerayHirsch, sum_mapRange_index, linearCombination, map_finsuppSum]
     using! h_sum
 
 /-! ## Tests over A: covering points and the projective line -/
@@ -1069,8 +1069,7 @@ lemma exists_isTodaCancellation_etaClass [Algebra A ℂ_[ℓ]] :
         erw [AddMonoidAlgebra.mapDomain_single]
       simp only [z₀, z₁, Bool.cond_false, Bool.cond_true, h_coord]
       change v = (F c (0, 0) - F c (0, X')) - (F c (0, 0) - F c (X - 1, 1))
-      rw [sub_sub_sub_cancel_left]
-      exact eq_sub_of_add_eq h_frame
+      simpa only [sub_sub_sub_cancel_left, eq_sub_iff_add_eq] using h_frame
 
   have h_disc : oneSub (discTwist χ) ≫ f = 0 := by
     -- `charTwist χ` fixes `X`, as the roots of unity are trivial at `1` and `-1`.
@@ -1194,7 +1193,7 @@ lemma hasLineFormula_tiltTheory (M : ModuleCat OFlat) [Algebra A ℂ_[ℓ]]
   have h_acyclic (S : AbFunctor PadicTest) [HasFlatValues S] (n : ℕ) :
       Subsingleton (H (abTensor S (cokernel gluing)) Θ.functor n) :=
     subsingleton_H_cokernel_gluing (F := Θ.functor)
-      (fun c ↦ (isCohomEquiv_gluing_tilt c h_acyclic_perfect).right.right) S n
+      (fun c ↦ isCohomEquiv_tensorCoeff_gluing c h_acyclic_perfect) S n
   exact hasLineFormula_of_isTodaCancellation Θ h_toda h_acyclic
 
 end New.Variety
