@@ -144,7 +144,7 @@ lemma descendsTo_comp_reindexGL {n' : Type*} [Fintype n'] [DecidableEq n'] (e : 
 /-- If (F, F') is a lift with coefficients in Z, then for every finite index set n some
 Z-combination of characters of GL_n(k')⋊Gal(k'/k) descends (`New.DescendsTo`) to F over k and to F'
 over k'. -/
-lemma Lift.hasCommonLift [Finite k'] (h : Lift Z F F') (n : Type*) [Fintype n] [DecidableEq n] :
+lemma Lift.hasCommonLift (h : Lift Z F F') (n : Type*) [Fintype n] [DecidableEq n] :
     HasCommonLift Z F F' n := by
   -- Take the lift in rank `card n` and renumber `n` as `Fin (card n)`.
   obtain ⟨Φ, hΦ, hF, hF'⟩ := h (card n)
