@@ -62,7 +62,6 @@ open Real Matrix Complex Fintype Metric Norms.L2Operator
 `M ^ 4`. -/
 lemma l2_opNorm_le_pow_four {l : ℕ} {M : ℝ} (hl : l ≤ M) {A : Matrix (Fin l) (Fin l) ℂ}
     (hA : ∀ a b : Fin l, ‖A a b‖ ≤ M ^ 2) : ‖A‖ ≤ M ^ 4 := by
-  have hM : 0 ≤ M := (Nat.cast_nonneg l).trans hl
   grw [l2_opNorm_le_of_apply hA, card_fin, ← sq, hl, ← pow_add]
 
 lemma oneSubNormSqInvCorner_le_one {𝔰 : Shape} (Z : 𝔰.FrameMatrix) : oneSubNormSqInvCorner Z ≤ 1 :=

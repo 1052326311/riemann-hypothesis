@@ -820,11 +820,10 @@ lemma map_vacuum_comp_equiv (hφ : ∀ x : W', e (φ x) = e' x) (x : W') : σ (e
   · simp [hφ]
   · simp [hφ, he'.conj_apply]
 
-/-- Change of variables along an isometric ring map `σ` of `ℂ` (the identity or the conjugation)
-and an isomorphism `φ : W' ≃ W` that matches the vacua and, up to `σ`, the cocycles:
-`σ (∫ f dμ) = ∫ σ ∘ f ∘ φ dμ'` for every `f`, and `σ ∘ e ∘ φ = e'`. The two parts are
-`map_integral_eq_integral_comp_equiv` and `map_vacuum_comp_equiv`, which do not need `hβ`. -/
-lemma map_integral_and_map_vacuum (_hβ : ∀ x y : W', σ (H.β (φ x) (φ y)) = H'.β x y)
+variable (H H') in
+/-- Change of variables along an isometric ring map `σ` and a topological group isomorphism
+`φ : W' ≃ W` that matches the vacua. -/
+lemma map_integral_and_map_vacuum
     (hφ : ∀ x : W', e (φ x) = e' x) :
     (∀ f : W → ℂ, σ (integral μ f) = ∫ x : W', σ (f (φ x)) ∂μ') ∧
       ∀ x : W', σ (e (φ x)) = e' x :=
@@ -843,7 +842,7 @@ noncomputable def transport (hβ : ∀ x y : W', σ (H.β (φ x) (φ y)) = H'.β
         ⟨fun x ↦ σL ((v.1 ∘ φ) x), σL.integrable_comp (h_pres.integrable_comp_of_integrable v.2.1),
           -- Apply `σ` to the reproducing formula of `v` at `φ x` and substitute `φ`.
           fun x ↦ by
-            simpa [σL, map_integral_and_map_vacuum hβ hφ, ← map_sub, hβ] using
+            simpa [σL, map_integral_and_map_vacuum H H' hφ, ← map_sub, hβ] using
               congrArg σ (v.2.2 (φ x))⟩
       map_add' := by aesop
       map_smul' := by aesop }

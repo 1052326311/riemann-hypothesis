@@ -46,7 +46,7 @@ lemma cardQuot_comap_of_surjective {f : N →ₗ[R] N'} (hf : Function.Surjectiv
   M.toAddSubgroup.index_comap_of_surjective (f := f.toAddMonoidHom) hf
 
 lemma submoduleZeta_anti {s t : ℕ} (hst : s ≤ t) : submoduleZeta R N t ≤ submoduleZeta R N s := by
-  refine ENNReal.tsum_le_tsum fun M ↦ pow_le_pow_of_le_one zero_le ?_ hst
+  refine tsum_le_tsum fun M ↦ pow_le_pow_of_le_one zero_le ?_ hst
   exact ENNReal.inv_le_one.2 (Nat.one_le_cast.2 (Nat.pos_of_ne_zero M.2))
 
 /-- The sum of `[range f : M] ^ (-s)` over the submodules `M` of finite index in the range of a
@@ -167,7 +167,7 @@ lemma submoduleZeta_prod_le (h_principal : ∀ I : Ideal R, I.cardQuot ≠ 0 →
     _ = ∑' M, weight (data M) := tsum_congr fun M ↦ (h_weight M).symm
     _ ≤ ∑' d, weight d := tsum_comp_le_tsum_of_injective h_inj weight
     _ = submoduleZeta R R (s + 1) * submoduleZeta R N s := by
-      simp only [Data, weight, ENNReal.tsum_sigma', ENNReal.tsum_mul_left, ENNReal.tsum_mul_right,
+      simp only [Data, weight, tsum_sigma', ENNReal.tsum_mul_left, ENNReal.tsum_mul_right,
         submoduleZeta, h_classes]
 
 /-- If the ideals of finite index of `R` are principal, then the sum of `[R ^ r : M] ^ (-(r + μ))`
