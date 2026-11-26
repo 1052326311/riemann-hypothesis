@@ -748,7 +748,7 @@ theorem New.IsLargeLevel.SplitPlaces.hasFewCocycles_of_central {K R ι : Type} [
       (hW.isHigmanProjective_of_coprime hcopP)).1
     -- A power `g ^ l ^ i` lies in `U`, and `t ^ l ^ i = t` in `ZMod l`.
     obtain ⟨i, hi⟩ : ∃ i : ℕ, (g : Gal(Ω/K)) ^ l ^ i ∈ U := hP g hg
-    show cyclotomicCharMod Ω l (g : Gal(Ω/K)) = 1
+    change cyclotomicCharMod Ω l (g : Gal(Ω/K)) = 1
     simpa [← Units.val_eq_one] using S.cyclotomicCharMod_eq_one _ hi
   -- Modules that are projective over `B/U` attain the bound.
   have hproj (F : DiscreteModule R B.1) (hF : F.FiniteKilledFixedInj l U' z' 1)

@@ -298,7 +298,7 @@ private lemma New.GaloisRep.card_eq_and_eventually_charpoly_eq_of_hasNoSmallRela
   have h_near : ∀ᶠ g : decompGroup Gal(Ω/E) A in nearOne (decompGroup Gal(Ω/E) A),
       G.aeval (T⁻¹.val * (r g).val.map (algebraMap (PadicAlgCl ℓ) ℂ_[ℓ])).uncurry = 0 := by
     rw [nearOne_eq_nhds_one hj_open]
-    exact continuousAt_subtype_val (x := (1 : decompGroup Gal(Ω/E) A)) hG
+    exact continuousAt_subtypeVal (x := (1 : decompGroup Gal(Ω/E) A)) hG
   have h_twisted : ∀ᶠ g : decompGroup Gal(Ω/E) A in nearOne (decompGroup Gal(Ω/E) A),
       G.aeval (fun i : Fin b × Fin b ↦
         (cyclotomicGp (j g) ^ (-k i.1)).val • j g • T⁻¹.val.uncurry i) = 0 := by
@@ -372,15 +372,9 @@ lemma New.GaloisRep.disjoint_iInf_primeCompl_iff {E : Type} [Field E] [NumberFie
     exact ⟨y, by simpa [Ideal.one_notMem] using hy_mem⟩
   simp only [Set.disjoint_left, Submonoid.mem_carrier, SetLike.mem_coe, Submonoid.mem_iInf,
     Ideal.mem_primeCompl_iff]
-  constructor
-  · intro h_disj
-    by_contra hG_w
-    have hy_notMem (u : FinPlace E) (hG_u : G u) : y ∉ u.asIdeal := by
-      rw [hy u]
-      rintro rfl
-      exact hG_w hG_u
-    exact h_disj hy_notMem ((hy w).mpr rfl)
-  · exact fun hG_w z hz ↦ hz w hG_w
+  refine ⟨fun h_disj ↦ ?_, fun hG_w z hz ↦ hz w hG_w⟩
+  by_contra hG_w
+  exact h_disj (fun u hu hyu ↦ hG_w ((hy u).1 hyu ▸ hu)) ((hy w).2 rfl)
 
 /-- Let `ψ ≠ 0` lie in `definiteForms 𝔑 ξ`, with `𝔑 ≠ 0`, and let the ideles `x` of `QuadField d`
 act on `ψ` through the central scalars by `ω x` (`hψ_cen`). Let the scalar matrix of `x̄`, for `x`
