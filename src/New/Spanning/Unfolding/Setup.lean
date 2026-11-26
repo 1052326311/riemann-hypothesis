@@ -765,7 +765,7 @@ def Agrees (s : S.ResidueGL) : Prop :=
 /-- A set T of rational elements is stable if, for all rational points u, u' of 𝖴 and every γ,
 u⁻¹γu' lies in T if and only if γ does. -/
 def IsStable (T : Set (S.G E)) : Prop :=
-  ∀ᵉ (u ∈ besselU) (u' ∈ besselU) (γ : S.G E), u⁻¹ * γ * u' ∈ T ↔ γ ∈ T
+  ∀ u ∈ besselU, ∀ u' ∈ besselU, ∀ γ : S.G E, u⁻¹ * γ * u' ∈ T ↔ γ ∈ T
 
 /-- The set of rational elements γ of the unitary group with `termDisc γ ≠ 0` whose link
 (`New.link`) is the given submodule `Λ`. -/
