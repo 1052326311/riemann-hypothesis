@@ -657,7 +657,7 @@ tangent vector at the `k`-point `o`, and let `γ : S → B` give `z'`, invert th
 and `G` kills `t ^ N`, `N` the number of `θ i` through `o`, then `ψ (ι z')` vanishes along `G`. -/
 private lemma vanishesAlong_of_map_pow_card_eq_zero [Algebra V k] {J : Type} [Finite J]
     {κ : J → AdelicTorsion E D.Index} {S : CommAlgCat V} [Module.Finite V S]
-    {ι : specOver V S ⟶ y.groupScheme} [IsClosedImmersion ι.left] {θ : J → S →ₐ[V] V}
+    {ι : specOver V S ⟶ y.groupScheme} {θ : J → S →ₐ[V] V}
     (hθ : ∀ i : J, Spec.map (ofHom (θ i)) ≫ ι.left = (e.torsionPoint (κ i)).left)
     (θ_inj : θ.Injective) {o : S →ₐ[V] k} {T : S}
     (hT : ∀ v : S →ₐ[V] k[ε], (∀ a : S, (v a).fst = o a) → (v T).snd = 0 → ∀ a : S, (v a).snd = 0)
