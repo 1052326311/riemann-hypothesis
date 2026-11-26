@@ -406,12 +406,10 @@ lemma posDef_cauchy_schwarz {ι : Type*} [Fintype ι] {M : Matrix ι ι ℂ} (h_
     (x y : ι → ℂ) :
     ‖star x ⬝ᵥ M *ᵥ y‖ ^ 2 ≤ (star y ⬝ᵥ M *ᵥ y).re * (star x ⬝ᵥ M *ᵥ x).re := by
   -- the Cauchy–Schwarz inequality of the inner product `⟪u, v⟫ = u* M v` that `M` defines
-  let _ : SeminormedAddCommGroup (ι → ℂ) := M.toSeminormedAddCommGroup h_posDef.posSemidef
-  let _ : InnerProductSpace ℂ (ι → ℂ) := M.toInnerProductSpace h_posDef.posSemidef
-  have h_inner (u v : ι → ℂ) : inner ℂ u v = star u ⬝ᵥ M *ᵥ v := dotProduct_comm _ _
-  have h_cs : ‖inner ℂ y x‖ * ‖inner ℂ x y‖ ≤ re (inner ℂ y y) * re (inner ℂ x x) :=
-    inner_mul_inner_self_le y x
-  rwa [norm_inner_symm y x, ← sq, h_inner, h_inner, h_inner] at h_cs
+  have h_cs := h_posDef.star_dotProduct_mulVec_mul_le x y
+  rw [eq_re_of_ofReal_le (h_posDef.posSemidef.dotProduct_mulVec_nonneg x),
+    eq_re_of_ofReal_le (h_posDef.posSemidef.dotProduct_mulVec_nonneg y)] at h_cs
+  simpa [mul_conj', mul_comm, ← ofReal_pow, ← ofReal_mul, real_le_real] using h_cs
 
 /-- As a complex number, the squared Gram norm `weylNormSq ξ` is `ξ* G ξ` itself: its imaginary part
 is zero because G is positive semidefinite. -/
