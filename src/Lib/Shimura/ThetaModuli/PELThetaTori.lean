@@ -756,7 +756,7 @@ lemma mem_lagrangian_of_bicharacter_sq
     refine fourierChar_eq_one_iff.mp (Circle.coe_eq_one.mp ?_)
     calc (Real.fourierChar (2 * τ * x.automorphyForm.riemannForm l (x.torsionLift s)) : ℂ)
         = x.automorphyForm.riemannPhase l (τ • x.torsionLift s) ^ 2 := by
-          simp [RealComplexForm.riemannPhase, ← Complex.exp_nat_mul, mul_assoc, mul_left_comm]
+          simp [RealComplexForm.riemannPhase, ← Complex.exp_natCast_mul, mul_assoc, mul_left_comm]
       _ = 1 := h_sq_phase
   -- `(2 τ + 1) r = m` and `2 τ r = n` for `r = riemannForm l (x.torsionLift s)`; subtract.
   have h_odd : (2 * τ + 1) * x.automorphyForm.riemannForm l (x.torsionLift s) = m := by
@@ -1040,7 +1040,7 @@ lemma hasGoodReduction_one :
     exact hf_ne (eq_zero_of_torsionPoints hf h_torsion_zero)
   -- The three sup norms are `0` or `1`.
   rw [← sizeAt_mul]
-  show (B + C).thetaNorm 1 (f * f') = B.thetaNorm 1 f * C.thetaNorm 1 f'
+  change (B + C).thetaNorm 1 (f * f') = B.thetaNorm 1 f * C.thetaNorm 1 f'
   by_cases hf_zero : f = 0
   · simp [hf_zero, thetaNorm_zero]
   by_cases hf'_zero : f' = 0

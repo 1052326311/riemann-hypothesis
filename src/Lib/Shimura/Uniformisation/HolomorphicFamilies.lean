@@ -873,7 +873,7 @@ lemma pull_translate (h : HasThetaCoords L e N B χ θ) {f : S ⟶ S} {a : V}
   mem_thetaSpace i := h.isAppellHumbert.thetaShift_mem (h.mem_thetaSpace i) a
   hasFieldCoords z := by
     -- The new coordinates at `z` are those at `z + a` times a nonzero exponential.
-    show N.IsHomogeneousCoords (e z ≫ f) (exp (-(B a z + B a a / 2)) • θ (z + a))
+    change N.IsHomogeneousCoords (e z ≫ f) (exp (-(B a z + B a a / 2)) • θ (z + a))
     rw [← he z]
     exact (h.hasFieldCoords (z + a)).smul (exp_ne_zero _).isUnit
 
