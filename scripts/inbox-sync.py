@@ -4,11 +4,12 @@
 The inbox workflow runs this from its trusted checkout: for one pull request when it is opened,
 reopened, marked ready, turned back into a draft, commented on, reviewed, relabelled or closed,
 and for every open pull request every fifteen minutes. Nothing from a pull request is checked out or run.
-Everything is read from GitHub's API, and the only thing written is the label.
+Everything is read from GitHub's API, and the only things written are labels.
 
-A pull request can be in the inbox when it is open, is based on `main`, is not a draft, is not a
-batch, and carries
-none of `batch queue`, `building` and `awaiting-author` (named in `batch-labels.py`). A batch is a
+Each branch that pull requests are based on has an inbox label of its own (`INBOXES`): `inbox` for
+`main`, and `alpoge-inbox` for `alpoge` (see below). A pull request based on another branch is in
+no inbox. A pull request can be in its branch's inbox when it is open, is not a draft, is not a
+batch, and carries none of `batch queue`, `building` and `awaiting-author` (named in `batch-labels.py`). A batch is a
 pull request from a branch of this repository named `batch/...`. One from a `batch/...` branch of a
 fork is not a batch, and can be in the inbox like any other pull request (see `holds_batch` in
 `batch-labels.py`).
@@ -23,6 +24,14 @@ request's author or by a bot do not count.
 A maintainer who takes `inbox` off by hand is not overruled until the pull request enters review
 again. One who puts it back asks for another look: it then stays until the next response, not
 counting their own in the ten minutes after, which usually just say why.
+
+The branch `alpoge` holds the work done before `main` was replaced, and about 1,200 open pull
+requests are based on it. Whether it will be kept up is undecided, and it may be phased out. Until
+then its pull requests have an inbox of their own, `alpoge-inbox`, so that they do not crowd the
+pull requests on `main`, and every open pull request based on it is labelled `alpoge`. Its pull
+requests' events run the workflows of `alpoge`, not this one, so the sweep is what keeps both
+labels up to date there. Everything about `alpoge` here is in `INBOXES` and `ALPOGE`, and goes
+when the branch does.
 
 Reviews on pull requests from forks only get a read-only token, so the workflow hears about them
 through a second workflow, `inbox review`, that does nothing but run. The sweep catches anything
@@ -47,9 +56,13 @@ _REST_SPEC.loader.exec_module(_rest)
 _labels = _rest.load("batch-labels.py")
 
 INBOX = "inbox"
-# The branch the pull requests in the inbox are based on. The open pull requests that were based on
-# the earlier `main` were moved to `alpoge` when `main` was replaced; they stay out of the inbox.
-TRUNK = "main"
+# The inbox label of each branch that pull requests are based on. A pull request based on any
+# other branch is in no inbox.
+INBOXES = {"main": INBOX, "alpoge": "alpoge-inbox"}
+# On every open pull request based on `alpoge`, whose future is undecided (see above).
+ALPOGE = "alpoge"
+# Labels that this script keeps up to date. Someone adding or removing one has not responded.
+OWN = set(INBOXES.values()) | {ALPOGE}
 # Handed back to the author. Taking it off hands the pull request back to the maintainers.
 WAITING = _labels.WAITING
 # Labels that mean a maintainer has already decided what happens next.
@@ -124,9 +137,9 @@ class GitHub(_rest.GitHub):
                 return found
             after = page["pageInfo"]["endCursor"]
 
-    def closed_in_inbox(self):
-        """The numbers of closed pull requests that still carry the label."""
-        found = self.graphql(CLOSED, q=f"repo:{self.repo} is:pr is:closed label:{INBOX}")
+    def closed_in_inbox(self, name=INBOX):
+        """The numbers of closed pull requests that still carry the inbox label `name`."""
+        found = self.graphql(CLOSED, q=f'repo:{self.repo} is:pr is:closed label:"{name}"')
         return [node["number"] for node in found["search"]["nodes"] if node]
 
     def pull(self, number):
@@ -149,21 +162,21 @@ class GitHub(_rest.GitHub):
         return self.access[login]
 
     def label_exists(self, name=INBOX):
-        """Whether the `inbox` label exists. `sync` decides what a missing one means."""
+        """Whether the label `name` exists. `sync` decides what a missing one means."""
         return super().label_exists(name)
 
-    def label(self, number, add):
+    def label(self, number, add, name=INBOX):
         verb = "add" if add else "remove"
         if self.dry_run:
-            print(f"would {verb} {INBOX} on #{number}")
+            print(f"would {verb} {name} on #{number}")
             return
         if add:
-            status, _ = self.write("POST", f"issues/{number}/labels", {"labels": [INBOX]})
+            status, _ = self.write("POST", f"issues/{number}/labels", {"labels": [name]})
         else:
-            status, _ = self.write("DELETE", f"issues/{number}/labels/{INBOX}")
+            status, _ = self.write("DELETE", f"issues/{number}/labels/{_rest.quoted(name)}")
         # Taking off a label that someone else has just taken off answers 404.
         if status not in (200, 201) and not (status == 404 and not add):
-            raise RuntimeError(f"could not {verb} {INBOX} on #{number}: {status}")
+            raise RuntimeError(f"could not {verb} {name} on #{number}: {status}")
 
 
 def when(text):
@@ -181,6 +194,7 @@ def pull(node, repo):
     """What this script needs to know about a pull request, from GraphQL's answer. `repo` is this
     repository, as `owner/name`."""
     entered = when(node["createdAt"])
+    inbox = INBOXES.get(node["baseRefName"])
     added = added_by = removed = removed_by = None
     responses = []
     # Timeline events come oldest first, so the last of each kind is the latest.
@@ -196,13 +210,13 @@ def pull(node, repo):
             # response too would take it straight back out.
             entered = max(entered, at)
             continue
-        if name != INBOX:
-            if actor and name not in AUTOMATIC:
-                responses.append({"login": actor, "at": at, "did": "changed its labels"})
-        elif kind == "LabeledEvent":
-            added, added_by = at, actor
-        else:
-            removed, removed_by = at, actor
+        if name == inbox:
+            if kind == "LabeledEvent":
+                added, added_by = at, actor
+            else:
+                removed, removed_by = at, actor
+        elif actor and name not in AUTOMATIC and name not in OWN:
+            responses.append({"login": actor, "at": at, "did": "changed its labels"})
     for comment in node["comments"]["nodes"]:
         login = person(comment.get("author"))
         if login:
@@ -214,7 +228,7 @@ def pull(node, repo):
     responses.sort(key=lambda response: response["at"])
     return {
         "number": node["number"], "open": node["state"] == "OPEN", "draft": node["isDraft"],
-        "base": node["baseRefName"],
+        "base": node["baseRefName"], "inbox": inbox,
         "batch": _labels.holds_batch(repo, (node.get("headRepository") or {}).get("nameWithOwner"),
                                      node["headRefName"]),
         "ref": node["headRefName"], "author": (node.get("author") or {}).get("login"),
@@ -226,8 +240,8 @@ def pull(node, repo):
 
 def unavailable(pr):
     """Why the pull request cannot be in the inbox at all, or None if it can."""
-    if pr["base"] != TRUNK:
-        return f"it is based on `{pr['base']}`, not `{TRUNK}`"
+    if pr["inbox"] is None:
+        return f"it is based on `{pr['base']}`, which has no inbox"
     if pr["draft"]:
         return "it is a draft"
     if pr["batch"]:
@@ -258,8 +272,9 @@ def responder(gh, pr, since, grace=None):
 
 
 def decide(gh, pr):
-    """What to do with the label: ("add" or "remove" or None, and why)."""
-    has = INBOX in pr["labels"]
+    """What to do with the inbox label of the pull request's branch: ("add" or "remove" or None,
+    and why)."""
+    has = pr["inbox"] in pr["labels"]
     if not pr["open"]:
         return ("remove" if has else None), "it is closed"
     why = unavailable(pr)
@@ -281,22 +296,44 @@ def decide(gh, pr):
     return "add", "it is waiting for a response"
 
 
+def tidy(pr):
+    """The other labels this script keeps, as ("add" or "remove", label, why) for each change: the
+    inbox labels of other branches come off, and `alpoge` is on the open pull requests based on
+    `alpoge` and on no other open pull request."""
+    changes = [("remove", name, f"it is based on `{pr['base']}`") for name in sorted(INBOXES.values())
+               if name != pr["inbox"] and name in pr["labels"]]
+    if pr["open"]:
+        on = pr["base"] == ALPOGE
+        if on != (ALPOGE in pr["labels"]):
+            changes.append(("add" if on else "remove", ALPOGE, f"it is based on `{pr['base']}`"))
+    return changes
+
+
+def where(name):
+    return "the inbox" if name == INBOX else f"the `{name}` inbox"
+
+
 def sync(gh, number=None, log=None):
     """Bring the label up to date on one pull request, or on all open ones. Returns the log, the
     list `log` if one is given: what it holds when an error stops the sweep is what was done."""
     log = [] if log is None else log
-    checked = False
+    checked = set()
 
-    def check_label():
+    def check_label(name):
         # Only adding needs the label to exist: GitHub would make a new one. Removing never does.
-        nonlocal checked
-        if checked:
+        if name in checked:
             return
-        checked = True
-        if not gh.label_exists():
+        checked.add(name)
+        if not gh.label_exists(name):
             if not gh.dry_run:
-                raise Refused(f"There is no `{INBOX}` label in {gh.repo}. Was it renamed?")
-            log.append(f"there is no `{INBOX}` label yet, so a real run would stop here")
+                raise Refused(f"There is no `{name}` label in {gh.repo}. Was it renamed?")
+            log.append(f"there is no `{name}` label yet, so a real run would stop here")
+
+    def change(pr, action, name):
+        if action == "add":
+            check_label(name)
+        gh.label(pr["number"], action == "add", name)
+        pr["labels"] = (pr["labels"] | {name}) if action == "add" else (pr["labels"] - {name})
 
     if number is None:
         pulls = gh.pulls()
@@ -307,36 +344,42 @@ def sync(gh, number=None, log=None):
         pulls = [found]
     for i, pr in enumerate(pulls):
         try:
-            action, why = decide(gh, pr)
-            if action and number is None:
+            action, why = decide(gh, pr) if pr["inbox"] else (None, unavailable(pr))
+            if (action or tidy(pr)) and number is None:
                 # The sweep read this pull request a while ago. A response, a close, a label put
                 # back or a pull request marked ready since then would otherwise be missed.
                 pr = pulls[i] = gh.pull(pr["number"]) or pr
-                action, why = decide(gh, pr)
+                action, why = decide(gh, pr) if pr["inbox"] else (None, unavailable(pr))
             if action:
-                if action == "add":
-                    check_label()
-                gh.label(pr["number"], action == "add")
-                pr["labels"] = (pr["labels"] | {INBOX}) if action == "add" else (pr["labels"] - {INBOX})
+                change(pr, action, pr["inbox"])
                 log.append(f"#{pr['number']}: {'put in' if action == 'add' else 'taken out of'} "
-                           f"the inbox, because {why}")
+                           f"{where(pr['inbox'])}, because {why}")
             elif number is not None:
                 log.append(f"#{pr['number']}: left as it was, because {why}")
+            for action, name, because in tidy(pr):
+                change(pr, action, name)
+                log.append(f"#{pr['number']}: {'labelled' if action == 'add' else 'no longer labelled'} "
+                           f"`{name}`, because {because}")
         except RuntimeError as error:
             # One pull request that cannot be read or labelled should not hold up the rest.
             gh.failed = True
             log.append(f"#{pr['number']}: skipped, because {error}")
     if number is None:
         # A closed pull request whose `closed` run failed would keep the label for good otherwise.
-        try:
-            for closed in gh.closed_in_inbox():
-                gh.label(closed, False)
-                log.append(f"#{closed}: taken out of the inbox, because it is closed")
-        except RuntimeError as error:
-            gh.failed = True
-            log.append(f"closed pull requests: skipped, because {error}")
-        waiting = sum(INBOX in pr["labels"] and pr["open"] for pr in pulls)
-        log.append(f"{waiting} of {len(pulls)} open pull requests are in the inbox")
+        for name in INBOXES.values():
+            try:
+                for closed in gh.closed_in_inbox(name):
+                    gh.label(closed, False, name)
+                    log.append(f"#{closed}: taken out of {where(name)}, because it is closed")
+            except RuntimeError as error:
+                gh.failed = True
+                log.append(f"closed pull requests in {where(name)}: skipped, because {error}")
+        for branch, name in INBOXES.items():
+            # The pull requests the sweep read as open, some of which may have closed since.
+            based = [pr for pr in pulls if pr["base"] == branch]
+            waiting = sum(name in pr["labels"] and pr["open"] for pr in based)
+            log.append(f"{waiting} of the {len(based)} open pull requests based on `{branch}` are in "
+                       f"{where(name)}")
     return log
 
 

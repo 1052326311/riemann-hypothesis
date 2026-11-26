@@ -8,6 +8,11 @@ name: inbox
 # keep a pull request out as well, and batches never go in: a batch is a pull request from a
 # `batch/...` branch of this repository, not of a fork. `scripts/inbox-sync.py` has the exact rules.
 #
+# Pull requests based on `alpoge` have an inbox of their own, `alpoge-inbox`, and are all labelled
+# `alpoge`. That branch's future is undecided and it may be phased out; see `scripts/inbox-sync.py`.
+# Their events run the workflows of `alpoge`, so apart from comments, which run this workflow,
+# only the sweep keeps their labels up to date.
+#
 # An author takes `awaiting-author` off by commenting `ready` (see review-commands.yml). That label
 # change is made with a workflow token, so it starts no run here, and the review commands workflow
 # dispatches one for that pull request instead. The sweep cannot be left to find it: GitHub's list
@@ -56,7 +61,8 @@ jobs:
           (github.event_name == 'workflow_run' &&
            contains(fromJSON('["success", "action_required"]'), github.event.workflow_run.conclusion)) ||
           (github.event_name == 'issue_comment' && github.event.issue.pull_request &&
-           contains(github.event.issue.labels.*.name, 'inbox') &&
+           (contains(github.event.issue.labels.*.name, 'inbox') ||
+            contains(github.event.issue.labels.*.name, 'alpoge-inbox')) &&
            github.event.comment.user.type != 'Bot' &&
            github.event.comment.user.login != github.event.issue.user.login) ||
           (github.event_name == 'pull_request_target' && (

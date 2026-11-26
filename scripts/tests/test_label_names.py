@@ -35,7 +35,7 @@ CONSTANTS = {name: value for name, value in vars(labels).items()
              if name.isupper() and isinstance(value, str) and name != "PREFIX"}
 BATCH_LABELS = set(CONSTANTS.values())
 # Labels the workflows use that are not batch labels: the inbox's own.
-OTHER = {inbox.INBOX}
+OTHER = set(inbox.OWN)
 
 CONTAINS = re.compile(r"labels\.\*\.name\s*,\s*'([^']*)'")
 COMPARED = re.compile(r"label\.name\s*[!=]=\s*'([^']*)'")

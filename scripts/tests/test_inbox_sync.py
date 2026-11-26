@@ -10,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import urllib.parse
 from unittest import mock
 
 SCRIPT = Path(__file__).resolve().parents[1] / "inbox-sync.py"
@@ -88,9 +89,10 @@ class Fake(inbox.GitHub):
 
     def call(self, method, path, payload=None):
         self.calls += 1
-        if method == "GET" and path == f"labels/{INBOX}":
+        if method == "GET" and path.startswith("labels/"):
             self.label_reads += 1
-            return (200, {"name": INBOX}) if self.has_label else (404, None)
+            name = urllib.parse.unquote(path.split("/", 1)[1])
+            return (200, {"name": name}) if self.has_label else (404, None)
         if method == "GET" and path.startswith("collaborators/"):
             login = path.split("/")[1]
             self.lookups.append(login)
@@ -102,15 +104,20 @@ class Fake(inbox.GitHub):
             permission = {"maintain": "write", "triage": "read"}.get(role, role)
             return 200, {"permission": permission, "role_name": role}
         if method in ("POST", "DELETE"):
-            self.writes.append(("add" if method == "POST" else "remove", int(path.split("/")[1])))
+            # The inbox label of `main` is left out, so that most tests read more easily.
+            parts = path.split("/")
+            name = payload["labels"][0] if method == "POST" else urllib.parse.unquote(parts[3])
+            write = ("add" if method == "POST" else "remove", int(parts[1]))
+            self.writes.append(write if name == INBOX else write + (name,))
             return 200, []
         raise AssertionError(f"unexpected {method} {path}")
 
     def graphql(self, query, **variables):
         self.calls += 1
         if "q" in variables:
+            name = variables["q"].split('label:"')[1].rstrip('"')
             closed = [n for n in self.nodes.values()
-                      if n["state"] != "OPEN" and {"name": INBOX} in n["labels"]["nodes"]]
+                      if n["state"] != "OPEN" and {"name": name} in n["labels"]["nodes"]]
             return {"search": {"nodes": [{"number": n["number"]} for n in closed]}}
         if "number" in variables:
             number = variables["number"]
@@ -167,7 +174,7 @@ class Sweep(unittest.TestCase):
         gh = Fake([node(1)])
         log = sweep(gh)
         self.assertEqual(gh.writes, [("add", 1)])
-        self.assertIn("1 of 1 open pull requests are in the inbox", log)
+        self.assertIn("1 of the 1 open pull requests based on `main` are in the inbox", log)
 
     def test_drafts_batches_and_decided_pull_requests_stay_out(self):
         gh = Fake([node(1, draft=True), node(2, ref="batch/citations"),
@@ -188,17 +195,47 @@ class Sweep(unittest.TestCase):
         inbox.sync(gh, 3)
         self.assertEqual(gh.writes, [("add", 1), ("add", 3)])
 
-    def test_pull_requests_on_other_branches_stay_out(self):
-        gh = Fake([node(1, base="alpoge"), node(2)])
-        sweep(gh)
-        self.assertEqual(gh.writes, [("add", 2)])
+    def test_pull_requests_on_alpoge_have_an_inbox_of_their_own(self):
+        gh = Fake([node(1, base="alpoge"), node(2), node(3, base="alpoge", labels=["alpoge"])])
+        log = sweep(gh)
+        self.assertEqual(gh.writes, [("add", 1, "alpoge-inbox"), ("add", 1, "alpoge"), ("add", 2),
+                                     ("add", 3, "alpoge-inbox")])
+        self.assertIn("#1: put in the `alpoge-inbox` inbox, because it is waiting for a response", log)
+        self.assertIn("#1: labelled `alpoge`, because it is based on `alpoge`", log)
+        self.assertIn("1 of the 1 open pull requests based on `main` are in the inbox", log)
+        self.assertIn("2 of the 2 open pull requests based on `alpoge` are in the `alpoge-inbox` inbox",
+                      log)
 
-    def test_pull_requests_on_other_branches_come_out(self):
+    def test_the_alpoge_inbox_follows_the_same_rules(self):
+        gh = Fake([node(1, base="alpoge", labels=["alpoge"], comments=[("maint", 5)]),
+                   node(2, base="alpoge", labels=["alpoge", "alpoge-inbox"], draft=True),
+                   node(3, base="alpoge", labels=["alpoge"], events=[("on", "alpoge", 1, "maint")])],
+                  roles=MAINT)
+        sweep(gh)
+        # A maintainer's comment is a response; putting `alpoge` on by hand is not.
+        self.assertEqual(gh.writes, [("remove", 2, "alpoge-inbox"), ("add", 3, "alpoge-inbox")])
+
+    def test_the_inbox_of_another_branch_comes_off(self):
+        # Put in the inbox of `main` before the switch, and based on `alpoge` since.
         gh = Fake([waiting(1, base="alpoge")])
         sweep(gh)
-        self.assertEqual(gh.writes, [("remove", 1)])
-        self.assertEqual(inbox.sync(Fake([waiting(1, base="alpoge")]), 1),
-                         ["#1: taken out of the inbox, because it is based on `alpoge`, not `main`"])
+        self.assertEqual(gh.writes, [("add", 1, "alpoge-inbox"), ("remove", 1), ("add", 1, "alpoge")])
+        # Moved back to `main`.
+        gh = Fake([node(2, labels=["alpoge", "alpoge-inbox"])])
+        sweep(gh)
+        self.assertEqual(gh.writes, [("add", 2), ("remove", 2, "alpoge-inbox"), ("remove", 2, "alpoge")])
+
+    def test_pull_requests_on_other_branches_are_in_no_inbox(self):
+        gh = Fake([waiting(1, base="feature"), node(2, base="feature", labels=["alpoge-inbox"])])
+        log = sweep(gh)
+        self.assertEqual(gh.writes, [("remove", 1), ("remove", 2, "alpoge-inbox")])
+        self.assertEqual(inbox.sync(Fake([node(3, base="feature")]), 3),
+                         ["#3: left as it was, because it is based on `feature`, which has no inbox"])
+
+    def test_closed_pull_requests_leave_every_inbox_but_keep_alpoge(self):
+        gh = Fake([node(1, base="alpoge", labels=["alpoge", "alpoge-inbox"], state="CLOSED")])
+        sweep(gh)
+        self.assertEqual(gh.writes, [("remove", 1, "alpoge-inbox")])
 
     def test_drafts_batches_and_decided_pull_requests_come_out(self):
         gh = Fake([waiting(1, draft=True), waiting(2, ref="batch/x"),
@@ -383,7 +420,7 @@ class Sweep(unittest.TestCase):
         gh.later[1] = node(1, state="MERGED")
         log = sweep(gh)
         self.assertEqual(gh.writes, [])
-        self.assertIn("0 of 1 open pull requests are in the inbox", log)
+        self.assertIn("0 of the 1 open pull requests based on `main` are in the inbox", log)
 
     def test_one_failed_lookup_does_not_stop_the_sweep(self):
         gh = Fake([waiting(1, comments=[("flaky", 2)]), node(2)])
@@ -411,7 +448,7 @@ class Sweep(unittest.TestCase):
         gh = Fake([node(i) for i in range(1, 6)])
         log = sweep(gh)
         self.assertEqual(gh.writes, [("add", i) for i in range(1, 6)])
-        self.assertIn("5 of 5 open pull requests are in the inbox", log)
+        self.assertIn("5 of the 5 open pull requests based on `main` are in the inbox", log)
 
 
 class OnePullRequest(unittest.TestCase):
