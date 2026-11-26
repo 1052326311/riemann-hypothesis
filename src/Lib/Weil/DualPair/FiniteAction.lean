@@ -70,7 +70,8 @@ variable {E : Type*} [Field E] [NumberField E] [IsCMField E]
 idele equal to `det g` on `A` and to `1` elsewhere. -/
 lemma Exchange.detOn_preimage_star (g : Gf E n) :
     detOn (star ⁻¹' A) g.val = star (detOn A g.val)⁻¹ := by
-  ext <;> simp [detOn, cutGL, star_idem, ← det_conjTranspose, inv_eq_left_inv g.prop]
+  ext <;> simp [detOn, cutGL, star_idem, ← det_conjTranspose, star_eq_conjTranspose,
+      inv_eq_left_inv (mem_unitaryGroupOf_iff.1 g.prop)]
 
 @[simp↓]
 lemma onHom_snd_inv_mulVec {p : G E s × G E s'} (x : n' × n → 𝔸f E) :
@@ -104,7 +105,7 @@ variable (n) in
 /-- The scalar matrices, as a homomorphism from the finite adeles of norm one to `Gf E n`. -/
 noncomputable def scalarFin : unitary (𝔸f E) →* Gf E n :=
   MonoidHom.codRestrict (MonoidHom.comp (GeneralLinearGroup.scalar n) Unitary.toUnits) (U 1)
-    (by simp [star_mul_self_of_mem, U])
+    (by simp [star_mul_self_of_mem, mem_unitaryGroupOf_iff, star_eq_conjTranspose])
 
 /-- Scalar finite points are central in the finite adelic unitary group. -/
 lemma Seesaw.commute_scalarFin {ν : unitary (𝔸f E)} (g : Gf E n) : Commute (scalarFin n ν) g :=
@@ -354,7 +355,7 @@ lemma pairWeil_boxProd_source (h : G E s') (f : 𝒮 (V₁.hom T)) (f' : 𝒮 (V
   have h_ω : ((V₁.sum V₂).hom T).ω (onHom (G.sum (g₁, g₂), h)) (boxProd homSigns_sum_source f f') =
       boxProd homSigns_sum_source ((V₁.hom T).ω (onHom (g₁, h)) f)
         ((V₂.hom T).ω (onHom (g₂, h)) f') :=
-    omega_boxProd _ (by simp_all [adeleMatrix_inv, stdForm, ← ext_iff]) f f'
+    omega_boxProd _ (by simp [adeleMatrix_inv, stdForm, ← ext_iff]) f f'
   simp [pairWeil_apply, det_eq, h_ω]
   module
 
@@ -490,7 +491,7 @@ lemma exists_theta_negSource :
   have h_rat (x : n' × n → 𝔸 E) (hx : (negSource (s := s) (s' := s')).φ x ∈ (S.hom T).ratVectors) :
       (1 : G E (homSigns (-s) s')) • x ∈ (S.neg.hom T).ratVectors := by
     simp [Space.neg, mem_ratVectors_hom] at hx ⊢
-    rwa [← smul_mul, ← T.x.1.mul_smul]
+    rwa [← smul_mul, ← T.x.val.mul_smul]
   obtain ⟨c, hc, hθ⟩ := negSource.exists_theta_omega_map (S.hom T) (S.neg.hom T) 1 h_rat
   exact ⟨conj c, by simpa using hc, fun f ↦ by simp [hθ f]⟩
 

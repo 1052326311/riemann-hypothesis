@@ -271,29 +271,20 @@ constant of the gauge and n = `𝔰.n`. -/
 lemma floorMassLe_depth_pow (hx : x ∈ F.positions) :
     F.FloorMassLe a (Γ.loss ^ (10 ^ 4 * 𝔰.n)) fun g : T.G ↦ F.depth a g x ^ F.volumeExponent := by
   -- For `g` in the box `F.boxSet` the depth at `σ * g` is at most `φ(y_X)`, where `y = σ⁻¹ e_a`.
-  refine Γ.floorMassLe_of_chart (b := a.castSucc) (fun ξ hξ g ↦ ?_) fun g hg ↦ ?_
-  · simp only [depth_mul_left hξ]
-  obtain ⟨φ, hφ⟩ : ∃ φ : (F.FreeIndex → A) → ℝ≥0∞,
-      F.IsCommonBound Γ.toSize Γ.loss (F.commonVectors g x 0) φ := Γ.exists_commonBound g hg x hx 0
-  have hφ_meas : Measurable φ := hφ.measurable
-  have h_depth (σ : T.G) (hσ : σ ∈ floorGroup a) :
-      F.depth a (σ * g) x ≤ φ (F.orthonormalPartᴴ *ᵥ T.splitGram *ᵥ orbitPoint a.castSucc σ) :=
-    hφ.depth_le fun w _ ↦ (isOrthogonalBelow_orthonormalPart_mulVec w).mulVec
-      (mem_partialUnitriangularGroup_of_mem_floorGroup hσ) le_rfl
-  let Ψ : (𝔰.BesselIndex → A) → ℝ≥0∞ :=
-    fun v ↦ φ (F.orthonormalPartᴴ *ᵥ T.splitGram *ᵥ v) ^ F.volumeExponent
+  refine Γ.floorMassLe_of_chart (b := a.castSucc)
+    (fun ξ hξ g ↦ by simp [depth_mul_left hξ]) fun g hg ↦ ?_
+  obtain ⟨φ, hφ⟩ := Γ.exists_commonBound g hg x hx 0
+  have := hφ.measurable
+  refine ⟨fun v ↦ φ (F.orthonormalPartᴴ *ᵥ T.splitGram *ᵥ v) ^ F.volumeExponent, ?_,
+    by fun_prop, fun σ hσ ↦ ?_⟩
   -- The bound over size `7` on the quadric comes from the bound over size `7 + 4` on X', at the
   -- cost of a factor `Λ ^ (99 n (7 + 6))`.
-  have h_free : ∫⁻ u in Γ.vecsOfSize 11, φ u ^ F.volumeExponent ≤ Γ.loss ^ (99 * 𝔰.n * 12) :=
-    hφ.lintegral_le 11
-  have h_quadric : ∫⁻ v in Γ.vecsOfSize 7, Ψ v ∂F.floorQuadricMeasure a.castSucc ≤
-      Γ.loss ^ (10 ^ 4 * 𝔰.n) :=
-    calc
-      _ ≤ Γ.loss ^ (99 * 𝔰.n * 13) * Γ.loss ^ (99 * 𝔰.n * 12) :=
-        setLIntegral_orthonormalPart_le (j := 7) (hρ := .inr rfl) h_free
-      _ = Γ.loss ^ (99 * 𝔰.n * 13 + 99 * 𝔰.n * 12) := by rw [pow_add]
-      _ ≤ Γ.loss ^ (10 ^ 4 * 𝔰.n) := pow_le_pow_right₀ Γ.one_le_loss (by lia)
-  exact ⟨Ψ, h_quadric, by fun_prop, fun σ hσ ↦ pow_le_pow_left' (h_depth σ hσ) _⟩
+  · exact (setLIntegral_orthonormalPart_le (j := 7) (hρ := .inr rfl)
+      (hφ.lintegral_le 11)).trans <|
+      (pow_add ..).symm.trans_le (pow_le_pow_right₀ Γ.one_le_loss (by lia))
+  · exact pow_le_pow_left' (hφ.depth_le fun w _ ↦
+      (isOrthogonalBelow_orthonormalPart_mulVec w).mulVec
+        (mem_partialUnitriangularGroup_of_mem_floorGroup hσ) le_rfl) _
 
 /-- The bound Λ^(10⁶ n³) for all floors of a head together: at most n floors at Λ^(10⁶ n²) each,
 with n = `𝔰.n` and Λ = `Γ.loss`, the constant of the gauge. -/
@@ -704,7 +695,6 @@ lemma lintegral_depthWeight_le (hj : j ≤ 𝔰.ϱ) (g y : T.G) (h_near : F.IsNe
       ∂ascConv heisenbergMeasure j ≤ ∏ l ∈ Finset.range j, Γ.floorConst l := by
   -- Move both points by the element `γ * n` of `R^(j)` that takes `g` into the box `F.boxSet`,
   -- then use induction on the length.
-  have h_meas : MeasurableSet Γ.positionsOfSize := Γ.measurableSet_positionsOfSize
   obtain ⟨ξ, hξ, hg⟩ : ∃ ξ ∈ partialUnitriangularGroup j, ξ * g ∈ F.boxSet := h_near
   obtain ⟨γ, hγ, n, hn, rfl⟩ : ∃ γ ∈ floorGroup j, ∃ n ∈ unipotentBelow j, ξ = γ * n :=
     exists_floorGroup_mul_unipotentBelow hξ
@@ -796,13 +786,13 @@ lemma hasShortDual_of_mem_stableProducts {c : Aˣ} (hc : ↑c ∈ F.stableProduc
   · simpa only [mulVec_smul, ← smul_sub, smul_comm F.levelUnit⁻¹.val] using
       mem_vecsOfSize_mono (smul_mem_vecsOfSize hc_size h_agree)
 
-/-- Let u x and v y lie in the box `F.boxSet`, with u, v in the Bessel unipotent group `T.besselU`,
+/-- Let v y lie in the box `F.boxSet`, with u, v in the Bessel unipotent group `T.besselU`,
 and let (v y - u x) / `F.levelUnit` have size 2 for Γ (`Γ.HasMatrixSize`). Then the lengths read at
 x and y differ by at most size 9 modulo the level `F.levelUnit` (`Γ.GaugesDifferLe`): if ω is
 orthogonal to all e_b, b < ϱ, and x⁻¹ ω has size i, then (x⁻¹ ω - y⁻¹ ω') / `F.levelUnit` has size
 i + 9 for some ω' congruent to ω modulo the e_b. -/
 lemma gaugesDifferLe_last_quotient_of_close {u v : T.G} (hu : u ∈ T.besselU) (hv : v ∈ T.besselU)
-    (_hx : u * x ∈ F.boxSet) (hy : v * y ∈ F.boxSet)
+    (hy : v * y ∈ F.boxSet)
     (h_close : Γ.HasMatrixSize 2 (F.levelUnit⁻¹.val • ((v * y).val.val - (u * x).val.val))) :
     Γ.GaugesDifferLe F.levelUnit x y 𝔰.ϱ 9 := by
   -- The lift is `v⁻¹ u ω`, and `x⁻¹ ω - y⁻¹ v⁻¹ u ω = (v y)⁻¹ (v y - u x) x⁻¹ ω`.
@@ -813,7 +803,7 @@ lemma gaugesDifferLe_last_quotient_of_close {u v : T.G} (hu : u ∈ T.besselU) (
   have h_eq : F.levelUnit⁻¹.val • (x⁻¹.val.val *ᵥ ω - y⁻¹.val.val *ᵥ (v⁻¹ * u).val.val *ᵥ ω) =
       ((v * y)⁻¹.val.val * (F.levelUnit⁻¹.val • ((v * y).val.val - (u * x).val.val))) *ᵥ
         x⁻¹.val.val *ᵥ ω := by
-    simp [smul_mulVec, sub_mulVec, mul_sub, sub_mul, mul_assoc, smul_sub]
+    simp [smul_mulVec, sub_mulVec, mul_sub, sub_mul, mul_assoc]
   rw [h_eq]
   have h_size : Γ.HasMatrixSize 1 (v * y).val.val := Γ.hasMatrixSize_boxSet hy
   exact mem_vecsOfSize_mono ((h_size.inv.mul h_close).mulVec hω_len)
@@ -837,7 +827,7 @@ lemma hasMatrixSize_sub_one_of_forall_stableProducts
     obtain ⟨c, hc, hc_size⟩ : ∃ c : Aˣ, ↑c ∈ F.stableProducts a x y ∧ ↑c⁻¹ ∈ Γ.ofSize 1 := h_unit a
     exact hasShortDual_of_mem_stableProducts hc hc_size
   have h_top : Γ.GaugesDifferLe F.levelUnit x (x * y) 𝔰.ϱ 9 :=
-    gaugesDifferLe_last_quotient_of_close hu hv hx hy h_close
+    gaugesDifferLe_last_quotient_of_close hu hv hy h_close
   -- Each floor costs `4 * 5 + 12`, and `9 + 32 ϱ` leaves room below `99 n`.
   have h_differ : Γ.GaugesDifferLe F.levelUnit x (x * y) 0 (9 + (4 * 5 + 12) * 𝔰.ϱ) :=
     h_top.on_whole_space_of_hasShortDual F.star_levelUnit Γ.levelUnit_mem_ofSize le_rfl

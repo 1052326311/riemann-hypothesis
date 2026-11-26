@@ -236,7 +236,7 @@ lemma exists_smul_teichmuller_eq (C : Subgroup (Gp p)) [hC : IsClosed (C : Set (
     refine Set.inter_subset_inter_right _ fun g h_next ↦ ?_
     have h_eq : ((g • b u (n + 1) : PadicAlgCl p) : ℂ_[p]) = (v.untiltRoot (n + 1)).val := h_next
     -- `↓`: with the plain lemma simp unfolds one Frobenius too many on each side
-    simpa [← smul_coe_Cp, hb, untiltRoot, ↓Function.iterate_succ',
+    simpa [← UniformSpace.Completion.algEquiv_smul_coe, hb, untiltRoot, ↓Function.iterate_succ',
       ← untilt_iterate_frobeniusEquiv_symm_pow (_^[n] _) 1] using congrArg (· ^ p) h_eq
   have hX_ne (n : ℕ) : (X n).Nonempty := by
     have h_pow_eq : b v n ^ (p ^ n * e) = b u n ^ (p ^ n * e) := by simp [hb_pow, hv]
@@ -256,7 +256,7 @@ lemma exists_smul_teichmuller_eq (C : Subgroup (Gp p)) [hC : IsClosed (C : Set (
   erw [map_pow, pow_one, ← coeff_tiltMap _ (mk_untiltRoot ..), ← mk_untiltRoot]
   have hg_n : ((g • b u n : PadicAlgCl p) : ℂ_[p]) = (v.untiltRoot n).val := (hg n).right
   have h_root_eq : g • untiltRoot n u = untiltRoot n v :=
-    Subtype.ext (by simpa [← hb, smul_coe_Cp] using hg_n)
+    Subtype.ext (by simpa [← hb] using hg_n)
   exact congrArg _ h_root_eq
 
 /-- A Kummer chart for j : Γ → G_p with open image: a chart S = Λ⟦z⟧ ⊂ A_inf, Λ = W(𝔽_{p^f}), and a
@@ -398,7 +398,7 @@ lemma exists_kummerChart (Γ : Type) [Group Γ] [𝒥 : OverGp Γ p] :
   have h_sep : IsHausdorff (span {κ π}) OC := by
     refine ⟨fun x h ↦ eq_of_forall_pow_dvd_sub ↑p fun n ↦ ?_⟩
     grw [← map_natCast κ, neg_dvd.mp (Associated.dvd' ⟨v, hv⟩), map_pow, ← pow_mul,
-      smodEq_span_pow_iff_dvd.mp (h _)]
+      (TauCeti.sModEq_span_singleton_pow_iff ..).mp (h _)]
   -- `θ` maps `Λ` into the integers of `K` (by `τ`), and every integer of `K` is a Teichmüller
   -- constant modulo `π` (`using!` below: the fact bounds `‖·‖`, the goal `‖·‖₊`)
   let τ : WittFq f →+* valRingBelow (localFieldOf Γ) (intQpBar p) :=

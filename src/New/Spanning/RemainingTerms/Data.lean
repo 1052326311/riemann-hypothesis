@@ -51,7 +51,7 @@ def termLattice : Submodule (Ô E) (𝔰.κ → 𝔸f E) :=
   S.classLatticeX₀ c ⊓
     (S.ideleM • colLattice (Ô E)
         (isotropicRows ((S.latticeMiddle (𝔸f E)).frameGram (S.translateByClassReps c c' γ)))ᴴ).comap
-      (((frameMiddle (S.translateByClassReps c c' γ).1.1)ᴴ * S.latticeMiddle (𝔸f E) *
+      (((frameMiddle (S.translateByClassReps c c' γ).val.val)ᴴ * S.latticeMiddle (𝔸f E) *
         S.classCoordX₀ c).mulVecLin.restrictScalars (Ô E))
 
 /-- The part of the lattice `L_γ` of the term `γ` in `commonLink γ γ'`, the vectors of `X₀` that
@@ -117,13 +117,6 @@ and `S.termDisc γ ≠ 0` exactly for `j = ϱ + 1`), then it lies in the cell of
 lemma HasCellRank.hasCellRank_cellRank {j : Fin (𝔰.ϱ + 2)} {γ : S.G E}
     (h : S.HasCellRank j γ) : S.HasCellRank (S.cellRank γ) γ :=
   Classical.epsilon_spec (p := fun i : Fin (𝔰.ϱ + 2) ↦ S.HasCellRank i γ) ⟨j, h⟩
-
-omit [HasPrimitiveRoot5040 E] in
-/-- If the rational element `γ` lies in the cell `j` (`S.HasCellRank j γ`), then the index
-`S.cellRank γ`, chosen among all cells that contain `γ`, is `j`, as there is at most one. -/
-lemma HasCellRank.cellRank_eq {j : Fin (𝔰.ϱ + 2)} {γ : S.G E} (h : S.HasCellRank j γ) :
-    S.cellRank γ = j :=
-  h.hasCellRank_cellRank.unique h
 
 omit [HasPrimitiveRoot5040 E] in
 /-- Vectors of `Λ ∩ X₀`, for the lattice `Λ` of the class `c` in the definite space `X₀`, have

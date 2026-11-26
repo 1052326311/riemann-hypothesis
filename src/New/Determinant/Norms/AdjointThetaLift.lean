@@ -169,9 +169,9 @@ noncomputable def DescentPair.thetaLift [Nonempty r] {l : NumberField.InfinitePl
     -- The level on `V` acts on the datum through the character of `O.FormV`.
     refine mem_levelSpace.2 fun k ↦ ?_
     have h_datum := O.omega_fockDatum_star 1 k (highestVector O.columnCount O.paramV)
-    simp only [map_one, Module.End.one_apply, star_highestVector] at h_datum
+    simp only [map_one, one_apply_eq_self, star_highestVector] at h_datum
     rw [LinearMap.comp_apply, LinearEquiv.coe_coe, ← toAlgForm_formRep,
-      hfit.isArrow_fockDatum.formRep_formLift_of_eq_smul h_datum, map_one, Module.End.one_apply,
+      hfit.isArrow_fockDatum.formRep_formLift_of_eq_smul h_datum, map_one, one_apply_eq_self,
       map_smul]
 
 /-- The function on the adelic group of `V` attached to the algebraic form `Θ_W y` is the theta lift
@@ -416,7 +416,7 @@ lemma DescentPair.thetaLift_eq_integral [WeilData E]
 /-- Over a finite commutative ring `R`, the number of `n × r` matrices whose square block on the
 rows `ι` is invertible is `card (GL r R) · (card R) ^ ((card n − card r) · card r)`: the block is an
 element of `GL r R`, and the other rows are free. -/
-lemma card_isUnit_submatrix {R : Type} [CommRing R] [Finite R] (ι : r ↪ n) :
+lemma card_isUnit_submatrix {R : Type} [CommRing R] (ι : r ↪ n) :
     Nat.card {x : Matrix n r R // IsUnit (x.submatrix ι id)} =
       Nat.card (GL r R) * Nat.card R ^ ((card n - card r) * card r) := by
   let rows : r ⊕ {a : n // a ∉ Set.range ι} ≃ n :=
@@ -842,8 +842,8 @@ theorem inner_singleLift {j : D.LiftIndex} (y : D.principalForms (D.spaceW j))
     (Ξ : (D.descentPair ϑ j).FormV) :
     inner ℂ (D.singleLift ϑ j y) Ξ = (D.spaceW j).petersson y.val
       ((D.descentPair ϑ j).normalizedDescent Ξ) := by
-  rw [D.singleLift_apply]
-  exact (D.descentPair ϑ j).inner_thetaLift (D.fitsParams_descentPair ϑ j) y.val Ξ
+  simpa only [D.singleLift_apply] using!
+    (D.descentPair ϑ j).inner_thetaLift (D.fitsParams_descentPair ϑ j) y.val Ξ
 
 /-- The adjoint of the theta lift `D.singleLift ϑ j` sends a form `Ξ` on `V_j` to the form on `W_j`
 whose function on the adelic group `U(W_j)(𝔸)` is `θ Ξ`: at `g` it is the sum, over the classes `h`
@@ -864,15 +864,6 @@ theorem coe_adjoint_singleLift {j : D.LiftIndex} (Ξ : (D.descentPair ϑ j).Form
   have h_eq : (D.singleLift ϑ j).adjoint Ξ = descentForm := ext_inner_left ℂ fun y ↦ by
     rw [LinearMap.adjoint_inner_right, inner_singleLift, Submodule.coe_inner, inner_eq_petersson]
   rw [h_eq]
-
-/-- The descent is the inner product with the kernel: for a form `φ` on `V_j` and `g` in
-`U(W_j)(𝔸)`, the value at `g` of the adjoint of the lift applied to `φ` is the inner product of the
-form `New.DescentPair.vectorKernelForm` at `g` with `φ`. -/
-theorem adjoint_singleLift_apply {j : D.LiftIndex} (φ : (D.descentPair ϑ j).FormV)
-    (g : New.G D.E (D.signsW j)) :
-    ((D.singleLift ϑ j).adjoint φ).val g = inner ℂ ((D.descentPair ϑ j).vectorKernelForm g) φ := by
-  rw [coe_adjoint_singleLift]
-  exact (D.descentPair ϑ j).normalizedDescent_eq_inner_vectorKernelForm φ g
 
 /-- The lift is integration against the kernel: the lift of a form `y` of level `J_M` on `W_j` is
 the integral over `g` in `[U(W_j)]` of `y(g)` times the form `New.DescentPair.vectorKernelForm` at
@@ -1071,9 +1062,27 @@ theorem singleLift_principalRep (ϑ : D.TameChar) {j : D.LiftIndex} (s : D.chose
     (y : D.principalForms (D.spaceW j)) :
     D.singleLift ϑ j (D.principalRep (D.spaceW j) s y) =
       (D.descentPair ϑ j).formAction s (D.singleLift ϑ j y) := by
-  rw [D.singleLift_apply, D.singleLift_apply]
-  exact (D.descentPair ϑ j).thetaLift_formRep (D.fitsParams_descentPair ϑ j) _
+  simpa only [D.singleLift_apply] using!
+    (D.descentPair ϑ j).thetaLift_formRep (D.fitsParams_descentPair ϑ j) _
     (reduceFamily_liftResidue (w := D.chosenPlace) s) y.val
+
+/-- The theta lift `D.singleLift ϑ j`, for a tame character `ϑ` and `1 ≤ j ≤ m`, commutes with the
+group algebra of `D.chosenGL`, the product of the groups `GL_r` over the residue fields of the
+chosen places. An element `x` acts through `principalRep` on `principalForms`, the forms on the
+hermitian space `W_j = D.spaceW j` fixed by the principal level at the chosen places. It acts by
+the group algebra action of `formAction` on the forms on the larger space of `D.descentPair ϑ j`, the datum of the lift. -/
+lemma singleLift_asAlgebraHom {ϑ : D.TameChar} {j : D.LiftIndex} {x : MonoidAlgebra ℂ D.chosenGL}
+    (y : D.principalForms (D.spaceW j)) :
+    D.singleLift ϑ j ((D.principalRep (D.spaceW j)).asAlgebraHom x y) =
+      (D.descentPair ϑ j).formAction.asAlgebraHom x (D.singleLift ϑ j y) := by
+  -- Both sides are sums over the group, and `singleLift` commutes with each group element.
+  have h_sum : (D.descentPair ϑ j).formAction.asAlgebraHom x (D.singleLift ϑ j y) =
+      ∑ g : D.chosenGL, x.coeff g • (D.descentPair ϑ j).formAction g (D.singleLift ϑ j y) :=
+    -- A term, as `rw` does not see that `D.chosenGL` is the group acting on the forms.
+    (LinearMap.congr_fun (asAlgebraHom_eq_sum (D.descentPair ϑ j).formAction) _).trans
+      (LinearMap.sum_apply ..)
+  rw [h_sum, asAlgebraHom_eq_sum]
+  simp [singleLift_principalRep]
 
 end Data
 

@@ -125,12 +125,12 @@ noncomputable def _root_.New.Space.Splitting.IsAdapted.mixedModel (h : D.IsAdapt
           D.zeroTerm (V.integrated v f) = V₀.integrated (T v) (D.zeroTerm (V.projReal f)) by
       simpa [↓ Splitting.slice] using h.exists_apply_zero_omega_integrated_eq isMixedLaw_slice
   refine
-    { L := realMatrix (D.lAdelic * t⁻¹.1ᴴ)
-      K := realMatrix (D.kAdelic * t.1)
+    { L := realMatrix (D.lAdelic * t⁻¹.valᴴ)
+      K := realMatrix (D.kAdelic * t.val)
       I := realMatrix D.iAdelic
-      slice a := T.comp (realHeisenbergOp (realMatrix (D.lAdelic * t⁻¹.1ᴴ) *ᵥ a))
+      slice a := T.comp (realHeisenbergOp (realMatrix (D.lAdelic * t⁻¹.valᴴ) *ᵥ a))
       exists_decomp :=
-        ⟨realMatrix (t.1ᴴ * D.lCoord), realMatrix D.iCoord, realMatrix (t⁻¹.1 * D.kCoord),
+        ⟨realMatrix (t.valᴴ * D.lCoord), realMatrix D.iCoord, realMatrix (t⁻¹.val * D.kCoord),
           fun y ↦ ?_⟩
       slice_realHeisenbergOp a a' w b v := eq_of_integrated_zeroTerm_eq h fun f ↦ ?_
       slice_vac a := eq_of_integrated_zeroTerm_eq h ?_ }
@@ -152,8 +152,8 @@ noncomputable def _root_.New.Space.Splitting.IsAdapted.mixedModel (h : D.IsAdapt
     simpa [← hT, ↓ conjTranspose_nonsing_inv, ↓ integrated_realHeisenbergOp,
       ↓ realVec_realMatrix_mulVec, mulVec_add, ↓ Splitting.slice, ↓ adelicHeisenberg,
       ↓ star_mulVec_dotProduct] using
-      D.isMixedLaw_slice (t⁻¹.1ᴴ *ᵥ _)
-        (D.lAdelic *ᵥ t⁻¹.1ᴴ *ᵥ _ + D.iAdelic *ᵥ _ + D.kAdelic *ᵥ t.1 *ᵥ _) _
+      D.isMixedLaw_slice (t⁻¹.valᴴ *ᵥ _)
+        (D.lAdelic *ᵥ t⁻¹.valᴴ *ᵥ _ + D.iAdelic *ᵥ _ + D.kAdelic *ᵥ t.val *ᵥ _) _
   · -- The vacuum becomes the Gaussian.
     simpa [← hT, ↓ integrated_realHeisenbergOp, ↓ realVec_realMatrix_mulVec, ↓ Splitting.slice]
       using h.omega_projReal_of_isMixedLaw isMixedLaw_slice _
@@ -313,21 +313,14 @@ lemma ReadsAt.psi_apply (h : ReadsAt S π) (z : 𝔸f E) : h.ψ (π z) = selfDua
 of integers `O`: it is continuous, and `h.ψ (t * ·)` is trivial on `O` exactly for `t ∈ O`. -/
 lemma ReadsAt.hasIntegralConductor_psi (h : ReadsAt S π) : HasIntegralConductor h.ψ := by
   refine ⟨continuous_selfDualAddChar.comp h.continuous_lift, fun t ↦ ?_⟩
-  -- Write `t = π x`; the claim becomes the self-duality of `Ô E` for `idem S * x`.
-  have π_surj : Function.Surjective π := fun y ↦ ⟨h.lift y, h.apply_lift y⟩
-  obtain ⟨x, rfl⟩ := π_surj t
-  rw [h.mem_iff, ← forall_selfDualAddChar_mul_eq_one_iff]
-  constructor
-  · intro h_triv u hu
-    have hu_mem : π u ∈ O := (h.mem_iff u).2 (mul_mem (idem_mem_Ô S) hu)
-    calc selfDualAddChar E (idem S * x * u) = h.ψ (π x * π u) := by
-          rw [← map_mul, h.psi_apply, mul_assoc]
-      _ = 1 := h_triv (π u) hu_mem
-  · intro h_triv s hs
-    obtain ⟨u, rfl⟩ := π_surj s
-    calc h.ψ (π x * π u) = selfDualAddChar E (idem S * x * (idem S * u)) := by
-          rw [← map_mul, h.psi_apply, mul_mul_mul_comm, idem_mul_self]
-      _ = 1 := h_triv (idem S * u) ((h.mem_iff u).1 hs)
+  -- Write `t = π (h.lift t)`; this becomes self-duality of `Ô E` for `idem S * h.lift t`.
+  rw [← h.apply_lift t, h.mem_iff, ← forall_selfDualAddChar_mul_eq_one_iff]
+  refine ⟨fun h_triv u hu ↦ ?_, fun h_triv s hs ↦ ?_⟩
+  · rw [mul_assoc, ← h.psi_apply, map_mul]
+    exact h_triv (π u) ((h.mem_iff u).2 (mul_mem (idem_mem_Ô S) hu))
+  · rw [← h.apply_lift s] at hs ⊢
+    rw [← map_mul, h.psi_apply, ← idem_mul_self S, mul_mul_mul_comm]
+    exact h_triv (idem S * h.lift s) ((h.mem_iff _).1 hs)
 
 omit [WeilData E] [DecidableEq p] in
 /-- If `π : 𝔸f E →+* F` reads the components at `S`, then applying it coordinatewise carries the
@@ -382,8 +375,6 @@ lemma ReadsAt.sliceDatum_eq_prod_setIntegral_smul (h : ReadsAt S π)
     have hψ_cont : Continuous h.ψ := h.hasIntegralConductor_psi.1
     simp only [g, vecToMatrix, mulVec, dotProduct, Fintype.sum_sum_type, Sum.elim_inl, Sum.elim_inr]
     fun_prop
-  have hψ_sum (z : p → F) : h.ψ (∑ i, z i) = ∏ i, h.ψ (z i) :=
-    map_prod h.ψ.toMonoidHom (fun i ↦ Multiplicative.ofAdd (z i)) Finset.univ
   have h_factor (z : p → F) : g z = (∏ i, Set.indicator (V.O : Set F)
       (fun t ↦ h.ψ (c i * t) * f i t) (z i)) * Ψ ((vecToMatrix y).map π) := by
     simp [g, h_prod, Set.indicator_apply, ← mul_assoc, ← Finset.prod_mul_distrib]
@@ -392,7 +383,7 @@ lemma ReadsAt.sliceDatum_eq_prod_setIntegral_smul (h : ReadsAt S π)
       = ∫ b : p → 𝔸f E in (integralBox p Sᶜ : Set (p → 𝔸f E)),
           g (π ∘ b) ∂latticeMeasure E p := by
         simp [g, c, sliceDatum, finFrameVector, ← h.psi_apply, ↓dotProduct_smul, vecToMatrix,
-          Matrix.map, dotProduct, mulVec, hψ_sum, matrixToVec]
+          Matrix.map, dotProduct, mulVec, AddChar.map_sum_eq_prod, matrixToVec]
     _ = ∫ z, g z := h.measurePreserving_comp.hasLaw.integral_comp hg.aestronglyMeasurable
     _ = (∏ i, ∫ t : F in V.O, h.ψ (c i * t) * f i t) * Ψ ((vecToMatrix y).map π) := by
       simp only [h_factor, integral_mul_const, integral_fintype_prod_volume_eq_prod,
@@ -430,11 +421,11 @@ lemma slice_localDatum (h : ReadsAt S π) {D : (W'.hom T').Splitting (W.hom T) p
     simp [funext_iff, realCoord, Units.smul_def]
   have h_fin : (fun i ↦ (0, ((scaleIdele E • x) i).2)) = finVec xf := rfl
   have h_vac :
-      D.slice (u.1⁻¹ᴴ *ᵥ finVec (idem S.conjClosureᶜ • xf))
+      D.slice (u.val⁻¹ᴴ *ᵥ finVec (idem S.conjClosureᶜ • xf))
           (ω (W'.hom T') 1 (W'.hom T').vacElem) =
         (if ∀ i, idem S.conjClosureᶜ * (x i).2 ∈ Ô E then (vacuumFactor hu : ℂ) else 0) •
           (W.hom T).vacElem := by
-    have h_norm : ‖vacuumFn (u.1ᴴ *ᵥ u.1⁻¹ᴴ *ᵥ finVec (idem S.conjClosureᶜ • xf))‖ =
+    have h_norm : ‖vacuumFn (u.valᴴ *ᵥ u.val⁻¹ᴴ *ᵥ finVec (idem S.conjClosureᶜ • xf))‖ =
         if ∀ i, idem S.conjClosureᶜ * (x i).2 ∈ Ô E then 1 else 0 := by
       simp [vacuumFn, finVec, ← conjTranspose_mul, xf, apply_ite norm, Circle.norm_coe]
     rw [map_one, one_apply_eq_self, slice_vacElem_eq_vacuumFactor_smul hu, h_norm]
@@ -443,7 +434,7 @@ lemma slice_localDatum (h : ReadsAt S π) {D : (W'.hom T').Splitting (W.hom T) p
       (∏ i, ∫ t in V.O, h.ψ (π (star (x i).2) * t) * f i t) • fun y ↦ Ψ ((vecToMatrix y).map π) :=
     h.sliceDatum_eq_prod_setIntegral_smul hΦ.1.continuous x f h_prod
   have h_name :
-      D.slice (u.1⁻¹ᴴ *ᵥ finVec xf) (ω (W'.hom T') 1
+      D.slice (u.val⁻¹ᴴ *ᵥ finVec xf) (ω (W'.hom T') 1
           ((W'.hom T').schrodingerOp S (fun y ↦ Φ ((vecToMatrix y).map π)) (W'.hom T').vacElem)) =
         (∏ i, ∫ t : F in V.O, h.ψ (π (star (x i).2) * t) * f i t) •
           (if ∀ i, idem S.conjClosureᶜ * (x i).2 ∈ Ô E then (vacuumFactor hu : ℂ) else 0) •
