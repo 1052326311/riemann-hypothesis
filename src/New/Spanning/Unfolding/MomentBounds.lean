@@ -398,7 +398,7 @@ all `a`, `b`, for a map `u` into an inner product space. Let `Γ` be a subgroup 
 modulo `w` or its conjugate, the elements of `Γ` that fix it (`vectorFixer`) carry at most a
 proportion `S.b^(-6k)` of the sum of `β` over `Γ`. Then the elements of `Γ` that are not open carry
 at most a proportion `S.b⁻⁴` of that sum. -/
-lemma sum_not_isOpenElement_le [S.IsAdmissible] {V : Type*} [NormedAddCommGroup V]
+lemma sum_not_isOpenElement_le {V : Type*} [NormedAddCommGroup V]
     [InnerProductSpace ℂ V] {β : S.ResidueGL → ℝ} (h_nonneg : ∀ s : S.ResidueGL, 0 ≤ β s)
       {u : S.ResidueGL → V}
     (h_posType : ∀ a b : S.ResidueGL, ⟪u a, u b⟫_ℂ = β (a⁻¹ * b)) {Γ : Subgroup S.ResidueGL}
