@@ -335,14 +335,19 @@ lemma projSpace.cutsOutLocus_stdChart_zero_X :
   simp [ComesFromPoints]
   -- Both sides of the equation are points `[v]`; compare them by cross products.
   change _ ↔ projSpace.mk _ _ = projSpace.mk _ _
-  erw [mk_eq_mk_iff_cross_mul]
+  refine Iff.trans ?_ mk_eq_mk_iff_cross_mul.symm
   simp +contextual
   change Ideal.span (Set.range X) ≤ RingHom.ker α.hom ↔
     0 = α.hom (X 0) ∧ α.hom (X 0) = 0
-  let x : (stdChart k 1 0).coordRing := X 0
-  have hx : Set.range (X : Fin 1 → (stdChart k 1 0).coordRing) = {x} := Set.range_unique
-  erw [hx, Ideal.span_le, Set.singleton_subset_iff, RingHom.mem_ker]
-  exact ⟨fun h ↦ ⟨h.symm, h⟩, And.right⟩
+  constructor
+  · intro h
+    have h₀ : α.hom (X 0) = 0 := Ideal.span_le.mp h ⟨0, rfl⟩
+    exact ⟨h₀.symm, h₀⟩
+  · rintro ⟨_, h₀⟩
+    apply Ideal.span_le.mpr
+    rintro _ ⟨i, rfl⟩
+    rw [Subsingleton.elim i 0]
+    exact h₀
 
 /-- The points of the chart `1` of the projective line (the points `[x : 1]`) avoid
 `affinePoint 0 0 = [1 : 0]`: for every map `ψ` from the chart's ring to `A`, the image of the
