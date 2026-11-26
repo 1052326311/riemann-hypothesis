@@ -321,7 +321,7 @@ lemma exists_ainfToBPlus_eq_p_pow_mul_sub_z_mul (ht_fixes : c.FixesThetaZ t)
   have h_expand : ainfToBPlus (α * (∑ l : d, A l * G l j - t • A j)) =
       ainfToBPlus (tau * c.z ^ (n + 1)) * (p ^ (v + 1) * W j - ainfToBPlus c.z * W'') := by
     linear_combination (norm :=
-      (simp [W'', ← smul_algebraMap_eq_algebraMap_smul t (A _), smul_sub, hA, ht_z, mu, mul_sub,
+      (simp [W'', ← smul_algebraMap_eq_algebraMap_smul t (A _), smul_sub, hA, ht_z, mu_eq, mul_sub,
          mul_assoc, Matrix.mul_apply, ← mul_sum, sub_mul, Matrix.one_apply, sub_eq_zero]
        ring) )
       -ainfToBPlus c.z ^ (n + 1) *

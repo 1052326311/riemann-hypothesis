@@ -265,7 +265,7 @@ lemma thickeningOver.teichmullerLift_epsTilt (c : PadicTest) :
       algebraMap (WittVector p OFlat) c.Thickening (teichmuller p epsTilt) :=
     congrArg (algebraMap (WittVector p c.TiltRing) c.Thickening) (map_teichmuller ..).symm
   rw [h_lift, ← map_one c.thickeningProj, mulMu_thickeningProj]
-  simp [mu]
+  simp [mu_eq]
 
 /-- Let `V` be covered by charts of dimension one (`New.Variety.IsChartCovered 1 V`) and `U` an
 open subfunctor of `V`. Then restriction from `p`-adic tests to Hodge–Tate pairs is bijective

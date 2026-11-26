@@ -116,7 +116,7 @@ lemma thetaGeneric_algebraMap_ainf (a : Ainf) :
 /-- `θ` kills the element `μ = [ε] - 1` of `A_inf`. -/
 lemma thetaGeneric_mu :
     c.thetaGeneric (algebraMap Ainf (Localization.Away (p : WittVector p c.TiltRing)) mu) = 0 := by
-  simp [thetaGeneric_algebraMap_ainf, mu]
+  simp [thetaGeneric_algebraMap_ainf, mu_eq]
 
 /-- For a p-adic test with ring R, the quotient B = W(R^♭)[1/p]/(ker θ)², where
 θ: W(R^♭)[1/p] → R[1/p]. -/

@@ -87,7 +87,7 @@ lemma mu_sq_dvd_smul_mu_sub (g : Gp p) : mu ^ 2 ∣ g • mu - (cyclotomicGp g :
   -- Let `u = [ε^{1/p^m}]` and let `a` be the cyclotomic character of `g` modulo `p ^ m`.
   let u : Ainf := teichmuller p ((frobeniusEquiv _ p).symm^[m] epsTilt)
   let a : ℕ := (cyclotomicCharMod ℂ_[p] (p ^ m) g : ZMod (p ^ m)).val
-  have hu : u ^ p ^ m = 1 + mu := by simp [u, mu, ← map_pow]
+  have hu : u ^ p ^ m = 1 + mu := by simp [u, mu_eq, ← map_pow]
   -- `θ u` is a `p ^ m`-th root of unity, as `u ^ p ^ m = 1 + μ` and `θ μ = 0`; `g` acts on it as
   -- the `a`-th power, and `ker θ = (ξ)`.
   have h_root : theta u ^ p ^ m = 1 := by
