@@ -1053,8 +1053,6 @@ def lineBasis : ∀ i : Bool, H (restrictAlong (elementsProj (projLineAlong g)) 
   | true => Ext.mk₀ (𝟙 (elementsProj (projLineAlong g) ⋙ M.functor))
   | false => M.cupClass
 
-lemma lineBasis_true :
-    M.lineBasis true = Ext.mk₀ (𝟙 (elementsProj (projLineAlong g) ⋙ M.functor)) := rfl
 
 lemma lineBasis_false : M.lineBasis false = M.cupClass := rfl
 
