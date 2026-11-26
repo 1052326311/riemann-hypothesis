@@ -1,6 +1,6 @@
 module
 
-public import Mathlib.Analysis.Matrix.MeasurableSpace -- shake: keep (Mathlib's instance must precede the `MeasurableSpace (Matrix m n R)` instance below)
+public import Mathlib.Analysis.Matrix.MeasurableSpace
 public import TauCeti.Analysis.Matrix.IndefiniteUnitaryGroup
 public import TauCeti.Topology.Algebra.Group.Units
 public import Aesop.Frontend.Tactic
@@ -127,8 +127,6 @@ deriving instance PolishSpace for Matrix m n R
 
 variable [MeasurableSpace R] [BorelSpace R]
 
-instance : MeasurableSpace (Matrix m n R) := .pi
-
 instance : BorelSpace Rˣ := by
   borelize Rˣ
   use (continuous_val.measurableEmbedding val_injective).comap_eq
@@ -144,7 +142,9 @@ deriving instance Countable, LocallyCompactSpace, BorelSpace for Matrix m n R
 
 end
 
-instance [Fintype m] [Fintype n] [MeasureSpace R] : MeasureSpace (Matrix m n R) := .pi
+/-- The product measure on matrices, over Mathlib's `σ`-algebra `Matrix.instMeasurableSpace`. -/
+instance [Fintype m] [Fintype n] [MeasureSpace R] : MeasureSpace (Matrix m n R) where
+  volume := (volume : Measure (m → n → R))
 
 /-! ### Special matrices -/
 
