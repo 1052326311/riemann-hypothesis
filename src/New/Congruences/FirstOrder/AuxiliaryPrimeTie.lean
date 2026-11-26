@@ -360,7 +360,7 @@ lemma heckeAction_pow_apply {A δ₀ : D.heckeAlgebra Q.place} {n₀ : EllAdicIn
 
 end
 
-omit [Nonempty n] in
+omit [Nonempty n] [V.IsStd] [WeilData E] in
 /-- Assume that the auxiliary places are off the level of `D`. Let `Nm` be the sum of the action
 `residueRep` of the finite group `∏ GL_n(𝔽_{w j})` and `δ = c² A δ₀`, with `A`, `δ₀` in the Hecke
 algebra. If the forms `u`, `l`, `y` satisfy `Nm u = d c l` and `A δ₀ l = n₀ A y`, then
