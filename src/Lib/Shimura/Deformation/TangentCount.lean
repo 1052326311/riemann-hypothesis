@@ -28,7 +28,7 @@ open Algebra Polynomial AlgebraicGeometry CategoryTheory Fintype IsAlgClosed Lin
   CartesianMonoidalCategory
 
 variable {E : Type} [Field E] [CMBase E] {D : PEL E}
-  {k : Type} [Field k] [IsAlgClosed k]
+  {k : Type} [Field k]
   {Z : Scheme} {σ : Z ⟶ Spec (CommRingCat.of (NumberField.RingOfIntegers E))}
   {Y : ThetaFamily D Z σ} {x : ThetaObject Y (Spec ⟨k⟩)}
 
@@ -36,7 +36,7 @@ attribute [local instance low] Fintype.ofFinite in
 /-- If x ↦ x^i, for a natural number i, is F-linear on an algebraically closed extension k of a
 finite field F, then i is a power of |F|. -/
 lemma mem_powers_card_of_isLinearMap_pow (F : Type*) {i : ℕ} [Field F] [Finite F] [Algebra F k]
-    (h_lin : IsLinearMap F fun a : k ↦ a ^ i) :
+    [IsAlgClosed k] (h_lin : IsLinearMap F fun a : k ↦ a ^ i) :
     i ∈ Submonoid.powers (Nat.card F) := by
   -- Let `q = card F`. The fixed points of the `F`-linear map `x ↦ x ^ (q * i)` are the `q * i`
   -- roots of a separable polynomial, and a finite `F`-space has a power of `q` elements.
@@ -148,7 +148,6 @@ lemma adjoin_eq_top_and_exists_algHom_eq_smul {B : Type*} [CommRing B] [Algebra 
   exact ⟨h_top, fun a ↦ ⟨pb.lift (a • τ) (aeval_eq_zero_of_dvd_aeval_eq_zero hm.dvd' <| by
     simp [_root_.smul_pow, (by simpa [dvd_iff] using hm.dvd : τ ^ m = 0)]), pb.lift_gen _ _⟩⟩
 
-omit [IsAlgClosed k] in
 /-- In a local `k`-algebra `B` with a `k`-point `z`, every `t ≠ 0` has a linear form `γ` with
 `γ (t * b) = z b` for all `b`. -/
 lemma exists_dual_mul_eq {B : Type*} [CommRing B] [Algebra k B] [IsLocalRing B] (z : B →ₐ[k] k)
@@ -314,7 +313,7 @@ factors (`h_fac`), and let `f` be natural in `C` (`hf`). If `f B u l = 0` and `l
 `k`-point, then `l` gives `0` at every point over a finite local `k`-algebra `C`: such a point is a
 constant point plus one that factors through `u`. -/
 lemma apply_eq_zero_of_apply_universal_eq_zero {B : Type} [CommRing B] [Algebra k B] [IsLocalRing B]
-    {u : placeTorsion x B}
+    [IsAlgClosed k] {u : placeTorsion x B}
     (h_fac : ∀ {C : Type} [CommRing C] [Algebra k C] [IsLocalRing C] (π : C →ₐ[k] k)
       (y : placeTorsion x C), placeTorsionMap π y = 0 → ∃ ψ : B →ₐ[k] C, placeTorsionMap ψ u = y)
     {W : Type*} [AddCommGroup W] [Module k W]
@@ -348,7 +347,7 @@ for the tangent line `L`, let `γ i` read the coefficient of `τ ^ i` (`hγ`), a
 `w = ker x.baseHom`, then `l = 0`: a lowest term of `f B u l` would have degree `q ^ j` with
 `j > 0`. -/
 lemma eq_zero_of_isLocalParameter (h_ker : RingHom.ker x.baseHom ≠ ⊥)
-    {L : k →+ (specOver k (DualNumber k) ⟶ x.groupScheme)}
+    [IsAlgClosed k] {L : k →+ (specOver k (DualNumber k) ⟶ x.groupScheme)}
     (hL_fst : ∀ m : k, specOver.map (fstHom k k k) ≫ L m = 0)
     (hL_smul : ∀ (a : NumberField.RingOfIntegers E) (m : k),
       a • L m = L (((algebraMap k k).comp x.baseHom) a * m))
@@ -421,7 +420,7 @@ along `x.baseHom` and linear in `l`, such that (a) `f` is natural in `C`; (b) `f
 points over `k[ε]` that reduce to `0`; (c) only `l = 0` gives zero on all finite local `C`. Then
 `dim W ≤ n - 1`, where `n = Fintype.card D.Index` is the number of indices of the PEL datum `D`. -/
 lemma finrank_le_of_placeTorsion (hw : D.IsGoodAt (RingHom.ker x.baseHom)) {V : ValuationSubring ℂ}
-    {φ : V →+* k} {y : ThetaObject Y (Spec (CommRingCat.of V))}
+    [IsAlgClosed k] {φ : V →+* k} {y : ThetaObject Y (Spec (CommRingCat.of V))}
     (hy : x.IsPullbackAlong (specMap φ) y) (h_full : y.FullLevelStructure) {W : Type*}
     [AddCommGroup W] [Module k W]
     (f : ∀ (C : Type) [CommRing C] [Algebra k C] [IsLocalRing C],
