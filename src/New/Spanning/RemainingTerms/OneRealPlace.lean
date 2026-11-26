@@ -670,7 +670,6 @@ lemma norm_det_mul_le_volumeRatio (h : IsTriangularBasis hi y Z ω L)
     simpa only [Fintype.card_fin] using
       ostrowski_taussky (PosSemidef.one.add v.posSemidef_conjTranspose_mul_self) h_negative
   have hL : 0 < ‖L.det‖ := norm_pos_iff.2 h.det_ne_zero
-  have hδ_pos : 0 < ‖(subframeBlock hi Z).det‖ := norm_pos_iff.2 hδ
   have h_det : ‖(-K).det‖ = volumeRatio γ y * ‖L.det‖ ^ 2 / ‖(subframeBlock hi Z).det‖ := by
     have h_factor : K = ((γ.val.val * subframeCols hi)ᴴ * 𝔰.J₁ * ω)ᴴ * (subframeBlock hi Z)⁻¹ *
       L := by
