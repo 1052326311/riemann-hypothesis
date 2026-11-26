@@ -183,7 +183,7 @@ lemma besselU_mul_apply_eq_add {𝔰 : Shape} (x u : (𝔰.middleGram (1 : ℂ))
 `M`, and the generalised index (`genIndex`, the inverse Haar modulus) of `det M` is `N ^ (-f)`.
 Here `N = S.N` is the prime `π π̄` of `S` and `f` is the number of infinite places of `E`. -/
 lemma exists_classBasis_eq_fromBlocks {E : Type} [Field E] [CMType E] [HasPrimitiveRoot5040 E]
-    {𝔰 : Shape} {S : Filling E 𝔰} (c : S.Classes) [S.IsAdmissible] :
+    {𝔰 : Shape} {S : Filling E 𝔰} (c : S.Classes) :
     ∃ M : Matrix 𝔰.MiddleIndex 𝔰.MiddleIndex (𝔸f E),
       (classBasis c).val = fromBlocks 1 0 0 (fromBlocks M 0 0 1) ∧
       genIndex M.det = 1 / S.N ^ numInfPlaces E := by
