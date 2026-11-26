@@ -171,7 +171,7 @@ lemma New.Selmer.exists_discreteLog {E : Type*} [Field E] [NumberField E] {P : F
 /-- Let `σ` be a Frobenius at a place above `P`, with `P.q = 1 + n * k`. If `σ` fixes an `n`-th root
 of a `T`-unit `u`, where `P ∉ T`, then `u ^ k ≡ 1` modulo `P`. -/
 lemma New.Selmer.valuation_pow_sub_one_lt_one_of_isFrob {E : Type*} [Field E]
-    [EmbeddedNumberField E] [NumberField.IsCMField E]
+    [EmbeddedNumberField E]
     {A : ClosurePlace} {P : FinPlace E} (hA : IsPlaceOver A P) {σ : Gal(Ω/E)} (hσ : IsFrob A P.q σ)
     {n k : ℕ} [NeZero n] (hk : P.q = 1 + n * k) {T : Set (FinPlace E)} (hPT : P ∉ T) {u : Eˣ}
     (hu : u ∈ T.unit E) {y : Ω} (hy : y ^ n = algebraMap E Ω u) (hy_fix : σ • y = y) :
