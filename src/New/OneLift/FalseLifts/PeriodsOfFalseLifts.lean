@@ -546,7 +546,6 @@ theorem stdClassSum_gramForm_eq_zero_of_rank_one {O : DescentPair E Unit n}
     (hyperplaneSum_apply_eq_zero_of_rank_one h_chosen hΞ_range) hΞ_descent hΞ_hecke
     (by grind [card_unit]) ε C hC ϑ h_kernels h₁ hx
 
-set_option backward.isDefEq.respectTransparency false in -- for rewriting products in `Gf`
 omit [WeilData E] [Nonempty r] in
 /-- Conjugates of the second block fix forms. Let `ε` split `I_n = I_N ⊕ I_l`, with `U.block ε` the
 block diagonal embedding; `reduceAt` is reduction to the residue field and `inclMatrix e` the matrix
@@ -572,12 +571,16 @@ lemma algFormRep_conj_block_apply_eq_self (Ξ : O.FormV) (ε : N ⊕ l ≃ n) {x
   let c : stdLevel E n := A⁻¹ * ⟨_, h_mem⟩ * A
   -- At the chosen places the columns `O.incl` of `c` are those of `1`, as `x⁻¹ (1, k) x` fixes `Y`.
   have h_col (i : O.ChosenIndex) :
-      (stdLevel.reduceAt (O.placeAt (inl i)) c).1 * inclMatrix _ O.incl = inclMatrix _ O.incl := by
+      (stdLevel.reduceAt (O.placeAt (inl i)) c).1 *
+          inclMatrix (ResField (O.placeAt (inl i))) O.incl =
+        inclMatrix (ResField (O.placeAt (inl i))) O.incl := by
     simp [c, hA_col, h_fixY, inv_mul_eq_iff_eq_mul_of_invertible, -elim_inl, Matrix.mul_assoc]
   -- At the twist places the point `x` is trivial, so `x⁻¹ (1, k) x` reduces to the block matrix
   -- `(1, k)`; it fixes the rows `e'`. So the rows `O.incl` of `c` are those of `1`.
   have h_row (i : O.TwistIndex) :
-      (stdLevel.reduceAt (O.placeAt (inr i)) c).1ᵀ * inclMatrix _ O.incl = inclMatrix _ O.incl := by
+      (stdLevel.reduceAt (O.placeAt (inr i)) c).1ᵀ *
+          inclMatrix (ResField (O.placeAt (inr i))) O.incl =
+        inclMatrix (ResField (O.placeAt (inr i))) O.incl := by
     obtain ⟨h_blk, h_red⟩ : ∃ h : U.block ε (1, k.1) ∈ stdLevel E n,
       stdLevel.reduceAt (O.twistPlace i) ⟨_, h⟩ =
         reindexGL ε (blockGL (1, stdLevel.reduceAt (O.twistPlace i) k)) := by
@@ -586,16 +589,23 @@ lemma algFormRep_conj_block_apply_eq_self (Ξ : O.FormV) (ε : N ⊕ l ≃ n) {x
       ⟨_, h_blk⟩ :=
       (MonoidHom.eq_iff _).2
         (stdLevel.reduceAt_eq_one_of_atPlace (by simp [atPlace_twistPlace_eq_one hx]))
-    have h_fix_rows : (stdLevel.reduceAt (O.twistPlace i) ⟨_, h_mem⟩).1ᵀ * inclMatrix _ e' =
-        inclMatrix _ e' := by
+    have h_fix_rows : (stdLevel.reduceAt (O.twistPlace i) ⟨_, h_mem⟩).1ᵀ *
+          inclMatrix (ResField (O.twistPlace i)) e' =
+        inclMatrix (ResField (O.twistPlace i)) e' := by
       rw [h_eq.trans h_red, mul_inclMatrix]
       simp [← ext_iff, reindex_equiv ε, inclMatrix, he', eq_comm (α := N), Matrix.one_apply]
     -- Cancel `A` on both sides; `O.placeAt (inr i)` is `O.twistPlace i` by definition.
     simpa [c, ← hA_row, transpose_nonsing_inv, Matrix.mul_right_inj_of_invertible, -elim_inr,
       Matrix.mul_assoc] using! h_fix_rows
   -- By `smul_chosenGLRep_eq_apply_of_triangular`, `c` then acts on `Ξ` as the block `1`.
-  simpa [c, mul_assoc, ← Pi.one_def] using (O.smul_chosenGLRep_eq_apply_of_triangular Ξ c 1
-    (fun i ↦ by simpa using h_col i) (fun i ↦ by simpa using h_row i)).symm
+  have h_act := (O.smul_chosenGLRep_eq_apply_of_triangular Ξ c 1
+    (fun i ↦ by simpa [-elim_inl] using h_col i)
+    (fun i ↦ by simpa [-elim_inr] using h_row i)).symm
+  have h_one : (fun i : O.ChosenIndex ↦ (1 : ∀ j, GL r (ResField (O.placeAt j))) (.inl i)) =
+      (1 : ∀ i : O.ChosenIndex, GL r (ResField (O.chosenPlace i))) := rfl
+  rw [h_one, map_one] at h_act
+  change _ = _ • Ξ.val at h_act
+  simpa [c, mul_assoc] using h_act
 
 open scoped Classical in
 /-- Periods against point forms vanish. Let `O` be a descent pair `(W, I_n)`; its level `O.places`

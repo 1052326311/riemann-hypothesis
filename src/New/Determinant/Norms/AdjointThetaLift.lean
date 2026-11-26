@@ -571,7 +571,6 @@ lemma DescentPair.isSharpFn_blockFn [WeilData E] :
     rintro _ ⟨k, hk, rfl⟩
     have h_all : stdLevel.reduceFamily O.placeAt k = 1 := O.ker_reductionGL_eq.le hk
     exact mem_levelOf.2 ⟨k.property, funext fun i ↦ congrFun h_all (.inl i)⟩
-  le_stdLevel := levelOf_le_stdLevel
   ne_zero h := by
     have h_normSq : star O.blockFn ⬝ᵥ O.blockFn ≠ 0 := by simp [O.blockFn_normSq, prod_eq_zero_iff]
     simp [h] at h_normSq
