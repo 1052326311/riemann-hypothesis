@@ -74,13 +74,6 @@ abbrev colSpan [Fintype k] : Submodule R (n → R) := X.mulVecLin.range
 /-- The matrix X has entries in the subring O and a left inverse with entries in O. -/
 def IsPrimitiveMatrix : Prop := IsIntMatrix O X ∧ ∃ L : Matrix k n R, IsIntMatrix O L ∧ L * X = 1
 
-/-- The involution of a local ring induces an involution of its residue field. -/
-noncomputable instance [IsLocalRing R] : StarRing (ResidueField R) where
-  star := ResidueField.mapEquiv starRingAut
-  star_involutive := by simp [Function.Involutive, residue_surjective.forall]
-  star_mul := by simp [mul_comm]
-  star_add := by simp
-
 omit [DecidableEq n] in
 /-- The form h(u, v) = uᴴ J v of a hermitian matrix `J` is hermitian: the conjugate of h(u, v) is
 h(v, u). -/
