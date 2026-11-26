@@ -348,7 +348,8 @@ lemma exists_comap_intQpBar_eq (h_val_lt_one : A p < 1) :
   let ι : Ω →+* PadicAlgCl p := Classical.ofNonempty
   obtain ⟨g, hg⟩ : ∃ g : Gal(Ω/ℚ), g • (intQpBar p).comap ι = A :=
     (h_over _ (valuation_comap_intQpBar_lt_one ι)).exists_smul Gal(Ω/ℚ) (h_over A h_val_lt_one)
-  exact ⟨ι.comp (toRingHom Gal(Ω/ℚ) Ω g⁻¹), smul_eq_comap.symm.trans hg⟩
+  exact ⟨ι.comp (toRingHom Gal(Ω/ℚ) Ω g⁻¹),
+    (ValuationSubring.pointwise_smul_eq_comap g _).symm.trans hg⟩
 
 /-- Let `Ω` be `New.Ω`, the algebraic closure of `ℚ`, let `Γ` be the Galois group of `Ω` over the
 number field `K`, and let `A` be a place of `Ω`. Suppose the completion `LocField v` embeds
