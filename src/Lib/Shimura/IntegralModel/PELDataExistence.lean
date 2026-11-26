@@ -185,7 +185,6 @@ lemma exists_star_eq_neg_and_im_pos {E : Type} [Field E] [CMBase E]
         Complex.sub_im, h_im_star]
       ring
     rw [map_add, Complex.add_im, h_im_sz]
-    have hs_pos : (0 : ℝ) < s := Nat.cast_pos.mpr (Nat.pos_of_ne_zero hs)
     have h_mul := mul_lt_mul_of_pos_left h_im (by positivity : (0 : ℝ) < 2 * s)
     have h_cancel : 2 * (s : ℝ) * ((Φ v (a * γ : E)).im / (2 * s)) = (Φ v (a * γ : E)).im :=
       mul_div_cancel₀ _ (by positivity)
