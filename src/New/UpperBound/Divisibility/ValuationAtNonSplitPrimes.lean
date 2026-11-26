@@ -198,7 +198,7 @@ lemma IsMarked.exists_eq_mul_neighborDiagonal_mul (hΛ : D.IsMarked Λ) {ι : Ty
         (localIntGL ι l.val) := by
     have h_unif : Valued.v (Units.mk0 (p : LocField l.val) NeZero.out).val = WithZero.exp (-1) := by
       simp [← v_algebraMap_eq_valuation, ← hΛ.valuation_natCast_eq_exp_neg_one l.2]
-    rw [neighborDiagonal, ← basicDoubleCoset_eq (diagGL_mem_basicDoubleCoset h_unif (J l)).1,
+    rw [neighborDiagonal, ← basicDoubleCoset_eq (diagGL_ite_mem_basicDoubleCoset h_unif (J l)),
       hJ l l.2]
     exact hg l
   have h_decomp (l : Λ) :

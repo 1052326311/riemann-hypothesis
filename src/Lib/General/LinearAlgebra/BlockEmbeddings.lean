@@ -155,13 +155,6 @@ lemma extendGL_apply_of_notMem_range [DecidableEq r]
   have h_ne (k : r) : i ≠ u k := fun h ↦ hi ⟨k, h.symm⟩
   simp [extendGL, inclMatrix, Matrix.mul_apply, Matrix.one_apply, h_ne]
 
-/-- The matrix `extendGL u g` has block g on the image of u and agrees with the identity matrix at
-every entry whose row index is outside that image. -/
-lemma submatrix_extendGL_and_apply_of_notMem_range [DecidableEq r] (u : r ↪ n) (g : GL r R) :
-    (extendGL u g).val.submatrix u u = g.val ∧
-    ∀ i ∉ range u, ∀ j : n, extendGL u g i j = (1 : Matrix n n R) i j :=
-  ⟨submatrix_extendGL u g, fun _ hi ↦ extendGL_apply_of_notMem_range u g hi⟩
-
 lemma extendGL_injective [DecidableEq r]
     (u : r ↪ n) : Function.Injective (extendGL (R := R) u) := by
   intro g h h_eq
