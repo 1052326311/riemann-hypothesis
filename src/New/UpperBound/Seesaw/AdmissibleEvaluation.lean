@@ -310,7 +310,8 @@ lemma latticeLift_eq_latticeUnitary_add_isotropic (hP : IsSplitLevel P N)
           ((fun _ : X ⊕ Unit ↦ (flipScale E : 𝔸f E)) ⊕ᵥ (1 : X'' ⊕ Unit → 𝔸f E)) * κ *
             (neighbourMatrix X X'' P π).col j := by
       simp [funext_iff, Matrix.mul_apply, planeCoeff, M, S, Z, removePlanes, flipScale, xFin,
-        Space.sum, flipSpace, ← mul_assoc, diagonal_apply, Matrix.one_apply, fromRows_map, fromBlocks_map]
+        Space.sum, flipSpace, ← mul_assoc, diagonal_apply, Matrix.one_apply, fromRows_map,
+        fromBlocks_map]
     rw [neighbourLift, transpose_apply, of_apply, liftVector, ← h_column, mulVec_mulVec]
     rfl
   -- The image of `κ γ ⊗ 1` and that of `planeCoeff ⊗ 1` are Kronecker products with the same

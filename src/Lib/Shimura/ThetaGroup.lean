@@ -340,7 +340,8 @@ translation by `z + w`. -/
 lemma IsTranslationLift.mul {w : 𝟙_ (Over (Spec (CommRingCat.of R))) ⟶ A}
     {Ψ : Module.End R ↥(L.H0 R)} (hΦ : IsTranslationLift L z Φ) (hΨ : IsTranslationLift L w Ψ) :
     IsTranslationLift L (z + w) (Φ * Ψ) := by
-  simpa [← comp_left, add_assoc, IsTranslationLift, comp_add, FunLike.coe_mul_eq_comp] using hΦ.comp hΨ
+  simpa [← comp_left, add_assoc, IsTranslationLift, comp_add, FunLike.coe_mul_eq_comp] using
+    hΦ.comp hΨ
 
 lemma IsTranslationLift.pow (hΦ : IsTranslationLift L z Φ) (k : ℕ) :
     IsTranslationLift L (k • z) (Φ ^ k) := by
