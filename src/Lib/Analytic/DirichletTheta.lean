@@ -118,9 +118,10 @@ lemma summable_and_norm_gaussianTheta_le (hc : ∀ n : ℕ, ‖c n‖ ≤ 1) (ht
   -- `∑ 3 r ^ n`, `r = e^(-2t)`.
   let r : ℝ := rexp (-t) ^ 2
   have hr : |r| < 1 := by simpa [r] using ht
-  have h_geom : HasSum (fun n : ℕ+ ↦ 3 * r ^ (n : ℕ)) (3 * (1 - r)⁻¹ - 3) :=
+  have h_geom : HasSum (fun n : ℕ+ ↦ 3 * r ^ (n : ℕ)) (3 * r / (1 - r)) :=
     (hasSum_pnat_iff_hasSum_succ (f := fun n : ℕ ↦ 3 * r ^ n)).2 <| by
-      simpa using (hasSum_nat_add_iff' 1).2 ((hasSum_geometric_of_abs_lt_one hr).mul_left 3)
+      simpa only [pow_succ', mul_assoc, div_eq_mul_inv] using
+        (hasSum_geometric_of_abs_lt_one hr).mul_left (3 * r)
   have h_term (n : ℕ+) : ‖c n * gaussianMonomial j (n * t)‖ ≤ 3 * r ^ (n : ℕ) := by
     grw [norm_mul, hc, norm_real, norm_gaussianMonomial_le (by positivity)]
     simp [r, ← Real.exp_natCast_mul, field]
@@ -128,12 +129,9 @@ lemma summable_and_norm_gaussianTheta_le (hc : ∀ n : ℕ, ‖c n‖ ≤ 1) (ht
   have h_mul_exp_le : t * rexp (-t) ≤ 1 - r := by
     nlinarith [add_one_le_exp t, exp_pos (-t), exp_le_one_iff.2 (neg_nonpos.2 ht.le),
       show rexp t * rexp (-t) = 1 by simp [← Real.exp_add]]
-  have h_sum : 3 * (1 - r)⁻¹ - 3 ≤ 3 * rexp (-t) / t := by
-    have h_one_sub : 0 < 1 - r := (mul_pos ht (exp_pos _)).trans_le h_mul_exp_le
-    calc 3 * (1 - r)⁻¹ - 3 = 3 * r / (1 - r) := by field
-      _ ≤ 3 * r / (t * rexp (-t)) := by gcongr
-      _ = 3 * rexp (-t) / t := by simp [r, field]
-  exact ⟨h_geom.summable.of_norm_bounded h_term, (tsum_of_norm_bounded h_geom h_term).trans h_sum⟩
+  refine ⟨h_geom.summable.of_norm_bounded h_term, (tsum_of_norm_bounded h_geom h_term).trans ?_⟩
+  calc 3 * r / (1 - r) ≤ 3 * r / (t * rexp (-t)) := by gcongr
+    _ = 3 * rexp (-t) / t := by simp [r, field]
 
 /-- The absolute value of `θ(u) = u ^ (1/2) ∑_{n ≥ 1} c(n) w(n u)` is `u ^ (1/2)` times that of
 the sum. -/
