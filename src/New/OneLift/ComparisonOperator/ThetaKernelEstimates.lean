@@ -796,8 +796,8 @@ lemma integral_norm_holMinorsPi_sq_pos (h_rank : card n ≤ D.t) (ho : IsPosFirs
   obtain ⟨hl_gap, hl_coeff⟩ : (∀ τ : D.Φ, (l τ).HasLargeGap (8 * nStar D)) ∧
       ∀ (τ : D.Φ) (g : USign s), (l τ).dsCoeff g = holMinors s (u τ) g :=
     forall_and.1 fun τ ↦ hasLargeGap_and_dsCoeff_eq_holMinors h_rank ho (hu_dom τ) (hu_gap τ)
-  rw [integral_norm_holMinorsPi_sq_eq_inv_prod hl_coeff]
-  exact inv_pos.2 (prod_pos fun τ _ ↦ formalDegree_pos (hl_gap τ))
+  simpa only [integral_norm_holMinorsPi_sq_eq_inv_prod hl_coeff, inv_pos] using
+    (prod_pos fun τ _ ↦ formalDegree_pos (hl_gap τ))
 
 /-- Let `D` be admissible data, `b = D.b`, `t = D.t`, `n_* = nStar D`, and let the rank satisfy
 `1 ≤ n ≤ t`. Let the order `o` put the signs `+1` first. Let the weights `u τ`, `u' τ` at the
