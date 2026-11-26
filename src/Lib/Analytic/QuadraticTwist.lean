@@ -245,7 +245,6 @@ theorem three_lines_bound_of_LFunction_eq_zero :
       measurable_gaussianTheta).2
   have h_pos {x : ℝ} (hx : x ∈ Set.Icc 2⁻¹ 2) : 0 < x := lt_of_lt_of_le (by norm_num) hx.1
   have h_diff : DifferentiableOn ℂ Ψ (closure (verticalStrip 2⁻¹ 2)) := by
-    have hL_diff : Differentiable ℂ χ.LFunction := differentiable_LFunction hχ_ne
     have hΨ : DifferentiableOn ℂ Ψ {z : ℂ | 0 < z.re} := by fun_prop
     rw [verticalStrip, closure_preimage_re, closure_Ioo (by norm_num)]
     exact hΨ.mono fun z hz ↦ h_pos hz
