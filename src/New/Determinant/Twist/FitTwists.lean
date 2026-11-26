@@ -13,6 +13,11 @@ default `1`). For these, `New.Data.CriticalPair.ratio` is the quotient
 congruence arguments need to know about a family of twists `θ ι`. The family has one twist for each
 prime `ℓ` and isomorphism `ι : ℂ ≃ ℚ̄_ℓ` (`New.PrimePadicIso`).
 
+For a fixed lift index, the denominator budget is a sum over primes, not embeddings. The
+bound at a prime must work for every embedding above it, even though the chosen twists and
+the clearing operators may vary with the embedding. The budget is imposed for each lift
+index separately. The same family of twists must also satisfy the inverse-ratio height bounds.
+
 ## Main definitions
 
 * `New.Data.goodLift`: the lift `New.Data.singleLift` restricted to good forms, whose range is the
@@ -183,7 +188,8 @@ most `exp β`. Here `p.lValueData _ ϑ` is the datum of the theta lift of the ch
 space, and its `trivialLift` is the lifted form. -/
 structure HasDenominatorsLe {ℓ : ℕ} [Fact ℓ.Prime] (ι : ℂ ≃+* PadicAlgCl ℓ) (ϑ : D.Twist) (j : ℕ)
     (β : ℝ) : Prop where
-  /-- An operator of controlled determinant clears the denominator of the projection. -/
+  /-- An operator of controlled determinant clears the denominator of the projection for forms
+  integral at the given embedding and orthogonal to the false lifts. -/
   clearsProjection : D.ClearsProjection ι ϑ j β
   /-- For a main pair for `j` and two test forms (`IsTestForm`: integral above `ℓ` and orthogonal to
   the false lifts in the kernel of the adjoint of the lift), the inner product of the projections to
@@ -229,7 +235,8 @@ structure HasSmallRatios (θ : PrimePadicIso → D.MFoldTwist) : Prop where
 has small ratios (`HasSmallRatios`) and, for `1 ≤ j ≤ m`, the `j`-th powers `(θ ι).powTwist j`
 have denominators within the budget `denominatorBudget` (`IsDenominatorBound`). -/
 structure IsRegularFamily (θ : PrimePadicIso → D.MFoldTwist) : Prop extends D.HasSmallRatios θ where
-  /-- Some reals `γ ℓ` bound the denominators of the `j`-th powers within `denominatorBudget`. -/
+  /-- For each `j`, some prime-indexed reals `γ ℓ` bound the denominators of the `j`-th powers
+  at all embeddings, within `denominatorBudget`. -/
   exists_denominator_bound (j : D.LiftIndex) : ∃ γ : ℕ → ℝ, D.IsDenominatorBound θ j γ
 
 end FitTwists
