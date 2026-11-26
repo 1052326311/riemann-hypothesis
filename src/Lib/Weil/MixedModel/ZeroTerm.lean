@@ -742,7 +742,9 @@ lemma hasSum_theta_slice :
     congr! with b
     -- Commute ϱ(l ξ) past ϱ(k b); the commutator is the character, and θ absorbs ϱ(l ξ).
     rw [← theta_rho, theta_eq_rawTheta, rho_swap, map_smul]
-    erw [V.isThetaFunctional_rawTheta.left _ (D.symm.kAdelic_mulVec_mem_ratVectors ⟨ξ, rfl⟩)]
+    have h_inv (v : 𝒮 V) : V.rawTheta (V.ϱ (D.lAdelic *ᵥ (toAdele ∘ ξ)) v) = V.rawTheta v :=
+      V.isThetaFunctional_rawTheta.left _ (D.symm.kAdelic_mulVec_mem_ratVectors ⟨ξ, rfl⟩) v
+    rw [h_inv]
     simp [D.beta_eq_coords, vecAtPoint]
     -- The rest is the definition of evaluation: `θ (ϱ(k b) f) = f (k b)`.
     rfl

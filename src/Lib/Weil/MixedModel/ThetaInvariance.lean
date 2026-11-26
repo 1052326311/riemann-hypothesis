@@ -109,7 +109,9 @@ lemma integrable_slice (f : 𝒮 V) : Integrable fun x : p → 𝔸 E ↦ D.slic
     _ < ⊤ := by
       refine IsFiniteMeasure.lintegral_lt_top_of_bounded_to_ennreal _ ⟨C * ‖f‖₊, fun x ↦ ?_⟩
       -- The points of `ratVectors` are the `toAdele ∘ ξ`.
-      erw [lintegral_count, ← (ofInjective _ (toAdele (E := E)).injective.comp_left).tsum_eq]
+      rw [lintegral_count, New.ratVectors,
+        ← (AddMonoidHom.ofInjective (f := (toAdele (E := E)).toAddMonoidHom.compLeft p)
+          (toAdele (E := E)).injective.comp_left).toEquiv.tsum_eq]
       exact h_bound x
 
 end MixedModelIntegrable
