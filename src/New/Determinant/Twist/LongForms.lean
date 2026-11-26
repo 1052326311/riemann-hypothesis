@@ -53,7 +53,7 @@ structure IsAuxiliaryForm (γ : D.MFoldTwist → ℂ) (y : D.targetForms) : Prop
   /-- The form `γ ϑ • Θ_ϑ y` is integral at `ι : ℂ ≃ ℚ̄_l` whenever the norm `ϑ.normQ` of the
   modulus of `ϑ` is prime to `l = ι.1`. -/
   smul_lift_mem_integralForms (ι : PrimePadicIso) (ϑ : D.MFoldTwist)
-    (hϑ : Nat.Coprime ι.1 ϑ.normQ) : γ ϑ • D.Θ ϑ y ∈ integralForms ι.place
+    (hϑ : Nat.Coprime ι.prime ϑ.normQ) : γ ϑ • D.Θ ϑ y ∈ integralForms ι.place
   /-- The conjugate of `Θ₁ y` by each automorphism `σ` of `ℂ` has squared norm at most
   `exp (2 x₁² b²)`. -/
   normSqAt_lift_le (σ : ℂ ≃+* ℂ) : (D.Θ 1 y).normSqAt σ ≤ exp (2 * D.x₁ ^ 2 * D.b ^ 2)
@@ -106,7 +106,7 @@ theorem exists_span_isAuxiliaryForm_eq_top :
   have h_exponent_le : D.x ^ 99 + D.x ^ 202 * D.b ^ 2 ≤ 2 * D.x₁ ^ 2 * D.b ^ 2 :=
     D.le_of_hasLogBound
   refine ⟨fun ι ϑ hϑ ↦ ?_, fun σ ↦ ?_⟩
-  · exact goodProjTranslate_mem_integralForms ι.place (h_int ϑ ι.1 ι.place hϑ) 1
+  · exact goodProjTranslate_mem_integralForms ι.place (h_int ϑ ι.prime ι.place hϑ) 1
   · exact (normSqAt_goodProjTranslate_le (h_short σ)).trans (exp_le_exp.2 h_exponent_le)
 
 /-- Let `ξ_ι = θ ι` be a family of `m`-fold twists, one for each `ι : ℂ ≃ ℚ̄_l`. Assume the family
@@ -230,7 +230,7 @@ theorem integral_forms_long_with_completion_cost {n : ℕ} {y : Fin n → D.targ
     exists_extend_basis_of_span_eq_top hy h_auxiliary_span
   have hz_aux (i : Fin n') : D.IsAuxiliaryForm γ (z i) := hz i
   have hz_int (i : Fin n') (ι : PrimePadicIso) (ϑ : D.MFoldTwist)
-      (hϑ : Nat.Coprime ι.1 ϑ.normQ) : γ ϑ • D.Θ ϑ (z i) ∈ integralForms ι.place :=
+      (hϑ : Nat.Coprime ι.prime ϑ.normQ) : γ ϑ • D.Θ ϑ (z i) ∈ integralForms ι.place :=
     (hz_aux i).smul_lift_mem_integralForms ι ϑ hϑ
   have hz_short (i : Fin n') (σ : ℂ ≃+* ℂ) :
       D.targetLattice.normSqAt (z i) σ ≤ exp (2 * D.x₁ ^ 2 * D.b ^ 2) :=

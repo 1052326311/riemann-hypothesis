@@ -210,7 +210,7 @@ structure IsDenominatorBound (θ : PrimePadicIso → D.MFoldTwist) (j : D.LiftIn
   sum_le (T : Finset ℕ) (hT : ∀ ℓ ∈ T, ℓ.Prime) : ∑ ℓ ∈ T, γ ℓ ≤ D.denominatorBudget
   /-- At `ι`, with prime `ℓ = ι.1`, both bounds of `HasDenominatorsLe` hold for the `j`-th power of
   `θ ι` with `β = γ ℓ`. -/
-  hasDenominatorsLe (ι : PrimePadicIso) : D.HasDenominatorsLe ι.2 ((θ ι).powTwist j) j (γ ι.1)
+  hasDenominatorsLe (ι : PrimePadicIso) : D.HasDenominatorsLe ι.iso ((θ ι).powTwist j) j (γ ι.prime)
 
 /-- Reals `e ℓ`, one for each `ℓ`, are negligible, with the exponent `C`, if
 `∑ e ℓ log ℓ ≤ x ^ C`, the sum taken over any finite set of primes. Here `x = D.x` is the length of
@@ -225,7 +225,7 @@ and their inverses have, for every ramified pair, inverse ratios of L-values of 
 `D.x₁`, the second cut-off of the data. -/
 structure HasSmallRatios (θ : PrimePadicIso → D.MFoldTwist) : Prop where
   /-- The norm of the modulus of `θ ι` is prime to the prime `ℓ = ι.1` of `ι`. -/
-  coprime (ι : PrimePadicIso) : Nat.Coprime ι.1 (θ ι).normQ
+  coprime (ι : PrimePadicIso) : Nat.Coprime ι.prime (θ ι).normQ
   /-- For a ramified pair, the inverse ratios of L-values at the `j`-th powers of the twists
   (`s = 1`) or at their inverses (`s = -1`) form a family of height at most `D.x₁`. -/
   height_le (j : D.LiftIndex) (p : D.CriticalPair) (s : ℤˣ) (hp : p.IsRamified) :
