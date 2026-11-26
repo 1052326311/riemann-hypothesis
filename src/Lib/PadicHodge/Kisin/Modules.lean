@@ -454,10 +454,17 @@ lemma gal_smul_letterProj (x : L.Ambient) :
 lemma phi_pow_smul_letterTeich :
     φ ^ l • (k.letterTeich i⁻¹).val = k.letterTeich ((k.letterFrob ^ l) i)⁻¹ := by
   -- `φ ^ l` raises the Teichmüller lift `letterTeich i⁻¹` to the power `p ^ l`, as `letterFrob ^ l`
-  -- does with `i`. We use `erw`, as `frobEnd` is `x ↦ x ^ p` only up to unfolding.
-  erw [phi_pow_smul, k.letterFrob.coe_pow, pow_iterate, map_pow, k.S.coe_pow, Subtype.coe_mk,
-    map_teichmuller]
-  simp
+  -- does with `i`.
+  rw [phi_pow_smul, k.letterFrob.coe_pow]
+  change _ = (k.letterTeich (((fun j : Letter ↦ j ^ p)^[l] i)⁻¹)).val
+  rw [pow_iterate]
+  change _ = (k.letterTeich ((i ^ p ^ l)⁻¹)).val
+  rw [← inv_pow, map_pow, k.S.coe_pow]
+  let a : flatFq k.f := (↑(i⁻¹ : (flatFq k.f)ˣ) : flatFq k.f)
+  have h_teich : (k.letterTeich i⁻¹).val =
+      teichmuller p (algebraMap (flatFq k.f) OFlat a) := by
+    exact map_teichmuller _ _ _
+  rw [h_teich, iterate_frobEnd_teichmuller]
 
 /-- The projector to the letter i takes values in the part at the letter i. -/
 lemma letterProj_mem_letterPart : L.letterProj i x ∈ letterPart i := by
