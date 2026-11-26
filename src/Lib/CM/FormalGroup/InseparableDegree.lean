@@ -141,7 +141,7 @@ lemma reducedOrder_eq_one {T : ℂ_[p]⟦X⟧} (hT : T ∈ C.integralSeriesRing)
   obtain ⟨u, rfl⟩ := C.exists_eq_subst_of_mem_integralSeriesRing hT
   rw [constantCoeff_subst_eq C.constantCoeff_taylorVia_translatedY] at hT₀
   rw [coeff_one_subst C.constantCoeff_taylorVia_translatedY, coeff_one_taylorVia_translatedY,
-    mul_one] at hT₁
+    mul_one, Algebra.algebraMap_self_apply] at hT₁
   rw [reducedOrder_subst_translatedY, ← Nat.cast_one, order_eq_nat]
   have hu₁ : IsUnit (coeff 1 u) := isUnit_integer_iff_norm_eq_one.2 hT₁
   simp [show constantCoeff u = 0 from Subtype.ext hT₀, hu₁]
