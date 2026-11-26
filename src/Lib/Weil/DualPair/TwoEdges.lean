@@ -158,10 +158,6 @@ lemma homHeisenbergOp_arrowProduct (w : Matrix ι' ι (𝔸 E)) (w' : Matrix ι'
     matrixToVec_fromRows_comp_inl, matrixToVec_fromRows_comp_inr, formAdjoint, map_J_inv, V'.map_J,
     ← mul_smul, flipCoords_apply, vecToMatrix_matrixToVec, -matrixToVec_smul]
 
-private lemma finVec_comp {m k : Type*} (x : m → 𝔸f E) (e : k → m) :
-    finVec x ∘ e = finVec (x ∘ e) :=
-  rfl
-
 /-- The finite Heisenberg operator of `y` on the joined datum acts on `f'` by the second block of
 `y` and on `f` by `normNegOne` (the fixed unit u of Ô with ūu = −1) times the conjugate transpose of
 the first block. The scalar is `stdLattice.semichar` of the first block, squared. -/
@@ -186,7 +182,8 @@ lemma finHeisenbergOp_arrowProduct (y : (ι ⊕ ι'') × ι' → 𝔸f E) :
     grind [-stdLattice.two_mul_half]
   -- The action passes through the product and the flip; it remains to compare the scalars.
   simp [finHeisenbergOp, arrowProduct, rho_boxProd, ← CoordChange.map_rho, ← mul_smul]
-  rw [finVec_comp, CoordChange.apply_finVec, h_scalar]
+  erw [CoordChange.apply_finVec]
+  rw [h_scalar]
   rfl -- The vectors agree by the definitions of `finEquiv` and `finVec`.
 
 @[simp]
@@ -281,7 +278,7 @@ lemma arrowTensor_map_liftWeilFin (p : Gf E ι) (q : Gf E ι') (r : Gf E ι'') :
       tripleWeil a b ((1, p), (1, q), 1, r) (arrowTensor t) := by
   -- Both sides are linear in `t`; on pure tensors this is `arrowProduct_twistedPairWeil`.
   induction t with
-  | tmul u u' => simp [arrowProduct_twistedPairWeil, arrowTensor, tripleWeil]
+  | tmul u u' => simp [arrowProduct_twistedPairWeil, arrowTensor]
   | add u u' hu hu' => simp_all [arrowTensor]
 
 /-- The theta functional of `tripleWeil a b (g, g', k) f` is unchanged when `g` is multiplied on the

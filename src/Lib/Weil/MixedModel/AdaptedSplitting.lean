@@ -206,11 +206,10 @@ lemma isAdapted_homSource [h : IsBaseAdapted A] :
     rw [frameAt_homSource]
     ext ⟨i, j⟩ ((⟨a, b⟩ | ⟨a, b⟩) | ⟨a, b⟩) : 1
     · -- The `l` block `1 ⊗ₖ A.kCoordᵀ`: both sides are `δ i a * star (A.lAdelic j b)` times a sign.
-      simp [F, e, ε, kCoord, stdForm, Matrix.one_apply, ← Pi.one_def, Prod.mk_one_one, mul_comm]
+      simp [F, e, ε, kCoord, stdForm, Matrix.one_apply, ← Pi.one_def, Prod.mk_one_one]
     · -- The `k` block `stdForm E t ⊗ₖ A.lCoordᵀ`: both sides are `δ i a * star (A.kAdelic j b)`
       -- times signs.
-      simp +contextual [F, e, ε, lCoord, stdForm, Matrix.one_apply, diagonal_apply, mul_comm,
-        mul_left_comm]
+      simp +contextual [F, e, ε, lCoord, stdForm, Matrix.one_apply, diagonal_apply, mul_comm]
     · -- The `ι` block `1 ⊗ₖ A.iCoordᵀ`: both sides are `δ i a * star (A.iAdelic j b)` times signs.
       simp [F, e, ε, iCoord, stdForm, Matrix.one_apply, mul_comm, mul_left_comm]
   change IsOrthoIntegral ((A.homSource T).frameAt 1 (adaptedHomBasis p T))

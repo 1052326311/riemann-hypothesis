@@ -137,7 +137,7 @@ def IsNear (γ : S.G E) : Prop :=
 /-- The finite character `New.Filling.unipotentChar` takes the same value at u and at γ⁻¹uγ for
 every rational u in 𝖴 ∩ γ𝖴γ⁻¹. -/
 def CharsAgree (γ : S.G E) : Prop :=
-  ∀ᵉ (u ∈ besselU) (u' ∈ besselU), u * γ = γ * u' →
+  ∀ u ∈ besselU, ∀ u' ∈ besselU, u * γ = γ * u' →
     S.unipotentChar (S.ratToFin u) = S.unipotentChar (S.ratToFin u')
 
 end Filling
@@ -482,10 +482,10 @@ lemma two_le_b : 2 ≤ S.b := by linarith [S.thousand_le_b]
 
 lemma b_pos : 0 < S.b := by linarith [S.thousand_le_b]
 
-lemma two_le_tailScale [S.IsAdmissible] : 2 ≤ S.tailScale :=
+lemma two_le_tailScale : 2 ≤ S.tailScale :=
   two_le_b.trans (by simpa using pow_le_tailScale (S := S) (e := 1) NeZero.one_le)
 
-lemma one_le_tailScale [S.IsAdmissible] : 1 ≤ S.tailScale := one_le_two.trans two_le_tailScale
+lemma one_le_tailScale : 1 ≤ S.tailScale := one_le_two.trans two_le_tailScale
 
 lemma identitySecondMoment_nonneg : 0 ≤ S.identitySecondMoment := by simp [identitySecondMoment]
 

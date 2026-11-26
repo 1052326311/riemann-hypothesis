@@ -275,7 +275,7 @@ end Space
 that multiplies the coordinates at τ by (2π Im τ(ȷ))^(−1/2), ȷ being the element `j` of the Weil
 data, and puts zero at the finite places. -/
 def realVec : (InfinitePlace E × n → ℂ) →+ n → 𝔸 E :=
-  AddMonoidHom.mk' (fun y i ↦ ((scaleIdele E).1.1 * fun w ↦ y (w, i), 0)) <| by
+  AddMonoidHom.mk' (fun y i ↦ ((scaleIdele E).val.1 * fun w ↦ y (w, i), 0)) <| by
     simp [mul_add, funext_iff]
 
 /-- The archimedean part of an adelic vector y in Fock coordinates: the complex numbers (2π Im
@@ -398,8 +398,7 @@ lemma dataInner_vacElem_omega_vacElem :
   -- Pairing with the vacuum evaluates `ω g vacElem` at `0`.
   have h_eval : V.dataInner V.vacElem (V.ω g V.vacElem) =
       weilRep adelicAction g Heisenberg.IsVacuum.vacElem 0 := modelInner_vacElem ..
-  rw [h_eval]
-  exact eq_inv_of_mul_eq_one_right (conj_delta_mul_weilRep_vacElem adelicAction g)
+  exact h_eval.trans (eq_inv_of_mul_eq_one_right (conj_delta_mul_weilRep_vacElem adelicAction g))
 
 /-- The operator norm of `ω g` is at most the norm of the vacuum times `|Δ g|`. -/
 lemma norm_omega_le : ‖V.ω g‖ ≤ ‖V.vacElem‖ * ‖weilMultiplier g‖ :=

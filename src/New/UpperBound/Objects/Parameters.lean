@@ -22,8 +22,8 @@ one formula serves both grids. An offset `o` shifts the second kind of block; th
 * `New.Data.gridCentres`, `New.Data.isParam_gridParam`: the parameter of a node consists of a stem
   and the blocks of a set of centres (`New.CentreSystem`).
 * `New.Data.paramsCorrespond_grid_succ_left`, `New.Data.paramsCorrespond_grid_succ_right`,
-  `New.Data.paramsCorrespond_leftPair`: each step inserts a block, so the parameters correspond
-  (`New.ParamsCorrespond`).
+  `New.Data.paramsCorrespond_neg_gridParam_insert_first`: each step inserts a block, so the
+  parameters correspond (`New.ParamsCorrespond`).
 
 Notions from other files:
 * `New.Data`: the admissible data `D`, with `m` (even) lifts, the rank `r` (odd), `k = r + 1 - m`,
@@ -555,12 +555,9 @@ private lemma isSeparated_gridCentres_on {P : Parameters} (D : Data P) (τ : D.�
       have h_centre : D.gap ≤ D.liftWeight (l + 1) τ := D.gap_le_liftWeight_succ τ l
       simp only [gridCentres, Sum.elim_inl, le_abs]
       omega
-    · have h_far : D.halfGap ≤ D.targetParameter τ n + D.liftWeight (l + 1) τ ∨
-          D.targetParameter τ n + D.liftWeight (l + 1) τ ≤ -D.halfGap :=
-        (lt_or_ge n (D.posRank (l + 1))).imp (D.halfGap_le_targetParameter_add_liftWeight τ)
-          (D.targetParameter_add_liftWeight_le_neg_halfGap τ)
+    · have h_far := D.targetParameter_add_liftWeight_gap (l + 1) τ n
       simp only [gridCentres, Sum.elim_inr, le_abs]
-      omega
+      split_ifs at h_far <;> omega
   case block_far =>
     -- in all four cases the two centres are at least `D.gap` apart
     rintro (l | l) - (l' | l') - hne y hy
@@ -773,14 +770,9 @@ lemma gridSigns_eq_mul_sign (hj : o + j ≤ D.m) (h_zero : o = 0 ∨ i = 0) (x :
     · have h_stem : 2 * D.targetParameter τ n ≤ D.k := D.two_mul_targetParameter_le τ n
       have h_centre : D.gap ≤ D.liftWeight (l' + 1) τ := D.gap_le_liftWeight_succ τ l'
       omega
-    · have h_above : n < D.k + (l' + 1) - 1 → D.halfGap ≤ D.targetParameter τ n + D.liftWeight
-        (l' + 1)
-        τ :=
-        D.halfGap_le_targetParameter_add_liftWeight τ
-      have h_below : D.k + (l' + 1) - 1 ≤ n → D.targetParameter τ n + D.liftWeight (l' + 1) τ ≤
-        -D.halfGap :=
-        D.targetParameter_add_liftWeight_le_neg_halfGap τ
-      omega
+    · have h_far := D.targetParameter_add_liftWeight_gap (l' + 1) τ n
+      simp only [posRank] at h_far
+      split_ifs at h_far <;> omega
   · -- An up block lies above all down centres, and it occurs only for `o = 0`.
     obtain rfl : o = 0 := by omega
     have h_sign : entrySign 0 j 0 = 1 := by simp [entrySign_eq_neg_one_pow]
@@ -912,26 +904,6 @@ lemma paramsCorrespond_neg_gridParam_insert_first {j : ℕ} {P : Parameters} (D 
     (gridBlocks_succ_right_eq_insert_first i 0 j) (D.isSeparated_gridCentres τ z)
     (D.gridBlocks_subset τ z D.m.zero_le (by omega)) h_centre (by simp [gridBlocks])
     (D.mul_card_gridIndex_add_pow_three_le D.m.zero_le (by omega) D.m.zero_le (by omega)) rfl
-
-/-- Adding or removing the first block of an interval, for `i + j < m`: the negated parameters of
-the node `(0, j)` with offset `i + 1` and of the node `(0, j + 1)` with offset `i` correspond, in
-both directions. -/
-lemma paramsCorrespond_leftPair {j : ℕ} {P : Parameters} (D : Data P) {i : ℕ} (z : Bool)
-    (hij : i + j < D.m) :
-    ParamsCorrespond
-        (fun τ : D.Φ ↦ card (D.GridIndex z 0 j) - D.gridWeight (!z) i (D.GridIndex z 0 j) τ)
-        (fun τ : D.Φ ↦
-          card (D.GridIndex z 0 (j + 1)) - D.gridWeight (!z) i (D.GridIndex z 0 (j + 1)) τ)
-        (-D.gridParam z (i + 1) 0 j) (-D.gridParam z i 0 (j + 1))
-        (D.gridSigns z (i + 1) 0 j) (D.gridSigns z i 0 (j + 1)) ∧
-      ParamsCorrespond
-        (fun τ : D.Φ ↦
-          card (D.GridIndex z 0 (j + 1)) - D.gridWeight (!z) i (D.GridIndex z 0 (j + 1)) τ)
-        (fun τ : D.Φ ↦ card (D.GridIndex z 0 j) - D.gridWeight (!z) i (D.GridIndex z 0 j) τ)
-        (-D.gridParam z i 0 (j + 1)) (-D.gridParam z (i + 1) 0 j)
-        (D.gridSigns z i 0 (j + 1)) (D.gridSigns z (i + 1) 0 j) :=
-  ⟨D.paramsCorrespond_neg_gridParam_insert_first hij,
-    (D.paramsCorrespond_neg_gridParam_insert_first hij).symm⟩
 
 end New.Data
 

@@ -111,11 +111,6 @@ section Normalised
 variable {γ : G} {ζ : R} (hγ : ∀ m : M, ρ γ m = ζ • m) (hζ : IsUnit (ζ - 1))
 include hγ hζ
 
-omit [TopologicalSpace G] [TopologicalSpace M] [DiscreteTopology M] in
-/-- If `γ` acts by a scalar `ζ` with `ζ - 1` a unit, `ρ` has no nonzero invariants. -/
-theorem invariants_eq_bot_of_smul : ρ.invariants = ⊥ := by
-  refine (Submodule.eq_bot_iff _).2 fun m hm ↦ hζ.smul_left_cancel.1 ?_
-  rw [smul_zero, sub_smul, one_smul, ← hγ, hm γ, sub_self]
 
 /-- If `γ` acts by a scalar `ζ` with `ζ - 1` a unit, a coboundary that vanishes at `γ` is zero. -/
 theorem eq_zero_of_mem_B1_of_apply_eq_zero {z : Z1 ρ} (hz : z ∈ B1 ρ) (hzγ : (z : G → M) γ = 0) :
@@ -179,16 +174,6 @@ variable {H : Type*} [AddGroup H] (π : Z1 ρ →+ H) (hπ : π.ker = (B1 ρ).to
 include hπ
 
 /-- Let `γ` act by a scalar `ζ` with `ζ - 1` a unit, and let `π` be an additive map on the cocycles
-with kernel `B¹`. For a group `W` of cocycles containing `B¹`, the members of `W` that vanish at
-`γ` are as many as the classes `π(W)`. -/
-theorem card_inf_vanishingAt_eq_card_map {W : AddSubgroup (Z1 ρ)}
-    (hBW : (B1 ρ).toAddSubgroup ≤ W) :
-    Nat.card ↥(W ⊓ (vanishingAt ρ γ).toAddSubgroup) = Nat.card (W.map π) := by
-  rw [card_eq_card_map_mul_card_inf_B1 π hπ, map_inf_vanishingAt_eq_map hγ hζ hρ π hπ hBW,
-    inf_B1_eq_bot_of_apply_eq_zero hγ hζ fun z hz ↦ (AddSubgroup.mem_inf.1 hz).2,
-    AddSubgroup.card_bot, mul_one]
-
-/-- Let `γ` act by a scalar `ζ` with `ζ - 1` a unit, and let `π` be an additive map on the cocycles
 with kernel `B¹`. For a group `W` of cocycles containing `B¹`, `π` is an isomorphism from the
 members of `W` that vanish at `γ` onto the classes `π(W)`. -/
 def infVanishingAtEquivMap {W : AddSubgroup (Z1 ρ)} (hBW : (B1 ρ).toAddSubgroup ≤ W) :
@@ -210,6 +195,14 @@ def infVanishingAtEquivMap {W : AddSubgroup (Z1 ρ)} (hBW : (B1 ρ).toAddSubgrou
       rw [← map_inf_vanishingAt_eq_map hγ hζ hρ π hπ hBW] at hy
       obtain ⟨z, hz, rfl⟩ := AddSubgroup.mem_map.1 hy
       exact ⟨⟨z, hz⟩, rfl⟩⟩
+
+/-- Let `γ` act by a scalar `ζ` with `ζ - 1` a unit, and let `π` be an additive map on the cocycles
+with kernel `B¹`. For a group `W` of cocycles containing `B¹`, the members of `W` that vanish at
+`γ` are as many as the classes `π(W)`. -/
+theorem card_inf_vanishingAt_eq_card_map {W : AddSubgroup (Z1 ρ)}
+    (hBW : (B1 ρ).toAddSubgroup ≤ W) :
+    Nat.card ↥(W ⊓ (vanishingAt ρ γ).toAddSubgroup) = Nat.card (W.map π) :=
+  Nat.card_congr (infVanishingAtEquivMap hγ hζ hρ π hπ hBW).toEquiv
 
 end Normalised
 
@@ -290,9 +283,6 @@ theorem ker_classMap : A.classMap.ker = (B1 A.ρ).toAddSubgroup := by
 def quotB1EquivH1 : (Z1 A.ρ ⧸ B1 A.ρ) ≃+ continuousCohomology 1 A.toTopRep :=
   QuotientAddGroup.liftEquiv (B1 A.ρ).toAddSubgroup A.classMap_surjective A.ker_classMap.symm
 
-@[simp]
-theorem quotB1EquivH1_mk (z : Z1 A.ρ) : A.quotB1EquivH1 (Submodule.Quotient.mk z) = A.classMap z :=
-  rfl
 
 end DiscreteModule
 

@@ -341,7 +341,6 @@ lemma isIntMatrix_latticeLift
     [Finite X'] (hP : IsSplitLevel P N) (hπ : IsSplitSquarefree P (N : E) π)
     (hκ : IsScalingAtM N β δ κ) {u' : unitary (𝔸f E)} (hL : Y'.SpansLattice a π u')
     (h_lift : D.LiftsNeighbours π u κ δ) : IsIntMatrix (Ô E) (D.latticeLift P π u κ) := by
-  have := Fintype.ofFinite X'
   intro i j
   have h_entry : D.neighbourLift P π u κ i.1 j.1 ∈ Ô E :=
     h_lift _ _ (isNeighbourVector_col_neighbourMatrix hP hπ hκ j.1) i.1

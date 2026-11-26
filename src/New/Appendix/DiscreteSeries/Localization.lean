@@ -70,7 +70,7 @@ lemma two_mul_re_sub_one_apply (g : USign ε) (i : n) :
     2 * (((g : Matrix n n ℂ) - 1) i i).re =
       2 * ∑ j : n, ‖noncompactPart ε g i j‖ ^ 2 - ∑ j : n, ‖((g : Matrix n n ℂ) - 1) i j‖ ^ 2 := by
   have h_form : (g : Matrix n n ℂ) * (signMatrix ε * (g : Matrix n n ℂ)ᴴ * signMatrix ε) = 1 := by
-    rw [← U.inv_coe_eq_mul_conjTranspose_mul, mul_nonsing_inv _ g.1.det_ne_zero.isUnit]
+    rw [← U.inv_coe_eq_mul_conjTranspose_mul, mul_nonsing_inv _ g.val.det_ne_zero.isUnit]
   generalize (g : Matrix n n ℂ) = A at h_form ⊢
   have h_signed : ∑ j : n, (‖A i j‖ ^ 2 - 2 * ‖noncompactPart ε A i j‖ ^ 2) = 1 := by
     have h_entry : (A * (signMatrix ε * Aᴴ * signMatrix ε)) i i = 1 := by simp [h_form]
@@ -137,9 +137,6 @@ lemma norm_sub_one_sq (g : USign ε) :
     _ = ∑ i : n, (2 * ∑ j : n, ‖y i j‖ ^ 2 - 2 * (x i i).re) := sum_congr rfl fun i _ ↦ h_row i
     _ = 2 * ‖y‖ ^ 2 - 2 * x.trace.re := by
       simp [frobenius_norm_sq_eq_sum, trace, re_sum, mul_sum, sum_sub_distrib]
-
-omit [Fintype n] in
-lemma conjTranspose_signMatrix : (signMatrix ε)ᴴ = signMatrix ε := by simp [signMatrix]
 
 lemma norm_signMatrix_mul (A : Matrix n n ℂ) : ‖signMatrix ε * A‖ = ‖A‖ :=
   frobenius_norm_mul_of_unitary (by rw [conjTranspose_signMatrix, signMatrix_mul_self]) A
@@ -217,7 +214,7 @@ lemma norm_onBlock_gram_sub_one_le (e : X ⊕ Fin M ≃ n) (hε : ∀ x : X, ε 
   -- The block on `X` of `gᴴ ε g = ε` reads `aᴴ a + onBlock e (Wᴴ ε W) = 1`, where `W` consists of
   -- the rows of `g - 1` off `X`.
   have h_form : (g : Matrix n n ℂ)ᴴ * signMatrix ε * (g : Matrix n n ℂ) = signMatrix ε :=
-    mem_unitaryGroupOf_iff.1 g.2
+    mem_unitaryGroupOf_iff.1 g.property
   generalize (g : Matrix n n ℂ) = A at h_form ⊢
   set W : Matrix n n ℂ := intDiagonal (offBlockIndicator e) * (A - 1) with hW
   have hW_on (x : X) (i : n) : W (e (.inl x)) i = 0 := by simp [hW, offBlockIndicator]
@@ -513,7 +510,7 @@ lemma conjTranspose_blockDiagPart_mul_blockDiagPart (g : USign ε) :
   -- With `g' = ε g ε` one has `a = (g + g') / 2`, `y = (g - g') / 2` and `gᴴ g' = g'ᴴ g = 1`.
   set g' : Matrix n n ℂ := signMatrix ε * g * signMatrix ε with hg'
   have h_right : (g : Matrix n n ℂ)ᴴ * g' = 1 := by
-    rw [hg', ← mul_assoc, ← mul_assoc, ← star_eq_conjTranspose, mem_unitaryGroupOf_iff.1 g.2,
+    rw [hg', ← mul_assoc, ← mul_assoc, ← star_eq_conjTranspose, mem_unitaryGroupOf_iff.1 g.property,
       signMatrix_mul_self]
   have h_left : g'ᴴ * (g : Matrix n n ℂ) = 1 := by simpa using congrArg conjTranspose h_right
   simp only [noncompactPart, blockDiagPart_eq, ← hg', conjTranspose_sub, conjTranspose_smul,
@@ -594,7 +591,7 @@ lemma IsLaplaceDatum.norm_subOnePair_mul_intDiagonal_sq_le (hj : IsLaplaceDatum 
     simp only [map_inv, Prod.fst_inv, U.coe_inv (signMatrix_mul_self ε) (j s).1]
     ext a b
     rcases eq_or_ne a b with rfl | hab
-    · rcases units_eq_one_or (ε a) with ha | ha <;> simp [signMatrix, ha, mul_comm]
+    · rcases units_eq_one_or (ε a) with ha | ha <;> simp [signMatrix, ha]
     · simp [signMatrix, hab, mul_comm, mul_left_comm]
   calc ‖(subOnePair j s).1 * intDiagonal (offBlockIndicator e)‖ ^ 2
       = ‖intDiagonal (offBlockIndicator e) * (subOnePair j s⁻¹).1‖ ^ 2 := by

@@ -287,8 +287,7 @@ lemma someUnitLocus_le_unimodularLocus {v : Fin d → c.baseAlg}
   have h_fst : (∑ l, inl (σ.down.fst (M i l)) * g' l).fst = σ.down.fst (v i) := by
     simp [g', hM, mulVec, dotProduct, fst_sum, HodgeTest.sqZeroExt]
   refine eq_top_of_isUnit_mem (span (Set.range g')) h_mem ?_
-  rw [isUnit_iff_isUnit_fst, h_fst]
-  exact hi
+  simpa only [isUnit_iff_isUnit_fst, h_fst] using! hi
 
 section Symbol
 
@@ -496,10 +495,10 @@ lemma symbolClass_one :
   refine ⟨ω, fun c v ↦ ?_, by
     simp_all [symbolClass, cocycleClass_apply, universalClass_succ, universalClass_zero, push]⟩
   -- Write `v = a + m`. A witness `l` has `l * a = 1`, so `w = l • m` is "`m / a`".
-  obtain ⟨l, hl⟩ := exists_jouanolouRel_of_unimodular _ _ v.2
+  obtain ⟨l, hl⟩ := exists_jouanolouRel_of_unimodular _ _ v.property
   have hl_one : l.down 0 * (v.val.down 0).fst = 1 := (Fin.sum_univ_one _).symm.trans hl
   refine ⟨l.down 0 • (v.val.down 0).snd, ?_,
-    .symm (hω c _ _ ⟨⟦.of ⟨(v.1, fun _ ↦ l), fun _ ↦ hl⟩⟧, ?_, ?_⟩)⟩
+    .symm (hω c _ _ ⟨⟦.of ⟨(v.val, fun _ ↦ l), fun _ ↦ hl⟩⟧, ?_, ?_⟩)⟩
   · rw [smul_smul, mul_comm, hl_one, one_smul]
   · -- the boundary of `v` with the one witness `l` is `v` with no witness
     simp [boundaryFromCoker, boundary, freeAb, noWitness, abCoker.desc, reindexWitness]
@@ -512,7 +511,7 @@ lemma symbolClass_one :
 /-- The natural map 𝔸^d × 𝔸^1 → 𝔸^{d+1} appending a last coordinate. -/
 @[simp]
 def affineSpace.snoc : affineSpace k d ⊗ affineSpace k 1 ⟶ affineSpace k d.succ where
-  app _ := ↾fun v ↦ ⟨Fin.snoc v.1.1 (v.2.1 0)⟩
+  app _ := ↾fun v ↦ ⟨Fin.snoc v.1.down (v.2.down 0)⟩
   naturality := by aesop_cat (add simp [affineSpace, comp_snoc])
 
 /-- The subfunctor of 𝔸^d × 𝔸^1 of the pairs (v, x) in which v or x is unimodular, that is, has
@@ -693,7 +692,7 @@ lemma snocRel.exists_detTensor_boundary_eq
     refine ⟨_ ⊗ₜ .of ⟨x, hx⟩, rfl, congrArg ULift.up ?_⟩
     simp [volumeForm, ExteriorAlgebra.ιMulti, ↓List.ofFn_succ', a, smul_smul, ← hw, mul_comm]
     -- `erw`, because `hωx` is stated on the subtype of unimodular points.
-    erw [hωx]
+    rw [hωx]
   · -- Otherwise the last column of `l` vanishes, and so do both sides.
     have h_det : det (fun i ↦ (l i).down) = 0 :=
       det_eq_zero_of_column_eq_zero (last d) fun i ↦ (hl i).right.resolve_left hx
@@ -871,7 +870,7 @@ lemma hodge_excision {u : X' ⟶ X} [Mono u] (hu_open : IsOpenSubfunctor (Subfun
     {U' : Subfunctor X'} (hU' : U' = U.preimage u) :
     IsCohomEquiv hodgeCoeff (sqZeroExt.whiskerLeft (relFreeAb.map u hU'.le)) := by
   -- Every point in a field lies in an open set contained in the range of `u` or in `U`.
-  have h_open (K : CommAlg k) (hK : IsField K.1) (x : X K) :
+  have h_open (K : CommAlg k) (hK : IsField K.carrier) (x : X K) :
       ∃ O : Subfunctor X, IsOpenSubfunctor O ∧ x ∈ O K ∧
         O.whisker sqZeroExt ≤ .range (sqZeroExt.whiskerLeft u) ⊔ U.whisker sqZeroExt := by
     by_cases hx : x ∈ Subfunctor.range u K
@@ -902,7 +901,7 @@ maps the part of `Spec R` off the preimage of `P` into `U`. Third, the pull-back
 `m • [dg / g]` in the Hodge cohomology of `Spec R` relative to that part. -/
 def IsLocalSymbol (ξ : HodgeH (relFreeAb U) d) (y : X.obj R) (P : (K : CommAlg k) → X.obj K → Prop)
     (g : Fin d → R) (m : k) : Prop :=
-  ∃ᵉ (D : CutsOutLocus X P y g) (h),
+  ∃ D : CutsOutLocus X P y g, ∃ h,
     HodgeH.map (relFreeAb.map (pointMap (A := R) y) (U := U) h) ξ =
       m • HodgeH.map (relFreeAb.map _ D.preimage_fieldLocus_not.le) (symbolClass (k := k) (d := d))
 
@@ -924,7 +923,7 @@ relative to the complement of `z`. Nothing is asked of `ξ` away from `s`. -/
 def IsPointSum (s : Set (X (CommAlgCat.of k k))) (n : X (CommAlgCat.of k k) → k)
     (ξ : HodgeH (relFreeAb U) d) :
     Prop :=
-  ∀ z ∈ s, ∃ᵉ (a : EtaleChart d X) (g : Fin d → a.coordRing),
+  ∀ z ∈ s, ∃ a : EtaleChart d X, ∃ g : Fin d → a.coordRing,
     z ∈ a.locus (CommAlgCat.of k k) ∧ IsLocalSymbol ξ a.point (ComesFromPoints {z}) g (n z)
 
 /-- The class of a `k`-point `z` in the Hodge cohomology of degree `d`: the image of a chosen

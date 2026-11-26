@@ -177,7 +177,7 @@ lemma IsAutomorphic.eq_zero_of_petersson_self (h : V.IsAutomorphic F)
       (integral_eq_zero_iff_of_nonneg (fun g ↦ sq_nonneg _) hF.norm.integrable_sq).1 h_int
   -- the zero set of `F` is stable under `V.Γ`, hence dense; and `F` is continuous
   have h_dense : Dense {g | F g = 0} :=
-    dense_of_ae_orbitMeasure (fun (γ : V.Γ) g hg ↦ (h.rat_mul γ γ.2 g).trans hg) h_ae
+    dense_of_ae_orbitMeasure (fun (γ : V.Γ) g hg ↦ (h.rat_mul γ γ.property g).trans hg) h_ae
   exact h.continuous.ext_on h_dense continuous_zero fun _ hg ↦ hg
 
 lemma IsForm.isBoundedMeasurable (hF : V.IsForm e F) : IsBoundedMeasurable F :=
@@ -336,7 +336,7 @@ theorem exists_height_le_mul (hK : IsCompact K) :
 above on the set of g that a point of Γ moves into K. Here ht is the height of V, the inverse of
 the first minimum cut off at 1. -/
 theorem exists_mul_height_pow_le (hK : IsCompact K) (C : ℝ) :
-    ∃ D : ℝ, ∀ᵉ (g : G E s) (γ ∈ V.Γ), γ * g ∈ K → C * V.height g ^ B ≤ D := by
+    ∃ D : ℝ, ∀ g : G E s, ∀ γ ∈ V.Γ, γ * g ∈ K → C * V.height g ^ B ≤ D := by
   obtain ⟨C', hC'_one, hC'⟩ := V.exists_height_le_mul hK
   refine ⟨|C| * (C' * V.height 1) ^ B, fun g _ ⟨γ, hγ⟩ hg ↦ ?_⟩
   -- As `γ * g ∈ K`, the height of `g` is comparable to the height of `1`.

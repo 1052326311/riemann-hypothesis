@@ -64,11 +64,6 @@ section ResidualIrreducibility
 
 open Matrix IsLocalRing Fintype Module Submodule Set End
 
-/-- The coordinates of a matrix in the standard basis are its entries. -/
-private lemma Matrix.stdBasis_repr_apply {R m : Type*} [CommRing R] [Fintype m]
-    (M : Matrix m m R) (i j : m) : (stdBasis R m m).repr M (i, j) = M i j :=
-  rfl
-
 /-- In a group, if `x ^ q = y⁻¹ * x * y`, then `x * y ^ k = y ^ k * x ^ q ^ k` for every `k`. -/
 private lemma mul_pow_eq_pow_mul_pow_pow_of_pow_eq_inv_mul_mul {M : Type*} [Group M] {x y : M}
     {q : ℕ} (h : x ^ q = y⁻¹ * x * y) (k : ℕ) : x * y ^ k = y ^ k * x ^ q ^ k := by
@@ -180,7 +175,7 @@ lemma New.Selmer.IsLatticeIn.span_range_eq_top_of_map_pow_eq_map_conj {G n : Typ
     have h_col : LinearIndependent (ResidueField O) ((e.toMatrix (u ∘ w)).map (residue O)).col := by
       refine linearIndependent_iff.mpr fun c hc (a, b) ↦ h_indep c ?_ a b
       ext i j
-      simpa [τ, e, Basis.toMatrix_apply, Matrix.stdBasis_repr_apply] using
+      simpa [τ, e, Basis.toMatrix_apply] using!
         congrFun hc (equivFin n j, equivFin n i)
     rw [← isUnit_map_iff (residue O), Basis.det_apply, RingHom.map_det]
     exact (linearIndependent_col_iff_isUnit.mp h_col).map detMonoidHom
@@ -445,7 +440,8 @@ private lemma eval_linearExtension_eq_zero {T : G → k}
     (hB : ∀ ρ : k[G] →ₐ[k] Matrix n n k, eval (fun x : k[G] ↦ (ρ x).trace) B = 0) :
     eval (linearExtension T) B = 0 := by
   -- Apply `h_identities` to `B` with each variable `X (∑ c g • g)` replaced by `∑ c g • X g`.
-  refine (B.aeval_bind₁ T _).symm.trans (h_identities _ fun ρ ↦ (aeval_bind₁ ..).trans ?_)
+  refine (comp_aeval_apply _ (aeval T) B).symm.trans
+    (h_identities _ fun ρ ↦ (comp_aeval_apply _ (aeval fun g : G ↦ (ρ g).val.trace) B).trans ?_)
   simpa [Finsupp.sum, lift_apply] using
     hB (MonoidAlgebra.lift k (Matrix n n k) G ((Units.coeHom (Matrix n n k)).comp ρ))
 

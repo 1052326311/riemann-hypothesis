@@ -91,7 +91,7 @@ def flipCoords : CoordChange E (.id ℂ) (homSigns t s) (homSigns s t') where
   finEquiv := starCoordEquiv (.prodComm ..) fun _ ↦ c.map (Ô E).subtype
   apply_adelicSum := by
     -- In the finite part the factors `star α` and `star α⁻¹` cancel.
-    simp [adelicSum, val_scaleIdele_fst, val_scaleIdele_snd, ← mul_assoc, mul_comm,
+    simp [adelicSum, val_scaleIdele_fst, val_scaleIdele_snd, ← mul_assoc,
       starCoordEquiv, val_flipIdele, _root_.funext_iff, Prod.ext_iff]
     grind [star_mul', star_one, α.mul_inv]
   beta_realEquiv := by
@@ -105,11 +105,11 @@ def flipCoords : CoordChange E (.id ℂ) (homSigns t s) (homSigns s t') where
       starCoordEquiv, sum_prod_type]
   selfDualAddChar_finEquiv := by
     -- The sign from `star c * c = -1` is made up for by `selfDualAddChar_star`.
-    simp_all [dotProduct, Finset.sum_comm (γ := a), mul_right_comm _ _ (star c.1.1), ← mul_assoc,
-      mul_comm, ← selfDualAddChar_star, star_half, starCoordEquiv, sum_prod_type]
+    simp_all [dotProduct, Finset.sum_comm (γ := a), mul_right_comm _ _ (star c.val.val),
+      ← mul_assoc, mul_comm, ← selfDualAddChar_star, star_half, starCoordEquiv, sum_prod_type]
   dot_finEquiv := by
-    simp_all [dotProduct, Finset.sum_comm (γ := a), mul_right_comm _ _ (star c.1.1), ← mul_assoc,
-      mul_comm, starCoordEquiv, sum_prod_type]
+    simp_all [dotProduct, Finset.sum_comm (γ := a), mul_right_comm _ _ (star c.val.val),
+      ← mul_assoc, mul_comm, starCoordEquiv, sum_prod_type]
   finEquiv_mem x := by
     -- Both the unit `c` and conjugation preserve `Ô E`.
     refine (Submodule.smul_mem_iff' _ c).trans ?_
@@ -124,7 +124,7 @@ diag(t) at the infinite places and the identity at the finite places. It then sc
 reads the result back as a vector on pairs. -/
 lemma flipCoords_apply (hc : star (c : 𝔸f E) * c = -1) (ht : t' = -t) (x : a × n → 𝔸 E) :
     (flipCoords (s := s) hc ht).φ x =
-      matrixToVec ((flipIdele c 1).1 • (stdForm E s * (vecToMatrix x)ᴴ * stdForm E t)) := by
+      matrixToVec ((flipIdele c 1).val • (stdForm E s * (vecToMatrix x)ᴴ * stdForm E t)) := by
   simp [flipCoords, stdForm, matrixToVec, vecToMatrix, field, starCoordEquiv, pairSign,
     val_flipIdele, _root_.funext_iff, Prod.ext_iff]
 

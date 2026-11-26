@@ -97,7 +97,7 @@ lemma New.bind₁_monomial_mem_vanishingIdeal_pow {K ι : Type} [Field K] {w : �
 
 /-- Chinese remainder theorem for jets: at finitely many distinct points `z t`, the coefficients
 of degree below `d` after translation to the origin can be prescribed arbitrarily. -/
-lemma New.exists_forall_coeff_translate_eq {K ι S : Type} [Field K] [Fintype ι] [Fintype S]
+lemma New.exists_forall_coeff_translate_eq {K ι S : Type} [Field K] [Fintype S]
     {z : S → ι → K} (hz_inj : z.Injective) {d : ℕ} {Γ : Finset (ι →₀ ℕ)}
     (hΓ : ∀ γ ∈ Γ, γ.degree < d) (y : S × Γ → K) :
     ∃ p : MvPolynomial ι K, ∀ (t : S) (γ : Γ), (aeval (X + C ∘ z t) p).coeff γ = y (t, γ) := by
@@ -144,7 +144,7 @@ lemma New.monomial_mul_bind₁_mem_of_weight_le {K ι : Type} [Field K] [Fintype
     monomial α 1 * aeval (R := K) (fun u : ι ↦ X u ^ κ u - g u) (monomial γ 1) ∈ N := by
   set cost : (ι →₀ ℕ) →+ ℝ := weight (fun u : ι ↦ (κ u : ℝ))⁻¹ with h_cost
   have h_mono : Monotone cost := fun α β h_exp ↦ by
-    simp only [h_cost, weight_eq_sum, nsmul_eq_mul, Pi.inv_apply]
+    simp only [h_cost, weight_eq_sum, Pi.inv_apply]
     gcongr with u
     exact h_exp u
   let b (α γ : ι →₀ ℕ) : MvPolynomial ι K :=
