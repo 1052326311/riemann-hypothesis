@@ -803,12 +803,14 @@ def restrictToY :
         refine (Matrix.unitaryGroupOf.isClosedEmbedding_val isUnit_one).continuous_iff.2
             (.matrix_reindex ?_ ..)
         -- each entry of `diag (g, 1)` is a constant or an entry of `g`
-        simp [U.sum]
+        simp only [U.sum, MonoidHom.inl_apply, MonoidHom.codRestrict_apply, MonoidHom.coe_comp,
+          MonoidHom.coe_prodMap, Function.comp_apply, val_blockGL_apply]
         fun_prop
       exact ((rightStabilizer ψ).comap D.borderU).isOpen_mono (fun _ hk ↦ by simp [hk _])
         (smooth.preimage cont)
     -- `branching` intertwines the action of `diag (γ, 1)` with that of `γ`
-    simp [stdSpace_weightRep_apply]
+    simp only [LinearMap.coe_comp, Function.comp_apply, LinearMap.compLeft_apply,
+      LinearMap.funLeft_apply, map_mul, mulVecBilin_apply, stdSpace_weightRep_apply, mulVec_mulVec]
     let ε := D.lastIndexEquiv.sumCongr (Equiv.refl Unit)
     have h_block : D.borderU ((stdSpace D.E (D.Y D.m)).embFin γ) =
         (stdSpace D.E (D.InitIndex D.m ⊕ Unit)).embFin (U.block ε (γ, 1)) :=
