@@ -719,7 +719,7 @@ lemma IsFillingData.exists_massIntegral_pi_eq (h : S.IsFillingData T F)
     have h_right : MeasurePreserving (· * x) F.groupMeasure F.groupMeasure :=
       measurePreserving_mul_right _ x
     exact ((h_emb.measurable.measurePreserving _).of_semiconj h_right
-      (fun y ↦ map_mul (S.toFibers T blk) y x) (by fun_prop)).map_eq
+      (fun y ↦ (S.toFibers T blk).map_mul y x) (by fun_prop)).map_eq
   obtain ⟨t, ht⟩ : ∃ t : ℝ≥0∞,
       F.groupMeasure.map (S.toFibers T blk) = t • .pi fun i : ι ↦ (F' i).groupMeasure :=
     exists_eq_smul_haar _ h_inv
@@ -738,7 +738,8 @@ lemma IsFillingData.exists_massIntegral_pi_eq (h : S.IsFillingData T F)
               ∂(F' i).groupMeasure := by
       rw [← integral_fintype_prod_eq_prod, ← integral_smul_measure, ← Measure.restrict_pi_pi,
         ← Measure.restrict_smul, ← ht, h_emb.setIntegral_map]
-      simp [coe_pi, h_phase]
+      simp only [coe_comap, coe_pi, h_phase, MonoidHom.map_mul, MonoidHom.map_inv, Pi.mul_apply,
+        Pi.inv_apply]
     let f (i : ι) (z : (S.latticeMiddle (LocProd (placeFiber T blk i))).G) : ℝ≥0∞ :=
       ‖∫ y in Y i, extendedBesselChar (F' i).levelUnit (y * z * y⁻¹) ∂(F' i).groupMeasure‖ₑ ^ 2
     -- The outer integral gives one more factor `t`: transport, then Tonelli.
@@ -750,7 +751,8 @@ lemma IsFillingData.exists_massIntegral_pi_eq (h : S.IsFillingData T F)
       _ = ‖t.toReal‖ₑ ^ 2 * ∫⁻ z, ∏ i : ι, f i (z i) ∂F.groupMeasure.map (S.toFibers T blk) := by
         rw [lintegral_const_mul' _ _ (by simp), h_emb.lintegral_map]
       _ = ‖t.toReal‖ₑ ^ 2 * t * ∏ i : ι, (F' i).massIntegral (Y i) := by
-        rw [ht, lintegral_smul_measure, TauCeti.lintegral_fintype_prod_eq_prod _ (by fun_prop),
+        rw [ht, lintegral_smul_measure, TauCeti.lintegral_fintype_prod_eq_prod _
+          fun i ↦ show Measurable (f i) from (measurable_integral (by fun_prop)).eNorm.pow_const 2,
           smul_eq_mul, mul_assoc]
         simp only [PlaceData.massIntegral, f]
   · rw [coe_comap, coe_pi, ← h_emb.map_apply, ht, smul_apply, Measure.pi_pi, smul_eq_mul]
