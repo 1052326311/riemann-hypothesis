@@ -21,7 +21,7 @@ This file states the conclusion of the Selmer group argument.
 Notions from other files:
 * `New.Data.MFoldTwist`: a twist ϑ whose tame part ψ has ψ_wⁿ non-trivial for all places w in its
   set Q and 1 ≤ n ≤ m.
-* `New.Data.IsNegligible`: nonnegative reals `e l` with `∑ e l log l ≤ x ^ C` over every finite set
+* `New.Data.IsNegligible`: reals `e l` with `∑ e l log l ≤ x ^ C` over every finite set
   of primes, where `x = D.x` is the length of the prime sum, the smallest scale of the data.
 * `New.Selmer.IsMainSummand`: an `ℓ`-adic Galois representation satisfies the local and global
   conditions `IsMainSummandLike` and, up to a twist and a string of characters, gives the traces of
@@ -157,7 +157,7 @@ coefficients in Tate twists of `O/l^ν`. These valuations are negligible with th
 with weights `log l` they sum to at most `D.x ^ 2000` over every finite set of primes. -/
 lemma New.Selmer.isNegligible_padicValNat_oddClassBound {P : Parameters} (D : Data P) :
     D.IsNegligible 2000 fun l : ℕ ↦ padicValNat l (oddClassBound D) := by
-  refine ⟨fun l ↦ Nat.cast_nonneg _, fun T hT ↦ ?_⟩
+  refine ⟨fun T hT ↦ ?_⟩
   calc ∑ l ∈ T, (padicValNat l (oddClassBound D) : ℝ) * log l
       ≤ log (2 ^ (4 * (D.cyclotomicConductor + D.t + 3) ^ 27) * NumberField.classNumber D.E : ℕ) :=
         sum_padicValNat_mul_log_le T hT (oddClassBound_le D)
@@ -175,7 +175,7 @@ the exponent `999`: with weights `log l` they sum to at most `D.x ^ 999` over ev
 primes. -/
 lemma New.Selmer.isNegligible_twistError {P : Parameters} (D : Data P) :
     D.IsNegligible 999 fun l : ℕ ↦ twistError l D := by
-  refine ⟨fun l ↦ NNReal.coe_nonneg _, fun T hT ↦ ?_⟩
+  refine ⟨fun T hT ↦ ?_⟩
   calc ∑ l ∈ T, (twistError l D : ℝ) * log l
       = (4 * D.f + 3) * D.r * ∑ l ∈ T, (padicValNat l D.chosenGroupOrder : ℝ) * log l +
           ∑ l ∈ T, (1 / 2 : ℝ) ^ l * log l := by
@@ -191,7 +191,7 @@ linear groups over residue fields. These terms are negligible with the exponent 
 `log l` they sum to at most `D.x ^ 4000` over every finite set of primes. -/
 lemma New.Selmer.isNegligible_denominatorError {P : Parameters} (D : Data P) :
     D.IsNegligible 4000 fun l : ℕ ↦ (denominatorError D l).toReal := by
-  refine ⟨fun l ↦ ENNReal.toReal_nonneg, fun T hT ↦ ?_⟩
+  refine ⟨fun T hT ↦ ?_⟩
   -- every term is a multiple of the valuation of `oddClassBound D` or of `D.chosenGroupOrder`
   let c : ℝ := 8 * D.f * D.t + 2 + ((4 * D.t + 1) * D.halfGap ^ 22 + D.halfGap)
   calc ∑ l ∈ T, (denominatorError D l).toReal * log l
@@ -213,7 +213,7 @@ to at most `D.x ^ 30` over every finite set of primes. -/
 lemma New.Selmer.isNegligible_padicValNat_card_stdClasses {P : Parameters} (D : Data P) :
     D.IsNegligible 30 fun l : ℕ ↦
       padicValNat l (Nat.card (StdClasses (n := Unit) D.chosenLevel)) := by
-  refine ⟨fun l ↦ Nat.cast_nonneg _, fun T hT ↦ ?_⟩
+  refine ⟨fun T hT ↦ ?_⟩
   have h_classes : (Nat.card (StdClasses (n := Unit) D.chosenLevel) : ℝ) ≤ exp (D.x ^ 30) :=
     D.card_stdClasses_le_exp (D.principalLevel_le_chosenLevel (dvd_mul_right ..))
       (Fintype.card_unit.trans_le D.nat_le_of_hasLogBound)
