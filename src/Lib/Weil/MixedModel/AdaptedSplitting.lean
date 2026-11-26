@@ -166,10 +166,6 @@ omit [Fintype n] [DecidableEq n'] [DecidableEq r] [Fintype p] in
 conjugate `Bᴴᵀ` of `B`. -/
 lemma IsOrthoIntegral.kronecker {B : Matrix r p (𝔸 E)} (hM : IsOrthoIntegral M)
     (hB : IsOrthoIntegral B) : IsOrthoIntegral (M ⊗ₖ Bᴴᵀ) := by
-  have hM_inf (w : NumberField.InfinitePlace E) : (M.map (evalInf w))ᴴ * M.map (evalInf w) = 1 :=
-    hM.left w
-  have hB_inf (w : NumberField.InfinitePlace E) : (B.map (evalInf w))ᴴ * B.map (evalInf w) = 1 :=
-    hB.left w
   -- Evaluation at an infinite place commutes with `ᴴ`.
   have h_conj (w : NumberField.InfinitePlace E) : Bᴴ.map (evalInf w) = (B.map (evalInf w))ᴴ :=
     B.conjTranspose_map (evalInf w) fun _ ↦ rfl
@@ -177,7 +173,7 @@ lemma IsOrthoIntegral.kronecker {B : Matrix r p (𝔸 E)} (hM : IsOrthoIntegral 
   · -- Evaluation at `w` commutes with `⊗ₖ`, so the product is `MᴴM ⊗ₖ (BᴴB)ᵀ = 1 ⊗ₖ 1`.
     simp [map_kronecker, h_conj, transpose_map, conjTranspose_kronecker,
       conjTranspose_transpose_eq_transpose_conjTranspose, ← mul_kronecker_mul, ← transpose_mul,
-      hM_inf w, hB_inf w]
+      hM.conjTranspose_map_mul_map w, hB.conjTranspose_map_mul_map w]
   · -- Each entry is an entry of `M` times the conjugate of an entry of `B`.
     simp [mul_mem, star_mem_Ô, hM.right, hB.right]
 
