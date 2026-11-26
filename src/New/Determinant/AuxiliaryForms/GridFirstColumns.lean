@@ -875,10 +875,7 @@ lemma exists_diagonalPeriodForm_transposedChain_eq :
   choose κ hκ using (D.exists_triangleGLCard_eq_mul_levelIndex :
     ∀ j : ℕ, ∃ C : ℂ, ∀ ϑ : D.MFoldTwist, D.triangleGLCard false ϑ j = C * levelIndex ϑ false 0 j)
   refine ⟨∏ i ∈ range D.m, κ i, fun ϑ g y' φ ↦ ?_⟩
-  have h_period : gridPeriod (.first D.m) firstPathDatum g (ϑ, y', φ) =
-      card (LevelCosets ϑ) * ∑ S ∈ tuplesOn ϑ (TwoGridPath.first D.m).edges, firstPointDatum S *
-        diagonalPeriodForm ϑ zero_le g ((GridPath.column D.m.zero_le).formMap S false y')
-          ((GridPath.column D.m.zero_le).formMap S true φ) :=
+  have h_period : gridPeriod (.first D.m) firstPathDatum g (ϑ, y', φ) = _ :=
     sum_firstPathDatum_mul g y' φ
   -- The period of `Ψ⁰` is the number of coset families times that of `Ψ¹`. This number is the
   -- product of the indices of the levels, and the orders for the `Y` are `κ i` times the indices.
