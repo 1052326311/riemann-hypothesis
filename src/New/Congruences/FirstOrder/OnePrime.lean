@@ -567,9 +567,10 @@ lemma reduceGL_mem_iff_mem_residuePreimage {N : ℕ} {P : GL (Fin N) (LocField w
     reduceGL g ∈ H ↔ (g : GL (Fin N) (LocField w)) ∈ residuePreimage P H hP :=
   (hP g).trans (and_iff_right g.property).symm
 
-/-- The reduction of `g ∈ GL_N(O_w)` stabilises the line of the first basis vector if and only if
-`g` lies in the parahoric subgroup with blocks of sizes `1` and `N - 1`. -/
-lemma reduceGL_mem_residueLineStabilizer_iff {N : ℕ} [NeZero N] {g : localIntGL (Fin N) w} :
+/-- The reduction of `g ∈ GL_N(O_w)` belongs to the residue line stabiliser if and only if
+`g` belongs to the corresponding block parahoric. For positive `N`, the blocks have sizes
+`1` and `N - 1`. -/
+lemma reduceGL_mem_residueLineStabilizer_iff {N : ℕ} {g : localIntGL (Fin N) w} :
     reduceGL g ∈ residueLineStabilizer (ResField w) N ↔
       (g : GL (Fin N) (LocField w)) ∈ blockParahoric (min 1) := by
   unfold residueLineStabilizer blockParahoric
