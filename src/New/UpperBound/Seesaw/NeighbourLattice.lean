@@ -789,20 +789,22 @@ lemma latticeUnitary_smul_of_mem_vanishingAbove {π : (𝔸f E)ˣ} {β : Ô E} {
 
 /-- Let `π` be split squarefree for `N` at `P`. Let `κ` be row factors that are `1` or a fixed adele
 `δ` of norm one, with denominators bounded by `β` and `β̄` (`IsScalingAtM`). Off `P` and its
-conjugate, `neighbourLattice` is the standard lattice with its rows scaled by `κ`: a matrix `x` that
-vanishes at `P` and its conjugate lies in it if and only if `κ⁻¹ x = κ̄ x` has integral entries. -/
-lemma mem_neighbourLattice_iff_of_mem_vanishingAbove {π : (𝔸f E)ˣ} {β : Ô E} {δ : 𝔸f E}
+conjugate, `neighbourLattice` is the standard lattice with its rows scaled by `κ`: if a matrix `x`
+vanishes at `P` and its conjugate and lies in `neighbourLattice`, then `κ⁻¹ x = κ̄ x` has integral
+entries. -/
+lemma star_mul_mem_of_mem_neighbourLattice {π : (𝔸f E)ˣ} {β : Ô E} {δ : 𝔸f E}
     {κ : PairIndex X X'' → 𝔸f E} [DecidableEq X] [DecidableEq X'']
     (hπ : IsSplitSquarefree P (N : E) π) (hκ : IsScalingAtM N β δ κ)
-    {x : PairIndex X X'' × X' → 𝔸f E} (hx : x ∈ vanishingAbove (PairIndex X X'' × X') P) :
-    x ∈ neighbourLattice X' hπ hκ ↔ ∀ i : PairIndex X X'' × X', star (κ i.1) * x i ∈ Ô E := by
+    {x : PairIndex X X'' × X' → 𝔸f E} (hx : x ∈ vanishingAbove (PairIndex X X'' × X') P)
+    (hmem : x ∈ neighbourLattice X' hπ hκ) (i : PairIndex X X'' × X') :
+    star (κ i.1) * x i ∈ Ô E := by
   -- The matrix `x` is the image of `κ̄ x`.
   have h_vanish : (fun i ↦ star (κ i.1) * x i) ∈ vanishingAbove (PairIndex X X'' × X') P :=
     funext fun i ↦ (mul_left_comm _ _ _).trans (mul_eq_zero_of_right _ (congrFun hx i))
   have h_image : latticeUnitary X' hπ hκ • (fun i ↦ star (κ i.1) * x i) = x := by
     simp only [latticeUnitary_smul_of_mem_vanishingAbove hπ hκ h_vanish, ← mul_assoc,
       hκ.apply_mul_star_eq_one, one_mul]
-  refine ⟨fun ⟨x₀, hx₀, h_eq⟩ i ↦ ?_, fun h ↦ ⟨_, h, h_image⟩⟩
+  obtain ⟨x₀, hx₀, h_eq⟩ := hmem
   obtain rfl : x₀ = fun i ↦ star (κ i.1) * x i :=
     MulAction.injective (latticeUnitary X' hπ hκ) (h_eq.trans h_image.symm)
   exact hx₀ i
@@ -822,7 +824,7 @@ lemma awayLattice_le_weightedTranslations {π : (𝔸f E)ˣ} {β : Ô E} {δ : �
     linear_combination -(selfOrConj β i.1 * x i) * hκ.apply_mul_star_eq_one i.1
   rw [h_eq]
   exact mem_Ô.1 (mul_mem (hκ.selfOrConj_mul_mem i.1)
-    ((mem_neighbourLattice_iff_of_mem_vanishingAbove hπ hκ hx_zero).1 hx i)) w
+    (star_mul_mem_of_mem_neighbourLattice hπ hκ hx_zero hx i)) w
 
 /-- Let `π` be split squarefree for `N` at `P` (`IsSplitSquarefree`): `N = π π̄`, `π` is a
 uniformiser on `P` and a unit elsewhere, and `P` does not meet its conjugate. Let `κ` be row factors
@@ -841,7 +843,7 @@ lemma card_awayLatticeQuotient_dvd {π : (𝔸f E)ˣ} {β : Ô E} {δ : 𝔸f E}
   -- matrix, hence integral.
   have h_int (x : awayLattice X' hπ hκ) (i : PairIndex X X'' × X') :
       star (κ i.1) * x.val i ∈ Ô E :=
-    (mem_neighbourLattice_iff_of_mem_vanishingAbove hπ hκ x.property.2).1 x.property.1 i
+    star_mul_mem_of_mem_neighbourLattice hπ hκ x.property.2 x.property.1 i
   let reduction : awayLattice X' hπ hκ →+ PairIndex X X'' × X' → Ô E ⧸ Ideal.span {β} :=
     AddMonoidHom.mk' (fun x i ↦ Ideal.Quotient.mk _ (star ⟨_, h_int x i⟩)) fun x y ↦ by
       ext i
