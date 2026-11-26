@@ -124,7 +124,7 @@ lemma New.Variety.UniversalFamily.GraphClosure.congruenceRelation {E : Type} [Fi
     -- the centre of the arc lies above `w`
     refine w.val.isMaximal.eq_of_le (ker_ne_top _) fun a ha ↦ ?_
     -- `erw`: the goal `a ∈ ker (ThetaObject.baseHom …)` matches `hx` only after unfolding.
-    erw [ThetaObject.baseHom, ← assoc, preimage_comp]
+    rw [ThetaObject.baseHom, ← assoc, preimage_comp]
     simpa [← reassoc_of% centre, ← c.w] using hx _ (h𝔭 a ha)
   refine (cancels_moebius_of_factorsThrough_sup hW reduction).mono fun A B hAB ↦ ?_
   -- Frobenius commutes with `ρ` and `ρ'`, and `Spec` of a field embedding is an epimorphism: the

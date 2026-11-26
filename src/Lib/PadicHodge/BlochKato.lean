@@ -616,7 +616,7 @@ lemma exists_padicInt_eq_pow_smul_of_frobEnd_eq {ι : Type} [Fintype ι] [Decida
   -- `(p ^ s * c g i : ℤ_[p])` and `p ^ s • c g i` agree in `Bmax` through `ℚ_[p]`. `erw` is needed
   -- because the coercion of `ℤ_[p]` into `Bmax` matches the one through `ℚ_[p]` only after
   -- unfolding.
-  erw [← hc, ← algebraMap.coe_smul]
+  rw [← hc, ← algebraMap.coe_smul]
   exact algebraMap_apply ..
 
 omit [Free ℤ_[p] T] [Module.Finite ℤ_[p] T] in

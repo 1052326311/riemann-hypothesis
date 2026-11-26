@@ -587,7 +587,7 @@ lemma integral_lastPathConjDelta_mul (y : D.principalForms (D.spaceY 0)) :
     have h_value : (D.lowerChain ϑ y).1 ((stdSpace D.E (D.Y D.m)).embFin γ * x * k.1) =
         (stdSpace D.E (D.Y D.m)).weightRep D.columnsY (D.lastEntry D.m) γ
           ((D.lowerChain ϑ y).1 x) := by
-      erw [levelSpace_smoothFormRep_apply (χ := 1) (by simpa using! h_fix)]
+      rw [levelSpace_smoothFormRep_apply (χ := 1) (by simpa using! h_fix)]
       exact one_smul ℂ _
     simpa [L, h_value] using! D.isDualPairing_dualPairing.invariant ..
   rw [h_integral, classIntegral_eq_classSum, h_sum]

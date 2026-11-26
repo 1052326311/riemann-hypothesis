@@ -416,7 +416,7 @@ theorem inner_pointForm_kernelForm (hq : q.HasEmptyRow (Fin (2 * p.z - 20)))
     tauto
   rw [innerSLFlip_apply_apply, ← inner_conj_symm, ← X.normalizedDescent_eq_inner_kernelForm 1]
   -- `erw` identifies the space and the level data of `X.descentPair` with those of `X`.
-  erw [normalizedDescent_pointForm, h_pol, ← modKernelBilin_apply]
+  rw [normalizedDescent_pointForm, h_pol, ← modKernelBilin_apply]
   rw [mul_assoc (modKernel ..), ← h_char, ← modKernel_factor h_first,
     kernelForm_eq_modKernelStdSpace_of_hasEmptyRow hq₂ ϑ (𝔪 := 𝔪) le_rfl,
     kernelForm_eq_modKernelStdSpace_of_hasEmptyRow hq₃ u h_untwisted,
@@ -483,7 +483,7 @@ theorem isTestForm_trivialLiftClassSum_pointForm {l : ℕ} [Fact l.Prime]
     refine pointForm_mem_integralForms v ?_
     -- the coefficients are rational integers, and the point fixes them
     have h_cast : v.ιₚ ∘ Int.cast ∘ c = Int.cast ∘ c := funext fun i ↦ map_intCast v.ιₚ (c i)
-    erw [weylGauge, h_cast, h_fix]
+    rw [weylGauge, h_cast, h_fix]
     · simp [pi_norm_le_iff_of_nonneg, norm_intCast_le_one]
     · simp [← map_inv, U.sum, Matrix.one_apply]
   refine ⟨fun v ↦ trivialLiftClassSum_mem hq hu (h_int v), fun w hw hS y hy ↦

@@ -342,7 +342,7 @@ lemma diagonalPeriodForm_tupleAction {D : Data P} {ϑ : D.MFoldTwist} {g : NodeF
       edgeCharProd g (p.edges true) • p.formMap S true φ :=
     formRep_formMap_column_tupleAction _ (hg_end true) S φ u' hu' (absurd · hm)
   -- `erw`: the index set of the node `(z, 0, 0)` is `D.GridIndex z 0 0` only by definition.
-  erw [← diagonalPeriodForm_formRep D ϑ u.1, h_false, h_true]
+  rw [← diagonalPeriodForm_formRep D ϑ u.1, h_false, h_true]
   rw [h_char, LinearMap.map_smul₂, map_smul, smul_smul, smul_eq_mul]
 
 end GridStart

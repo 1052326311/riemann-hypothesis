@@ -607,7 +607,7 @@ lemma weylGauge_cartanProduct_le [DecidableEq m] [DecidableEq N]
   -- Move the action of `g⁻¹` into `cartanProduct` (`weylRep_mulVec_cartanProduct`) and split the
   -- power of `M` by blocks.
   -- `erw`: `O.columnCount` and `O.detExp` are the mixed weight and its twist by unfolding.
-  erw [weylGauge, map_cartanProduct V.hasColumnsBelow.1 V.hasColumnsBelow.2 (f := ιₚ),
+  rw [weylGauge, map_cartanProduct V.hasColumnsBelow.1 V.hasColumnsBelow.2 (f := ιₚ),
     show ιₚ ∘ η = ιₚ.comp conj ∘ star η by
       aesop, weylRep_mulVec_cartanProduct V.hasColumnsBelow.1 V.hasColumnsBelow.2]
   rw [denominatorExponent, sum_add_distrib, pow_add, mul_mul_mul_comm]

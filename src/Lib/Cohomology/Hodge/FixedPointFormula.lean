@@ -894,7 +894,7 @@ lemma map_constMap_eq_of_forall_affine_eq {z z' : X.obj (of k k)}
             (mk₀ (homEquiv₀ x)) =
           mk₀ (freeAb.map (sqZeroExt.whiskerLeft (constMap (W := 𝟙_ (CommAlg k ⥤ Type 1)) w)) ≫
             homEquiv₀ x) := by
-      erw [H.map, bilinearComp_apply_apply, mk₀_comp_mk₀]
+      rw [H.map, bilinearComp_apply_apply, mk₀_comp_mk₀]
     refine (map_mk₀ z).trans ((congrArg mk₀ ?_).trans (map_mk₀ z').symm)
     refine eval_bij.1 (ULift.down_injective (formBasis.ext_elem fun i ↦ ?_))
     -- On the pairs `(A, 0)` the class `x` is a natural map from `X A` to forms; its `i`-th
