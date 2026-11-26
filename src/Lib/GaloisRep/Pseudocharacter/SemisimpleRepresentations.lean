@@ -122,7 +122,7 @@ variable {p : Matrix n n k} (f : PiMatrix k d →ₐ[k] Matrix N N k)
 
 /-- The trace of an idempotent matrix is its rank. In characteristic zero, the matrix is zero
 exactly when its trace is zero. -/
-lemma trace_of_idempotent [CharZero k] [IsAlgClosed k] (hp : IsIdempotentElem p) :
+lemma trace_of_idempotent [CharZero k] (hp : IsIdempotentElem p) :
     p.trace = p.rank ∧ (p = 0 ↔ p.trace = 0) :=
   ⟨trace_eq_rank_of_isIdempotentElem hp, fun h ↦ by simp [h],
     Matrix.IsIdempotentElem.eq_zero_of_trace_eq_zero hp⟩
