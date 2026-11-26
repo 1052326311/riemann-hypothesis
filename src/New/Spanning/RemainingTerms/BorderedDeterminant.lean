@@ -777,7 +777,7 @@ products of the frame `f = (e₁, …, e_ϱ, z)` with `k f`; `S.isotropicRowsInd
 the lattice that they span, of the lattice spanned by the first `j` of them. Then
 `S.maxGauge j c c' γ` is `m` divided by the product of these indices at `k` and at `k⁻¹`. -/
 lemma HasCellRank.maxGauge_eq {S : Filling E 𝔰} {j : Fin (𝔰.ϱ + 2)} {γ : S.G E}
-    [HasPrimitiveRoot5040 E] (hγ : S.HasCellRank j γ) (c c' : S.Classes) :
+    (hγ : S.HasCellRank j γ) (c c' : S.Classes) :
     S.maxGauge j c c' γ = (S.termDiscNorm γ ⊔ S.N ^ numInfPlaces E * S.minorNorm j γ) /
       (S.isotropicRowsIndex j (S.translateByClassReps c c' γ) *
         S.isotropicRowsIndex j (S.translateByClassReps c c' γ)⁻¹) := by
