@@ -365,10 +365,9 @@ lemma exists_mul_stdClassSum_eq_carrierForm {m : ℕ} [NeZero m] (hm_even : Even
     rw [mul_one, one_mul] at ht
     change modKernel H (stdSpace E (Fin (2 * m) ⊕ Fin m)) (upsilonU1 ^ m) 1 𝔪 (χ ·.det) 1 x (1, h) =
       cx * modKernel H (stdSpace E (Fin (2 * m) ⊕ Fin m)) (upsilonU1 ^ m) c 𝔪 (χ ·.det) 1 x (1, h)
-    rw [ht, ← mul_assoc]
+    rw [ht]
     have h1 : (((1 : AutChar E).val (G.det (s := 1) (1, h)) : Circle) : ℂ) = 1 := rfl
-    rw [h1, one_div]
-    exact (mul_inv_cancel₀ hcx_ne ▸ one_mul _).symm
+    rw [h1, one_div, mul_inv_cancel_left₀ hcx_ne]
   have h_mod3 (y : G E (-1)) :
       modKernel J.neg H (c * upsilonU1 ^ m) 1 𝔪 1
           (∏ τ, variableMinor τ Sum.inr id ^ (2 * m)) y x =
