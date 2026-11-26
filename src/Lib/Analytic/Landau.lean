@@ -1,4 +1,6 @@
-import Lib.Analytic.EntireLFunction
+module
+
+public import Lib.Analytic.EntireLFunction
 
 /-!
 # Landau's lemma
@@ -29,6 +31,8 @@ simple poles whose residues at real points have non-negative real part: no pole 
 of the abscissa given by the one-sided bound. Source: Montgomery and Vaughan, Multiplicative
 Number Theory I, 2007, Lemma 15.1 (Widder, The Laplace Transform, 1941, II Thm 5b).
 -/
+
+@[expose] public section
 
 open ArithmeticFunction DirichletCharacter Complex Set Filter MeasureTheory Metric ProbabilityTheory
   Nat Topology ComplexOrder AnalyticOnNhd Real

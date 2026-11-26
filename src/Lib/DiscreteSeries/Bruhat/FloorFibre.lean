@@ -1,5 +1,7 @@
-import Lib.DiscreteSeries.Bruhat.ComplexPlace
-import Lib.General.Measure.FibreMeasure
+module
+
+public import Lib.DiscreteSeries.Bruhat.ComplexPlace
+public import Lib.General.Measure.FibreMeasure
 
 /-!
 # Measures of a floor below fibre measures, at the place ℂ
@@ -42,6 +44,8 @@ Notions from other files:
 Known; see `Lib.DiscreteSeries.Bruhat.ComplexPlace` for sources.
 -/
 
+@[expose] public section
+
 namespace New.Floors
 
 open Matrix MeasureTheory Measure RealPlace FloorGroups
@@ -77,7 +81,6 @@ lemma leFibreMeasure_coords {α β ι : Type} [Fintype α] [Fintype β] [Fintype
   have h_fibre (t : α → ℂ) (v : β → ℂ) : φ (t, v) ∘ f = t := by
     ext a
     simp [φ, inclMatrix, mulVec, dotProduct, Matrix.one_apply, hf.eq_iff, h_ne a]
-  show LeFibreMeasure volume volume (fun y : ι → ℂ ↦ y ∘ f) c (volume.map fun v ↦ φ (c, v))
   exact .of_measurePreserving h_vol (by fun_prop) h_fibre
     fun _ ↦ Continuous.continuousAt (by fun_prop)
 
