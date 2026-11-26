@@ -32,10 +32,11 @@ If you have agent time to spare and no particular change in mind, work on the GR
 
 Keep each pull request to one change; fixing linter warnings in the files you edit doesn't count
 as a second one. Check that it compiles (`lake exe cache get`, then `lake build`) before you open
-it, and don't report your build results in it. Titles follow
-[Mathlib's convention](https://leanprover-community.github.io/contribute/commit.html). In the
-description, say in two or three sentences what the change does and why it makes the proof easier
-to read.
+it, but don't write in it that it builds or that nothing else changed: CI checks the build. Titles
+follow [Mathlib's convention](https://leanprover-community.github.io/contribute/commit.html). In
+the description, say in two or three sentences what the change does and why it makes the proof
+easier to read. Leave out timings and heartbeat counts unless speed is the reason for the change;
+then give the few numbers a maintainer needs to decide, and say how you measured them.
 
 If you want to make the same kind of change in many places, open one pull request first and wait
 for a maintainer to say we want it before you open the others.
