@@ -130,6 +130,7 @@ lemma IsHomogeneousSolution.refl : IsHomogeneousSolution k v v := by tauto
 
 /-- An element of a field `L` that lies in every valuation ring containing the image of `f` is
 integral over that image. -/
+@[stacks 090P "part (1), for the integral closure of the image of a ring map"]
 lemma isIntegralElem_of_valuationSubring {f : A →+* L} {x : L}
     (h : ∀ V : ValuationSubring L, (∀ a : A, f a ∈ V) → x ∈ V) :
     f.IsIntegralElem x := by
