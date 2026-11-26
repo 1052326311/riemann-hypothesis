@@ -88,7 +88,8 @@ open New NumberField IsCyclotomicExtension.Rat Selmer Ideal NeZero Nat Function
 lemma New.ncard_placesDividing_le_finrank (K : Type) [Field K] [EmbeddedNumberField K] (l : ℕ)
     [ThePrime l] : (placesDividing K l).ncard ≤ Module.finrank ℚ K := by
   have hl : span {(l : ℤ)} ≠ ⊥ := by simp [NeZero.ne l]
-  grw [← ncard_primesOver_le_finrank (span {(l : ℤ)})]
+  grw [← RingOfIntegers.rank,
+    ← TauCeti.RamificationInertia.ncard_primesOver_le_finrank (span {(l : ℤ)})]
   refine (Set.ncard_congr' (.trans (.subtypeEquivRight fun P ↦ ?_) (equivPrimesOver _ hl))).le
   simp [placesDividing, map_span]
 
