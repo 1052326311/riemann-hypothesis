@@ -291,7 +291,7 @@ lemma torsionValue_two_mul (G : ℂ → ℂ) (u : ℂ) :
 
 /-- For a prime `d ≡ 7 (mod 8)` the doubling formula for `θ` holds for torsion values:
 `θ[2 u] = θ[u] ^ 4 - σ[u] ^ 4`. -/
-lemma torsionValue_theta_two_mul [PrimeSevenModEight d] (u : ℂ) :
+lemma torsionValue_theta_two_mul (u : ℂ) :
     C.torsionValue 1 C.θ (2 * u) = C.torsionValue 1 C.θ u ^ 4 - C.torsionValue 1 C.σ u ^ 4 := by
   rw [torsionValue_two_mul]
   simp only [torsionValue_eq, theta_two_mul]
