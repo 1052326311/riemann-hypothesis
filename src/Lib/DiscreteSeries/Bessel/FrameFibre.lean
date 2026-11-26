@@ -65,6 +65,7 @@ theorem embedH_mul_definiteCols (h : U (1 : Matrix 𝔰.κ 𝔰.κ ℂ)) :
   simp [coe_embedH, actOnCols, Matrix.sub_mul, Matrix.add_mul, Matrix.mul_assoc,
     conjTranspose_definiteCols_mul_self]
 
+omit [DecidableEq n] in
 /-- Let `f` be a measurable map to the unitary group `G₁` whose values all fix the tuple of
 vectors given by the columns of `E`. Then almost every element for the image of `μ` under `f`
 fixes this tuple. -/
