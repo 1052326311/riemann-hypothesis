@@ -93,7 +93,7 @@ lemma exists_representation_heckeFun_inflateConj (hw : w.IsSplit) {κ : Weight E
   obtain ⟨hv_K, -⟩ := Submodule.mem_inf.mp v.prop
   have h_sum : (ρ.asAlgebraHom (groupAlgElem fun g ↦ conj (χ g)) v).1 =
       ∑ x, conj (χ x) • π (lift x) v := by
-    simp [asAlgebraHom_eq_sum, Subtype.ext_iff]
+    simp [asAlgebraHom_eq_sum]
     -- `ρ x v` is `π (lift x) v` by the definition of `ρ`
     rfl
   -- the kernel of reduction fixes `v`, so the first half of `HasLabel` holds

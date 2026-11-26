@@ -189,7 +189,7 @@ lemma New.Variety.exists_fibre_mem_of_isOpenSubfunctor {k : Type} [Field k] [Cha
   obtain ⟨P, hP₀, hP⟩ := h_root (aeval w b) hbw
   obtain ⟨q, hq⟩ : ∃ q : Fin n → k, MvPolynomial.eval q (P.coeff 0) ≠ 0 := by
     contrapose! hP₀
-    exact MvPolynomial.funext (by simpa using hP₀)
+    exact MvPolynomial.funext (hP₀)
   refine ⟨q, fun K hK x v hv hΛv hx ↦ ?_⟩
   let h_field : Field K := hK.toField
   -- Homogenised by `Λ 0`, the relation `P(b)` gives a form `G` with its value wherever `Λ 0` is `1`
