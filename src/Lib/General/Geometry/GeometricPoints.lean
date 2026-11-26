@@ -135,11 +135,11 @@ lemma AddObj.property_of_isOpenImmersion {k : Type} {X : Scheme} [Field k] [IsAl
       exists_point_mem (Over.mk s) U.isOpen.isClosed_compl.isLocallyClosed ⟨x, hx⟩
     refine hz (TopologicalSpace.Opens.mem_iSup.2 ⟨z - y, a, ?_⟩)
     have h_yz : y ≫ translation (z - y) = z := by simp [Pt, comp_add]
-    show (translation (z - y)).left (i a) = z.left c
+    change (translation (z - y)).left (i a) = z.left c
     rw [ha, ← Hom.comp_apply, ← comp_left, h_yz]
   refine IsZariskiLocalAtSource.of_openCover (.mkOfCovers _ _ t h_cover) fun z ↦ ?_
   -- Translations are morphisms over `k`.
-  show P ((i ≫ (translation z).left) ≫ (Over.mk s).hom)
+  change P ((i ≫ (translation z).left) ≫ (Over.mk s).hom)
   rwa [Category.assoc, (translation z).w]
 
 /-- A standard smooth ring map is standard smooth of some relative dimension. -/
@@ -482,7 +482,7 @@ lemma IsSeparatingFamily.prod {S : Scheme} [IsReduced S] {A B : Over S} {V W J :
   let j : A.hom.smoothLocus.toScheme ⟶ A.left := A.hom.smoothLocus.ι
   have : Smooth (j ≫ A.hom) := by
     simp [j, ← Hom.smoothLocus_eq_top_iff, ← j.preimage_smoothLocus_eq]
-  have : IsDominant j := ⟨(dense_smoothLocus_of_isDenseFamily hξ A.hom).denseRange_val⟩
+  have : IsDominant j := ⟨(dense_smoothLocus_of_isDenseFamily hξ A.hom).denseRange_subtypeVal⟩
   have : IsSchemeTheoreticallyDominant j := of_isDominant j
   -- Hence `A ×_S B` is reduced: the flat base change `j'` of `j` is scheme-theoretically dominant,
   -- and its source is smooth over the reduced `B`.
