@@ -145,7 +145,7 @@ def DiscreteSeries.IsAnalyticFamily (f : E → K → ℂ) (a : E) : Prop :=
   ∃ g : E → C(K, ℂ), AnalyticAt ℂ g a ∧ ∀ᶠ x : E in nhds a, g x = f x
 
 omit [FiniteDimensional ℂ E] in
-/-- Let E be a complex normed space, K a compact R₁ space and μ a finite Borel
+/-- Let E be a complex normed space, K a compact space and μ a finite Borel
 measure on K. If x ↦ f(x, ·) is analytic at p ∈ E as a map to C(K, ℂ) (`IsAnalyticFamily f p`), then
 its integral against μ is an analytic function of x at p. -/
 lemma DiscreteSeries.IsAnalyticFamily.analyticAt_integral {mK : MeasurableSpace K} [BorelSpace K]
