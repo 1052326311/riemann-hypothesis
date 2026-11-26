@@ -204,8 +204,8 @@ theorem span_short_integralRamified_eq_top :
   rintro φ ⟨h_integral, h_size⟩
   refine ⟨fun ι ↦ ?_, fun s σ ↦ ?_⟩
   · -- A short form is integral at every `ι`.
-    let : PadicPlace ι.1 := ι.place
-    exact ⟨φ.val.prop, h_integral ι.1⟩
+    let : PadicPlace ι.prime := ι.place
+    exact ⟨φ.val.prop, h_integral ι.prime⟩
   obtain ⟨Ψ, hΨ, h_seesaw⟩ : ∃ Ψ : D.Translations →₀ ℂ,
       IsChainDatum (1 : D.MFoldTwist).toTwist Ψ ∧ ∀ φ : D.ramifiedSourceForms,
         D.lowerChain .one (D.poincare (D.scaledInclusion φ)) = compositeLift .one Ψ φ :=
@@ -250,10 +250,10 @@ every `m`-fold twist `ϑ` of level prime to `l`. -/
 lemma normalizedPoincare_mem_integralVectors {ι : PrimePadicIso} (s : D.chosenGL)
     {φ : D.ramifiedSourceForms}
     (hφ : ∀ (ϑ : D.Twist) (Ψ : D.Translations →₀ ℂ), IsChainDatum ϑ Ψ →
-      Nat.Coprime ι.1 ϑ.normQ → letI := ι.place
+      Nat.Coprime ι.prime ϑ.normQ → letI := ι.place
       GaugeLe 1 (((ι.1 : ℕ) : ℝ) ^ (D.allowedLoss ι.1 - D.gain ι.1)) (compositeLift ϑ Ψ φ)) :
     D.normalizedPoincare s φ ∈ D.targetLattice.integralVectors ι := by
-  let : PadicPlace ι.1 := ι.place
+  let : PadicPlace ι.prime := ι.place
   refine mem_integralVectors_targetLattice.2 fun ϑ hϑ ↦ ?_
   obtain ⟨Ψ, hΨ, h_seesaw⟩ : ∃ Ψ : D.Translations →₀ ℂ, IsChainDatum ϑ.toTwist Ψ ∧
       ∀ φ : D.ramifiedSourceForms, D.lowerChain ϑ.toTameChar (D.poincare (D.scaledInclusion φ)) =
@@ -261,7 +261,7 @@ lemma normalizedPoincare_mem_integralVectors {ι : PrimePadicIso} (s : D.chosenG
     D.exists_lowerChain_poincare_eq ϑ
   -- As `g_l ≤ gain_l - err_l`, the form `B_ϑ φ` is `l ^ g_l` times an integral form.
   have h_gauge : GaugeLe 1 1
-      (((ι.1 : ℕ) : ℂ) ^ (-D.gainExponent ι.1) • compositeLift ϑ.toTameChar Ψ φ) :=
+      (((ι.prime : ℕ) : ℂ) ^ (-D.gainExponent ι.prime) • compositeLift ϑ.toTameChar Ψ φ) :=
     (hφ ϑ Ψ hΨ hϑ).zpow_neg_smul ((Int.floor_le _).trans_eq (neg_sub _ _).symm)
   have h_norm : ‖ιₚ (D.invGainFactor : ℂ)‖ = ‖ιₚ (((ι.1 : ℕ) : ℂ) ^ (-D.gainExponent ι.1))‖ := by
     simp [norm_invGainFactor]
@@ -299,15 +299,15 @@ lemma indexLe_of_mem_image_normalizedPoincare (s : D.chosenGL) {n : ℕ} {y : Fi
     grw [sum_allowedLoss_mul_log_le, finrank_sourceForm_le_two_mul]
     push_cast
     exact le_of_eq (by ring)
-  let : PadicPlace ι.1 := ι.place
+  let : PadicPlace ι.prime := ι.place
   -- On `S` the chain has valuation at least `gain_l - err_l`, for all twists prime to `l`.
   obtain ⟨j, S, hj, h_index, h_gauge⟩ :=
-    exists_colengthDvd_gaugeLe_compositeLift (D := D) (p := ι.1)
+    exists_colengthDvd_gaugeLe_compositeLift (D := D) (p := ι.prime)
   let A : D.ramifiedSourceForms →ₗ[ι.integers] D.targetForms :=
     (D.normalizedPoincare s).restrictScalars _
   let M : Submodule ι.integers D.ramifiedSourceForms :=
     D.integralSourceForms.comap (D.ramifiedSourceForms.subtype.restrictScalars _)
-  have h_source : ColengthDvd M ((D.targetLattice.integralVectors ι).comap A) (ι.1 ^ j) :=
+  have h_source : ColengthDvd M ((D.targetLattice.integralVectors ι).comap A) (ι.prime ^ j) :=
     h_index.comap _ (fun _ hφ ↦ hφ) fun φ _ hφ ↦
       D.normalizedPoincare_mem_integralVectors s fun ϑ Ψ hΨ hϑ ↦ h_gauge ϑ Ψ hΨ hϑ φ hφ φ.prop
   have h_subset : D.integralRamified ⊆ M := fun φ hφ ↦ hφ ι
