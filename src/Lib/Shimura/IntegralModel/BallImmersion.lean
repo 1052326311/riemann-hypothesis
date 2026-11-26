@@ -144,8 +144,6 @@ lemma AnalyticFamily.isHolomorphicImmersionAt_of_holomorphicAt {f : AnalyticFami
     -- So the `k`-th multiple of the section is the zero section over `x b'`.
     have h_mul_eq (b' : BallBase D.Index) :
         ψ (b', (k : ℂ)⁻¹ • T l b') ≫ (k • 𝟙 X.total).left = x b' ≫ (X.levelPoints 0).left := by
-      have h_exp_zero : (m b').uniformisation.expMap (T l b') = 0 :=
-        ((m b').uniformisation.eq_zero_iff (T l b')).mp (h_lattice b')
       simp_all [← (x _).isGroupBaseChange.nsmul_id_comp, ← comp_left_assoc, ← map_nsmul,
         ← Nat.cast_smul_eq_nsmul ℂ, ψ, ← (x _).isGroupBaseChange.pullSection_comp, comp_nsmul]
     have h_still :

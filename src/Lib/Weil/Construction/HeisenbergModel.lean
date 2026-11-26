@@ -523,7 +523,7 @@ lemma eq_zero_of_modelInner_self {v : he.Model} (h : he.modelInner v v = 0) : v 
   -- If `v x ≠ 0`, the integral of the continuous function `‖v ·‖ ^ 2` is positive.
   by_contra hx_ne
   have h_pos : 0 < ∫ y : W, ‖v y‖ ^ 2 ∂μ :=
-    integral_pos_of_integrable_nonneg_nonzero (x := x) (by fun_prop) (integrable_norm_sq v)
+    integral_pos_of_integrable_nonneg_ne_zero (x := x) (by fun_prop) (integrable_norm_sq v)
       (fun y ↦ sq_nonneg ‖v y‖) (by simpa using hx_ne)
   exact h_pos.ne' (mod_cast (modelInner_self v).symm.trans h)
 
@@ -535,7 +535,7 @@ instance : CompleteSpace he.Model := by
   -- that function satisfies the reproducing identity, term by term.
   refine NormedAddCommGroup.completeSpace_of_summable_imp_tendsto fun u hu ↦ ?_
   have h_ae : ⇑(∑' n : ℕ, IsVacuum.toL1 H (u n)) =ᵐ[μ] fun x : W ↦ ∑' n : ℕ, u n x :=
-    (Lp.coeFn_tsum (tsum_enorm_ne_top_iff_summable_norm.mpr hu)).trans
+    (Lp.coeFn_tsum (tsum_eNorm_ne_top_iff_summable_norm.mpr hu)).trans
       ((ae_all_iff.mpr fun n ↦ (u n).integrable.coeFn_toL1).mono fun _ ↦ tsum_congr)
   have h_int : Integrable (fun x : W ↦ ∑' n : ℕ, u n x) μ := .congr (by fun_prop) h_ae
   have h_repr (x : W) :
@@ -617,7 +617,7 @@ identity in operator form. -/
 lemma integrated_vacElem : he.heisenbergRep.integrated v vacElem = v := by
   ext x
   rw [integrated_apply_eq_integral]
-  show ∫ y : W, v y * heisenbergOp y vacElem x ∂μ = v x
+  change ∫ y : W, v y * heisenbergOp y vacElem x ∂μ = v x
   simp only [heisenbergOp_apply, vacElem_apply]
   exact v.integral_mul_beta_mul_eq x
 

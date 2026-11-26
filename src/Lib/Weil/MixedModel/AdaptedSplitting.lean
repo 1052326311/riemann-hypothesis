@@ -215,7 +215,7 @@ lemma isAdapted_homSource [h : IsBaseAdapted A] :
         mul_left_comm]
     · -- The `ι` block `1 ⊗ₖ A.iCoordᵀ`: both sides are `δ i a * star (A.iAdelic j b)` times signs.
       simp [F, e, ε, iCoord, stdForm, Matrix.one_apply, mul_comm, mul_left_comm]
-  show IsOrthoIntegral ((A.homSource T).frameAt 1 (adaptedHomBasis p T))
+  change IsOrthoIntegral ((A.homSource T).frameAt 1 (adaptedHomBasis p T))
   exact h_kron.of_eq_submatrix_mul e (.of_stdForm ε) h_frame (by simp [e, Function.Injective])
 
 end AdaptedHom

@@ -259,7 +259,7 @@ lemma cupProduct_flip {R R' S Γ : Type} [CommRing R] [CommRing R'] [CommRing S]
     simp only [hx_mul, hy_mul, map_add, AddMonoidHom.add_apply, h_equivariant]
     abel
   -- the coboundary condition at `(g, h)`, with both cup products written out
-  show b.flip (y g) (M.ρ g (x h)) - -b (x g) (N.ρ g (y h))
+  change b.flip (y g) (M.ρ g (x h)) - -b (x g) (N.ρ g (y h))
       = W.ρ g (-b (x h) (y h)) - -b (x (g * h)) (y (g * h)) + -b (x g) (y g)
   rw [AddMonoidHom.flip_apply, h_expand, map_neg]
   abel
@@ -490,7 +490,7 @@ lemma IsProGalois.of_fixingSubgroup_eq {U : Subgroup Γ}
   refine { tower_top_of_isGalois K L Ω, h_fix with
     commutes.smul_comm := ?_, isInvariant.isInvariant := ?_ }
   · -- Elements of `U` fix `L`, so they commute with multiplication by elements of `L`.
-    show ∀ (u : fixingSubgroup Γ (Set.range (algebraMap L Ω))) (l : L) (y : Ω),
+    change ∀ (u : fixingSubgroup Γ (Set.range (algebraMap L Ω))) (l : L) (y : Ω),
       u • l • y = l • u • y
     simp_all [smul_def, mem_fixingSubgroup_iff]
   · exact (fixedFieldOf_fixingSubgroup (IsScalarTower.toAlgHom K L Ω).fieldRange).le
@@ -668,7 +668,7 @@ lemma QZChar.exists_corestrictH0_eq_of_cyclicClass_eq_zero (χ : ↥(QZChar Γ))
     shapiro_H0 U ⟨_, h_invariant⟩
   -- Summing `hy` over the cosets: the left side is the norm of `y`, the right side is `w`.
   refine ⟨y, ?_⟩
-  show M.sum U (fun q ↦ M.ρ q.out y) = w.val
+  change M.sum U (fun q ↦ M.ρ q.out y) = w.val
   rw [hy]
   simp [U, D, carry_max, sum_shift, sum, sub_smul]
 

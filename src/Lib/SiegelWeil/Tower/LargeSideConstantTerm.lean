@@ -269,7 +269,6 @@ theorem theta_lineTerm_levi (hn : 2 ∣ card n) {u : (𝔸 E)ˣ} (hu : u = 1 ∨
           rpow_mul_natCast ideleAbs_pos.le]
   have h_factor : (ideleAbs a ^ (card r + 1) : ℝ) * c =
       ν.baseChange.val (a * u) * (ideleAbs (a * u) ^ e : ℝ) := by
-    have h_ne : (√(ideleAbs (a * u)) : ℂ) ≠ 0 := ofReal_ne_zero.2 (sqrt_pos.2 ideleAbs_pos).ne'
     rw [← mul_div_assoc, ← ofReal_pow, ← ofReal_mul, h_module]
     simp [circleChar_inv_apply, field]
   rw [h_move, ← mul_assoc, h_factor, mul_right_comm]

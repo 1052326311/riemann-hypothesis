@@ -96,17 +96,6 @@ lemma isCutoff_chosenCutoff [h_cutoff : HasCutoff ν X] :
     IsCutoff ν (chosenCutoff ν : X → ENNReal) :=
   Classical.epsilon_spec h_cutoff.out
 
-/-- If the action has a cutoff, the chosen weight is measurable. -/
-@[to_additive measurable_chosenAddCutoff]
-lemma measurable_chosenCutoff [HasCutoff ν X] : Measurable (chosenCutoff ν : X → ENNReal) :=
-  (isCutoff_chosenCutoff ν).1
-
-/-- If the action has a cutoff, the chosen weight has integral one over each orbit. -/
-@[to_additive lintegral_chosenAddCutoff_vadd]
-lemma lintegral_chosenCutoff_smul [HasCutoff ν X] (x : X) :
-    ∫⁻ h : H, chosenCutoff ν (h • x) ∂ν = 1 :=
-  (isCutoff_chosenCutoff ν).2 x
-
 /-- Shortcut: the `MulAction` instance of a subgroup `N` on its ambient group `G`. -/
 @[to_additive]
 instance (priority := high) mulActionSubgroupSelf : MulAction N G := inferInstance
@@ -409,7 +398,7 @@ noncomputable abbrev cosetProdEquiv : (G ⧸ N) × N ≃ G where
   right_inv x := by aesop
 
 instance : DiscreteTopology (Γ.subgroupOf N) :=
-  have h_cont : Continuous (Subtype.val : N → G) := continuous_subtype_val
+  have h_cont : Continuous (Subtype.val : N → G) := continuous_subtypeVal
   .preimage_of_continuous_injective Γ.carrier h_cont Subtype.val_injective
 
 instance : DiscreteTopology ↥(Γ ⊓ N) :=

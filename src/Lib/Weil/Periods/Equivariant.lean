@@ -191,7 +191,7 @@ vector to a multiple of the next one, so that it lowers grades by `2`. Then for 
 entries `(b, a)` with `gradeOf b = gradeOf a + 2`. -/
 lemma trace_shift_mul (A : Matrix ι ι (𝔸 E)) :
     (Y.shift * A).trace = (Y.shift * Y.degreePart 2 A).trace := by
-  simp only [trace, diag_apply, mul_apply]
+  simp only [trace, diag_apply]
   refine Finset.sum_congr rfl fun a _ ↦ Finset.sum_congr rfl fun b _ ↦ ?_
   by_cases hab : Y.gradeOf b = Y.gradeOf a + 2 <;>
     simp [degreePart_apply, hab, Y.shift_apply_eq_zero]
@@ -228,7 +228,7 @@ omit [Fintype X] in
 @[fun_prop]
 lemma continuous_unipotentChar : Continuous Y.unipotentChar := by
   have h_mat : Continuous V.ratCoordMatrix := V.isEmbedding_ratCoordMatrix.continuous
-  exact continuous_subtype_val.comp (continuous_stdAddChar.comp (by fun_prop))
+  exact continuous_subtypeVal.comp (continuous_stdAddChar.comp (by fun_prop))
 
 omit [Fintype X] in
 /-- For a grading `Y` presenting `V` as `X ⊕ J_s`, and Weil data on `E`, consider

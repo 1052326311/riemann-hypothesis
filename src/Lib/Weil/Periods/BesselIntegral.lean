@@ -454,7 +454,7 @@ lemma integral_besselMeasure_eq_of_mean {q : Type*} [Fintype q]
     .trans ?_ (push M M_cont.measurable M_inv)⟩
   have M_comp_pr_inv : (Y.ratBessel.subgroupOf Y.besselGroup).FixesLeft (fun r ↦ M (pr r)) := by
     intro γ hγ r
-    show M (pr (γ * r)) = M (pr r)
+    change M (pr (γ * r)) = M (pr r)
     rw [map_mul, M_inv _ (pr_rat γ hγ)]
   rw [← sub_eq_zero, ← integral_sub (integrable_of_isCocompact Y.isCocompact_ratBessel φ_cont φ_inv)
     (integrable_of_isCocompact Y.isCocompact_ratBessel (by fun_prop) M_comp_pr_inv)]
@@ -469,7 +469,7 @@ lemma integral_besselMeasure_eq_of_mean {q : Type*} [Fintype q]
       (mem_unip _).mp (unip_part r)
     simp only [j₀, map_mul, map_inv, pr_u, pr_unip, inv_one, mul_one]
   have j_mem (r : Y.besselGroup) (b : q × X → 𝔸 E) : j₀ r b ∈ S := by
-    show pr (j₀ r b) ∈ (stdSpace E X).Γ
+    change pr (j₀ r b) ∈ (stdSpace E X).Γ
     rw [pr_j₀ r b]
     exact one_mem _
   let j (r : Y.besselGroup) (b : q × X → 𝔸 E) : S := ⟨j₀ r b, j_mem r b⟩
@@ -669,7 +669,7 @@ lemma agreesWithStringMap_mul_iff {w : Matrix ι' ι (𝔸 E)} {γ : G E ε} (h�
   -- The entry `(b, a)` of `(δ - 1) * (w * γ)` is this entry times a unit (`col`, using `ih`), and
   -- it vanishes because `δ * (w * γ)` and `w * γ` both agree with `stringMap` there.
   rw [← unit.mul_left_eq_zero, ← col agrees _ h_row, ← Matrix.mul_apply', Matrix.sub_mul]
-  show (V'.ratCoordMatrix δ * (w * V.ratCoordMatrix γ) -
+  change (V'.ratCoordMatrix δ * (w * V.ratCoordMatrix γ) -
       (1 : Matrix ι' ι' (𝔸 E)) * (w * V.ratCoordMatrix γ)) b a = 0
   simp (disch := grind) [hδ b a, agrees b a]
 
@@ -731,7 +731,7 @@ private lemma hasLeftInv_submatrix_of_survives {x : Matrix ι' ι E}
   refine .of_ker_le_bot fun u hu ↦ funext (int_weight_induction (fun a : A ↦ Y.gradeOf a) ?_)
   -- Indices of positive weight lie on the string; let `a` be the last one there with `u a ≠ 0`.
   simp [A, reindex_equiv Y.indexEquiv]
-  show ∀ (b : Fin s) (hb : 2 * ((b : ℕ) : ℤ) < (s : ℤ) - 1),
+  change ∀ (b : Fin s) (hb : 2 * ((b : ℕ) : ℤ) < (s : ℤ) - 1),
     (∀ (b' : Fin s) (hb' : 2 * ((b' : ℕ) : ℤ) < (s : ℤ) - 1), b < b' →
       u ⟨Y.indexEquiv (.inr b'), _⟩ = 0) → u ⟨Y.indexEquiv (.inr b), _⟩ = 0
   by_contra! ⟨a, a_pos, ih, u_ne⟩

@@ -188,7 +188,7 @@ lemma denseRange_polyVector : DenseRange (polyVector ε) := by
     obtain ⟨P, hP⟩ := exists_tendsto_fockMoment h_rapid
     have h_tendsto : Filter.Tendsto (fun n : ℕ ↦ polyVector ε (P n)) Filter.atTop
         (nhds (realHeisenbergOp y vacVector)) := by
-      simpa [fockMoment_zero, enorm_sub_rev, tendsto_iff_enorm_sub_tendsto_zero] using hP 0
+      simpa [fockMoment_zero, eNorm_sub_rev, tendsto_iff_eNorm_sub_tendsto_zero] using hP 0
     exact mem_closure_of_tendsto h_tendsto (by simp)
   -- A bounded map is determined by its values on these translates (`hom_ext`), so the quotient
   -- map by `V` vanishes.
