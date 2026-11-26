@@ -177,11 +177,6 @@ def gridChar : AutChar D.E :=
   D.liftChar (bif c then ϑ.pow (l + 1) else TameChar.one) (l + 1) *
     WeilData.upsilonU1 ^ ((card n + (!c).toNat) / 2)
 
-lemma gridChar_true :
-    gridChar ϑ true l n =
-      D.liftChar (ϑ.pow (l + 1)) (l + 1) * WeilData.upsilonU1 ^ (card n / 2) :=
-  rfl
-
 
 /-- The tame part of `gridChar`: that of `liftChar` with the twist `ϑ ^ (l + 1)` if `c`, and with
 the trivial twist otherwise. -/
