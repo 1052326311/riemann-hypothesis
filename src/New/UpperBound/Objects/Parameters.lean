@@ -215,8 +215,8 @@ lemma exists_equiv_diagonal_signs (j : ℕ) :
   · rw [negCount_sumElim, negCount_gridSigns, negCount_gridSigns]
     rcases Nat.even_or_odd (min j D.m) with h | h <;>
       simp [negCount, h.neg_one_pow]
-    · grind [Nat.even_iff]
-    · grind [Nat.odd_iff]
+    · grind
+    · grind
 
 /-- A bijection from the index set of `Y` at `(j, j)` plus one point to that of `Ỹ`. It is the
 identity for `j = 0`. Otherwise it is chosen to match the signs (`exists_equiv_diagonal_signs`). -/
