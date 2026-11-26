@@ -889,7 +889,7 @@ that lift times a power of the splitting character), its datum is `columnDatum` 
 polynomial is `letterPoly` of the vector `leftSideSeries ϑ j i h` of the Weyl module with column
 counts `colsPlus`. The coordinates of this vector are formed from the kernels at `h` of the summands
 of `W` other than `W_j`. -/
-lemma stdClassSum_thirdExchangeKernel_productDatum {a : Type} [Fintype a]
+lemma stdClassSum_thirdExchangeKernel_productDatum {a : Type}
     (w : Matrix a (FirstFactorIndex j) (D.untwistedModulus 2).ResidueRing) (i : ChoiceIndex j)
     (g : New.G D.E (D.signsW j)) (h : Gf D.E (FirstFactorIndex j)) :
     stdClassSum (stdLevel D.E D.CarrierIndex) (fun h' : Gf D.E D.CarrierIndex ↦ carrierCoeff D.m
