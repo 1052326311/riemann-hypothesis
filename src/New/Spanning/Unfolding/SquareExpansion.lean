@@ -185,7 +185,7 @@ lemma val_reduction_of_eq_smul_one {z : S.latticeStabilizer} {ζ : Ô E}
     (S.reduction z i w).val = New.reduceAt (w : FinPlace E) ζ • 1 := by
   ext a b
   change New.reduceAt (w : FinPlace E) ⟨((z : S.GFin) : GL 𝔰.BesselIndex (𝔸f E)).val a b, _⟩ = _
-  by_cases hab : a = b <;> simp [hz, hab, ← ZeroMemClass.zero_def]
+  by_cases hab : a = b <;> simp [hz, hab]
 
 /-- The classes `c`, `c'` are double cosets of the unitary group of the middle space `X₀`, with
 representatives `h_c`, `h_c'`; a rational `γ` lies over the block `(c, s, c')` (`termsOver`) if
