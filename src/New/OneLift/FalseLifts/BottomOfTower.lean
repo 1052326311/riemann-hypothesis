@@ -132,7 +132,7 @@ lemma rowShear_mul_eq_self_of_vecMul_eq_zero {v : r → R} {l : n → R} {x : Ma
     (hlx : l ᵥ* x = 0) :
     rowShear ι v l * x = x := by
   ext a b
-  simp [rowShear, Matrix.add_mul, vecMulVec_mul, hlx, vecMulVec_apply]
+  simp [rowShear, Matrix.add_mul, vecMulVec_mul, hlx]
 
 /-- The matrix `rowShear ι v l` is block upper triangular with first block `1 + v λ`, where
 `λ = l ∘ ι`. -/
