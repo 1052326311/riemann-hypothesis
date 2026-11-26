@@ -502,8 +502,8 @@ lemma iInf_ker_sum_pow_eq_range {G V ι : Type*} [CommGroup G] [AddCommGroup V] 
       have h_sum : ↑r - σ w = ∑ i ∈ range r, (1 - y w ^ i) := by simp [σ]
       rw [h_sum]
       exact dvd_sum fun i _ ↦ one_sub_dvd_one_sub_pow (y w) i
-    obtain ⟨q, hq⟩ : ∏ w, (1 - y w) ∣ ∏ w, (↑r - σ w) :=
-      prod_dvd_prod_of_dvd _ _ fun w _ ↦ h_dvd w
+    have h_dvd' : ∀ w ∈ (univ : Finset ι), 1 - y w ∣ ↑r - σ w := fun w _ ↦ h_dvd w
+    obtain ⟨q, hq⟩ := prod_dvd_prod_of_dvd _ _ h_dvd'
     rw [← smul_mem_iff _ (pow_ne_zero _ hr), ← h_scalar univ, hq, map_mul]
     exact ⟨ρ q φ, (Module.End.mul_apply _ _ φ).symm⟩
   · -- `σ w * (1 - z w) = 1 - z w ^ r` acts as `0`.
@@ -938,8 +938,8 @@ lemma finrank_ker_ramifyingOp_le {P : Parameters} (D : Data P) (s : Finset D.piN
     have h_ker : finrank ℂ (D.ramifyingOp (cons w s hw)).ker ≤
         finrank ℂ (1 - D.centralRep (D.scalingGenerator w)).ker +
           finrank ℂ (D.ramifyingOp s).ker := by
-      rw [D.ramifyingOp_cons w hw]
-      exact finrank_ker_mul_le _ _
+      exact (congrArg (fun f : Module.End ℂ D.SourceForm ↦ finrank ℂ f.ker)
+        (D.ramifyingOp_cons w hw)).trans_le (finrank_ker_mul_le _ _)
     calc (finrank ℂ (D.ramifyingOp (cons w s hw)).ker : ℝ)
         ≤ finrank ℂ (1 - D.centralRep (D.scalingGenerator w)).ker +
             finrank ℂ (D.ramifyingOp s).ker := by exact_mod_cast h_ker
@@ -1017,8 +1017,8 @@ lemma span_isShort_ramifiedSourceForms_eq_top {P : Parameters} (D : Data P) :
       {φ : D.SourceForm | IsShort D.errorUnit.exp φ.val} := by
     intro φ hφ
     simpa [Z, card_piNPlaces, mul_div_cancel₀] using D.isShort_ramifyingOp univ hφ
-  exact span_setOf_mem_eq_top_of_eq_range D.ramifiedSourceForms_eq_range D.span_isShort_eq_top
-    h_maps
+  exact span_setOf_mem_eq_top_of_eq_range (T := {φ : D.SourceForm | IsShort D.errorUnit.exp φ.val})
+    D.ramifiedSourceForms_eq_range D.span_isShort_eq_top h_maps
 
 end Data
 
