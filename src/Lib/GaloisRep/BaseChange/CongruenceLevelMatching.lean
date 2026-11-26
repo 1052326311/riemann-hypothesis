@@ -63,7 +63,7 @@ lemma New.charpoly_map_eq_self_of_smul_sub_one {O R n : Type} [CommRing O] [Comm
   -- of `charpoly (g - 1) = (charpoly g).comp (X + 1)`, and `σ` fixes all of these.
   have h_shift : (g - 1).charpoly = g.charpoly.comp (X + 1) := by
     simpa using g.charpoly_sub_scalar 1
-  refine Polynomial.ext fun i ↦ h_inj ?_
+  refine AddMonoidAlgebra.ext <| Finsupp.ext fun i ↦ h_inj ?_
   rw [coeff_map, hιτ]
   simp [← coeff_map, ← charpoly_map, hY, hσv, hg, h_shift, charpoly_smul_coeff,
     Polynomial.map_add, map_comp]
@@ -636,10 +636,9 @@ noncomputable def intAdeleMap {F : Type} [Field F] [NumberField F] (f : E →+* 
 /-- For a ring endomorphism `f` of `E`, the `i`-th iterate of `intAdeleMap f` is the restriction of
 `adeleMap f ^ i` to the integral adeles. -/
 @[simp] lemma intAdeleMap_iterate (i : ℕ) (x : Ô E) :
-    ((intAdeleMap f)^[i] x : 𝔸f E) = (adeleMap f ^ i) x := by
-  induction i generalizing x with
-  | zero => rfl
-  | succ i ih => exact ih (intAdeleMap f x)
+    ((intAdeleMap f)^[i] x : 𝔸f E) = (adeleMap f ^ i) x :=
+  Function.Semiconj.iterate_right (f := Subtype.val) (ga := intAdeleMap f) (gb := adeleMap f)
+    (fun _ ↦ rfl) i x
 
 omit [CMType E] [CMType E'] in
 /-- If `σ` moves the place `u`, then `σ` is not in the inertia group of `u`. -/

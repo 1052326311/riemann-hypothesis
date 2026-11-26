@@ -191,7 +191,7 @@ lemma exists_add_two_primes [NeZero ℓ] [NeZero N]
       φ := Sum.elim s.φ φ
       isFrob := Sum.forall.2 ⟨fun i ↦ ⟨(s.isFrob i).1, hUO (s.isFrob i).2⟩,
         fun j ↦ ⟨hφ j, (mul_mem_cancel_left (x j).2).1 (hUO (hφU j))⟩⟩
-      mem_inertia_iff _ := Iff.of_eq Set.mem_setOf_eq
+      mem_inertia_iff _ := Iff.of_eq Set.mem_ofPred_eq
       inertiaGroup_le hv hB := (s.inertiaGroup_le hv hB).trans hUO
       principal_sup_idelesUnitOff F _ h :=
         s.principal_sup_idelesUnitOff F fun y hy g ↦ h hy (inclusion hUO g) }
@@ -378,7 +378,7 @@ lemma exists_hasFewCocycles_torsion (hκ : Continuous κ)
   obtain ⟨h_few, -⟩ := s'.card_trivialised_of_isHigmanProjective hV
     (hV.isHigmanProjective_of_coprime (coprime_index_ker_torsionAction h_card))
     fun y hy h_frob g ↦ by
-      simp only [map_one, Module.End.one_apply, zero_smul, sub_zero]
+      simp only [map_one, one_apply_eq_self, zero_smul, sub_zero]
       exact fixed y hy h_frob g
   -- The family `s'` has `#ι + 2` primes and the bound has one further factor `#M[ℓ]`.
   simpa using h_few

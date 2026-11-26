@@ -230,11 +230,9 @@ lemma IsOpenSubfunctor.fieldLocus_le (hV : IsOpenSubfunctor V) : fieldLocus (fun
   obtain ⟨I, hI⟩ : ∃ I : Ideal A, ∀ (B : CommAlg k) (φ : A ⟶ B),
       X.map φ x ∈ V B ↔ I.map φ.hom = ⊤ := hV A x
   -- `I` generates the unit ideal in every field over `A`, so it is the unit ideal.
-  have h_top : I.map (𝟙 A : A ⟶ A).hom = ⊤ := by
-    refine (map_eq_top_iff_forall_isField I _).2 fun K ψ hK h_le ↦ ?_
-    have : Nontrivial K := hK.nontrivial
-    have h_bot : I.map ψ.hom = ⊥ := by simpa [← map_eq_bot_iff_le_ker] using h_le
-    simpa [h_bot] using (hI K ψ).1 (hx K ψ hK)
+  have h_top : I.map (𝟙 A : A ⟶ A).hom = ⊤ :=
+    (map_eq_top_iff_forall_isField I _).2 fun K ψ hK ↦ by
+      simpa using (map_eq_top_iff_forall_isField I ψ).1 ((hI K ψ).1 (hx K ψ hK)) K (𝟙 K) hK
   simpa using (hI A (𝟙 A)).2 h_top
 
 /-- If the image of `x ∈ X(A)` under a map `φ` to a field `B` lies in the open subfunctor `V` of
@@ -757,8 +755,7 @@ lemma EtaleChart.mem_locus_prod_iff (a : EtaleChart d X) (b : EtaleChart n Y) {x
   have h_locus : (a.prod b).locus = a.locus.preimage (SemiCartesianMonoidalCategory.fst X Y) ⊓
       b.locus.preimage (SemiCartesianMonoidalCategory.snd X Y) :=
     range_pointMap_prod a b
-  rw [h_locus]
-  exact Iff.rfl
+  exact h_locus.symm ▸ Iff.rfl
 
 /-- If `X` has an atlas of dimension d, charts of dimension d cover the field-valued points of
 `X`. -/

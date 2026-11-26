@@ -99,7 +99,8 @@ lemma frameVector_eq_sum (hs : s ∈ besselU) :
       (s * y)⁻¹.val.val.submatrix id 𝔰.besselFrame * frameMatrix s := by
     simpa using submatrix_mul_besselFrame hs (y⁻¹ * s⁻¹).val.val id
   ext i
-  simpa [frameVector, Matrix.mul_apply, mul_comm] using congrFun₂ h_cols i a
+  simpa [frameVector] using (congrFun₂ h_cols i a).trans
+    (Matrix.mul_apply.trans (Finset.sum_congr rfl fun _ _ ↦ mul_comm _ _))
 
 /-- The vector `frameVector y a` = y⁻¹ f_a, where f_a is the `a`-th vector of the frame (e₁, …, e_ϱ,
 z), is not longer than the operator norm of `y`. -/
@@ -319,8 +320,7 @@ lemma gramSchmidt_eq_of_sub_mem_span {ι V : Type*} [LinearOrder ι] [LocallyFin
         h_perp.ge (Submodule.mem_span_singleton_self _)
       refine Submodule.isOrtho_span.2 ?_
       rintro _ ⟨b, hb, rfl⟩ _ rfl
-      rw [← hx b hb]
-      exact gramSchmidt_orthogonal ℂ x (ne_of_lt hb)
+      simpa only [hx b hb] using gramSchmidt_orthogonal ℂ x (ne_of_lt hb)
   obtain ⟨hv_span, hv_orth⟩ := h_proj v ih
   obtain ⟨hw_span, hw_orth⟩ := h_proj w fun _ _ ↦ rfl
   have h_diff : v a - w a ∈ B := (span_gramSchmidt_Iio ℂ w a).ge (h_sub a)
@@ -371,11 +371,9 @@ subgroup `besselS`, the group of the elements of `𝔰.G₁` that map each vecto
 e_ϱ, z) to itself plus a combination of the earlier ones. -/
 theorem orthoFrame_besselS_mul (y : 𝔰.G₁) {s : 𝔰.G₁} (hs : s ∈ besselS) :
     orthoFrame (s * y) = orthoFrame y := by
-  obtain ⟨u, hu, k, rfl⟩ : ∃ u ∈ besselU, ∃ k : U (1 : Matrix 𝔰.κ 𝔰.κ ℂ),
-      s = u * toBesselH 𝔰 1 k :=
-    exists_besselU_mul_toBesselH hs isUnit_one
-  have h_fix : frameVector (embedH k * y) = frameVector y :=
-    frameVector_mul_of_mem_besselFixer (mem_besselFixer_of_mem_besselH (toBesselH_mem k))
+  obtain ⟨u, hu, h, hh, rfl⟩ := mem_besselS.1 hs
+  have h_fix : frameVector (h * y) = frameVector y :=
+    frameVector_mul_of_mem_besselFixer (mem_besselFixer_of_mem_besselH hh)
   rw [orthoFrame, orthoFrame, ← h_fix, mul_assoc]
   refine (gramSchmidt_eq_of_sub_mem_span fun a ↦ ?_).symm
   -- `u` acts on the frame by a unitriangular matrix
@@ -443,20 +441,18 @@ theorem gramSchmidtMatrix_besselS_mul (y : 𝔰.G₁) {s : 𝔰.G₁} (hs : s �
     gramSchmidtMatrix (s * y) * frameMatrix s = gramSchmidtMatrix y := by
   -- Both matrices express the frame at `y` in the same orthogonal family of nonzero vectors.
   have h_orth : orthoFrame (s * y) = orthoFrame y := orthoFrame_besselS_mul y hs
-  obtain ⟨u, hu, k, rfl⟩ : ∃ u ∈ besselU, ∃ k : U (1 : Matrix 𝔰.κ 𝔰.κ ℂ),
-      s = u * toBesselH 𝔰 1 k :=
-    exists_besselU_mul_toBesselH hs isUnit_one
-  have h_fix : frameVector (embedH k * y) = frameVector y :=
-    frameVector_mul_of_mem_besselFixer (mem_besselFixer_of_mem_besselH (toBesselH_mem k))
+  obtain ⟨u, hu, h, hh, rfl⟩ := mem_besselS.1 hs
+  have h_fix : frameVector (h * y) = frameVector y :=
+    frameVector_mul_of_mem_besselFixer (mem_besselFixer_of_mem_besselH hh)
   set C : 𝔰.FrameMatrix :=
-    gramSchmidtMatrix (u * toBesselH 𝔰 1 k * y) * frameMatrix (u * toBesselH 𝔰 1 k) with hC
+    gramSchmidtMatrix (u * h * y) * frameMatrix (u * h) with hC
   have h_same_expansion (b : Fin (𝔰.ϱ + 1)) : ∑ a : Fin (𝔰.ϱ + 1), C a b • orthoFrame y a =
       ∑ a : Fin (𝔰.ϱ + 1), gramSchmidtMatrix y a b • orthoFrame y a := by
     rw [← frameVector_eq_sum_orthoFrame, ← h_fix, frameVector_eq_sum b hu, ← mul_assoc, hC,
-      frameMatrix_mul_besselH u (toBesselH_mem k)]
+      frameMatrix_mul_besselH u hh]
     simp only [frameVector_eq_sum_orthoFrame, h_orth, Matrix.mul_apply, sum_smul, smul_sum,
-      smul_smul, mul_comm]
-    exact sum_comm
+      smul_smul]
+    exact sum_comm.trans (sum_congr rfl fun _ _ ↦ sum_congr rfl fun _ _ ↦ by rw [mul_comm])
   ext a b
   exact Fintype.linearIndependent_iffₛ.1 (linearIndependent_orthoFrame y) (C · b)
     (gramSchmidtMatrix y · b) (h_same_expansion b) a
@@ -773,7 +769,9 @@ lemma gram_framePair (N : R) (hN : star N = N) (γ : (𝔰.middleGram N).G) :
         (castSucc_ne_last _).symm]
   have h_herm : (𝔰.middleGram N).splitGramᴴ = (𝔰.middleGram N).splitGram := by
     simp [Shape.Form.splitGram, Shape.middleGram, ← Matrix.ext_iff, hN, Matrix.one_apply,
-      apply_ite star, eq_comm]
+      apply_ite star]
+    exact ⟨fun _ _ ↦ if_congr eq_comm rfl rfl, fun _ _ ↦ if_congr eq_comm rfl rfl,
+      fun _ _ ↦ if_congr eq_comm rfl rfl⟩
   have h_block (x y : Matrix 𝔰.BesselIndex 𝔰.BesselIndex R) :
       (frameImage x)ᴴ * (𝔰.middleGram N).splitGram * frameImage y =
         (xᴴ * (𝔰.middleGram N).splitGram * y).submatrix 𝔰.besselFrame 𝔰.besselFrame := rfl

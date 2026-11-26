@@ -48,20 +48,13 @@ Known; see `Lib.GaloisRep.Main.OddRank` for sources.
 
 open NumberField Matrix New Variety Period IsLocalization RingHom Subgroup Gf
 
-/-- `conjAtSplit w g` is the inverse transpose of the unitary element `ofSplitPlace w g`. -/
-private lemma New.GaloisRep.invTransposeGL_ofSplitPlace_eq_conjAtSplit {E : Type} [Field E]
-    [CMBase E] {n : Type} [Fintype n] [DecidableEq n] {w : SplitFinPlace E}
-    (g : GL n (LocField (w : FinPlace E))) :
-    invTransposeGL (ofSplitPlace w.prop g).val = conjAtSplit w g :=
-  rfl
-
 /-- Moving a coset representative at a split place. Let the cosets modulo the level `levelGU n 𝔑`
 of `toFinGL y₀ * invTransposeGL u₀` and of `x` agree, and let `𝔑 ∉ star w` for the split place `w`.
 Then for some `c` at `w` and all `y : GL n E` and `g` at `w`, the cosets of
 `toFinGL (y * y₀) * invTransposeGL (u₀ * ofSplitPlace w (c * g))` and of
 `toFinGL y * (x * conjAtSplit w g)` agree. -/
 private lemma New.GaloisRep.exists_forall_mk_eq_mk_mul_conjAtSplit {E : Type} [Field E] [CMBase E]
-    {n : Type} [Fintype n] [DecidableEq n] [Nonempty n] {𝔑 : 𝓞 E} {y₀ : GL n E} {u₀ : Gf E n}
+    {n : Type} [Fintype n] [DecidableEq n] {𝔑 : 𝓞 E} {y₀ : GL n E} {u₀ : Gf E n}
     {x : GL n (𝔸f E)}
     (h_coset : (⟦toFinGL y₀ * invTransposeGL u₀.val⟧ : GL n (𝔸f E) ⧸ levelGU n 𝔑) = ⟦x⟧)
     {w : SplitFinPlace E} (hw : 𝔑 ∉ (star w.val).asIdeal) :
@@ -79,7 +72,7 @@ private lemma New.GaloisRep.exists_forall_mk_eq_mk_mul_conjAtSplit {E : Type} [F
   refine ⟨c, fun y g ↦ QuotientGroup.eq.mpr ?_⟩
   have h_elt : (toFinGL (y * y₀) * invTransposeGL (u₀ * ofSplitPlace w.prop (c * g)).val)⁻¹ *
       (toFinGL y * (x * conjAtSplit w g)) = (conjAtSplit w c)⁻¹ * κ := by
-    simpa [mul_assoc, κ, invTransposeGL_ofSplitPlace_eq_conjAtSplit] using
+    simpa [mul_assoc, κ] using!
       (h_comm g).symm.inv_mul_cancel
   rw [h_elt]
   exact mul_mem (inv_mem h_loc) h_mem
@@ -372,15 +365,9 @@ lemma New.GaloisRep.disjoint_iInf_primeCompl_iff {E : Type} [Field E] [NumberFie
     exact ⟨y, by simpa [Ideal.one_notMem] using hy_mem⟩
   simp only [Set.disjoint_left, Submonoid.mem_carrier, SetLike.mem_coe, Submonoid.mem_iInf,
     Ideal.mem_primeCompl_iff]
-  constructor
-  · intro h_disj
-    by_contra hG_w
-    have hy_notMem (u : FinPlace E) (hG_u : G u) : y ∉ u.asIdeal := by
-      rw [hy u]
-      rintro rfl
-      exact hG_w hG_u
-    exact h_disj hy_notMem ((hy w).mpr rfl)
-  · exact fun hG_w z hz ↦ hz w hG_w
+  refine ⟨fun h_disj ↦ ?_, fun hG_w z hz ↦ hz w hG_w⟩
+  by_contra hG_w
+  exact h_disj (fun u hu hyu ↦ hG_w ((hy u).1 hyu ▸ hu)) ((hy w).2 rfl)
 
 /-- Let `ψ ≠ 0` lie in `definiteForms 𝔑 ξ`, with `𝔑 ≠ 0`, and let the ideles `x` of `QuadField d`
 act on `ψ` through the central scalars by `ω x` (`hψ_cen`). Let the scalar matrix of `x̄`, for `x`
@@ -451,7 +438,7 @@ places below `w₀` and `w'` are split and not conjugate to each other, since th
 contains `ℓ` (as `v`, the place of `ε`, does), hence so does its conjugate, and then `hw'`
 applies. -/
 private lemma New.GaloisRep.mem_or_star_mem_insert_filter_of_isSplitPrimeToDisc {ℓ : ℕ} {E : Type}
-    {d : ℕ} [ThePrime ℓ] [PadicIso ℓ] [Field E] [CMType E] [EmbeddedNumberField E]
+    {d : ℕ} [ThePrime ℓ] [Field E] [CMType E] [EmbeddedNumberField E]
     [HasQuadSubfield d E] {S : Finset (FinPlace E)} {w₀ w₁ v w' : FinPlace E}
     (hw₀_split : IsSplitPrimeToDisc (w₀.below (QuadField d)))
     (hw' : IsSplitPrimeToDisc (w'.below (QuadField d)) ∧
@@ -482,8 +469,8 @@ private lemma New.GaloisRep.exists_apply_mul_eq_of_mem_unitary {E : Type} [Field
       (∀ u : Gf E (Fin a), f (c * u) = ξ y (f u)) ∧ invTransposeGL c.val = toFinGL y := by
   refine ⟨(stdSpace E (Fin a)).embFin (entryConj ⟨y, hy⟩), fun u ↦ ?_, ?_⟩
   · simpa [hξ] using hf.right (entryConj ⟨y, hy⟩) u
-  · -- `erw`: the form `(stdSpace E (Fin a)).J` of the standard space is `1` only by unfolding
-    erw [stdSpace_embFin]
+  · -- the form `(stdSpace E (Fin a)).J` of the standard space is `1` only by unfolding
+    refine (congrArg invTransposeGL (stdSpace_embFin ..)).trans ?_
     rfl
 
 /-- An embedding `s` of `E` that induces a safe place `w` (`IsSafe 𝔑 w`) restricts on `QuadField d`
@@ -492,7 +479,7 @@ to the embedding given by `ε`, if `𝔑 ∈ w₀` and `v`, the place of `ε`, l
 conjugate of the place below `w`, which a safe place forbids. -/
 private lemma New.GaloisRep.comp_algebraMap_eq_of_isSafe {ℓ : ℕ} {E : Type} {d : ℕ} [ThePrime ℓ]
     [PadicIso ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
-    [HasPrimitiveRoot5040 E] {𝔑 : 𝓞 E} {w w₀ v : FinPlace E} (hw : IsSafe 𝔑 w)
+    {𝔑 : 𝓞 E} {w w₀ v : FinPlace E} (hw : IsSafe 𝔑 w)
     (h𝔑_w₀ : 𝔑 ∈ w₀.asIdeal)
     (hv_below : v.below (QuadField d) = w₀.below (QuadField d)) {ε : Ω →+* PadicAlgCl ℓ}
     (hε : placeOfEmb (ε.comp (algebraMap E Ω)) = v) {s : E →+* ℂ} (hs : inducedPrime s = w) :
@@ -517,7 +504,7 @@ embedding `algebraMap E ℂ`, with no condition at the other embeddings, and the
 integers that lie in no safe place. -/
 private lemma New.GaloisRep.exists_padicRep_of_pel {ℓ : ℕ} {E : Type} {d : ℕ}
     [ThePrime ℓ] [PadicIso ℓ] [Field E] [CMBase E] [EmbeddedNumberField E] [HasQuadSubfield d E]
-    [HasPrimitiveRoot5040 E] {D : PEL E} [NeZero D.rank] (h_neat : IsNeat (Fin D.rank) D.level)
+    {D : PEL E} [NeZero D.rank] (h_neat : IsNeat (Fin D.rank) D.level)
     (hD_β : D.β = algebraMap (𝓞 (QuadField d)) (𝓞 E) (QuadField.betaK d))
     (hD_good : ∀ w : FinPlace E, IsSafe D.level w → D.IsGoodAt w.asIdeal) {v : FinPlace E}
     (hv_safe : IsSafe D.level v) (ν : ℕ) (θ : SafePlace D.level → ℕ → ℂ) (J : Multiset ℤ)
@@ -555,8 +542,8 @@ places containing `N` and those of `levelPlaces d S w₀ w₁ w'`, `N` is prime 
 lies over that place too if `ℓ ∈ w'`, then `v`, and `w'` if `w'` and `star w'` lie outside `S`, are
 safe, `𝔑 ∉ star w₀`, and `𝔑` lies in `w₁` but not in `star w₁`. -/
 private lemma New.GaloisRep.isSafe_and_mem_of_mem_iff {ℓ : ℕ} {E : Type} {d : ℕ}
-    [ThePrime ℓ] [PadicIso ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
-    [HasPrimitiveRoot5040 E] {S : Finset (FinPlace E)} {w₀ w₁ v w' : FinPlace E} {N : ℕ+} {𝔑 : 𝓞 E}
+    [ThePrime ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
+    {S : Finset (FinPlace E)} {w₀ w₁ v w' : FinPlace E} {N : ℕ+} {𝔑 : 𝓞 E}
     (h𝔑_mem : ∀ w : FinPlace E,
       𝔑 ∈ w.asIdeal ↔ ((N : ℕ) : 𝓞 E) ∈ w.asIdeal ∨ w ∈ levelPlaces d S w₀ w₁ w')
     (hN : ∀ w ∈ ({w₀, w'} : Finset (FinPlace E)), ((N : ℕ) : 𝓞 E) ∉ w.asIdeal) (hS : w₀ ∈ S)
@@ -581,8 +568,8 @@ open Classical in
 and it is prime to `N`; here `𝔑` lies exactly in the places that contain `N` and in those of
 `levelPlaces d S w₀ w₁ w'`. -/
 private lemma New.GaloisRep.isSafe_of_notMem_image_below {ℓ : ℕ} {E : Type} {d : ℕ}
-    [ThePrime ℓ] [PadicIso ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
-    [HasPrimitiveRoot5040 E] {S : Finset (FinPlace E)} {w₀ w₁ w' u : FinPlace E} {N : ℕ+} {𝔑 : 𝓞 E}
+    [ThePrime ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
+    {S : Finset (FinPlace E)} {w₀ w₁ w' u : FinPlace E} {N : ℕ+} {𝔑 : 𝓞 E}
     (h𝔑_mem : ∀ w : FinPlace E,
       𝔑 ∈ w.asIdeal ↔ ((N : ℕ) : 𝓞 E) ∈ w.asIdeal ∨ w ∈ levelPlaces d S w₀ w₁ w')
     (hu_split : IsSplitPrimeToDisc (u.below (QuadField d)))
@@ -600,8 +587,8 @@ open Classical in
 `levelPlaces d S w₀ w₁ w'`, each place of `insert w₁ S` or its conjugate lies in that set
 (`h_cover`), `w₀ ∈ S`, and `𝔑` is prime to the conjugate of `w₀`. -/
 private lemma New.GaloisRep.mem_and_notMem_of_isSafe {ℓ : ℕ} {E : Type} {d : ℕ}
-    [ThePrime ℓ] [PadicIso ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
-    [HasPrimitiveRoot5040 E] {S : Finset (FinPlace E)} {w₀ w₁ w' : FinPlace E} {N : ℕ+} {𝔑 : 𝓞 E}
+    [ThePrime ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
+    {S : Finset (FinPlace E)} {w₀ w₁ w' : FinPlace E} {N : ℕ+} {𝔑 : 𝓞 E}
     (h𝔑_mem : ∀ w : FinPlace E,
       𝔑 ∈ w.asIdeal ↔ ((N : ℕ) : 𝓞 E) ∈ w.asIdeal ∨ w ∈ levelPlaces d S w₀ w₁ w')
     (h_cover : ∀ w ∈ insert w₁ S, w ∈ levelPlaces d S w₀ w₁ w' ∨ star w ∈ levelPlaces d S w₀ w₁ w')
@@ -616,8 +603,8 @@ the integral points trivial at `S ∋ w₀`, and each place of `insert w₁ S` o
 and those of that set, and each `u` whose inverse transpose lies in `levelGU (Fin a) 𝔑` fixes `f`,
 is `≡ 1` modulo `w₀` and lies in `proIwahori` at `w₁`. -/
 private lemma New.GaloisRep.exists_levelGU_le_rightStabilizer {ℓ : ℕ} {E : Type} {d : ℕ}
-    [ThePrime ℓ] [PadicIso ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
-    [HasPrimitiveRoot5040 E] {a : ℕ} {W : Type} {f : Gf E (Fin a) → W → ℂ}
+    [ThePrime ℓ] [Field E] [CMType E] [EmbeddedNumberField E] [HasQuadSubfield d E]
+    {a : ℕ} {W : Type} {f : Gf E (Fin a) → W → ℂ}
     (hf_open : IsOpen ((rightStabilizer f : Subgroup (Gf E (Fin a))) : Set (Gf E (Fin a))))
     {S : Finset (FinPlace E)} (hf_off : ∀ k ∈ stdLevel E (Fin a) ⊓ Gf.trivialOn (Fin a) S,
       rightRegular ℂ (Gf E (Fin a)) (W → ℂ) k f = f)

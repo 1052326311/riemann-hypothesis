@@ -435,15 +435,11 @@ def pointsToBase {X : Scheme} {R : CommRingCat} (s : X ⟶ Spec R) :
 under s. -/
 def baseRingMap (x : X B) : R ⟶ B := (s B x).down
 
-/-- The map of `h_R` along `f : B ⟶ B'` sends a ring map `R ⟶ B` to its composite with `f`. -/
-private lemma reprBy_map_down {B' : CommRingCat} (f : B ⟶ B') (y : (reprBy R).obj B) :
-    ((reprBy R).map f y).down = y.down ≫ f :=
-  rfl
-
 @[simp]
 lemma baseRingMap_map {B' : CommRingCat} (f : B ⟶ B') (x : X.obj B) :
     baseRingMap s (X.map (X := B) (Y := B') f x) = baseRingMap s x ≫ f := by
-  simp [baseRingMap, NatTrans.naturality_apply, reprBy_map_down]
+  simp only [baseRingMap, NatTrans.naturality_apply]
+  rfl
 
 /-- For s: X → h_R and a subset I of R, the subfunctor of points x ∈ X(B) whose structure map
 R → B sends I to 0. -/
@@ -514,8 +510,7 @@ lemma locallyConstant_mem_of_indicator {Λ : Type*} [AddCommGroup Λ]
     ext x
     -- at `x` only the term of `a = y x` is non-zero
     change evalAddMonoidHom x y = evalAddMonoidHom x _
-    rw [map_sum]
-    simp [Set.indicator, ← h_fiber_eq]
+    simp [map_sum, Set.indicator, ← h_fiber_eq]
   rw [h_sum]
   exact sum_mem fun a _ ↦ h a (e a) (he_idem a)
 
@@ -790,7 +785,8 @@ lemma Comparison.pull_push (β : c.functor ⋙ G ⟶ G') (γ : F ⟶ G) (γ' : F
 @[simp]
 lemma Comparison.id_pull : (id F).pull α = H.map F α := by
   ext n x
-  simp [mapExactFunctor_restrictAlong_id, x.comp_mk₀_id, pull, H.map, H.push, mapExtAddHom]
+  change H.map F α n ((x.mapExactFunctor (restrictAlong (𝟭 C))).comp (mk₀ (𝟙 F)) rfl) = _
+  rw [mapExactFunctor_restrictAlong_id, x.comp_mk₀_id]
 
 /-- The composite of comparisons (φ,β) from F to F' and (φ',β') from F' to F'': the functor φ∘φ'
 with the map Fφφ' → F'φ' → F''. -/
@@ -812,8 +808,9 @@ namespace Comparison
 
 /-- The comparison map of `(𝟭 C, β)` along the identity of `N` is the push-forward along `β`. -/
 lemma pull_id_eq_push : pull ⟨𝟭 C, β⟩ (𝟙 N) n = push N β n := by
-  ext
-  simp [mapExactFunctor_restrictAlong_id, pull, H.map, H.push, mapExtAddHom]
+  ext x
+  change H.map _ (𝟙 N) n (push N β n (x.mapExactFunctor (restrictAlong (𝟭 C)))) = _
+  rw [mapExactFunctor_restrictAlong_id, H.map_id]
 
 /-- For `η : φ ⟶ ψ` and `β : ψ ⋙ F ⟶ F'`, moving `η` from the coefficient map (`η F` before
 `β`) to the source map (`η N` after `α`) does not change the comparison map. The target of `α` is

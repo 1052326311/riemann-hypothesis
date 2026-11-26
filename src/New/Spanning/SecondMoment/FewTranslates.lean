@@ -211,7 +211,7 @@ omit [FiniteDimensional ℂ T] in
 lemma norm_sq_eq_add_of_isSymmetricProjection {pr : T →ₗ[ℂ] T} (hpr : pr.IsSymmetricProjection)
     (y : T) : ‖y‖ ^ 2 = ‖pr y‖ ^ 2 + ‖(1 - pr) y‖ ^ 2 := by
   have h_orth : ⟪pr y, (1 - pr) y⟫_ℂ = 0 := by
-    rw [hpr.isSymmetric, ← End.mul_apply, hpr.isIdempotentElem.mul_one_sub_self,
+    rw [hpr.isSymmetric, ← mul_apply_eq_comp, hpr.isIdempotentElem.mul_one_sub_self,
       LinearMap.zero_apply, inner_zero_right]
   simpa [sq] using norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ h_orth
 
@@ -230,8 +230,8 @@ lemma hilbertSchmidtNorm_one_sub_mul_comp_sq_le {p : T →ₗ[ℂ] T} (hp : p.Is
   have h_ker : (1 - p) * (1 - p * q) = 1 - p := by
     simp [mul_sub, ← mul_assoc, hp.isIdempotentElem.one_sub_mul_self]
   have h_split : ‖(1 - p * q) y‖ ^ 2 = ‖p ((1 - q) y)‖ ^ 2 + ‖(1 - p) y‖ ^ 2 := by
-    rw [norm_sq_eq_add_of_isSymmetricProjection hp, ← End.mul_apply, ← End.mul_apply (1 - p),
-      h_range, h_ker, End.mul_apply]
+    rw [norm_sq_eq_add_of_isSymmetricProjection hp, ← mul_apply_eq_comp,
+      ← mul_apply_eq_comp (1 - p), h_range, h_ker, mul_apply_eq_comp]
   have h_contract : ‖p ((1 - q) y)‖ ^ 2 ≤ ‖(1 - q) y‖ ^ 2 := by
     linarith [norm_sq_eq_add_of_isSymmetricProjection hp ((1 - q) y),
       sq_nonneg ‖(1 - p) ((1 - q) y)‖]
@@ -333,7 +333,6 @@ theorem isSpread_of_second_moment [Fintype Γ]
   -- dimension of that preimage. Here `W₀` is `W` inside `T₀`, and `α = dim W / dim T₀`.
   intro W₀ α
   set W : Submodule ℂ T := W₀.map (range pr₀).subtype
-  have hα : 0 ≤ α := by positivity
   have h_dim : (finrank ℂ W : ℝ) = α * finrank ℂ (range pr₀) := by
     rw [Submodule.finrank_map_subtype_eq]
     have h_zero (h : (finrank ℂ (range pr₀) : ℝ) = 0) : (finrank ℂ W₀ : ℝ) = 0 :=
@@ -366,8 +365,8 @@ theorem isSpread_of_second_moment [Fintype Γ]
       Submodule.mem_map_of_mem (f := (range pr₀).subtype) hx
     have h_orth (w : T) (hw : w ∈ W) : ⟪ρ s (B x) - pr₀ (ρ s (B x)), w⟫_ℂ = 0 := by
       obtain ⟨y, rfl⟩ : w ∈ range pr₀ := Submodule.map_subtype_le _ W₀ hw
-      simp [← hpr₀.isSymmetric _ y, ← End.mul_apply pr₀ pr₀, hpr₀.isIdempotentElem.eq]
-    rw [← End.mul_apply, ← (h_comm s).eq, End.mul_apply]
+      simp [← hpr₀.isSymmetric _ y, ← mul_apply_eq_comp pr₀ pr₀, hpr₀.isIdempotentElem.eq]
+    rw [← mul_apply_eq_comp, ← (h_comm s).eq, mul_apply_eq_comp]
     exact (Submodule.eq_starProjection_of_mem_of_inner_eq_zero h_mem h_orth).symm
   have h_preimage : hilbertSchmidtNorm ((pr₀ ∘ₗ B) ∘ₗ orthoProj W') ≤ hilbertSchmidtNorm
     (orthoProj W ∘ₗ ρ s ∘ₗ B) := by

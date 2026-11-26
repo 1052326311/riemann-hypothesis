@@ -700,15 +700,6 @@ theorem exists_mem_coe_eq_norm_aeval_of_forall_det_aeval_mem {R A : Type*} [Comm
   rw [Algebra.norm_eq_matrix_det b, ← aeval_algHom_apply]
   exact hd_det
 
-/-- The `i`-th power of `Polynomial.mapRingHom f` maps the coefficients by `f ^ i`. -/
-theorem Polynomial.mapRingHom_pow_apply {R : Type*} [Semiring R] (f : R →+* R) (i : ℕ)
-    (p : R[X]) : (mapRingHom f ^ i) p = p.map (f ^ i) := by
-  induction i with
-  | zero => simp [RingHom.one_def]
-  | succ i ih =>
-    rw [pow_succ', RingHom.mul_def, RingHom.comp_apply, ih, coe_mapRingHom, Polynomial.map_map,
-      pow_succ', RingHom.mul_def]
-
 /-- The finite idele of `y` in `Lˣ` is the image of `y` in the finite adeles. -/
 private lemma New.coe_principalIdele {L : Type*} [Field L] [NumberField L] (y : Lˣ) :
     ((principalIdele y : (𝔸f L)ˣ) : 𝔸f L) = algebraMap L (𝔸f L) y :=
@@ -807,7 +798,7 @@ some unit `y` and `c` with `θ q c` a unit make `star (θ q c) * (y * θ q (T^[p
 self-adjoint, then some `y q`, `c₀ q` make `y q * θ q (T c)` a unit and `star (θ q c)` times it
 self-adjoint at all `q`, for every `c` with `θ q c = θ q (c₀ q)` for all `q`. -/
 private lemma New.exists_isSelfAdjoint_principalIdele_of_forall_minimalPeriod {E E' : Type}
-    [Field E] [Field E'] [NumberField E'] [IsCMField E'] [Algebra E E'] {P : E'[X]}
+    [Field E] [Field E'] [NumberField E'] [Algebra E E'] {P : E'[X]}
     [∀ q : primeFactors P, Fact (Irreducible q.val)]
     [∀ q : primeFactors P, IsCMField (AdjoinRoot q.val)]
     (θ : ∀ q : primeFactors P, (𝔸f E')[X] →ₐ[𝔸f E'] 𝔸f (AdjoinRoot q.val))

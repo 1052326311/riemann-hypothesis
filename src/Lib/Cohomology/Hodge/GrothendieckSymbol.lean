@@ -1,7 +1,6 @@
 module
 
 public import Lib.Cohomology.Hodge.DepthVanishing
-public import Lib.General.Groups.CongruenceSubgroups
 public import Lib.PadicComparison.HodgeTate.ExtCocycles
 
 /-!
@@ -288,8 +287,7 @@ lemma someUnitLocus_le_unimodularLocus {v : Fin d → c.baseAlg}
   have h_fst : (∑ l, inl (σ.down.fst (M i l)) * g' l).fst = σ.down.fst (v i) := by
     simp [g', hM, mulVec, dotProduct, fst_sum, HodgeTest.sqZeroExt]
   refine eq_top_of_isUnit_mem (span (Set.range g')) h_mem ?_
-  rw [isUnit_iff_isUnit_fst, h_fst]
-  exact hi
+  simpa only [isUnit_iff_isUnit_fst, h_fst] using! hi
 
 section Symbol
 
@@ -503,7 +501,8 @@ lemma symbolClass_one :
     .symm (hω c _ _ ⟨⟦.of ⟨(v.1, fun _ ↦ l), fun _ ↦ hl⟩⟧, ?_, ?_⟩)⟩
   · rw [smul_smul, mul_comm, hl_one, one_smul]
   · -- the boundary of `v` with the one witness `l` is `v` with no witness
-    with_unfolding_all congrm .of ⟨⟨_, $(funext nofun)⟩, _⟩
+    simp [boundaryFromCoker, boundary, freeAb, noWitness, abCoker.desc, reindexWitness]
+    congrm .of ⟨⟨_, $(funext nofun)⟩, _⟩
   · -- the cocycle sends it to `det l • volumeForm v = l • ι m`
     refine congrArg ULift.up ?_
     simp [volumeForm]
@@ -1049,8 +1048,12 @@ lemma IsPointSum.map_eq_sum_pointClass {s : Finset (X (CommAlgCat.of k k))}
     exact ⟨a, g, ha, cut, _, by simpa [h_sum, h_vanish] using local_eq⟩
   obtain rfl := add_eq_of_eq_sub' hy
   -- The case of one point applies to `x`, the induction hypothesis to `y`.
-  have hx_sum : IsPointSum {z} n x := h_isPointSum_of_eq_add s rfl (by simp [V]) (by grind)
-  have hy_sum : IsPointSum s n y := h_isPointSum_of_eq_add {z} (add_comm ..) rfl (by grind)
+  have hx_sum : IsPointSum {z} n x := h_isPointSum_of_eq_add s rfl (by simp [V]) (by
+    ext w
+    simp only [Set.mem_singleton_iff, Set.mem_sdiff, Finset.mem_coe, Finset.mem_insert]
+    exact ⟨fun hw ↦ ⟨Or.inl hw, hw ▸ hz⟩, fun ⟨h, hns⟩ ↦ h.resolve_right hns⟩)
+  have hy_sum : IsPointSum s n y := h_isPointSum_of_eq_add {z} (add_comm ..) rfl (by
+    rw [Finset.coe_insert, Set.insert_sdiff_self_of_notMem (by simpa only [Finset.mem_coe] using hz)])
   simp [V, hz, ← ih hy_sum, ← hx_sum.map_eq_smul_pointClass, π_map]
 
 end PointClass

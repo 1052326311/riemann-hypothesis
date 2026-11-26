@@ -191,7 +191,7 @@ lemma smul_eq_self_of_mem_decompGroup_of_mem_closure (ι : Ω →+* PadicAlgCl p
     have h_val : ((intQpBar p).comap ι) (σ • (x - algebraMap K Ω a)) =
         ((intQpBar p).comap ι) (x - algebraMap K Ω a) :=
       decompGroup.val_smul hσ (x - algebraMap K Ω a)
-    simpa [nndist_eq_nnnorm, smul_sub, k] using
+    simpa [nnDist_eq_nnNorm, smul_sub, k] using
       ((PadicAlgCl.valued p).v.comap ι).isEquiv_valuation_valuationSubring.eq_iff.mpr h_val
   have h_dist_self : nndist (ι (σ • x)) (ι x) = nndist (ι x) (ι x) :=
     h_dist.closure (by fun_prop) (by fun_prop) hx
@@ -345,7 +345,8 @@ lemma exists_comap_intQpBar_eq (h_val_lt_one : A p < 1) :
   let ι : Ω →+* PadicAlgCl p := Classical.ofNonempty
   obtain ⟨g, hg⟩ : ∃ g : Gal(Ω/ℚ), g • (intQpBar p).comap ι = A :=
     (h_over _ (valuation_comap_intQpBar_lt_one ι)).exists_smul Gal(Ω/ℚ) (h_over A h_val_lt_one)
-  exact ⟨ι.comp (toRingHom Gal(Ω/ℚ) Ω g⁻¹), smul_eq_comap.symm.trans hg⟩
+  exact ⟨ι.comp (toRingHom Gal(Ω/ℚ) Ω g⁻¹),
+    (ValuationSubring.pointwise_smul_eq_comap g _).symm.trans hg⟩
 
 /-- Let `Ω` be `New.Ω`, the algebraic closure of `ℚ`, let `Γ` be the Galois group of `Ω` over the
 number field `K`, and let `A` be a place of `Ω`. Suppose the completion `LocField v` embeds
@@ -367,7 +368,7 @@ lemma nonempty_isCompletionEmb_of_isPadicAt (h_at : IsPadicAt v p A j) :
   -- contains `ℚ_p` (`padic_mem_topologicalClosure`).
   have h_image_closed :
       IsClosed (SetLike.coe (Algebra.linearMap (LocField v) (PadicAlgCl p)).range) :=
-    Submodule.closed_of_finiteDimensional _
+    Submodule.isClosed_of_finiteDimensional _
   have h_padic_mem (x : ℚ_[p]) :
       algebraMap ℚ_[p] (PadicAlgCl p) x ∈ (algebraMap (LocField v) (PadicAlgCl p)).fieldRange :=
     h_image_closed.closure_subset
@@ -384,7 +385,7 @@ lemma nonempty_isCompletionEmb_of_isPadicAt (h_at : IsPadicAt v p A j) :
     refine (v.denseRange_algebraMap K).induction_on y
       (isClosed_eq (h_at.continuous.const_smul (J g)) h_at.continuous) fun x ↦ ?_
     -- On `K` the map to `ℚ̄_p` is `j`, and `J g` moves `j x` as `g` moves `x`, which it fixes.
-    show J g (algebraMap (LocField v) (PadicAlgCl p) (algebraMap K (LocField v) x)) = _
+    change J g (algebraMap (LocField v) (PadicAlgCl p) (algebraMap K (LocField v) x)) = _
     simp [← h_at.map_algebraMap, hJ_equivariant]
   -- An automorphism fixing `C` fixes `K`, so it comes from the group; thus invariants lie in `C`.
   have h_invariant_mem (x : PadicAlgCl p) (hx : ∀ g : decompGroup Γ A, g • x = x) : x ∈ C := by

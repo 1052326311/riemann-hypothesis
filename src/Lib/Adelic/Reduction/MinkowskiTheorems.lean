@@ -72,7 +72,7 @@ lemma lintegral_encard_rat_points {S : Set (n → 𝔸 E)} (hS : MeasurableSet S
   have h_unfold : MeasurePreserving (fun p : (n → 𝔸 E) × ratVectors E n ↦ y⁻¹.1 *ᵥ (p.2 +ᵥ p.1))
       ((ratVectors E n).quotMeasure.prod count) (ENNReal.ofReal (ideleAbs y.det) • volume) :=
     h_scale.comp measurePreserving_addOrbitMeasure
-  rw [← smul_eq_mul, ← Measure.smul_apply, ← h_unfold.measure_preimage hS.nullMeasurableSet,
+  rw [← smul_eq_mul, ← smul_apply, ← h_unfold.measure_preimage hS.nullMeasurableSet,
     Measure.prod_apply (h_unfold.measurable hS)]
   refine lintegral_congr fun x ↦ ?_
   -- the fibre over `x` is counted in `ratVectors E n`, the image of `n → E` under `toAdele ∘ ·`
@@ -634,7 +634,7 @@ lemma tsum_prod_le_prod_tsum {α : Type*} (f : α → ℝ≥0∞) :
   -- a finite set of tuples lies in the product of its projections, over which the sum factors
   have h_sub : s ⊆ piFinset (fun i ↦ s.image (eval i)) := fun x hx ↦
     mem_piFinset.2 fun i ↦ mem_image_of_mem (eval i) hx
-  grw [h_sub, ← prod_univ_sum, ENNReal.sum_le_tsum]
+  grw [h_sub, ← prod_univ_sum, sum_le_tsum]
 
 open Pointwise in
 /-- Let `box` be the set of adelic vectors with entries of size at most `1` at infinity and

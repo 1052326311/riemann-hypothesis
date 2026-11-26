@@ -98,9 +98,7 @@ lemma RepresentedBy.of_conjTranspose_mul_mul {t' : b → ℤˣ} {T : Matrix b b 
     _ = (q⁻¹.valᴴ * (q.valᴴ * T * q.val) * q⁻¹.val).map (evalInf u) := by
         rw [Matrix.map_mul, Matrix.map_mul]
         rfl
-    _ = atRealPlace T u := by
-        rw [h_inv]
-        rfl
+    _ = atRealPlace T u := congrArg (fun M ↦ M.map (evalInf u)) h_inv
 
 variable {W₁} in
 /-- The real slice of `v` along `D` vanishes at every adelic matrix `x` whose Gram matrix for the
@@ -173,7 +171,7 @@ lemma hasIntegrableTerms_localDatum_of_eq_stdDatum (hπ : ReadsAt A π) (β γ :
   have h_inv : M * M⁻¹ = 1 := mul_nonsing_inv M (.of_mul_eq_one_right d h_det)
   -- the frame at the point enters `M`, so the right inverse is a triangular matrix times `N M⁻¹`
   simp only [M, ← coordMatrix_mul_fromBlocks_eq_fromCols W₁ D c z q g, Matrix.map_mul] at h_inv
-  exact ⟨_, by simpa [← Matrix.mul_assoc, fromBlocks_map] using congrArg transpose h_inv⟩
+  exact ⟨_, by simpa [← Matrix.mul_assoc] using congrArg transpose h_inv⟩
 
 open scoped Classical in
 omit [Nontrivial (LocProd P)] in
@@ -762,7 +760,7 @@ lemma det_eq_realIdele_mul_finIdeleIncl {B : GL b (𝔸 E)} {x : GL b (𝔸f E)}
     (hx : B.val.map Prod.snd = x.val) : B.det = realIdele (infiniteDet B) * finIdeleIncl x.det := by
   ext : 2
   · simp [infiniteDet]
-  · simpa [← hx] using (RingHom.snd (NumberField.InfinitePlace E → ℂ) (𝔸f E)).map_det B.val
+  · simp [← hx]
 
 /-- The identity of periods over `[U W₁]` for a tame character `𝔠` of weight `μ` (an integer for
 each infinite place) and real data `v` of `(X, V' ⊕ W₁)` and `v'` of `(X, V')`, with weight function

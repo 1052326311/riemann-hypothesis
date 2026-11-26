@@ -124,8 +124,8 @@ lemma exists_avatar :
     ext g : 1
     obtain ⟨x, hx⟩ := artinMap_surjective Gal(Ω/K) ⟦g⟧
     have hψ_mul : ψ (θ * θ') x = ψ θ x * ψ θ' x := by
-      simp [ψ, AlgHeckeChar.character, AlgHeckeChar.infinityType, zpow_add, prod_mul_distrib,
-        mul_mul_mul_comm]
+      simp [ψ, AlgHeckeChar.character, AlgHeckeChar.infinityType, zpow_add, prod_mul_distrib]
+      exact mul_mul_mul_comm ..
     rw [MonoidHom.mul_apply, hμ _ x g hx, hμ θ x g hx, hμ θ' x g hx, hψ_mul]
   exact ⟨.mk' μ hμ_mul, fun θ ↦ ⟨hμ_cont θ, fun x g hg ↦ by simp [ψ, hμ θ x g hg]⟩⟩
 
@@ -407,7 +407,7 @@ lemma jump_twist [OverGp (decompGroup Gal(Ω/E) A) ℓ] {γ : PadicAlgCl ℓ →
       ∃ x : Fin 1 → PadicAlgCl ℓ, f x ≠ 0 := by
     -- `jump` is the rank of the space `hodgeTateMaps`, so that space has a nonzero element.
     obtain ⟨f, hf_ne, -⟩ := finrank_eq_one_iff'.1 hμ
-    exact ⟨f, f.property, by simpa [Subtype.ext_iff, DFunLike.ext_iff] using hf_ne⟩
+    exact ⟨f, f.property, not_forall.mp fun h ↦ hf_ne (Subtype.ext (LinearMap.ext h))⟩
   have h_period : ∀ᶠ t : decompGroup Gal(Ω/E) A in nearOne _,
       γ (μ t.val).val * f x = (χ t ^ (-u)).val • toGp t • f x := by
     filter_upwards [hf x] with t ht
@@ -429,7 +429,7 @@ lemma JumpsRelAt.twist {R : ℕ → ℕ → Prop} {J : (E →+* ℂ) → Multise
   set τ : E →+* ℂ := .comp ιℓ.symm (.comp ↑g⁻¹ (L.e.comp (algebraMap E Ω)) : E →+* PadicAlgCl ℓ)
   have h_one : jump (decompRep ((GeneralLinearGroup.scalar (Fin 1)).comp μ) A) γ (u τ) = 1 :=
     (hμ hg (u τ)).symm.trans (count_singleton_self (u τ))
-  show R (((J τ).map fun v : ℤ ↦ v + u τ).count v) (jump (decompRep r' A) γ v)
+  change R (((J τ).map fun v : ℤ ↦ v + u τ).count v) (jump (decompRep r' A) γ v)
   rw [← sub_add_cancel v (u τ), count_map_eq_count' _ _ (add_left_injective (u τ)),
     jump_twist h_twist h_one]
   exact hr hg (v - u τ)
@@ -565,8 +565,9 @@ private lemma exists_isUnit_mul_frobenius_smul_eq [Free ℤ_[p] T] [Module.Finit
     exact ⟨n, 1 ⊗ₜ b * w, by rwa [h_pow, smul_mul_assoc] at hv⟩
   refine ⟨(1 - α) * x + 1, ?_, ?_⟩
   · -- `(1 - α) ^ e` lies in `(p)`, so `1 - α` lies in the Jacobson radical
-    refine mem_jacobson_bot.1 (isRadical_jacobson _ ⟨e, ?_⟩) x
-    apply ((map_algebraMap_iff ..).2 complete).le_jacobson_bot
+    refine Ring.mem_jacobson_iff.1 (Ideal.jacobson_bot.le (isRadical_jacobson _ ⟨e, ?_⟩)) x
+    apply Ideal.jacobson_bot.ge
+    apply ((map_algebraMap_iff ..).2 complete).le_jacobson
     simp [h_pow, Algebra.smul_def, mem_span_singleton, Ideal.map_span]
   · rw [smul_add, smul_mul', smul_sub, smul_one, α_fixed]
     linear_combination (1 - α) * hx
@@ -624,7 +625,7 @@ lemma exists_unramified_period [Free ℤ_[p] T] [Module.Finite ℤ_[p] T] (a : T
   refine ⟨weil_fix, ?_⟩
   -- `φ ^ k * (1, s) = (ofAdd k, s)` fixes `y`, so `s • y = α ^ k * y`
   have h_mul : φ ^ k * ((1, s) : FrobGal) = (ofAdd k, s) := by simp [φ, ← ofAdd_nsmul]
-  show ((1, s) : FrobGal) • y = _
+  change ((1, s) : FrobGal) • y = _
   rw [← smul_y_eq k (1, s), h_mul, weil_fix]
 
 /-- If `‖1 - b‖ < 1` and `f ≠ 0`, then `b ∈ ℚ̄_p` has an `f`-th root `a` with `‖1 - a‖ < 1`. -/
@@ -731,7 +732,7 @@ lemma exists_period_of_character [TopologicalSpace Γ]
     have h_smul : toGp (φ ^ k * i)⁻¹ • y = 1 ⊗ₜ a₀ ^ (f * k) * y := by
       rw [map_inv, (h_weil _ _ h_pair).2]
     have hνi : ν i = 1 := (hU i hiU).1 (inv_mem hi)
-    show Θ (toGp (φ ^ k * i)⁻¹ • y) = (ν (φ ^ k * i)).val * Θ y
+    change Θ (toGp (φ ^ k * i)⁻¹ • y) = (ν (φ ^ k * i)).val * Θ y
     rw [h_smul]
     simp [a₀, Θ, ha, hνi, coe_eq, pow_mul]
   -- these elements are dense in the preimage of `U`, so it holds at `g⁻¹`
@@ -807,7 +808,7 @@ private lemma one_tmul_mul_toBmaxTensor_mem_dpcris {ρ : Γ →* End (PadicAlgCl
     1 ⊗ₜ x * toBmaxTensor T O y ∈ Dpcris ρ := by
   -- The factor `ν g⁻¹` on `y` cancels the factor `ν g` on `x`.
   refine h_near.mono fun g ⟨o, (h_line : ((1, toGp g) : FrobGal) • y = 1 ⊗ₜ o * y), ho⟩ ↦ ?_
-  show tensorAction Bmax ((1, toGp g) : FrobGal) (ρ g) (1 ⊗ₜ x * toBmaxTensor T O y) = _
+  change tensorAction Bmax ((1, toGp g) : FrobGal) (ρ g) (1 ⊗ₜ x * toBmaxTensor T O y) = _
   rw [tensorAction_one_tmul_mul_toBmaxTensor hρ (1, toGp g) 1, h_line]
   simp [toBmaxTensor, hρ, ho, algebraMap_eq_smul_one, ← mul_assoc]
 
@@ -902,7 +903,7 @@ private lemma eventually_eq_one_of_isWeilPair_zero [L : PadicPlaceEmbedding E A 
     (hμ : Continuous μ) (hfin : (μ '' inertiaGroup Gal(Ω/E) A).Finite) :
     ∀ᶠ s : decompGroup Gal(Ω/E) A in nhds 1,
       IsWeilPair (L.toGp s) 0 → μ.domRestrict (decompGroup Gal(Ω/E) A) s = 1 :=
-  (continuousAt_subtype_val.eventually (eventually_eq_one_of_finite_image_inertia hμ hfin)).mono
+  (continuousAt_subtypeVal.eventually (eventually_eq_one_of_finite_image_inertia hμ hfin)).mono
     fun _ hs h_pair ↦ hs (L.isWeilPair_zero_iff.1 h_pair)
 
 /-- If a continuous ℓ-adic character μ has finite image on the inertia group of A, then the

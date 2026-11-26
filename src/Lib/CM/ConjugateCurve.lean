@@ -1,6 +1,7 @@
 module
 
 public import Lib.CM.GoodReduction
+import TauCeti.Analysis.SpecialFunctions.Elliptic.LatticeClassification
 
 /-!
 # Galois conjugates of CM curves: conjugate sections, isogenies and translates of θ
@@ -392,7 +393,7 @@ lemma exists_galConjugate_of_g₂_g₃ (L : PeriodPair) (hg₂ : L.g₂ = σ C.g
 The proof takes the lattice with the invariants `σ g₂`, `σ g₃`. -/
 lemma exists_galConjugate : ∃ C' : CMLattice d, C'.a₁ = σ C.a₁ := by
   obtain ⟨L, hg₂, hg₃⟩ : ∃ L : PeriodPair, L.g₂ = σ C.g₂ ∧ L.g₃ = σ C.g₃ :=
-    exists_lattice_of_g₂_g₃
+    PeriodPair.exists_g₂_g₃_eq
       (by simpa [map_ofNat] using σ.injective.ne (weierstrass_disc_ne_zero C.periodPair))
   obtain ⟨C', -, h_a₁⟩ := C.exists_galConjugate_of_g₂_g₃ σ L hg₂ hg₃
   exact ⟨C', h_a₁⟩
@@ -609,7 +610,6 @@ lemma exists_forall_apply_mul_eq_pow_mul {C D : CMLattice d} {a u u' μ : ℂ} (
   refine ⟨N, fun {m f g} hf hfg hg ↦ ?_⟩
   -- Transport `f (a z)`; by uniqueness of Taylor series the result is `g (a z)`.
   obtain ⟨G, hG, hG_ser, hG_val⟩ := transport (D.comp_mul_mem_sections hN hf)
-  have hf_diff : Differentiable ℂ f := hf.1
   obtain rfl : G = fun z : ℂ ↦ g (a * z) := by
     refine eq_of_taylorAtZero_eq hG.1 (by fun_prop) ?_
     simp (disch := fun_prop) [hG_ser, hfg, taylorVia, ← rescale_map,

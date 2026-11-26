@@ -308,9 +308,10 @@ lemma exists_periodAlg_iso_genericAlg :
         ((isLocalization_iff_isPushout _ ℂ_[p]).1
           (c.isLocalization_genericRing _)).symm.out.equiv.toModuleIso)
       fun f ↦ ModuleCat.hom_ext <| tmul_ext fun a x ↦ by
-        -- `erw` rewrites through the composite module maps and the pushout equivalence.
-        erw [map_smul (mapGeneric f), mapGeneric_algebraMap]
-        rfl
+        -- Both sides unfold to `a • algebraMap _ _ (f x)`, through the composite module maps and
+        -- the pushout equivalence.
+        exact .symm ((map_smul (mapGeneric f) a _).trans
+          (congrArg (a • ·) (mapGeneric_algebraMap f x)))
   refine ⟨isoWhiskerRight θ (asModules (𝟭 _) ⋙ tensorWith ℂ_[p] ℂ_[p]) ≪≫ invert, fun c a w ↦ ?_⟩
   -- `invert` sends `a ⊗ x` to `a • x`, and `θ` sends `1 ⊗ w` to `θ(w)`.
   exact (congrArg (a • algebraMap c.ProdRing c.GenericRing ·) (hθ c w)).trans
@@ -401,10 +402,11 @@ lemma proj_mulMu : ∀ t : genericOver.obj c, proj c (mulMu c t) = 0 := by
 lemma mulMu_proj_mul (b : thickeningOver.obj c) :
     ∀ t : genericOver.obj c, mulMu c (proj c b * t) = b * mulMu c t := by
   refine c.thickeningProj_surjective_and_ker_thetaGeneric.left.forall.mpr fun b' ↦ ?_
-  -- `erw`: `b` lives in `thickeningOver.obj c`, and `proj c b` is `c.thickeningProj b` only up to
-  -- unfolding.
-  erw [← map_mul, mulMu_thickeningProj, mulMu_thickeningProj, mul_left_comm]
-  rfl
+  -- `b` lives in `thickeningOver.obj c`, and `proj c b` is `c.thickeningProj b` up to unfolding.
+  refine (congrArg (mulMu c) (map_mul c.thickeningProj b b').symm).trans <|
+    (mulMu_thickeningProj ..).trans ?_
+  rw [mulMu_thickeningProj]
+  exact mul_left_comm ..
 
 /-- `mulMu` commutes with the maps induced by a morphism `f` of tests. -/
 lemma map_mulMu (d : PadicTest) (f : c ⟶ d) :

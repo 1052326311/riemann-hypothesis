@@ -330,9 +330,7 @@ lemma omega_integrated (g : G E s) (v : Model (realHeisenberg (realSigns E s))) 
       tm (heisenbergOp ((adelicSum E s).equiv.symm y).fst IsVacuum.vacElem)
         (heisenbergOp ((adelicSum E s).equiv.symm y).snd IsVacuum.vacElem) := by
     rw [map_one, one_apply_eq_self, vacElem, ← (adelicSum E s).tmul_vacElem]
-    -- `erw`: after unfolding `vacElem` the vector lies in `Model (adelicHeisenberg E s)`, which is
-    -- `𝒮 V` only up to definitions.
-    erw [heisenbergOp_tmul]
+    exact heisenbergOp_tmul ..
   rw [h_tensor]
   exact h_pure _ _
 
@@ -342,9 +340,10 @@ lemma dataInner_vacElem_smul_vacElem :
     V.dataInner V.vacElem f • V.vacElem = V.projReal (V.projOn univ f) := by
   -- The left side is `f 0 • vacElem = ∫ vacElem y • ϱ y f`. As `vacElem` is the tensor product of
   -- the real and the finite vacuum, the integral splits, and its finite part is the mean
-  -- `projOn univ`. (`erw`: `𝒮 V` and its vacuum are the model and the tensor-product vacuum only
-  -- up to definitions.)
-  erw [modelInner_vacElem, ← integrated_eq_smul, vacElem, ← (adelicSum E s).tmul_vacElem,
+  -- `projOn univ`.
+  have h_int : V.dataInner V.vacElem f • V.vacElem = V.heisenbergRep.integrated V.vacElem f :=
+    (congrArg (· • V.vacElem) (modelInner_vacElem ..)).trans (integrated_eq_smul ..).symm
+  rw [h_int, vacElem, ← (adelicSum E s).tmul_vacElem,
     integrated_tmul, map_projOn_eq_integral, map_integrated_eq_integral]
   -- By definition, the finite vacuum is `semichar` on the lattice and `0` off it.
   have h_finVac (y) : finVac y = (stdLattice E n : Set (n → 𝔸f E)).indicator semichar y := rfl
@@ -616,7 +615,7 @@ lemma map_eq_zero_of_map_integrated_eq_zero {f : 𝒮 V} (hf_fix : V.projOn S f 
   -- `S.conjClosure`.
   suffices h_box : finCoord y ∈ integralBox n S.conjClosure →
       L (V.integrated w (V.finHeisenbergOp (finCoord y) V.vacElem)) = 0 by
-    show L (V.projOn S (V.ω 1 (V.ϱ y V.vacElem))) = 0
+    change L (V.projOn S (V.ω 1 (V.ϱ y V.vacElem))) = 0
     simpa [projOn_finHeisenbergOp, apply_ite, hw] using h_box
   intro hy
   have h_int : idem S.conjClosure • finCoord y ∈ stdLattice E n := hy
@@ -665,7 +664,7 @@ invertible matrix. -/
     realMultiplier, finMultiplier_inv]
   -- What remains: `projOn S` commutes with `finHeisenbergOp y`, as `y` is `0` above
   -- `S.conjClosure`, and the real vacuum takes the value `1` at `0`.
-  show V.integrated (polyVector (realSigns E s) P)
+  change V.integrated (polyVector (realSigns E s) P)
         (V.projOn S (V.finHeisenbergOp y (V.ω (1, g) V.vacElem))) =
       realVac 0 • V.integrated (polyVector (realSigns E s) P)
         (V.finHeisenbergOp y (V.projOn S (V.ω (1, g) V.vacElem)))

@@ -14,8 +14,6 @@ projection `Λ⁺` to this span are sums of lines.
 * `New.Grading.SpansLattice.isGraded`: `Λ` is graded.
 * `New.Grading.SpansLattice.mem_latticeMinus_iff`, `New.Grading.SpansLattice.mem_latticePlus_iff`:
   the generators of the lines; they differ only by `N⁻¹` at the middle vector of the string.
-* `New.Grading.SpansLattice.mem_lattice_and_stringProj_eq_zero_iff`: for odd `s`, the
-  intersection of `Λ` with the span of `X ⊕ Unit`.
 * `New.Grading.SpansLattice.stringSum_mem_latticeMinus_iff`,
   `New.Grading.SpansLattice.stringSum_mem_latticePlus_iff`: the generators on the lines of the
   vectors `𝔢 ^ i`, for the scale `u = (a / ā) ^ ⌊(s + 2) / 2⌋` and when the constant `c` of `Y`
@@ -27,8 +25,7 @@ projection `Λ⁺` to this span are sums of lines.
 * `New.Grading.SpansLattice.exists_place_generates_of_notMem_latticeMinus`: such a vector
   generates `Λ⁺` over `Λ⁻` at some place above `N`.
 
-The results on `Λ⁺` and on the span of `X ⊕ Unit` assume that `N` is split and squarefree
-(`IsSplitSquarefree P N π`).
+The results on `Λ⁺` assume that `N` is split and squarefree (`IsSplitSquarefree P N π`).
 
 Notions from other files:
 * `Y.SpansLattice a π u`: the lattice `Λ = V.lattice 1` has the standard basis

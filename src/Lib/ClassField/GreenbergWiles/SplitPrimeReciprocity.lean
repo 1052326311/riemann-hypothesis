@@ -137,12 +137,12 @@ lemma snd_mem_Z1 [Nonempty X] {p : (X → V) × (G → V)} (hp : p ∈ V.trivial
   obtain ⟨h_cont, h_triv, -⟩ :
       Continuous z ∧ (∀ (g : G) (x : X), V.ρ g (f x) = f (g • x) + z g) ∧ ∀ g ∈ I, z g = 0 :=
     mem_trivialisedCocycles.mp hp
-  show Continuous z ∧ ∀ g k : G, z (g * k) = z g + V.ρ g (z k)
+  change Continuous z ∧ ∀ g k : G, z (g * k) = z g + V.ρ g (z k)
   refine ⟨h_cont, fun g k ↦ ?_⟩
   -- Compute the action of `g * k` on the trivialisation at any point `y` in two ways.
   obtain ⟨y⟩ : Nonempty X := inferInstance
   have h_two_ways : f ((g * k) • y) + z (g * k) = f ((g * k) • y) + (z g + V.ρ g (z k)) := by
-    rw [← h_triv, map_mul, Module.End.mul_apply, h_triv, map_add, h_triv, mul_smul, add_assoc]
+    rw [← h_triv, map_mul, mul_apply_eq_comp, h_triv, map_add, h_triv, mul_smul, add_assoc]
   exact add_left_cancel h_two_ways
 
 /-- Let the points `x i` represent the orbits of `G` on `X`, and let `z` be a cocycle that vanishes
@@ -163,7 +163,7 @@ lemma exists_mem_of_orbit_reps {κ : Sort*} {x : κ → X}
       V.ρ a (m j) - z a = V.ρ b (m j) - z b := by
     have h_fixes : (b⁻¹ * a) • x j = x j := by rw [mul_smul, hab, inv_smul_smul]
     have h_cocycle : z a = z b + V.ρ b (z (b⁻¹ * a)) := by rw [← hz_cocycle, mul_inv_cancel_left]
-    rw [h_cocycle, h_stab j _ h_fixes, map_sub, ← Module.End.mul_apply, ← map_mul,
+    rw [h_cocycle, h_stab j _ h_fixes, map_sub, ← mul_apply_eq_comp, ← map_mul,
       mul_inv_cancel_left]
     abel
   obtain ⟨i, s, hs⟩ : ∃ (i : X → κ) (s : X → G), ∀ y : X, s y • x (i y) = y := by
@@ -176,7 +176,7 @@ lemma exists_mem_of_orbit_reps {κ : Sort*} {x : κ → X}
     have h_same_point : s (g • y) • x (i y) = (g * s y) • x (i y) := by rw [h_point, ← h_index, hs]
     have h_value : V.ρ (s (g • y)) (m (i y)) - z (s (g • y)) =
         V.ρ (g * s y) (m (i y)) - z (g * s y) := h_well (i y) _ _ h_same_point
-    simp only [h_index, h_value, hz_cocycle, map_mul, map_sub, Module.End.mul_apply]
+    simp only [h_index, h_value, hz_cocycle, map_mul, map_sub, mul_apply_eq_comp]
     abel
   · have h_index : j = i (x j) := index_unique _ _ (s (x j)) (hs _)
     have h_fix : s (x j) • x j = x j := by simpa only [← h_index] using hs (x j)
@@ -225,8 +225,8 @@ lemma corestrict_mem [IsTopologicalGroup G] (P : OpenSubgroup G) [Fintype (G ⧸
       rw [← h_point]
       exact h_triv ⟨x.out⁻¹ * g * (g⁻¹ • x).out, out_inv_mul_mul_out_mem P.toSubgroup g x⟩
         ((g⁻¹ • x).out⁻¹ • y)
-    rw [← map_add, ← h_term, ← Module.End.mul_apply, ← map_mul, mul_assoc,
-      mul_inv_cancel_left, map_mul, Module.End.mul_apply, toPerm_apply]
+    rw [← map_add, ← h_term, ← mul_apply_eq_comp, ← map_mul, mul_assoc,
+      mul_inv_cancel_left, map_mul, mul_apply_eq_comp, toPerm_apply]
   · -- All conjugates of `g` lie in `I`, hence in `P`: `g` fixes every coset and each term is `0`.
     have h_fix (x : G ⧸ P.toSubgroup) : g⁻¹ • x = x := by
       induction x using QuotientGroup.induction_on with
@@ -641,11 +641,6 @@ private lemma IsLargeLevel.SplitPlaces.sum_symbol_smul_snd_generators_eq_zero {�
     exact s.decompGroup_le (s.isPlaceOver i) hγ_dec
   let γ' (θ : ι × G ⧸ Q) : Q :=
     ⟨θ.snd.out⁻¹ * γ θ.fst * θ.snd.out⁻¹⁻¹, U.isNormal'.conj_mem _ (hγ_mem θ.fst) _⟩
-  have κ_φ (x : ↥(unitsModule Q).H0) (hx : x.val ∈ sUnits N) (θ : ι × G ⧸ Q) :
-      (κ x).val (S.φ θ) =
-        cyclotomicCharMod Ω m θ.snd.out⁻¹ * b (fixedSUnitsRep N U θ.snd.out ⟨_, hx, x.prop⟩)
-          θ.fst :=
-    kummer_frob_liftToFixedField s hκ hb x hx θ
   obtain ⟨z_cts, z_mul⟩ : P.snd ∈ Z1 V.ρ := snd_mem_Z1 hP
   obtain ⟨-, -, hP_zero⟩ := mem_trivialisedCocycles.mp hP
   obtain ⟨y, y_unit, y_fix⟩ := y
@@ -679,8 +674,9 @@ private lemma IsLargeLevel.SplitPlaces.sum_symbol_smul_snd_generators_eq_zero {�
       l (V.ρ θ.snd.out⁻¹ (P.snd (γ θ.fst))) = 0 by
     simpa [ZMod.map_smul] using congrArg (ofZMod m) h_goal
   apply ofZMod_injective (n := m)
-  -- By `l_γ` and `κ_φ` both sums have the terms `cyclotomicCharMod g⁻¹ * b (g y) i * ord x`.
-  simpa [← map_zsmul, χ, ZMod.map_smul, l_γ, κ_φ ⟨y, y_fix⟩ y_unit, mul_comm (b _ _),
+  -- By `l_γ` and the Kummer formula at Frobenius both sums have the terms `cyclotomicCharMod g⁻¹ * b (g y) i * ord x`.
+  simpa [S, ← map_zsmul, χ, ZMod.map_smul, l_γ, kummer_frob_liftToFixedField s hκ hb ⟨y, y_fix⟩ y_unit,
+    mul_comm (b _ _),
     mul_left_comm (Int.cast _), mul_assoc] using h_sum
 
 variable [NeZero N]
@@ -691,7 +687,7 @@ family `liftToFixedField s`, and of order `cyclotomicCharMod Ω m g * f (i, g)` 
 `(i, g)`. Then `z = κ x • a` is trivialised at the places above `N` and infinity, and its
 corestriction to `G` has the values `z (γ i) = ∑ g, g (f (i, g) • a)`. -/
 private lemma IsLargeLevel.SplitPlaces.exists_mem_trivialisedCocycles_of_valuation {γ : ι → G}
-    (hγ : ∀ i : ι, IsTameGeneratorFor m (s.valuationSubring i) (γ i)) [Fintype ι]
+    (hγ : ∀ i : ι, IsTameGeneratorFor m (s.valuationSubring i) (γ i))
     (h_triv : V.TrivialOn U.toOpenSubgroup.toSubgroup)
     [IsTotallyComplex (fixedFieldOf U.toOpenSubgroup.toSubgroup)]
     {κ : (unitsModule U.toOpenSubgroup.toSubgroup).H0 →+
@@ -803,11 +799,6 @@ private lemma IsLargeLevel.SplitPlaces.exists_mem_trivialisedCocycles_of_sum_sym
   let Q : Subgroup G := U.toOpenSubgroup.toSubgroup
   let F : IntermediateField K Ω := fixedFieldOf Q
   let S := liftToFixedField s
-  have κ_φ (x : ↥(unitsModule Q).H0) (hx : x.val ∈ sUnits N) (θ : ι × G ⧸ Q) :
-      (κ x).val (S.φ θ) =
-        cyclotomicCharMod Ω m θ.snd.out⁻¹ * b (fixedSUnitsRep N U θ.snd.out ⟨_, hx, x.prop⟩)
-          θ.fst :=
-    kummer_frob_liftToFixedField s hκ hb x hx θ
   choose ξ hξ_val hξ_art using fun θ : ι × G ⧸ Q ↦
     (S.isPlaceOver θ).exists_localArtin_eq_of_isFrob (Γ := Q) (g := (S.φ θ)⁻¹)
       (by simpa only [inv_inv] using (S.isFrob θ).left)
@@ -815,9 +806,11 @@ private lemma IsLargeLevel.SplitPlaces.exists_mem_trivialisedCocycles_of_sum_sym
   let α : (𝔸f F)ˣ := ∏ θ, locIdele (S.v θ) (ξ θ) ^ e θ
   have hα (u : Set.unit {u : FinPlace F | ↑N ∈ u.asIdeal} F) :
       abelianLift (ofZModCocycle m (κ (ofBase Q Ω (.ofMul u.val)))) (artinMap Q α) = 1 := by
-    simp [α, e, (S.isPlaceOver _).artinAt_eq_of_localArtin_eq (hξ_art _), ← toAdd_eq_zero,
+    simp [S, α, e, (S.isPlaceOver _).artinAt_eq_of_localArtin_eq (hξ_art _), ← toAdd_eq_zero,
       ← map_nsmul, ← map_sum,
-      mul_comm (f _), mul_assoc, κ_φ (ofBase Q Ω (.ofMul u.val)) (ofBase_mem_sUnits.mpr u.prop), hf]
+      mul_comm (f _), mul_assoc,
+      kummer_frob_liftToFixedField s hκ hb (ofBase Q Ω (.ofMul u.val)) (ofBase_mem_sUnits.mpr u.prop),
+      hf]
   obtain ⟨_, ⟨x, rfl⟩, β, ⟨h_pow, h_unit⟩, hβ⟩ := mem_sup.mp (h_idele α hα)
   obtain rfl : β = α / principalIdele x := eq_div_of_mul_eq'' hβ
   -- Off `N`, `x` has the valuations of `α`.

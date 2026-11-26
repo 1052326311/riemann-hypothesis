@@ -131,7 +131,7 @@ lemma pointFn_ext {Z : Type} {X : Scheme} {ξ : Z → (Spec (CommRingCat.of ℂ)
   by_contra hs_ne
   -- On a reduced scheme a nonzero section is invertible on a nonempty open set.
   have h_nonempty : (X.basicOpen (s - s') : Set X).Nonempty := by
-    simpa [nonempty_iff_ne_empty] using hs_ne
+    simpa [← ne_empty_iff_nonempty] using hs_ne
   -- By density some `ξ z` lies in it: there `s - s'` is a unit, but `f` and `g` agree.
   obtain ⟨z, hz⟩ := h_dense.exists_mem_open (X.basicOpen (s - s')).isOpen h_nonempty
   have hz_U : LandsIn (ξ z) U := (landsIn_iff_mem.2 hz).mono (X.basicOpen_le _)
@@ -237,7 +237,6 @@ lemma New.eq_map_C_of_ne_bot_of_le_map_C {A σ : Type*} [CommRing A] [IsDomain A
     exact mem_map_C_iff.1 (hJ_le (mem_comap.1 ha)) _
   have h_ne_bot : J' ≠ ⊥ := J'.ne_bot_iff.2 ⟨w, mem_comap.2 hw_mem, ne_zero_of_map hw_ne⟩
   have : p.IsPrime := Ideal.IsMinimalPrime.isPrime hp
-  have := isPrime_map_C_mvPolynomial (σ := Fin n) p
   have h_eq : J' = p.map C := J'.eq_of_le_of_height_le h_le
     ((height_map_C_le_one hp).trans (by simpa [Order.one_le_iff_ne_zero] using h_ne_bot))
   refine hJ_le.antisymm (map_le_of_le_comap fun a ha ↦ ?_)

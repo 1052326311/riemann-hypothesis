@@ -316,15 +316,12 @@ lemma IsMatchingPairAbove.mul_mul {σ : Gal(E'/E)} {Z X Y : Set (FinPlace E)}
     exact IsMatchingPair.mul pair_X pair_Y idem_mul (idem_mul_self _) (idem_mul_self _)
       (star_idem_above X) (star_idem_above Y)
   -- Split `1` as the idempotent of the places above `Z` plus its complement.
-  have h_orth : idem (placesAbove E' Z) * (1 - idem (placesAbove E' Z)) = 0 := by
-    simp [mul_sub, idem_mul_self]
-  have h_compl_idem : (1 - idem (placesAbove E' Z)) * (1 - idem (placesAbove E' Z)) =
-      1 - idem (placesAbove E' Z) := by simp [mul_sub, sub_mul, idem_mul_self]
+  have h_idem : IsIdempotentElem (idem (placesAbove E' Z)) := idem_mul_self _
   have h_compl_star : star (1 - idem (placesAbove E' Z)) = 1 - idem (placesAbove E' Z) := by
     simp [star_idem_above]
   rw [← add_sub_cancel (idem (placesAbove E' Z)) (1 : 𝔸f E')]
-  exact IsMatchingPair.mul pair_Z pair_XY h_orth (idem_mul_self _) h_compl_idem (star_idem_above Z)
-    h_compl_star
+  exact IsMatchingPair.mul pair_Z pair_XY h_idem.mul_one_sub_self h_idem h_idem.one_sub
+    (star_idem_above Z) h_compl_star
 
 /-- A matched place (`New.IsMatched`) is unramified in the step (`New.IsStepUnramifiedAt`): some
 `σ ≠ 1` moves each place above it, so it is not in the inertia group, and `μ` is trivial on

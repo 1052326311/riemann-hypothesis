@@ -195,7 +195,6 @@ lemma normDensity_indicator_eq_mul [WeilData E] (hψ : P.ψ = S.charOnPlaces T) 
       ∫ b : skewAdjoint (LocProd T), ∫ y : κ → LocProd T,
         Ψ y * P.ψ (P.element * (b : LocProd T) * (star y ⬝ᵥ y - evalPlaces T β))
         ∂volume ∂P.skewMeasure := by
-  classical
   -- Split first the frequency and then the vector into their parts at `T` and off `T`.
   let L : Set (κ → 𝔸f E) := intVectors (integralOff T) κ
   have L_meas : MeasurableSet L := (isOpen_intVectors (isOpen_integralOff T)).measurableSet
@@ -449,7 +448,7 @@ lemma IsFillingData.enorm_normDensity_le_mul_lintegral_normFiberMeasure [WeilDat
     exact lintegral_gauss_sum_le_idealZeta
       (le_two_of_pow_le_ofReal (idealZeta_intAdeles_pow_le 𝔰.ϱ h_degree)) h_card _
   · simpa only [one_mulVec, hδβ] using enorm_localDensity_le
-      (P.isDisintegration_normFiberMeasure hF.two_le_card) conjTranspose_one hF.psi_add_star hΨ
+      (P.isDisintegration_normFiberMeasure F.two_le_card) conjTranspose_one hF.psi_add_star hΨ
         h_supp δβ
 
 omit [Fact (↑S.ideleM⁻¹ ∈ integralOff T)] ok in
@@ -799,7 +798,7 @@ theorem IsFillingData.siegel_sum_le_lintegral_sphere (hT_N : (S.N : E)⁻¹ ∈ 
       rw [← h_siegel]
       simp_rw [classSum_sourceLevel_eq_sum, ← NNReal.coe_sum, eNorm_eq_nnNorm, nnNorm_real,
         nnNorm_eq, ofNNReal_finsetSum, ENNReal.coe_tsum (h_summable _)]
-      grw [← ENNReal.tsum_prod.trans (tsum_fintype _), ← ENNReal.sum_le_tsum s]
+      grw [← tsum_prod.trans (tsum_fintype _), ← sum_le_tsum s]
       gcongr with z hz
       have h_norm_eq : star z.2 ⬝ᵥ z.2 = β := by simp [β, ← h_norm z hz, Nat.Prime.ne_zero]
       grw [ite_eq_left h_norm_eq, ← vectorOfLastEntry_evalPlaces]
@@ -820,7 +819,7 @@ omit [WeilData E] [S.IsAdmissible] [Fact (↑S.ideleM⁻¹ ∈ integralOff T)] i
 element `γ` of `floorGroup 𝔰.ϱ` are integral off `T`, then so is the `X₀`-part of the column of `γ`
 at `z`, moved by the inverse of the representative of `c`. -/
 lemma x₀Part_mem_integralOff (hT_basis : S.latticeBasis ∈ intGL 𝔰.BesselIndex (integralOff T))
-    [_P : IntegralPlace (LocProd T)] {c c' : S.Classes} {γ : S.G E} (hγ : γ ∈ floorGroup 𝔰.ϱ)
+    {c c' : S.Classes} {γ : S.G E} (hγ : γ ∈ floorGroup 𝔰.ϱ)
     (h_off : S.IsIntegralOff T (S.translateByClassReps c c' γ)) (i : 𝔰.κ) :
     (c.out⁻¹.val.val *ᵥ algebraMap E (𝔸f E) ∘ fun l : 𝔰.κ ↦ γ.val.val (𝔰.indexX₀ l) 𝔰.z) i ∈
       integralOff T := by
@@ -952,7 +951,7 @@ theorem IsFillingData.sum_mul_norm_sum_cosetAmplitude_sq_le_lastEntryDensity
       _ = _ := by
         -- almost every point of the sphere lies on the top quadric, where `Ψ_eq` gives `Ψ`
         rw [h_sphere, lintegral_congr_ae
-          ((P.ae_vectorOfLastEntry_mem_lastVectorQuadric piNAt_mul_star hF.two_le_card _).mono
+          ((P.ae_vectorOfLastEntry_mem_lastVectorQuadric piNAt_mul_star F.two_le_card _).mono
             fun _ ↦ Ψ_eq _)]
         rfl
   -- pass to real numbers and cancel the constants

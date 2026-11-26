@@ -186,7 +186,7 @@ lemma relIndex_mul_measure_inf (hK : IsCompact (K : Set G)) (hH : IsOpen (H : Se
     H.relIndex K * μ ↑(H ⊓ K) = μ K := by
   -- Pull `μ` back to the group `K`; there `H ⊓ K` is a measurable subgroup of finite index,
   -- and its cosets, all of the same measure, partition `K`.
-  have h_emb : MeasurableEmbedding K.subtype := .subtype_coe hK.measurableSet
+  have h_emb : MeasurableEmbedding K.subtype := .subtypeVal hK.measurableSet
   have : (H.subgroupOf K).FiniteIndex := ⟨hK.relIndex_ne_zero hH⟩
   have : (μ.comap K.subtype).IsMulLeftInvariant := .comap _ h_emb
   have h_index :
@@ -284,7 +284,7 @@ lemma heckeFun_eq_sum (hf : ∀ (g : G) (k : K), f (g * k) = f g)
   -- The chosen representative of `g K` is some `g * k`, and `k` does not change `f g • π g v`.
   have term (g : G) : f (g : G ⧸ K).out • π (g : G ⧸ K).out v = f g • π g v := by
     obtain ⟨k, hk⟩ := mk_out_eq_mul K g
-    rw [hk, hf, map_mul, Module.End.mul_apply, mem_levelSpace.1 hv k, MonoidHom.one_apply, one_smul]
+    rw [hk, hf, map_mul, mul_apply_eq_comp, mem_levelSpace.1 hv k, MonoidHom.one_apply, one_smul]
   have h_support : support (fun q : G ⧸ K ↦ f q.out • π q.out) ⊆
       s.image fun i ↦ (r i : G ⧸ K) :=
     fun q hq ↦ support_subset q (left_ne_zero_of_smul hq)
@@ -371,7 +371,6 @@ lemma heckeFun_heckeFun (hf_fin : HasFiniteCosets K f) (hf : ∀ (g : G) (k : K)
       heckeFun π K (fun x : G ↦ ∑ q ∈ h'.toFinset, f' q.out * f (q.out⁻¹ * x)) v := by
   -- Each `π q.out (heckeFun π K f v)` is the operator of a left translate of `f` applied to `v`;
   -- then exchange the two sums.
-
   have h_linear : heckeFun π K (fun x : G ↦ ∑ q ∈ h'.toFinset, f' q.out * f (q.out⁻¹ * x)) =
       ∑ q ∈ h'.toFinset, f' q.out • heckeFun π K (fun x : G ↦ f (q.out⁻¹ * x)) := by
     simp [heckeFun, sum_smul, finsum_sum_comm, fun_smul_left (hf_fin.comp_inv_mul hf _),

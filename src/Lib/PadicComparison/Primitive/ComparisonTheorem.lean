@@ -151,8 +151,6 @@ noncomputable def toGenericPoints [Algebra R OC]
         exact (mapGeneric_algebraMap ..).symm }
     (algPointsOf R R Y)
 
-set_option backward.isDefEq.respectTransparency false
-
 /-- Let `Ω` be a field in which `ℓ` is invertible and `D` a compared theory on tests over `Ω`
 (`New.Variety.ComparedTheory`). Then `D.IsFiniteLerayHirsch` (the classes `D.comparison` form a
 Leray–Hirsch basis and the total cohomology is finite) holds for `ℤ[X] = freeAb X` iff it holds for
@@ -175,14 +173,15 @@ lemma ComparedTheory.isFiniteLerayHirsch_freeAb_iff_relFreeAb {ℓ : ℕ} {Ω : 
     refine (zar (U := .whisker (Y := (offClosedFibre X).toFunctor) ⊥ _)
       fun _ y _ hm ↦ ?_).isCohomEquiv
     refine (hm.ne_top (eq_top_mono ?_ y.prop)).elim
-    simp only [IdealFamily.ofMaximalIdeal, IsLocalRing.maximalIdeal_eq_bot, Ideal.map_bot, bot_le]
+    simp only [IdealFamily.ofMaximalIdeal, IsLocalRing.maximalIdeal_eq_bot]
+    exact Ideal.map_le_iff_le_comap.2 bot_le
   obtain ⟨w, h_exact⟩ := relFreeAb.shortExact (offClosedFibre X)
   exact h_ses ⟨_, _, w⟩ h_exact h_sub
 
 omit [ThePrime p] [Algebra Ω ℂ_[p]] in
 /-- The points of a proper `Y` over `R` on tests over `Ω` have flat base change: the functor is
 covered by affine pieces (`isAffinelyCovered_algPointsOf`). -/
-lemma hasFlatBaseChange_algPointsOf [InvertsPrime Ω p] (Y : Over (Spec R)) [IsProper Y.hom] :
+lemma hasFlatBaseChange_algPointsOf (Y : Over (Spec R)) [IsProper Y.hom] :
     HasFlatBaseChange
       (freeAb (ObjectProperty.ι _ ⋙ algPointsOf Ω R Y) : AbFunctor (TestOver Ω)) :=
   (isAffinelyCovered_algPointsOf (·.2.2) Y).hasFlatBaseChange
@@ -258,10 +257,12 @@ lemma finite_and_primitive_comparison [IsAlgClosed Ω]
     NatIso.ofComponents
       (fun _ ↦ ((cancelBaseChange ..).symm ≪≫ₗ TensorProduct.comm ..).toModuleIso)
       fun _ ↦ ModuleCat.hom_ext (tmul_ext fun _ _ ↦ rfl)
-  let γ := isoWhiskerRight γ₀ (moduleCoeff (𝟭 _))
+  let γ : moduleCoeff (asModules (TestOver.toTest Ω ⋙ testIncl ⋙ locConstAlg) ⋙ tensorWith _ M) ≅
+      TestOver.toTest Ω ⋙ oFlatLocConst ⋙ moduleCoeff (tensorCoeff M) :=
+    isoWhiskerRight γ₀ (moduleCoeff (𝟭 _))
   let b := Module.Free.chooseBasis (ZMod p) M
   let c : Comparison (TestOver.toTest Ω ⋙ oFlatLocConst ⋙ moduleCoeff (tensorCoeff M))
-      (tilt ⋙ moduleCoeff (tensorCoeff M)) :=
+      (tiltTheory Ω M ac).functor :=
     ⟨genericTestOver Ω, whiskerRight primitiveMap (moduleCoeff _)⟩
   -- The tilted theory, with the classes `x ↦ b i ⊗ x` of degree zero. It and the locally
   -- constant theory satisfy the projective line formula.
@@ -305,6 +306,7 @@ lemma finite_and_primitive_comparison [IsAlgClosed Ω]
       simp_rw [map_homClass, ← homClass_comp]
       rfl
     -- Pull-back along the isomorphism `u` is bijective, and so is `E`.
+    have : IsIso (freeAbMap u.hom) := inferInstanceAs (IsIso (freeAb.map u.hom))
     erw [← bijective_totalH_iff_isBijective,
       (IsCohomEquiv.of_isIso _).bijective_pullbackAlong.of_comp_iff',
       ← E.bijective.of_comp_iff]

@@ -1,7 +1,6 @@
 module
 
 public import Lib.General.Analysis.HolomorphicIntegrals
-public import Lib.Shimura.AbelianScheme.Pairings
 public import Lib.Shimura.Uniformisation.HolomorphicFamilies
 
 /-!
@@ -306,7 +305,7 @@ private lemma New.isAppellHumbert_of_double_eq {V : Type*} [FinComplexSpace V] {
 /-- If theta functions of type (B, χ) are homogeneous coordinates of a projective embedding of a
 uniformised group, then the Riemann form of B is positive. -/
 private lemma New.Uniformisation.isPosRiemann_of_hasThetaCoords
-    {A : Over (AlgebraicGeometry.Spec (CommRingCat.of ℂ))} [AddObj A] {ι V : Type} [Finite ι]
+    {A : Over (AlgebraicGeometry.Spec (CommRingCat.of ℂ))} [AddObj A] {ι V : Type}
     [FinComplexSpace V] (u : Uniformisation (O := ℂ) A V) {N : LineBundle A.left ι}
     (hN : IsProjEmbedding (ι := ι) N A.hom) {B : ThetaTori.LatticeForm u.lattice} {χ : V → ℂ}
     {θ : V → ι → ℂ} (h_theta : HasThetaCoords u.lattice (atGeneric u.expMap) N B χ θ) :

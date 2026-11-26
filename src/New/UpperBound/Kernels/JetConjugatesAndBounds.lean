@@ -513,8 +513,8 @@ open Matrix Fintype Finset Real MvPolynomial MeasureTheory Space Fock NumberFiel
 `card n'` (`New.FitsRanks`: no column has height strictly between them), then the row lengths
 `diagramWeight` of the diagram formed by the columns of height below `card n'`, summed over all
 places and the first `card n` rows, add up to the number of boxes of that diagram. -/
-lemma FitsRanks.sum_diagramWeight_eq_boxes {n n' Φ : Type} [Fintype n] [DecidableEq n] [Fintype n']
-    [DecidableEq n'] [Fintype Φ] {κ : Φ → ℕ → ℕ}
+lemma FitsRanks.sum_diagramWeight_eq_boxes {n n' Φ : Type} [Fintype n] [Fintype n']
+    [Fintype Φ] {κ : Φ → ℕ → ℕ}
     (hκ : FitsRanks (fun _ : Φ ↦ n) (fun _ : Φ ↦ n') κ) :
     ∑ x : Φ × Fin (Fintype.card n), diagramWeight (rankAt fun _ : Φ ↦ n') κ (x.1, x.2) =
       boxes κ (Fintype.card n') := by
@@ -543,7 +543,7 @@ def HasConjugateGrowth {ι : Type*} [Fintype ι] (σ : ℂ → ℂ) (Q : MvPolyn
 
 /-- Against `normalizedVolume ι`, which is Lebesgue measure on `ι → ℂ` divided by `π ^ card ι`, the
 Gaussian `exp (-|y|² / a)` has integral `a ^ card ι`. -/
-lemma integral_exp_neg_inv_mul_normalizedVolume {ι : Type} [Fintype ι] [DecidableEq ι] {a : ℝ}
+lemma integral_exp_neg_inv_mul_normalizedVolume {ι : Type} [Fintype ι] {a : ℝ}
     (ha : 0 < a) :
     ∫ y : ι → ℂ, exp (-a⁻¹ * ∑ i : ι, ‖y i‖ ^ 2) ∂normalizedVolume ι = a ^ card ι := by
   rw [normalizedVolume, integral_smul_nnreal_measure,
@@ -563,7 +563,7 @@ lemma norm_integral_normalizedVolume_le {ι : Type} [Fintype ι] [DecidableEq ι
     (by positivity))
 
 /-- The vacuum `realVac y` has modulus `exp (-|y|² / 2)`. -/
-lemma norm_realVac {ι : Type} [Fintype ι] [DecidableEq ι] (y : ι → ℂ) :
+lemma norm_realVac {ι : Type} [Fintype ι] (y : ι → ℂ) :
     ‖realVac y‖ = exp (-(∑ i : ι, ‖y i‖ ^ 2) / 2) := by
   rw [realVac, star_dotProduct_self_eq_sum, Complex.norm_exp]
   norm_cast
@@ -576,10 +576,11 @@ representation acts. -/
 lemma Parameters.jet_jetSeries_mul (V : Space (P.E s) (n' × n) (homSigns 1 1)) (c a : ℂ)
     (Q : MvPolynomial (P.Φ s × n' × n) ℂ) (F : 𝒮 V) :
     jet ℂ Q (V.jetSeries (c * a) F) = jet ℂ (aeval (c • X) Q) (V.jetSeries a F) := by
-  have h_scale : bind₁ (fun i ↦ (c * a) • X i) Q = bind₁ (fun i ↦ a • X i) (aeval (c • X) Q) := by
+  have h_scale : aeval (fun i ↦ (c * a) • X (R := ℂ) i) Q =
+      aeval (fun i ↦ a • X i) (aeval (c • X (R := ℂ)) Q) := by
     rw [Q.as_sum]
-    simp [monomial_eq, ← C_mul', mul_assoc, bind₁]
-  rw [jet_jetSeries_eq_theta, jet_jetSeries_eq_theta, aeval_eq_bind₁, aeval_eq_bind₁, h_scale]
+    simp [monomial_eq, ← C_mul', mul_assoc]
+  rw [jet_jetSeries_eq_theta, jet_jetSeries_eq_theta, h_scale]
 
 /-- Conjugates of jets as Gaussian integrals, on a space `V` whose signs `homSigns 1 1` are all
 `+1`. Suppose that `σ` takes the Taylor series of `F` at scale `P.jetScale s` to that of `F'` at

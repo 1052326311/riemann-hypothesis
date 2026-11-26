@@ -99,14 +99,13 @@ lemma norm_sub_ite_le {p : Prop} [Decidable p] (hs : 1 / 2 ≤ s.re) :
 /-- Linear growth bound: `|𝖿_χ(s)| ≤ 8 N |s|` in `re s ≥ 1 / 2`, where `𝖿_χ` (`regularL χ`) is
 `L(s, χ)`, times `(s - 1) / s` if `χ` is principal, and `N` is the modulus of `χ`. -/
 lemma norm_regularL_le_linear (hs : 1 / 2 ≤ s.re) : ‖regularL χ s‖ ≤ 8 * N * ‖s‖ := by
-  have bound_ne {z : ℂ} (hz : 1 / 2 ≤ z.re) (h1 : z ≠ 1 ∨ χ ≠ 1) :
+  have bound_ne {z : ℂ} (hz : 1 / 2 ≤ z.re) (hz1 : z ≠ 1) :
       ‖regularL χ z‖ ≤ 8 * N * ‖z‖ := by
     have hz_pos : 0 < z.re := by linarith
     have hz_norm : 1 / 2 ≤ ‖z‖ := hz.trans (re_le_norm z)
     have hN : (0 : ℝ) ≤ N := Nat.cast_nonneg N
     by_cases hχ : χ = 1
-    · have hz1 : z ≠ 1 := h1.resolve_right (not_not.mpr hχ)
-      have h_eq : regularL χ z = (z - 1) / z * χ.LFunction z := by
+    · have h_eq : regularL χ z = (z - 1) / z * χ.LFunction z := by
         simp [regularL, entireL, hχ, LFunctionTrivChar₁, Function.update_of_ne hz1]
         ring
       have h_sub : ‖z - 1‖ ≤ ‖z‖ := by simpa using norm_sub_ite_le (p := True) hz
@@ -130,7 +129,7 @@ lemma norm_regularL_le_linear (hs : 1 / 2 ≤ s.re) : ‖regularL χ s‖ ≤ 8 
         ‖regularL χ z‖ = ‖z - 1‖ / ‖z‖ * ‖χ.LFunction z‖ := by rw [h_eq, norm_mul, norm_div]
         _ ≤ ‖z - 1‖ / ‖z‖ * (N * (‖z - 1‖⁻¹ + 1 + ‖z‖ / z.re)) := by
           gcongr
-          exact χ.norm_LFunction_le hz_pos h1
+          exact χ.norm_LFunction_le hz_pos (.inl hz1)
         _ = N * (‖z - 1‖ / ‖z‖ * (‖z - 1‖⁻¹ + 1 + ‖z‖ / z.re)) := by ring
         _ ≤ N * (8 * ‖z‖) := by gcongr
         _ = 8 * N * ‖z‖ := by ring
@@ -140,19 +139,14 @@ lemma norm_regularL_le_linear (hs : 1 / 2 ≤ s.re) : ‖regularL χ s‖ ≤ 8 
         _ ≤ N * ‖z‖ / z.re := χ.norm_LFunction_le_level_mul_norm_div_re hχ hz_pos
         _ ≤ N * ‖z‖ / (1 / 2) := by gcongr
         _ ≤ 8 * N * ‖z‖ := by nlinarith [norm_nonneg z]
-  by_cases h1 : s ≠ 1 ∨ χ ≠ 1
-  · exact bound_ne hs h1
-  · push Not at h1
-    rcases h1 with ⟨rfl, rfl⟩
-    refine le_of_tendsto_of_tendsto (b := 𝓝[≠] (1 : ℂ))
-      ((differentiableAt_regularL (s := 1) 1 (by norm_num)).continuousAt.norm.tendsto.mono_left
-        nhdsWithin_le_nhds)
-      ((continuous_const.mul continuous_norm).continuousAt.tendsto.mono_left
-        nhdsWithin_le_nhds) ?_
-    filter_upwards [mem_nhdsWithin_of_mem_nhds
-      ((isOpen_re_gt (1 / 2)).mem_nhds (by norm_num : (1 / 2 : ℝ) < (1 : ℂ).re)),
-      self_mem_nhdsWithin] with z hz hz1
-    exact bound_ne (le_of_lt hz) (Or.inl hz1)
+  -- Extend the estimate from the punctured open half-plane by continuity.
+  have hs_closure : s ∈ closure ({z : ℂ | 1 / 2 < z.re} ∩ {1}ᶜ) :=
+    closure_minimal
+      ((dense_compl_singleton (1 : ℂ)).open_subset_closure_inter (isOpen_re_gt (1 / 2)))
+      isClosed_closure (by simpa only [closure_setOfPred_lt_re, Set.mem_ofPred_eq] using hs)
+  exact ContinuousWithinAt.closure_le (g := fun z : ℂ ↦ 8 * N * ‖z‖) hs_closure
+    (differentiableAt_regularL χ (by linarith)).continuousAt.norm.continuousWithinAt
+    (by fun_prop) (fun z hz ↦ bound_ne (le_of_lt hz.1) hz.2)
 
 /-- For `l ≥ 1` and `re s > 1`, at distance at least `1 / l` from `1` if `χ` is principal, we have
 `|L(s, χ)| ≤ 2 l |𝖿_χ(s)|`, where `𝖿_χ` (`regularL χ`) is `L(s, χ)`, times `(s - 1) / s` if `χ` is

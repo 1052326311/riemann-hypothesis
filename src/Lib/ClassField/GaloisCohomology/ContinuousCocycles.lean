@@ -14,6 +14,7 @@ modules, and counts continuous 1-cocycles along exact sequences.
 
 ## Main definitions and results
 
+* `New.B1`: the 1-coboundaries among the continuous 1-cocycles `New.Z1`.
 * `New.Z2`, `New.B2`, `New.H2`: continuous 2-cocycles, coboundaries and their quotient.
 * `New.QZ`, `New.QZ.carry`, `New.QZChar`: the discrete group `ℚ/ℤ`, the carry of two representatives
   in `[0, 1)`, and continuous characters into `ℚ/ℤ`.
@@ -78,6 +79,14 @@ def Z1 : Submodule R (G → M) :=
 /-- The coboundary map in degree 0: the `R`-linear map from `M` to functions `G → M` sending `m`
 to `g ↦ ρ g m - m`. -/
 abbrev coboundaryMap : M →ₗ[R] G → M := LinearMap.pi fun g ↦ ρ g - LinearMap.id
+
+/-- The 1-coboundaries of `ρ`, as a submodule of the continuous 1-cocycles: the cocycles of the form
+`g ↦ ρ g m - m` for some `m : M`. -/
+def B1 : Submodule R (Z1 ρ) := (LinearMap.range (coboundaryMap ρ)).comap (Z1 ρ).subtype
+
+variable {ρ} in
+lemma mem_B1_iff {z : Z1 ρ} : z ∈ B1 ρ ↔ ∃ m : M, ∀ g : G, ρ g m - m = (z : G → M) g := by
+  simp [B1, funext_iff]
 
 /-- The continuous 2-cocycles of `ρ`: continuous `f : G × G → M` with
 `f (g * h, k) = f (g, h * k) - f (g, h) + ρ g (f (h, k))`. -/
@@ -233,13 +242,13 @@ lemma carry_smul_mem_Z2 (χ : QZChar G) (w : ρ.invariants) :
   have hχ_cont : Continuous (χ : G → QZ) := χ.prop.left
   refine ⟨by fun_prop, fun g h k ↦ ?_⟩
   set f : G → QZ := (χ : G → QZ)
-  show (f (g * h)).carry (f k) • (w : M) =
+  change (f (g * h)).carry (f k) • (w : M) =
     (f g).carry (f (h * k)) • (w : M) - (f g).carry (f h) • (w : M) +
       ρ g ((f h).carry (f k) • (w : M))
   -- `w` is invariant, so this is the cocycle identity of the carry, times `w`
   have hf_mul (a b : G) : f (a * b) = f a + f b := QZChar.apply_mul χ a b
   have h_carry (a b c : QZ) : (a + b).carry c = a.carry (b + c) - a.carry b + b.carry c := by
-    linarith [QZ.carry_add_add_carry a b c]
+    linarith only [QZ.carry_add_add_carry a b c]
   have hw_inv : ρ g (w : M) = w := w.prop g
   rw [hf_mul, hf_mul, h_carry, map_zsmul, hw_inv, add_smul, sub_smul]
 
@@ -256,7 +265,7 @@ def cyclicClass : QZChar G →+ ρ.invariants →+ H2 ρ :=
       refine AddMonoidHom.ext fun w ↦ (Submodule.Quotient.eq _).mpr
         ⟨fun g ↦ (χ g).carry (ψ g) • -w, by fun_prop, fun g h ↦ ?_⟩
       have hw_inv : ρ g (w : M) = w := w.prop g
-      show (χ g + ψ g).carry (χ h + ψ h) • (w : M) -
+      change (χ g + ψ g).carry (χ h + ψ h) • (w : M) -
           ((χ g).carry (χ h) • (w : M) + (ψ g).carry (ψ h) • (w : M)) =
         ρ g ((χ h).carry (ψ h) • -(w : M)) - (χ (g * h)).carry (ψ (g * h)) • -(w : M) +
           (χ g).carry (ψ g) • -(w : M)
@@ -321,10 +330,6 @@ abbrev QZChar.ker : Subgroup Γ := (toHom χ).ker
 /-- `QZChar.toHom χ` sends `g` to `χ g`, written multiplicatively. -/
 lemma QZChar.toHom_apply (g : Γ) : toHom χ g = Multiplicative.ofAdd ((χ : Γ → QZ) g) := rfl
 
-/-- An element `g` lies in the kernel of the character `χ` exactly when `χ g = 0`. -/
-lemma QZChar.mem_ker_iff {g : Γ} : g ∈ QZChar.ker χ ↔ (χ : Γ → QZ) g = 0 := by
-  rw [QZChar.ker, MonoidHom.mem_ker, toHom_apply, ofAdd_eq_one]
-
 /-- The kernel of a continuous character `χ : Γ → ℚ/ℤ` is closed in `Γ`. -/
 lemma QZChar.isClosed_ker : IsClosed (QZChar.ker χ : Set Γ) :=
   (isClosed_discrete {0}).preimage χ.prop.left
@@ -335,7 +340,7 @@ def QZChar.abelianLift [IsTopologicalGroup Γ] (χ : QZChar Γ) :
     TopologicalAbelianization Γ →* Multiplicative QZ :=
   -- the kernel is closed and contains the commutators
   QuotientGroup.lift (commutator Γ).topologicalClosure (toHom χ)
-    (closure_minimal (Abelianization.commutator_subset_ker (toHom χ)) (QZChar.isClosed_ker χ))
+    (closure_minimal (Group.Abelianization.commutator_le_ker (toHom χ)) (QZChar.isClosed_ker χ))
 
 variable (Γ)
 
@@ -575,10 +580,6 @@ lemma IsShortExact.restrictAlong (h_exact : IsShortExact ι π) :
 /-- A Γ-stable R-submodule W of a discrete Γ-module A, as a discrete Γ-module with the
 restricted action. -/
 abbrev submodule : DiscreteModule R Γ := of (A.ρ.subrepresentation W h)
-
-private lemma discreteTopology_quotient : DiscreteTopology (A.V ⧸ W) :=
-  discreteTopology_iff_forall_isOpen.mpr fun s ↦
-    (W.isOpenQuotientMap_mkQ.isQuotientMap.isOpen_preimage (s := s)).mp (isOpen_discrete _)
 
 /-- For a Γ-stable R-submodule W of a discrete Γ-module A, the quotient A ⧸ W as a discrete
 Γ-module, with the action induced on cosets. -/

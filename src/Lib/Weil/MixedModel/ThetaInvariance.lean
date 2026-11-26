@@ -105,11 +105,13 @@ lemma integrable_slice (f : 𝒮 V) : Integrable fun x : p → 𝔸 E ↦ D.slic
   -- Unfold the integral into an integral over the quotient of sums over the lattice `E^p`.
   calc ∫⁻ x : p → 𝔸 E, ‖D.slice x f‖ₑ
     _ ≤ _ := (lintegral_addOrbitMeasure_lintegral (H := New.ratVectors E p) (ν := .count)
-        (D.continuous_slice f).enorm.measurable).ge
+        (D.continuous_slice f).eNorm.measurable).ge
     _ < ⊤ := by
       refine IsFiniteMeasure.lintegral_lt_top_of_bounded_to_ennreal _ ⟨C * ‖f‖₊, fun x ↦ ?_⟩
       -- The points of `ratVectors` are the `toAdele ∘ ξ`.
-      erw [lintegral_count, ← (ofInjective _ (toAdele (E := E)).injective.comp_left).tsum_eq]
+      rw [lintegral_count, New.ratVectors,
+        ← (AddMonoidHom.ofInjective (f := (toAdele (E := E)).toAddMonoidHom.compLeft p)
+          (toAdele (E := E)).injective.comp_left).toEquiv.tsum_eq]
       exact h_bound x
 
 end MixedModelIntegrable
@@ -356,7 +358,7 @@ lemma zeroTerm_omega_levi (f : 𝒮 V) :
   have hI : 0 < I := by
     -- the integrand of the pair `(u, u)` has norm `‖w‖² φ²`, which is not zero at `0`
     simpa [hu, hw, φ, I, mul_mul_mul_comm ‖w‖, integral_const_mul] using
-      integral_pos_of_integrable_nonneg_nonzero (x := 0) (by fun_prop)
+      integral_pos_of_integrable_nonneg_ne_zero (x := 0) (by fun_prop)
         (D.integrable_dataInner_slice u u).norm (fun _ ↦ norm_nonneg _)
         (by simp [hu, hw, φ, vacuumFn])
   have hφ_cont : Continuous φ := (cont (adelicHeisenberg E 1)).norm.pow 2
@@ -542,11 +544,8 @@ lemma theta_omega_ratEmbed_of_splitting (γ : U V.J) [DecidableEq p]
   -- The stabilizer of `θ` contains two opposite parabolic subgroups, which generate the group.
   have h_le (D' : V.Splitting (stdSpace E Empty) p) : D'.siegelParabolic ≤ V.thetaStabilizer :=
     fun δ ⟨a, ha⟩ ↦ theta_omega_ratEmbed_of_mul_k δ D' a ha
-  have h_top : V.thetaStabilizer = ⊤ := by
-    rw [eq_top_iff, ← D.siegelParabolic_sup_symm_eq_top]
-    exact sup_le (h_le D) (h_le D.symm)
-  have h_mem : γ ∈ V.thetaStabilizer := by simp [h_top]
-  exact h_mem f
+  exact (D.siegelParabolic_sup_symm_eq_top.ge.trans (sup_le (h_le D) (h_le D.symm))
+    (Subgroup.mem_top γ)) f
 
 variable (V) in
 /-- The splitting without middle part of `V ⊕ V⁻`, with `V⁻` the space of the negative form, whose

@@ -215,8 +215,7 @@ lemma charpoly_simClassOf : (simClassOf g).charpoly = g.charpoly :=
 lemma Hall.ext (H : ∀ (n : ℕ) (g : End k (Fin n → k)), f (simClassOf g) = h (simClassOf g)) :
     f = h := by
   funext c
-  rw [← simClassOf_out c]
-  exact H c.out.fst c.out.snd
+  simpa only [simClassOf_out c] using H c.out.fst c.out.snd
 
 /-- The value of the induction product `f * h` at a class `c`, as in its definition. Let g be the
 chosen representative of `c`. The value is the finite sum, over the g-stable subspaces W, of `f` at
@@ -468,8 +467,7 @@ lemma Hall.one_sub_constOne_pow_apply_eq_zero (m : ℕ) :
     exact absurd hc (Nat.not_lt_zero _)
   | succ m ih =>
     intro c hc
-    rw [pow_succ]
-    exact mul_apply_eq_zero_of_dim_lt ih h_zero c hc
+    simpa only [pow_succ] using mul_apply_eq_zero_of_dim_lt ih h_zero c hc
 
 /-- The class functions form a `ℂ`-algebra: scalars act pointwise. -/
 instance : Algebra ℂ (Hall k) := by
@@ -1064,8 +1062,7 @@ lemma classInner_evalGL_prod [Finite k] {s : Finset ι} (hs : ∀ i : n, b i ∈
   have h_unit (g : parabolic (R := k) b) : IsUnit (M g).toBlocks₁₁ ∧ IsUnit (M g).toBlocks₂₂ := by
     have h_M_unit :
         IsUnit (fromBlocks (M g).toBlocks₁₁ 0 (M g).toBlocks₂₁ (M g).toBlocks₂₂) := by
-      rw [h_blocks g]
-      simp
+      simp [h_blocks g]
     exact isUnit_fromBlocks_zero₁₂.1 h_M_unit
   -- Move the factor of level `m` to the other side (`rankInner_mul_eq_rankInner_skew`) and apply
   -- the induction hypothesis to the indices of the other levels.
@@ -1102,7 +1099,8 @@ lemma classInner_evalGL_prod [Finite k] {s : Finset ι} (hs : ∀ i : n, b i ∈
       left_inv := by aesop_cat
       right_inv := by aesop_cat }
   apply finMean_equiv blocks
-  simp_intro g [blocks, mul_left_comm, ← mul_assoc, h_notMem]
+  simp_intro g [blocks, ← mul_assoc, h_notMem]
+  rw [mul_comm (∏ x ∈ s, _)]
   symm
   congr!
   · -- The blocks of the levels in `s` agree up to a bijection of their index sets.

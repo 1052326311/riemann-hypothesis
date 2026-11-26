@@ -258,7 +258,7 @@ lemma Lift.exists_lift_of_descendsTo [Finite k']
 /-- Suppose Gal(k'/k) is trivial, F' on GL_n(k') is a Z-combination of characters, and F' agrees
 with F on GL_n(k). Then some Z-combination of characters of GL_n(k') ⋊ Gal(k'/k) descends
 (`New.DescendsTo`) to both F and F'. -/
-lemma hasCommonLift_of_gal_trivial [Finite k'] (h_triv : ∀ σ : Gal(k'/k), σ = 1)
+lemma hasCommonLift_of_gal_trivial (h_triv : ∀ σ : Gal(k'/k), σ = 1)
     (h : F'.evalGL ∈ virtualChars Z (GL n k'))
     (h_ev : ∀ g : GL n k, F'.evalGL (g.map (algebraMap k k')) = F.evalGL g) :
     HasCommonLift Z F F' n := by
@@ -479,7 +479,7 @@ omit [Finite k] in
 homomorphism. Then there is a function ϑ on Sˣ ⋊ Gal(k'/k) such that (a) ϑ is a character, (b)
 ϑ(s) = ∏_τ ν(α(τ) s₁), with s₁ the component of s in Sˣ, and (c) for σ with fixed field k,
 ϑ(s) = ν(γ) whenever s lies over σ and s^{ord σ} = γ. -/
-lemma exists_norm_char_semidirect {S : Type*} [Monoid S] [Finite S] (α : Gal(k'/k) →* MulAut Sˣ)
+lemma exists_norm_char_semidirect {S : Type*} [Monoid S] (α : Gal(k'/k) →* MulAut Sˣ)
     (ν : S →* ℂ) :
     ∃ ϑ : Sˣ ⋊[α] Gal(k'/k) → ℂ,
       -- (a) `ϑ` is a character
