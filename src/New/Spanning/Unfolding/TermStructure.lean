@@ -441,7 +441,6 @@ theorem finrank_linkedX₀_add_one (h_disc : S.termDisc γ ≠ 0) :
   have h_perp : 𝔰.n + 𝔰.n + finrank E (framePerp γ) = 𝔰.r := by
     rw [← finrank_frameSum_of_termDisc_ne_zero h_disc, finrank_frameSum_add_finrank_framePerp]
   have h_r : 𝔰.r = 𝔰.ϱ + (𝔰.k + 1 + 𝔰.ϱ) := by simp [Shape.r]
-  have h_n : 𝔰.n = 𝔰.ϱ + 1 := rfl
   lia
 
 /-- If `γ` has the cell rank `j`, then `finrank E (linkedX₀ γ) + (j - ϱ) = 𝔰.k`, the dimension of
