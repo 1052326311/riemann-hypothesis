@@ -28,9 +28,9 @@ counting their own in the ten minutes after, which usually just say why.
 The branch `alpoge` holds the work done before `main` was replaced, and about 1,200 open pull
 requests are based on it. Whether it will be kept up is undecided, and it may be phased out. Until
 then its pull requests have an inbox of their own, `alpoge-inbox`, so that they do not crowd the
-pull requests on `main`, and every open pull request based on it is labelled `alpoge`. Its pull
-requests' events run the workflows of `alpoge`, not this one, so the sweep is what keeps both
-labels up to date there. Everything about `alpoge` here is in `INBOXES` and `ALPOGE`, and goes
+pull requests on `main`, and every open pull request based on it is labelled `alpoge`. GitHub
+runs the default branch's copy of the inbox workflow for their events too, except reviews, which
+run the copy of `inbox review` on `alpoge`: the sweep catches those. Everything about `alpoge` here is in `INBOXES` and `ALPOGE`, and goes
 when the branch does.
 
 Reviews on pull requests from forks only get a read-only token, so the workflow hears about them

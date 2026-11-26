@@ -10,8 +10,10 @@ name: inbox
 #
 # Pull requests based on `alpoge` have an inbox of their own, `alpoge-inbox`, and are all labelled
 # `alpoge`. That branch's future is undecided and it may be phased out; see `scripts/inbox-sync.py`.
-# Their events run the workflows of `alpoge`, so apart from comments, which run this workflow,
-# only the sweep keeps their labels up to date.
+# GitHub runs the default branch's copy of a `pull_request_target` workflow whatever branch a pull
+# request is based on, so this workflow hears about theirs too. A review is different: it runs the
+# copy of `inbox review` in the pull request's merge commit, and that of `alpoge` relays only reviews
+# of pull requests labelled `inbox`. The sweep takes reviews of the others out of `alpoge-inbox`.
 #
 # An author takes `awaiting-author` off by commenting `ready` (see review-commands.yml). That label
 # change is made with a workflow token, so it starts no run here, and the review commands workflow
@@ -68,9 +70,11 @@ jobs:
           (github.event_name == 'pull_request_target' && (
            contains(fromJSON('["opened", "reopened", "ready_for_review", "converted_to_draft"]'), github.event.action) ||
            (github.event.action == 'unlabeled' && github.event.label.name == 'awaiting-author') ||
-           (contains(github.event.pull_request.labels.*.name, 'inbox') && (
+           ((contains(github.event.pull_request.labels.*.name, 'inbox') ||
+             contains(github.event.pull_request.labels.*.name, 'alpoge-inbox')) && (
             github.event.action == 'closed' ||
             (github.event.pull_request.state == 'open' && github.event.label.name != 'inbox' &&
+             github.event.label.name != 'alpoge-inbox' && github.event.label.name != 'alpoge' &&
              github.event.sender.type != 'Bot' &&
              github.event.sender.login != github.event.pull_request.user.login))))) ) }}
     runs-on: ubuntu-latest
