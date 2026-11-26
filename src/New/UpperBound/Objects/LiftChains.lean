@@ -219,7 +219,7 @@ each datum `Φ x j` by `ω(a j, a (j + 1))`, with `a m = 1`. Let the levels `K j
 trivial stabilisers `classAut`. Then ∑_x L_x(value at `g m` of the chain with data `Φ x` applied to
 `φ`) is the sum, over tuples `c` of double cosets `StdClasses (K j)`, `j < m`, of ∑_x
 L_x(`kernelProduct`). -/
-theorem IsJointlyInvariant.sum_chain_eq_sum_kernelProduct [WeilData E]
+theorem IsJointlyInvariant.sum_chain_eq_sum_kernelProduct
     {X : Type*} {m : ℕ} {s : Finset X}
     {L : X → (WeylIndex (n m) κ → ℂ) →ₗ[ℂ] M} {Φ : X → ∀ j : ℕ, S j}
     (h_inv : IsJointlyInvariant k m s L Φ)
