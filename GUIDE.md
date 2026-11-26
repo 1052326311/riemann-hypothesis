@@ -33,8 +33,8 @@ For the exceptional-prime divisibility step, start with
 single scaled Hecke operator, given a compatible Frobenius cycle.
 [`MarkOperator`](src/New/UpperBound/Divisibility/MarkOperator.lean) constructs that cycle.
 For the lattice `M` and operator `y`, “onto up to colength” says that `y` preserves `M`
-and that `y(M) + p^n M` has colength dividing `p^i` in `M`, in the sense of
-[`ColengthDvd`](src/New/Reduction/Lattices/Colength.lean), for some bounded exponent `i`.
+and that, for some natural number `i ≤ c`, `y(M) + p^j₀ M` has index dividing `p^i` in `M`,
+in the sense of [`ColengthDvd`](src/New/Reduction/Lattices/Colength.lean).
 [`LocalDivisibility`](src/New/UpperBound/Divisibility/LocalDivisibility.lean) applies the bound
 to the product of the marked operators raised to the number of lifts, and combines it
 with the valuation estimate in `exists_colengthDvd_gaugeLe_compositeLift`.
