@@ -433,7 +433,7 @@ lemma fockPairing_linSubst {σ m R : Type} [CommRing R] [Fintype m] (z : Matrix 
   -- A factor `X i` of `f` moves across the Fock form as `pderiv i` (`fockPairing_mul_X`), and
   -- both sides then agree by the chain rule; for constants only the constant terms matter.
   induction f using MvPolynomial.induction_on generalizing g with
-  | C c => simp [linSubst, fockPairing_C, hom_bind₁, -fockPairing]
+  | C c => simp [linSubst, fockPairing_C, -fockPairing]
   | add p q hp hq => simp [hp, hq, -fockPairing]
   | mul_X p i hp =>
     have h_subst : linSubst zᵀ (p * X i) = ∑ a : σ, z i a • (linSubst zᵀ p * X a) := by
@@ -492,7 +492,7 @@ def symPowMatrix (a : ℕ) : Matrix σ σ R →* Matrix (Monomials σ a) (Monomi
   map_mul' A B := by
     ext β α
     -- Expand `linSubst B (monomial α 1)` in the monomials of degree `a`, then apply `linSubst A`.
-    show (linSubst (A * B) (monomial α.1 1)).coeff β.1 = _
+    change (linSubst (A * B) (monomial α.1 1)).coeff β.1 = _
     rw [linSubst_mul, ← sum_monomials_eq_of_isHomogeneous (α.isHomogeneous_linSubst B)]
     simp [mul_comm, Matrix.mul_apply]
 
@@ -684,12 +684,12 @@ lemma fockPairing_rowSubst [∀ τ : Φ, DecidableEq (n τ)] (p : MatrixPoly ((�
       simp [h_q, mul_sum (ι := n _), apply_ite, sum_add_distrib, Pi.single_apply, smul_add, h_X]
       -- Both sides are `z τ b a' • w q` if `τ' = τ` and `k' = k`, and `0` otherwise; `aesop`
       -- matches the dependent pairs.
-      show (w q * ∑ x : n' τ', if (τ' = τ ∧ x ≍ b) ∧ k' = k then z τ' x a' • 1 else 0) =
+      change (w q * ∑ x : n' τ', if (τ' = τ ∧ x ≍ b) ∧ k' = k then z τ' x a' • 1 else 0) =
           ∑ x : n τ, if (τ' = τ ∧ a' ≍ x) ∧ k' = k then z τ b x • w q else 0
       aesop (add simp ite_and)
   -- Induction on `p`: multiplication by a variable is adjoint to the partial derivative.
   induction p using MvPolynomial.induction_on with
-  | C a => simp [w, fockPairing_C, hom_bind₁, rowSubst]
+  | C a => simp [w, fockPairing_C, rowSubst]
   | add p₁ p₂ h₁ h₂ => simp [h₁, h₂]
   | mul_X p j h_p =>
     intro q

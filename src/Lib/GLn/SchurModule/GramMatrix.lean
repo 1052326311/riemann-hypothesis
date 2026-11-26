@@ -442,7 +442,7 @@ lemma weylNormSq_weylEval_permArray (e : ∀ τ : Φ, n τ ≃ Fin (rankAt n τ)
   have h_form : star (weylEval n κ y) ⬝ᵥ weylGramOver *ᵥ weylEval n κ y = 1 := by
     rw [h_star, ← eval_toPoly, toPoly_weylEval]
     exact eval_weylKernel_permArray e
-  show re (star (weylEval n κ y) ⬝ᵥ weylGramOver *ᵥ weylEval n κ y) = 1
+  change re (star (weylEval n κ y) ⬝ᵥ weylGramOver *ᵥ weylEval n κ y) = 1
   rw [h_form, one_re]
 
 /-- A tight frame of integral vectors. Let `hk` be the hook number and `⟨ξ, ξ'⟩ = ξ* G ξ'` the form
