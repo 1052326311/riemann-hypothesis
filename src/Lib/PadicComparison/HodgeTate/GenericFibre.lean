@@ -433,7 +433,7 @@ lemma isLeftRegular_xi {p : ℕ} [ThePrime p] (c : PadicTest) :
       (algebraMap Ainf (WittVector p c.TiltRing) xi).coeff 0 ^ p ^ j * y.coeff 0 = 0 := by
     simpa [← smul_eq_mul, hx] using
       (iterate_verschiebung_mul_coeff (algebraMap Ainf (WittVector p c.TiltRing) xi) y 0 j).symm
-  show tiltMap c.structureMap pFlat ^ p ^ j * y.coeff 0 = tiltMap c.structureMap pFlat ^ p ^ j * 0
+  change tiltMap c.structureMap pFlat ^ p ^ j * y.coeff 0 = tiltMap c.structureMap pFlat ^ p ^ j * 0
   rw [mul_zero]
   -- The zeroth coordinate of `ξ` in `W(R♭)` is the image of `pFlat`.
   have h_xi_coeff : (algebraMap Ainf (WittVector p c.TiltRing) xi).coeff 0 =

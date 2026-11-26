@@ -244,7 +244,7 @@ lemma theta_comp_bijective {R : Type*} {c : PadicTest} [CommRing R] [CharP R p] 
     intro f g h_eq
     refine hom_ext p fun x ↦ ?_
     -- `θ [y]` reduces modulo `p` to the zeroth coordinate of `y`
-    show PreTilt.coeff 0 (f x) = PreTilt.coeff 0 (g x)
+    change PreTilt.coeff 0 (f x) = PreTilt.coeff 0 (g x)
     simpa using
       congrArg (algebraMap c.ProdRing (ModP c.ProdRing p))
         (RingHom.congr_fun h_eq (teichmuller p x))

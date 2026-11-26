@@ -236,7 +236,6 @@ theorem hodgeTateMap_galois_twist
   let u : TotalH (galTwist g ⋙ formCoeff) scalarCoeff :=
     TotalH.comp (TotalH.map (restrictAlong (galTwist g)) (contractionPow h)) β
   let s : formCoeff ⟶ formCoeff := toHodgeTest.whiskerLeft (HodgeTest.scaleModule t hodgeCoeff)
-
   have h_tw : pullbackAlong (twistForms g) u = contractionPow h := contractionPow_galTwist g h
   -- The class `y` comes from the Hodge class `x` over `E`, so its twist along `T` is its scaling
   -- by `t`.
