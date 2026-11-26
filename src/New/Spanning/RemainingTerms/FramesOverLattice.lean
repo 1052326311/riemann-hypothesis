@@ -55,7 +55,7 @@ vectors of finite adeles over the ring `Ô E` of integral finite adeles, with `K
 index in `K'`. Attach to each element of `A` a family `f a`, indexed by `ι`, of vectors of `K'`. If
 every nonempty subset of `A` whose families are congruent modulo `K` has at most `x` elements, then
 `A` has at most `[K' : K ∩ K'] ^ card ι * x` elements. -/
-lemma encard_le_of_colouring {E : Type} [Field E] [CMType E] [HasPrimitiveRoot5040 E]
+lemma encard_le_of_colouring {E : Type} [Field E] [CMType E]
     {α ι σ : Type} [Fintype ι] {A : Set α} (f : α → ι → σ → 𝔸f E)
     {K K' : Submodule (Ô E) (σ → 𝔸f E)} (h_index : submoduleIndex K K' ≠ 0)
     (hf : ∀ a ∈ A, ∀ i : ι, f a i ∈ K') {x : ℝ≥0∞}
