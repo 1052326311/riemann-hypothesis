@@ -745,9 +745,9 @@ lemma Parameters.norm_jet_le_of_isVacuumCombination
     (2 * L + 2) ^ card (P.Φ s × n' × n)
   have hT' : ‖σ' c‖ ^ 2 / P.bigOmega s ≤ T := by rwa [← hσ' c]
   have hQ' : HasConjugateGrowth σ' Q T L w A := by simpa only [HasConjugateGrowth, hσ'] using hQ
-  have h_term (x : n' × n → 𝔸f (P.E s)) :
-      ‖σ (jet ℂ Q (V.jetSeries (c * P.jetScale s) (W (V.finHeisenbergOp x (intVacuum V)))))‖ ≤
-        C * A := by
+  let J (x : n' × n → 𝔸f (P.E s)) : ℂ :=
+    jet ℂ Q (V.jetSeries (c * P.jetScale s) (W (V.finHeisenbergOp x (intVacuum V))))
+  have h_term (x : n' × n → 𝔸f (P.E s)) : ‖σ (J x)‖ ≤ C * A := by
     -- `W` is a scalar times `ω` at a finite point `k`, and `ω(k)` moves past the translation.
     -- The conjugates of the scalars have norm one.
     let k : Gf (P.E s) (n' × n) := (G.onHom p).2
@@ -759,12 +759,11 @@ lemma Parameters.norm_jet_le_of_isVacuumCombination
     have h_unit : ‖σ' (pairChar a b p * ζ)‖ = 1 := by
       rw [map_mul, norm_mul, P.norm_map_pairChar σ' g h, one_mul]
       exact (MonoidHom.isOfFinOrder (σ' : ℂ →* ℂ) hζ).norm_eq_one
+    dsimp only [J]
     rw [hσ', h_move, map_smul, map_smul, smul_eq_mul, map_mul, norm_mul, h_unit, one_mul]
     exact P.norm_jet_translate_le V σ' hT' hQ' _ k
-  calc _ = ‖∑ x ∈ r.support, σ (r x) *
-          σ (jet ℂ Q (V.jetSeries (c * P.jetScale s)
-            (W (V.finHeisenbergOp x (intVacuum V)))))‖ := by
-        simp only [map_sum, map_smul, smul_eq_mul, map_mul]
+  calc _ = ‖∑ x ∈ r.support, σ (r x) * σ (J x)‖ := by
+        simp only [J, map_sum, map_smul, smul_eq_mul, map_mul]
     _ ≤ ∑ x ∈ r.support, ‖σ (r x)‖ * (C * A) :=
         norm_sum_le_of_le _ fun x _ ↦ by grw [norm_mul, h_term]
     _ ≤ B * (C * A) := by grw [← sum_mul, h_size σ]
