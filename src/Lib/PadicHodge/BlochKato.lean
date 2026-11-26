@@ -774,10 +774,6 @@ lemma crysCocycles.finrank_eq (h : IsPotentiallyCrystalline ρ) {J : Multiset �
   let ι : Type := Fin (finrank ℤ_[p] T)
   let ε : Basis ι ℤ_[p] T := finBasis ℤ_[p] T
   obtain ⟨k, N, hk, hN, hP, -⟩ := h.exists_hodge_basis ε
-  have hN_coord : ∀ (g : Γ) (y : ι → BdR) (i : ι),
-      N (fun j : ι ↦ ∑ l : ι, algebraMap ℤ_[p] BdR (repMatrix ρ ε g j l) * toGp g • y l) i =
-        toGp g • N y i :=
-    fun g y i ↦ congrFun (hN g y) i
   let P : Submodule ℤ_[p] (ι → BdR) :=
     (N.toLinearMap ∘ₗ (toAlgHom ℤ_[p] BdRPlus BdR).toLinearMap.compLeft ι).range
   -- `D` is the coboundary map on `ι → Bmax`, `u` reads a vector in Hodge coordinates, `w` includes
