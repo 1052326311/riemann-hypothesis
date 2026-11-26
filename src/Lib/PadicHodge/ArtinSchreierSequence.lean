@@ -137,8 +137,9 @@ private lemma continuous_smul_cFlat (y : CFlat) :
     have c_eq : t * (h • x - g • x) * e = c := by
       simpa [eq_div_iff, Algebra.smul_def, ← map_mul, ← map_sub] using ht
     rw [← c_eq, coeff_oFlat_mul, coeff_oFlat_mul]
-    erw [map_sub (Perfection.coeff (ModP OC p) p n)]
-    rw [h_coeff, sub_self, mul_zero, zero_mul, map_zero]
+    have h_diff : Perfection.coeff (ModP OC p) p n (h • x - g • x) = 0 :=
+      (map_sub (Perfection.coeff (ModP OC p) p n) _ _).trans (sub_eq_zero.mpr h_coeff)
+    rw [h_diff, mul_zero, zero_mul, map_zero]
   obtain ⟨⟨c, e⟩, rfl⟩ := mk'_surjective OFlat⁰ y
   have h_div :
       Continuous ((fun g : Gp p ↦ g • (c : CFlat)) / fun g ↦ g • ((e : OFlat) : CFlat)) :=
