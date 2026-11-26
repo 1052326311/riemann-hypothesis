@@ -331,11 +331,8 @@ theorem sum_columns_eq_quarticOp :
 otherwise, times the same factor for `(b, a)`, is `1`. So these factors drop out of a Casimir
 element. -/
 theorem sign_mul_sign {n : Type*} (δ : n → ℤˣ) (s : ℤˣ) (a b : n) :
-    (if δ a = δ b then 1 else s : ℂ) * (if δ b = δ a then 1 else s : ℂ) = 1 := by
-  obtain hab | hab := eq_or_ne (δ a) (δ b)
-  · simp [hab]
-  · rw [ite_eq_right hab, ite_eq_right hab.symm, ← Int.cast_mul, Int.units_coe_mul_self,
-      Int.cast_one]
+    (if δ a = δ b then 1 else s : ℂ) * (if δ b = δ a then 1 else s : ℂ) = 1 :=
+  (ite_units_eq_mul_ite_units_eq s _ _ _).trans (ite_eq_left rfl)
 
 /-- The row action of the matrix unit `(a, b)` less `T.centre = T.rowShift - n'/2` on the diagonal
 is `∑ c, x_ac d_bc + (n'/2) δ_ab`, times the sign `T.globalSign` of the pair where the signs `ε a`,
