@@ -47,8 +47,9 @@ Notions from other files:
 ## Relation to the literature
 
 Related work: Bannai–Kobayashi, Algebraic theta functions and the p-adic interpolation of
-Eisenstein–Kronecker numbers, 2010; Kings–Sprang, Eisenstein–Kronecker classes and integrality of
-critical values, 2019; Katz, p-adic L-functions for CM fields, 1978.
+Eisenstein–Kronecker numbers, 2010; Kings–Sprang, Eisenstein–Kronecker classes, integrality of
+critical values of Hecke L-functions and p-adic interpolation, 2019; Katz, p-adic L-functions for CM
+fields, 1978.
 
 The Galois action on theta functions with complex multiplication and on the finite Weil
 representation is known; see `Lib.Weil.DualPair.KernelLaws` for sources.
