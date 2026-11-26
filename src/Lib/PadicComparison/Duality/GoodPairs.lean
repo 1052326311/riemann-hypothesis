@@ -277,11 +277,23 @@ def mulClassOp {N N' K P : AbFunctor (TestOver A)} [HasFlatValues N]
         (pullbackAlong (t.toTestOver.whiskerLeft π)))
   naturality := by
     intro C _ t φ Θ l b x
-    -- `erw`: the restriction of `tateModule (𝟭 _)` along `t.toTestOver` is
-    -- `tateModule t.toTestOver` only after unfolding.
-    erw [mapThenComp_comp map_homClass, TorsionCoeff.mulClass_naturality (S := _ ⋙ N) (P := _ ⋙ P),
-      map_restrictAlong_restrictAlong _ _ ξ, map_comp_assoc, map_homClass]
-    rfl
+    let ξt : TotalH (t.toTestOver ⋙ P) (tateModule t.toTestOver) :=
+      TotalH.map (restrictAlong t.toTestOver) ξ
+    let ξφ : TotalH ((φ ⋙ t.toTestOver) ⋙ P) (tateModule (φ ⋙ t.toTestOver)) :=
+      TotalH.map (restrictAlong (φ ⋙ t.toTestOver)) ξ
+    let y := pullbackAlong (t.toTestOver.whiskerLeft π) x
+    change mapThenComp (restrictAlong φ) b
+        (pullbackAlong (t.toTestOver.whiskerLeft p) (t.theory.mulClass ξt y)) =
+      pullbackAlong ((φ ⋙ t.toTestOver).whiskerLeft p)
+        (Θ.mulClass ξφ (pullbackAlong ((φ ⋙ t.toTestOver).whiskerLeft π)
+          (mapThenComp (restrictAlong φ) b x)))
+    refine (mapThenComp_comp map_homClass).trans ?_
+    refine congrArg (pullbackAlong ((φ ⋙ t.toTestOver).whiskerLeft p)) ?_
+    refine (t.theory.mulClass_naturality φ Θ.toTorsionCoeff b ξt y).trans ?_
+    have hξ : (TotalH.map (restrictAlong φ)) ξt = ξφ :=
+      map_restrictAlong_restrictAlong _ _ ξ
+    rw [hξ]
+    exact congrArg (Θ.mulClass ξφ) (mapThenComp_comp map_homClass)
 
 -- Keeps definitional checks from unfolding the Ext groups.
 seal CategoryTheory.Abelian.Ext in
