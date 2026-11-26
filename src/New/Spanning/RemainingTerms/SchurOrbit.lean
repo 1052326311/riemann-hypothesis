@@ -559,7 +559,7 @@ lemma HasCellRank.exists_majorant_lintegral_le_kernelBound (h_rank : S.HasCellRa
   -- takes.
   refine ⟨fun A ↦ φ₀ ((S.shiftScaling j v)ᴴ * of A + 0), h_meas.comp (Continuous.measurable ?_),
     ?_, fun g A hg_gram hg_pair hg_part ↦ h_le g _ hg_gram hg_pair ?_⟩
-  · show Continuous fun A : Fin (min 𝔰.ϱ j) → 𝔰.κ → ℂ ↦ (S.shiftScaling j v)ᴴ * of A + 0
+  · change Continuous fun A : Fin (min 𝔰.ϱ j) → 𝔰.κ → ℂ ↦ (S.shiftScaling j v)ᴴ * of A + 0
     fun_prop
   · -- The change of variables brings in the Jacobian that `kernelBound` carries.
     have h_det : (S.shiftScaling j v)ᴴ.det ≠ 0 := by
