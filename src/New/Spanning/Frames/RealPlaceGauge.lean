@@ -2,7 +2,6 @@ import Lib.CM.Sigma.Basic
 import Lib.DiscreteSeries.Bessel.FrameFibre
 import Lib.DiscreteSeries.Bruhat.FloorFibre
 import Lib.DiscreteSeries.Bruhat.SphereFibres
-import Lib.Weil.Construction.HeisenbergModel
 import New.Spanning.Bessel.Basic
 import New.Spanning.Frames.Correlations
 
