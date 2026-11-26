@@ -400,16 +400,15 @@ lemma measurePreserving_orbitPoint {F : PlaceData ι T m} (b : Fin 𝔰.n) :
       ∫⁻ t : A, modulus t ^ d * ∫⁻ u : V, ∫⁻ β : skewAdjoint A,
         Φ (orbitPoint a.castSucc ((floorWeyl a t : T.G)⁻¹ * heisenbergElem a (u, β)))
           ∂P.skewMeasure := by
-    simp (disch := fun_prop) [floorMeasure, heisenbergMeasure, lintegral_map,
-      mconv, lintegral_prod, hd, V]
+    simp (disch := fun_prop) only [floorMeasure, Fin.val_castSucc, Fin.is_lt, ↓reduceIte, mconv,
+      heisenbergMeasure, ↓reduceDIte, lintegral_map, lintegral_prod, hd]
     rw [weylLaw, lintegral_map (by fun_prop) (by fun_prop),
       lintegral_withDensity_eq_lintegral_mul _ (by fun_prop) (by fun_prop)]
     rfl
   have h_quadric : ∫⁻ v, Φ v ∂F.floorQuadricMeasure a.castSucc =
       ∫⁻ t : A, ∫⁻ u : V, ∫⁻ β : skewAdjoint A, Φ (χ t u β) ∂P.skewMeasure := by
     rw [floorQuadricMeasure_castSucc_eq_map]
-    simp (disch := fun_prop)
-      [lintegral_map, lintegral_prod, volume_eq_prod, χ, V]
+    simp (disch := fun_prop) only [lintegral_map, volume_eq_prod, lintegral_prod, V, χ]
     rw [lintegral_prod _ (by fun_prop)]
   rw [h_floor, h_quadric]
   refine lintegral_congr_of_ae_imp ae_isUnit ?_
