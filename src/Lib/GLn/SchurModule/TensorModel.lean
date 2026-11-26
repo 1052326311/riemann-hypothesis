@@ -89,7 +89,7 @@ lemma det_sum_smul_X (τ : Φ) {h : ℕ} (c : Matrix (Fin h) (n τ) R) :
           of fun (a : Fin (rankAt n τ)) (t : Fin h) ↦
             X (R := R) ((⟨τ, (rowEquivFin n τ).symm a⟩ : Σ τ, n τ), (t : ℕ)) := by
     ext s t : 1
-    simp only [mul_apply, map_apply, submatrix_apply, of_apply, id_eq, smul_eq_C_mul]
+    simp only [of_apply, smul_eq_C_mul]
     exact (Equiv.sum_comp (rowEquivFin n τ).symm _).symm
   rw [hproduct, det_mul_eq_sum_increasing]
   -- Both sides are products of the same minors, by the definition of the matrix of variables.
