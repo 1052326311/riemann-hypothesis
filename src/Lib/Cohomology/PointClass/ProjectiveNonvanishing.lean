@@ -1244,7 +1244,11 @@ lemma New.Variety.projSpace.hodgeTateMap_pointClass_ne_zero {p : ℕ} {k : Type}
       (HodgeTatePair.cross (restrictToPairs η) (restrictToPairs ξ)) = 0
     · erw [hn, map_nsmul, hodgeTateMap_map, hodgeTateMap_cup, sum_eq_single d _ (by simp)]
       · simp [n_ne, hξ, hη, ← Nat.cast_smul_eq_nsmul k]
-        erw [LinearMap.map_smul]
+        let y : PairH (abTensor (freeAb.obj (projSpace k d)) (freeAb.obj (projSpace k 1))) :=
+          HodgeTatePair.cross (restrictToPairs η) (restrictToPairs ξ)
+        change PairH.map (freeAb.prod (projSpace k d) (projSpace k 1)) ((↑d + 1 : k) • y) = 0 ↔
+          PairH.map (freeAb.prod (projSpace k d) (projSpace k 1)) y = 0
+        rw [LinearMap.map_smul]
         simp [Nat.cast_add_one_ne_zero]
       · intro h _ h_ne
         simp [hodgeTateMap_pointClass_eq_zero_of_ne z h_ne]
