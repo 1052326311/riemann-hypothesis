@@ -41,7 +41,7 @@ open CategoryTheory AlgebraicGeometry Scheme IdealSheafData IsLocalRing
 
 /-- Let `i : Y ⟶ Z` be a closed immersion and `f : X ⟶ Z` with `X` reduced. If the preimage under
 `f` of the image of `i` is dense in `X`, then `f` factors through `i`. -/
-@[stacks 0356 "the preimage of the closed subscheme only needs to be dense"]
+@[stacks 0356 "'if' direction, with the preimage of the closed subscheme only assumed dense"]
 lemma New.exists_lift_of_dense_preimage {X Y Z : Scheme} [IsReduced X] (i : Y ⟶ Z)
     [IsClosedImmersion i] (f : X ⟶ Z) (h_dense : Dense (f ⁻¹' Set.range i)) :
     ∃ g : X ⟶ Y, g ≫ i = f := by
