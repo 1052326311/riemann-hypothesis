@@ -1,5 +1,7 @@
-import Lib.PadicComparison.Crystalline.DividedPowerEnvelope
-import Lib.PadicComparison.Primitive.PeriodCoefficients
+module
+
+public import Lib.PadicComparison.Crystalline.DividedPowerEnvelope
+public import Lib.PadicComparison.Primitive.PeriodCoefficients
 
 /-!
 # Crystalline comparison: bijectivity on étale charts and spanning of period cohomology
@@ -64,6 +66,8 @@ p-adic Galois representations, 1989); for the site, Bhatt, Prismatic F-gauges, 2
 for the line lemma, Andreatta–Brinon, Acyclicité géométrique de B_cris relatif, 2013, Comment. Math.
 Helv. 88.
 -/
+
+@[expose] public section
 
 noncomputable section
 

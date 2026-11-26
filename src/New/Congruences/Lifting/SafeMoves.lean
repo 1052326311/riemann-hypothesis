@@ -1,4 +1,6 @@
-import New.Congruences.Lifting.SidePoints
+module
+
+public import New.Congruences.Lifting.SidePoints
 
 /-!
 # Safe moves and the walk for pairings of sides of a Kummer chart
@@ -49,6 +51,8 @@ crystalline representations, 2011.
 
 The file `New.Congruences.Lifting.CutExponentBounds` applies the walk to two choices of cuts.
 -/
+
+@[expose] public section
 
 noncomputable section
 

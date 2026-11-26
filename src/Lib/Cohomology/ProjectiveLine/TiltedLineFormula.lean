@@ -1,5 +1,7 @@
-import Lib.Cohomology.ProjectiveLine.PerfectLine
-import Lib.Cohomology.ProperBaseChange.Theorem
+module
+
+public import Lib.Cohomology.ProjectiveLine.PerfectLine
+public import Lib.Cohomology.ProperBaseChange.Theorem
 
 /-!
 # Leray–Hirsch bases and the projective line formula for the tilted theory
@@ -53,6 +55,8 @@ VI.8.
 
 See also `Lib.Cohomology.ProjectiveLine.ConstantLineFormula`.
 -/
+
+@[expose] public section
 
 /-! ## Leray–Hirsch bases over the special fibre and at points of tests -/
 

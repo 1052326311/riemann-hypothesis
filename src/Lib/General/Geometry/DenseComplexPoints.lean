@@ -1,4 +1,6 @@
-import Lib.General.Geometry.ProjectiveSpace
+module
+
+public import Lib.General.Geometry.ProjectiveSpace
 
 /-!
 # Dense families of complex points: reduced closures, separation of maps, and arcs
@@ -32,6 +34,8 @@ Notions from other files:
 * `New.LineBundle.IsProjEmbedding`: a linear system on a proper `X ⟶ S` for which points in one
   chart with the same affine coordinates and the same image in `S` are equal.
 -/
+
+@[expose] public section
 
 /-! ## Reduced closures of families of complex points -/
 

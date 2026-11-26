@@ -1,4 +1,6 @@
-import Lib.SiegelWeil.OneVector.ClassGaussSums
+module
+
+public import Lib.SiegelWeil.OneVector.ClassGaussSums
 
 /-!
 # Bounds for local densities at finitely many finite places
@@ -30,6 +32,8 @@ Notions from other files:
 Known result: bounds for local densities of hermitian forms by Gauss sums, part of Siegel's formula
 for representing a number by a hermitian form. See `Lib.SiegelWeil.OneVector.SiegelClassSum`.
 -/
+
+@[expose] public section
 
 namespace New.Floors.IntegralPlace
 
