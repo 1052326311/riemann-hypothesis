@@ -746,25 +746,19 @@ the values have squared norm at most `exp (x ^ 99 * b ^ 2)`, with `x = D.x` the 
 sum and `b = D.b` the weight at the `b`-places. -/
 lemma span_isShort_eq_top_gridLevelForms : span ℂ {φ : D.gridLevelForms D.m |
     IsShort (exp (D.x ^ 99 * D.b ^ 2)) (D.lastPathToAlgForm true φ.val)} = ⊤ := by
-  have h_card : card (D.LastPathIndex true 0) ≤ 2 * D.n D.m := card_lastPathIndex_le true zero_le
-  have h_alg : span ℂ {φ : levelSpace (algFormRep (D.lastPathColumns true)
-    (D.lastPathDetExp true 0))
-      (principalLevel (D.LastPathIndex true 0) D.gridLevelGen) |
-        IsShort (exp (D.x ^ 99 * D.b ^ 2)) φ.1} = ⊤ := by
-    refine New.span_isShort_eq_top
-      (D.classAut_eq_bot_of_le_chosenLevel
-        (D.principalLevel_le_chosenLevel piM_dvd_gridLevelGen) h_card)
-      P.conductor_mem_differentIdeal (by grw [boxes_lastPathColumns_le_natB_mul true zero_le,
-        h_card]) ?_
-    grw [shortBasisConst, h_card]
-    exact le_exp_of_log_le D.le_of_hasLogBound
   -- Transport along the isomorphism `e` between algebraic forms and forms of level `gridLevelGen`.
   let e : _ ≃ₗ[ℂ] D.gridLevelForms D.m :=
     (D.gridSpace 0 true 0 D.m).algFormEquiv (D.isHCParam_lastPathColumns true zero_le)
       (principalLevel (D.LastPathIndex true 0) D.gridLevelGen)
-  have h_symm (φ : D.gridLevelForms D.m) : (e.symm φ).1 = D.lastPathToAlgForm true φ.1 := rfl
-  rw [← e.range, e.range_eq_map, ← h_alg, map_span, LinearEquiv.coe_coe, e.image_eq_preimage_symm]
-  simp only [Set.preimage_ofPred_eq, h_symm]
+  have h_card := D.card_lastPathIndex_le true zero_le
+  rw [← e.range, e.range_eq_map, ← New.span_isShort_eq_top
+    (D.classAut_eq_bot_of_le_chosenLevel (D.principalLevel_le_chosenLevel piM_dvd_gridLevelGen)
+      h_card) P.conductor_mem_differentIdeal
+    (by grw [boxes_lastPathColumns_le_natB_mul true zero_le, h_card]) _,
+    map_span, LinearEquiv.coe_coe, e.image_eq_preimage_symm]
+  · rfl
+  · grw [shortBasisConst, h_card]
+    exact le_exp_of_log_le D.le_of_hasLogBound
 
 /-- The space of forms on `Y₀` of principal level at the chosen places is spanned by auxiliary forms
 with integral and small lifts. There are constants `c ϑ`, whose modulus is, up to a constant and a
