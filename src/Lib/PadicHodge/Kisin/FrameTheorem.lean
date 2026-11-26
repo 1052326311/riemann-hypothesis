@@ -753,8 +753,7 @@ lemma kisinAinf_eq_span_kisinModule : L.kisinAinf = span Ainf (L.kisinModule : S
 W(C^♭) ⊗ L → `BdR` whose restriction to 1 ⊗ L comes from a ℤ_p-linear map L → `Bmax`), and let `y`
 be a vector of the Kisin module of `L`. Let `jumpBound` be the least a such that all Hodge–Tate
 jumps of `L` lie in [−a, a]. Then `E ^ jumpBound • μ y` is the image in `BdR` of an element of
-`bicommutant`, the ring S_B ⊂ `BPlus` of the chart, which is the closure of S[E/p] in `BPlus` with p
-inverted. -/
+`bicommutant`, the ring S_B ⊂ `BPlus` of the chart. -/
 lemma exists_mem_bicommutant_pow_smul_eq_of_mem_kisinModule {μ : L.Functional}
     (hμ : μ ∈ L.crysForms) {y : L.Ambient} (hy : y ∈ L.kisinModule) :
     ∃ s ∈ k.bicommutant, k.E.val ^ L.jumpBound • μ y = algebraMap BPlus BdR s :=
@@ -923,11 +922,11 @@ variable {p : ℕ} [ThePrime p] [Γ : GroupOverGp p]
   {k : KummerChart Γ} {O : Coeffs} {L : JumpLattice O} {x : L.Ambient} {μ : L.Functional}
 
 /-- For the Kummer chart `k`, let `k.bicommutant` be its ring S_B: the elements of `BPlus` whose
-multiplication commutes with every `k.S`-linear map of `BPlus` keeping the image of A_max,
-equivalently the closure of `S[E/p]` in `BPlus` with `p` inverted. Let `E` be the chart's element
-`k.E`. If `g ∈ G_p` and `d ∈ BPlus` are such that `d` divides `g • y - y` for every `y` in
-`k.bicommutant`, and `x ∈ BdR` has `E ^ m • x` equal to the image of an element of `k.bicommutant`,
-then `E ^ (2 * m) • (g • x - x)` is a `BPlus`-multiple of the image of `d` in `BdR`. -/
+multiplication commutes with every `k.S`-linear map of `BPlus` keeping the image of A_max. Let `E`
+be the chart's element `k.E`. If `g ∈ G_p` and `d ∈ BPlus` are such that `d` divides `g • y - y` for
+every `y` in `k.bicommutant`, and `x ∈ BdR` has `E ^ m • x` equal to the image of an element of
+`k.bicommutant`, then `E ^ (2 * m) • (g • x - x)` is a `BPlus`-multiple of the image of `d` in
+`BdR`. -/
 lemma pow_smul_gal_sub_mem_span_of_dvd {g : Gp p} {d : BPlus} {m : ℕ} {x : BdR}
     (hd : ∀ {y : BPlus}, y ∈ k.bicommutant → d ∣ g • y - y)
     (hx_mem : ∃ s ∈ k.bicommutant, k.E.val ^ m • x = algebraMap BPlus BdR s) :

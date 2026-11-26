@@ -9,12 +9,11 @@ public import Lib.PadicHodge.Kisin.Charts
 
 This file works in B^+ = `BPlus` = A_max[1/p], where A_max = `Amax` has image `amaxImage` in B^+.
 It defines the ring S_B of a chart, the elements of B^+ whose multiplication commutes with all
-`S`-linear maps of B^+ that keep `amaxImage`. It shows that S_B is the closure of `S[E/p]` with `p`
-inverted, and that every `S`-linear map of A_inf extends to an S_B-linear map of B^+ that keeps
-`amaxImage`. Most identities for the extensions are checked on A_inf by a density principle: an
-additive map of B^+ that keeps `amaxImage` and kills A_inf is zero
-(`New.Lift.Chart.eq_zero_of_map_ainfToBPlus_eq_zero`). The file ends with results on divisibility
-by `z` in B^+.
+`S`-linear maps of B^+ that keep `amaxImage`. It shows that every `S`-linear map of A_inf extends
+to an S_B-linear map of B^+ that keeps `amaxImage`. Most identities for the extensions are checked
+on A_inf by a density principle: an additive map of B^+ that keeps `amaxImage` and kills A_inf is
+zero (`New.Lift.Chart.eq_zero_of_map_ainfToBPlus_eq_zero`). The file ends with results on
+divisibility by `z` in B^+.
 
 ## Main definitions and results
 
