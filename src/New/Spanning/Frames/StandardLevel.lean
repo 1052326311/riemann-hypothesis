@@ -1,6 +1,8 @@
-import Lib.SiegelWeil.OneVector.StandardQuadrics
-import New.Spanning.Frames.QuadricPlancherel
-import New.Spanning.Unfolding.BesselLevelStructure
+module
+
+public import Lib.SiegelWeil.OneVector.StandardQuadrics
+public import New.Spanning.Frames.QuadricPlancherel
+public import New.Spanning.Unfolding.BesselLevelStructure
 
 /-!
 # Place data and gauges at a finite place from the lattice of integral vectors
@@ -43,6 +45,8 @@ Notions from other files:
 
 See `New.Spanning.MainTerm.EnergyEstimate` for related work.
 -/
+
+@[expose] public section
 
 noncomputable section
 

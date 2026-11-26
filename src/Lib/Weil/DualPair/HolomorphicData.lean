@@ -1,4 +1,6 @@
-import Lib.ClassField.HeckeCharacter.TameModulus
+module
+
+public import Lib.ClassField.HeckeCharacter.TameModulus
 
 /-!
 # Holomorphic data, functions of a level, and theta kernels modulo 𝔪 as level multipliers
@@ -47,6 +49,8 @@ unit disk, Pacific J. Math. 129 (1987) 33–55.
 
 See also `Lib.Weil.DualPair.ThetaLiftConvergence`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

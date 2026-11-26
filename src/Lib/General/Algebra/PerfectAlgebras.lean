@@ -1,4 +1,6 @@
-import Lib.PadicComparison.Descent.TestCovers
+module
+
+public import Lib.PadicComparison.Descent.TestCovers
 
 /-!
 # Perfect algebras, étale algebras over perfect rings, and constant Laurent polynomials
@@ -35,6 +37,8 @@ Notions from other files:
 
 Known; see `Lib.PadicComparison.Descent.AlmostDescent` for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

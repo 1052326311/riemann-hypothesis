@@ -1,5 +1,7 @@
-import Lib.SiegelWeil.Tower.FiniteTateIntegral
-import New.Determinant.Twist.FitTwists
+module
+
+public import Lib.SiegelWeil.Tower.FiniteTateIntegral
+public import New.Determinant.Twist.FitTwists
 
 /-!
 # The algebraic part as a Hecke L-value, and products of L-values of twists
@@ -50,6 +52,8 @@ Notions from other files:
 
 Known; see `Lib.SiegelWeil.RallisInner.SharpData` for sources.
 -/
+
+@[expose] public section
 
 /-!
 ## The algebraic part as a multiple of a Hecke L-value

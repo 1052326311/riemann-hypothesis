@@ -1,5 +1,7 @@
-import Lib.ClassField.Places.LocalFields
-import Lib.PadicHodge.PeriodRings.AxTheorem
+module
+
+public import Lib.ClassField.Places.LocalFields
+public import Lib.PadicHodge.PeriodRings.AxTheorem
 
 /-!
 # Decomposition groups of places above p as Galois groups of local fields in ℚ̄_p
@@ -45,6 +47,8 @@ Notions from other files:
 
 Known; see `Lib.ClassField.Places.LocalFields` for sources.
 -/
+
+@[expose] public section
 
 namespace New
 
