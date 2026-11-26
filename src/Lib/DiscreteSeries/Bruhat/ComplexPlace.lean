@@ -143,10 +143,10 @@ lemma lintegral_eq_polar (k : κ) {g : (κ → ℂ) → ENNReal} (hg : Measurabl
       rw [← lintegral_mul_right_eq_self _ u]
       simp [← mulVec_mulVec, hu]
     _ = _ := by
-      -- pass from `ω` to `r = |ω|²` (`erw`: the integrand is a product and a composite up to defeq)
-      erw [← lintegral_withDensity_eq_lintegral_mul,
-          ← measurePreserving_normSq_sphereDensity.lintegral_comp] <;>
-        fun_prop
+      -- pass from `ω` to `r = |ω|²`
+      refine ((measurePreserving_normSq_sphereDensity (κ := κ)).lintegral_comp
+        (f := fun r : ℝ ↦ ∫⁻ h : U 1, g (h.1.1 *ᵥ √r • Pi.single k 1)) (by fun_prop)).trans ?_
+      exact lintegral_withDensity_eq_lintegral_mul _ (by fun_prop) (by fun_prop)
 
 /-- The boost in the plane of k₀ and z with parameter a, for 1 ≤ |a|. With s = √(|a|² - 1) it acts
 on that plane by the matrix with rows (conj a, s) and (-s, -a), and it fixes the other basis
