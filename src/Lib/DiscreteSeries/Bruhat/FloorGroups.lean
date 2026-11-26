@@ -800,6 +800,10 @@ lemma weylElem_star : (weylElem l (star p) : T.G) = (weylElem l p)⁻¹ := by
   ext
   rfl
 
+lemma weylElem_left_comm (hs : s ∈ floorGroup l) :
+    weylElem l p * (s * g) = s * (weylElem l p * g) :=
+  (commute_weylElem hs).left_comm g
+
 lemma weylElem_inv_left_comm (hs : s ∈ floorGroup l) :
     (weylElem l p)⁻¹ * (s * g) = s * ((weylElem l p)⁻¹ * g) :=
   (commute_weylElem hs).inv_left.left_comm g
@@ -809,7 +813,7 @@ inverse can be moved past `s` on the left. -/
 lemma weylElem_mul_left_comm (hs : s ∈ floorGroup l) :
     weylElem l p * (s * g) = s * (weylElem l p * g) ∧
     (weylElem l p)⁻¹ * (s * g) = s * ((weylElem l p)⁻¹ * g) :=
-  ⟨(commute_weylElem hs).left_comm _, weylElem_inv_left_comm hs⟩
+  ⟨weylElem_left_comm hs, weylElem_inv_left_comm hs⟩
 
 /-- The diagonal entry `b` of the frame Gram matrix of `σ τ⁻¹`, that is the hermitian product of
 `f_b` and `σ τ⁻¹ f_b`, is the hermitian product of `σ⁻¹ f_b = orbitPoint b σ` and
