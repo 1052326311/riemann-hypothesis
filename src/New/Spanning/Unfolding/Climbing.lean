@@ -309,9 +309,7 @@ lemma isIntMatrix_middleInclusionMatrix_mul_iff {m : Type*} {l : Matrix 𝔰.κ 
       simpa using mul_mem S.piN_mem (h_div j)
     have h_int : IsIntMatrix (Ô E) l := by
       intro i j
-      obtain rfl | hi := eq_or_ne i 𝔰.k₀
-      · exact h_row j
-      · exact h_other i hi j
+      grind
     exact ⟨h_int, fun j ↦ mem_span_unit_iff.2 (h_div j)⟩
   · rintro ⟨h_int, h_span⟩
     have h_star (j : m) : star S.piN.val * l 𝔰.k₀ j ∈ Ô E :=
@@ -730,7 +728,7 @@ lemma pairOccursAt_succ (h_agree : S.CharsAgree γ) {μ μ' : E} (j : Fin 𝔰.�
   obtain ⟨u, hu, hu_sum, hu_eichler⟩ := exists_mem_besselU_eq_eichlerMap j.succ x r hγv hx hm
   obtain ⟨w, hw, hw_sum, hw_eichler⟩ := exists_mem_besselU_eq_eichlerMap j.succ y r hv hy hm'
   have h_comm : u * γ = γ * w := by
-    ext : 2
+    refine Subtype.ext (Units.ext ?_)
     simp [hu_eichler, hw_eichler, hxy, ext_iff_mulVec, U.form_mulVec_mulVec, ← mulVec_mulVec,
       frameImage_mulVec γ.val.val, eichlerMap_mulVec, mulVec_sub, mulVec_add, mulVec_smul]
   -- So the agreement of the characters at `u` and `w` is the claim.
@@ -775,8 +773,7 @@ lemma CharsAgree.mul_star_ne_zero_of_isTopIndex (h_agree : S.CharsAgree γ) {x y
     (h_top : IsTopIndex x y j) : x j * star (x j) ≠ 0 := by
   obtain hxj | hyj : x j ≠ 0 ∨ y j ≠ 0 := h_top.ne_zero_or_ne_zero hx
   · exact mul_ne_zero hxj (star_ne_zero.2 hxj)
-  · rw [h_agree.mul_star_eq_of_isTopIndex hxy h_top]
-    exact mul_ne_zero hyj (star_ne_zero.2 hyj)
+  · simp [h_agree.mul_star_eq_of_isTopIndex hxy h_top, hyj]
 
 end New.Filling
 

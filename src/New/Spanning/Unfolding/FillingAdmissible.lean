@@ -646,8 +646,8 @@ lemma abs_log_mainSecondMoment_div_identitySecondMoment_sub_le :
   -- the sums of `log i!` and in `log b`.
   simp (disch := intros; first | positivity | omega) only [log_div, log_mul, log_pow, log_sqrt,
     sum_add_distrib, sum_const, Finset.card_range, nsmul_eq_mul, sum_range_id,
-    ← Nat.choose_two_right, card_univ, logLevelTarget, abs_le, ↓sum_Ico_eq_sub, Set.mem_Icc,
-    sum_sub_distrib, ← mul_sum,
+    ← Nat.choose_two_right, card_univ, logLevelTarget, New.Parameters.logLevelMin,
+    abs_le, ↓sum_Ico_eq_sub, Set.mem_Icc, sum_sub_distrib, ← mul_sum,
     sum_singleton, ← sum_mul, ← Nat.cast_sum _ (·), ↓sum_range_sub (log <| mass D.E ·)] at *
   push_cast (disch := apply D.nat_le_of_hasLogBound) [Nat.cast_choose_two, ← add_assoc,
     m_eq_two_mul_varrho_add_two] at *

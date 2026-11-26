@@ -169,21 +169,6 @@ lemma isMulLeftInvariant_measure_smul_inv (μ : Measure Z) [SFinite μ] [μ.IsMu
   have := isMulLeftInvariant_map_restrict μ hπ hO h_lift
   infer_instance
 
-/-- Let `μ` be an s-finite bi-invariant measure on `Z`, `η` an s-finite left invariant measure on
-`G`, `π : Z →* G` measurable, `K` measurable in `G`, and `O` a measurable set such that every
-element of `G` has a preimage under `π` whose translations preserve `O` (`New.HasStableLifts`).
-Then `η K` times the pushforward of `μ.restrict O` equals `μ (π ⁻¹' K ∩ O)` times `η.inv`, the
-image of `η` under inversion, and this measure is left invariant. -/
-@[to_additive]
-lemma map_restrict_haar_eq (μ : Measure Z) [SFinite μ] [μ.IsMulLeftInvariant]
-    [μ.IsMulRightInvariant] (η : Measure G) [SFinite η] [η.IsMulLeftInvariant] {π : Z →* G}
-    (hπ : Measurable π) {O : Set Z} (hO : MeasurableSet O) (h_lift : HasStableLifts π O)
-    {K : Set G} (hK : MeasurableSet K) :
-    η K • (μ.restrict O).map π = μ (π ⁻¹' K ∩ O) • η.inv ∧
-      (μ (π ⁻¹' K ∩ O) • η.inv).IsMulLeftInvariant :=
-  ⟨measure_smul_map_restrict_eq_smul_inv μ η hπ hO h_lift hK,
-    isMulLeftInvariant_measure_smul_inv μ η hπ hO h_lift hK⟩
-
 end Invariant
 
 section ScalingFactor

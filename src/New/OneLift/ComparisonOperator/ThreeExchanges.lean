@@ -433,7 +433,7 @@ runs over the infinite places and `y⁻_τ` is the `m × m` block of variables i
 copies of the compact group `U(0, m)`.
 Here `Ω = realPairWeil 0 0` is the real Weil representation of the pair with both weights `0`, and
 `⟨·, ·⟩ = Fock.fockInner` is the sesquilinear form of the Fock space. -/
-lemma fockInner_realPairWeil_variableMinor_pow_eq_self {m : ℕ} [NeZero m]
+lemma fockInner_realPairWeil_variableMinor_pow_eq_self {m : ℕ}
     (u : GInf E (-1 : Fin m → ℤˣ)) :
     let v : PairFock E (-1 : Fin m → ℤˣ) (1 ⊕ᵥ -1 : Fin (2 * m) ⊕ Fin m → ℤˣ) :=
       Fock.polyVector (realSigns E (homSigns (-1) (1 ⊕ᵥ -1)))
@@ -482,7 +482,7 @@ lemma carrierForm_ne_zero {m : ℕ} [NeZero m] : carrierForm E m ≠ 0 := by
       Fock.fockInner v (realPairWeil 0 0 (u, 1) v) = Fock.fockInner v v :=
     fockInner_realPairWeil_variableMinor_pow_eq_self u
   have : CompactSpace (USign (-1 : Fin m → ℤˣ)) := by
-    rw [show USign (-1 : Fin m → ℤˣ) = U 1 by simp [U]]
+    rw [show USign (-1 : Fin m → ℤˣ) = U 1 by ext; simp [mem_unitaryGroupOf_iff]]
     infer_instance
   intro h_lift_zero
   -- The modulus is trivial, so the finite part of the datum is the vacuum, which is sharp.
