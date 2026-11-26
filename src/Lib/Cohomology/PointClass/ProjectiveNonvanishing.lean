@@ -156,7 +156,7 @@ private lemma pull_mk₀_comp_contractionPow_one_eq_pull_extClass_oneSubMu
   -- The left side is `α` (the form `ω` on pairs), then one contraction, then the projection
   -- `HodgeTatePair.contractionPow 0` of `⋀ M` to degree zero; with `D` below it is the class of the
   -- cocycle `D` (the form `ω`, then contraction along `f`), followed by that projection.
-  show TotalH.comp (TotalH.homClass α)
+  change TotalH.comp (TotalH.homClass α)
       (TotalH.comp HodgeTatePair.contractionCocycle.cohomClass (HodgeTatePair.contractionPow 0)) = _
   let D : Cocycle (HodgeTatePair.pairAlg ⋙ N) HodgeTatePair.formCoeff :=
     ⟨fun {c d} f ↦ α.app c ≫ HodgeTatePair.contractionCocycle.component f,
