@@ -183,7 +183,7 @@ lemma New.norm_term_le_exp_mul (a : ℕ → ℂ) {z : ℂ} (σ E : ℝ) {n : ℕ
   obtain rfl | hn := eq_or_ne n 0
   · simp
   have hn_pos : 0 < (n : ℝ) := Nat.cast_pos.2 (Nat.pos_of_ne_zero hn)
-  simp only [norm_term_eq, if_neg hn, add_re, one_re, ofReal_re]
+  simp only [norm_term_eq, ite_eq_right hn, add_re, one_re, ofReal_re]
   rw [show 1 + z.re = (1 + σ) - (σ - z.re) by ring,
     Real.rpow_sub hn_pos, div_div_eq_mul_div, mul_comm ‖a n‖, mul_div_assoc]
   grw [Real.rpow_def_of_pos hn_pos (σ - z.re), h_le]
