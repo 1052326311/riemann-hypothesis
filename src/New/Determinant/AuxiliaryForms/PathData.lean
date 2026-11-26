@@ -730,11 +730,8 @@ subtraction. -/
 lemma card_edges_le (p : GridPath a₀ b₀ a b) : #(p.edges z) + a₀ + b ≤ a + b₀ := by
   induction p with
   | nil => simp [edges]
-  | @down a b p ih =>
-    have h_card : #((down p).edges z) ≤ #(p.edges z) + 1 := card_insert_le ..
-    omega
-  | @right a b p ih =>
-    have h_card : #((right p).edges z) ≤ #(p.edges z) + 1 := card_insert_le ..
+  | down p ih | right p ih =>
+    grw [edges, card_insert_le]
     omega
 
 end GridPath
