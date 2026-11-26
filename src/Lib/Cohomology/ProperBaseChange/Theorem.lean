@@ -742,12 +742,8 @@ lemma IsProperOver.injective_map_residue {ℓ n : ℕ} {W : CommRingCat ⥤ Type
         ext y
         exact baseChangeOf.ext rfl (residue_surjective.forall.mpr fun _ ↦ rfl) }
   have h_fac : w ≫ res = X₀.ι := rfl
-  intro x y (hxy : map ⟨ZMod ℓ⟩ res n x = map ⟨ZMod ℓ⟩ res n y)
-  apply h_inj
-  calc map ⟨ZMod ℓ⟩ X₀.ι n x
-      = map ⟨ZMod ℓ⟩ w n (map ⟨ZMod ℓ⟩ res n x) := by rw [← h_fac, map_comp]
-    _ = map ⟨ZMod ℓ⟩ w n (map ⟨ZMod ℓ⟩ res n y) := by rw [hxy]
-    _ = map ⟨ZMod ℓ⟩ X₀.ι n y := by rw [← h_fac, map_comp]
+  refine .of_comp (f := map ⟨ZMod ℓ⟩ w n) fun x y hxy ↦ h_inj ?_
+  rwa [← h_fac, map_comp, map_comp]
 
 variable {ℓ n : ℕ} {W : CommRingCat ⥤ Type 1} [ThePrime ℓ] {R S T : CommRingCat} {s : W ⟶ reprBy R}
 
