@@ -1,5 +1,7 @@
-import New.Derivatives.Divisibility.Count
-import New.Derivatives.Sharpness.NearPairs
+module
+
+public import New.Derivatives.Divisibility.Count
+public import New.Derivatives.Sharpness.NearPairs
 
 /-!
 # A lower bound for the divisibility bound by the gain
@@ -27,6 +29,8 @@ Notions from other files:
 * `New.Data.placeOfInt`: The infinite place of E named by the class of the integer ν modulo q₁ if ν
   is prime to q₁, and the identity place otherwise.
 -/
+
+@[expose] public section
 
 noncomputable section
 

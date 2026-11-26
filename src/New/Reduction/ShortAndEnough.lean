@@ -1,8 +1,10 @@
-import New.Reduction.IntegralTargetForms
-import New.Spanning.SecondMoment.SpanningTheorem
-import New.UpperBound.Divisibility.LocalDivisibility
-import New.UpperBound.Seesaw.SeesawIdentity
-import New.UpperBound.Size.ArchimedeanSize
+module
+
+public import New.Reduction.IntegralTargetForms
+public import New.Spanning.SecondMoment.SpanningTheorem
+public import New.UpperBound.Divisibility.LocalDivisibility
+public import New.UpperBound.Seesaw.SeesawIdentity
+public import New.UpperBound.Size.ArchimedeanSize
 
 /-!
 # Theorem A (short forms) and Theorem B (enough forms)
@@ -25,6 +27,8 @@ Notions from other files:
 * `D.gain l` is the divisibility asked of the chain at `l`; `D.errorUnit` is `f a log³ b`, with
   `D.logB` standing for `log b`.
 -/
+
+@[expose] public section
 
 noncomputable section
 

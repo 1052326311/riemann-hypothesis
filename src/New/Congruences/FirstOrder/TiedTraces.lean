@@ -1,7 +1,9 @@
-import Lib.GaloisRep.LocalGlobal.IwahoriCompatibility
-import Lib.GaloisRep.TaylorWiles
-import Lib.LocalGL.SphericalChainLemma
-import New.Congruences.FirstOrder.OnePrime
+module
+
+public import Lib.GaloisRep.LocalGlobal.IwahoriCompatibility
+public import Lib.GaloisRep.TaylorWiles
+public import Lib.LocalGL.SphericalChainLemma
+public import New.Congruences.FirstOrder.OnePrime
 
 /-!
 # Tied traces and the dictionary at one auxiliary place
@@ -48,6 +50,8 @@ Notions from other files:
 
 See `New.Congruences.FirstOrder.AuxiliaryPrimeTie` for related work.
 -/
+
+@[expose] public section
 
 open Pi Fintype Polynomial Nat Group Submodule ComplexOrder
 
