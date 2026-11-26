@@ -203,7 +203,6 @@ private lemma IsLocalGalois.stabilizer_le_ker_of_pow_eq {P : Type*} [Monoid P] {
   have h_fact : Fact f.ker.IsOpen := ⟨hf⟩
   obtain ⟨y₁_ne, ⟨N_ne⟩⟩ :=
     ne_zero_of_tame_root (A := A) (n := n ^ M * n) (by aesop) hy
-  have hn_ne : NeZero n := ⟨right_ne_zero_of_mul N_ne⟩
   -- By Galois theory it is enough that an `r` fixing `y₁` fixes the fixed field of `f.ker`.
   intro r hr
   refine (fixingSubgroup_fixedFieldOf f.ker).le fun ⟨x, hx⟩ ↦ ?_
