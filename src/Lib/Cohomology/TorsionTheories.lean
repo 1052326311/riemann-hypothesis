@@ -346,11 +346,6 @@ lemma Comparison.HasUniversalPoints.on_elements {E' : C' ⥤ Type 1} {u : E' ⟶
     ext
     exact h_uniq g'.1 ⟨hg'_x, congrArg (·.1) hg'_comp⟩
 
-private lemma bijective_map_id (G : AbFunctor C) (b : C) :
-    Bijective fun v : G.obj b ↦ G.map (𝟙 b) v := by
-  rw [G.map_id]
-  exact bijective_id
-
 /-- For an element a = (c, x) of E, the forgetful map from morphisms out of a to morphisms out of c
 has universal points (`New.Variety.Comparison.HasUniversalPoints`) for the restriction of G to the
 category of elements of E. -/
@@ -361,7 +356,7 @@ lemma hasUniversalPoints_reprBy_elements (a : E.Elements) :
   -- the universal point over `y : a.fst ⟶ b` is `y` itself, read as a map from `a` to the
   -- point `E.map y a.snd` over `b`; the coefficient map is the identity of `G b`
   refine ⟨E.elementsMk b (E.map y.down a.val), ⟨⟨y.down, rfl⟩⟩, 𝟙 b, by aesop, ?_,
-    bijective_map_id G b⟩
+    ConcreteCategory.bijective_of_isIso (G.map (𝟙 b))⟩
   rintro d ⟨z, hz⟩ f ⟨⟩
   -- the map `f : b ⟶ d.fst` respects the elements of `E`, as `y ≫ f` does; it gives the unique
   -- lift, as maps between elements are determined by their underlying maps
@@ -382,7 +377,8 @@ lemma hasUniversalPoints_elements :
   intro a y
   -- the universal point over `y` is `(a, y)` itself, with the identity of `a`; the coefficient
   -- map is `G.map (𝟙 a)`, the identity of `G a`
-  refine ⟨X.elementsMk a y, PUnit.unit, 𝟙 a, ?_, fun d z f hf ↦ ?_, bijective_map_id G a⟩
+  refine ⟨X.elementsMk a y, PUnit.unit, 𝟙 a, ?_, fun d z f hf ↦ ?_,
+    ConcreteCategory.bijective_of_isIso (G.map (𝟙 a))⟩
   · -- the tautological section at `(a, y)` is `y`
     aesop
   · refine ⟨⟨f, hf.symm⟩, ?_⟩
