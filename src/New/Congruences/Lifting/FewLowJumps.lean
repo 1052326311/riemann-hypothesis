@@ -783,23 +783,6 @@ lemma relLength_constantAt_deepConstants_le {k : KummerChart Γ} {O : k.Coeffs}
     hb_gap
       h_window hn hr i ((units_eq_one_or _).resolve_left hε))).trans (mod_cast by lia)
 
-/-- Let the jumps of `T` and `S` at a letter `i` lie in `[-η, η]` or in far windows `∓σ [β, β + W]`
-of opposite signs. Then each jump `u` of the Tate dual side of a pairing of `T` and `S` lies near
-`0`, `β` or `-β`: such a jump is `0` or `-(v + w) - 1` for jumps `v` of `T` and `w` of `S`. -/
-lemma tateDualSide_jump_near {k : KummerChart Γ} {O : k.Coeffs} {S : k.PairingSide O} {i : Letter}
-    {η W : ℕ} {T : PairingSide O} (P : SidePairing T S) {σ : ℤˣ} {β : ℕ}
-    (hT_window : FitsWindows η (-σ) β W (T.jumpSet i))
-    (hS_window : FitsWindows η σ β W (S.jumpSet i)) {u : ℤ}
-    (hu : u ∈ P.tateDualSide.jumpSet i) :
-    (-(2 * η + W + 1) ≤ u ∧ u ≤ 2 * η + W) ∨
-      (β ≤ u + η + 1 ∧ u + 1 ≤ β + W + η) ∨
-      (β ≤ -u + η ∧ -u ≤ β + W + η + 1) := by
-  obtain rfl | ⟨v, hv, w, hw, rfl⟩ : u = 0 ∨ ∃ v ∈ T.jumpSet i, ∃ w ∈ S.jumpSet i,
-    -(v + w) - 1 = u := by
-    simpa [mem_image₂] using hu
-  · omega
-  · grind [hT_window v hv, hS_window w hw, Units.val_neg]
-
 /-- Let `b j + W + η ≤ (p - 3) a` and `6 (a + η + W) < b j` at every letter `j`. If the jumps of the
 paired sides `T` and `S` lie in `[-η, η]` or in far windows `∓ε j [b j, b j + W]` of opposite signs,
 then the jumps of the Tate dual side are at most `(p - 3) a`. -/
@@ -810,7 +793,9 @@ lemma tateDualSide_jump_le {k : KummerChart Γ} {O : k.Coeffs} {S : k.PairingSid
     {T : PairingSide O} (P : SidePairing T S)
     (hT_window : ∀ j : Letter, FitsWindows η (-ε j) (b j) W (T.jumpSet j)) (j : Letter) (u : ℤ)
     (hu : u ∈ P.tateDualSide.jumpSet j) : u ≤ ((p - 3) * a : ℕ) := by
-  grind [tateDualSide_jump_near P (hT_window j) (hS_window j) hu, hb_le j, hb_gt j]
+  have h := tateDualSide_jump_near P (hT_window j) (hS_window j) hu
+  simp only [abs_eq_max_neg] at h
+  grind [hb_le j, hb_gt j]
 
 /-- The inequality for a safe move at the level `1`. Let `6 (a + η + W) < β`, let the jump `u` of
 the moving side lie in `[-η, η]` or in `-σ • [β, β + W]`, and the jump `v` of the resting side in
@@ -888,8 +873,9 @@ lemma isSafeMoveFst_of_negativeWindowDepth {k : KummerChart Γ} {O : k.Coeffs} {
       (by simpa only [zero_add] using tateDualSide_jump_le hb_le hb_gt hS_window P hT_window)
       fun u hu y hy_ge hy_lt ↦ ?_
     rw [mem_twoWindows_union_iff]
-    obtain h_low | h_pos | h_neg :=
-      tateDualSide_jump_near P (hT_window _) (hS_window _) hu <;> omega
+    have h := tateDualSide_jump_near P (hT_window _) (hS_window _) hu
+    simp only [abs_eq_max_neg] at h
+    omega
   have h_anti (l : ℕ) : Antitone (z l) := fun u v h_le ↦ by
     simp only [z, improvedOrders, raisedOrdersAtZero]
     omega
