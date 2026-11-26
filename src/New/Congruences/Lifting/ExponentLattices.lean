@@ -373,12 +373,11 @@ lemma kisinModule_le_kisinLoc : L.kisinModule ≤ L.kisinLoc :=
 holds on the Kisin module `L.kisinModule` and passes from `p_a • y` to `y` holds on `L.kisinLoc`. -/
 lemma kisinLoc_induction {C : L.Ambient → Prop} (hx : x ∈ L.kisinLoc)
     (h_base : ∀ y ∈ L.kisinModule, C y)
-    (h_step : ∀ a : ℕ, ∀ y ∈ L.kisinLoc, C ((k.frobE a).val • y) → C y) : C x := by
-  have h_span := mem_kisinLocAinf_of_mem_kisinLoc hx
-  revert hx
-  exact saturateBy_induction (C := fun y ↦ y ∈ L.kisinLoc → C y) h_span
+    (h_step : ∀ a : ℕ, ∀ y ∈ L.kisinLoc, C ((k.frobE a).val • y) → C y) : C x :=
+  saturateBy_induction (C := fun y ↦ y ∈ L.kisinLoc → C y)
+    (mem_kisinLocAinf_of_mem_kisinLoc hx)
     (fun z hz_span ⟨_, hz_val⟩ ↦ h_base z ⟨hz_span, hz_val⟩)
-    fun a z ih hz ↦ h_step a z hz (ih (smul_mem _ (k.frobE a) hz))
+    (fun a z ih hz ↦ h_step a z hz (ih (smul_mem _ (k.frobE a) hz))) hx
 
 /-- The Kisin module `L.kisinLoc` with all `φ^a E` inverted is stable under multiplication and
 division by the integer powers of `k.frobEUnit a`, which is `φ^a E` as a unit of `W(C^♭)`. -/
