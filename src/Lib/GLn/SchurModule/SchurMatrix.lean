@@ -563,20 +563,9 @@ lemma schur_mul_left (h_fits : FitsRanks n n' κ) (z : ∀ τ : Φ, Matrix (n' �
   -- Substitute `g`, then `z` (`rowSubst_rowSubst`), and expand both times by
   -- `sum_schur_smul_nablaBasis`.
   refine schur_eq_of_expansion fun i ↦ ?_
-  -- `g` is square, so its expansion has no determinant factor.
-  have h_expand_g : rowSubst g (nablaBasis R n' κ i) =
-      ∑ k : WeylIndexFamily n' κ, schur κ g i k • nablaBasis R n' κ k := by
-    rw [← sum_schur_smul_nablaBasis FitsRanks.refl g i]
-    simp only [schurDetExp_self, detPow_zero, mul_one]
-  calc ∑ j : WeylIndexFamily n κ, (schur κ g * schur κ z) i j •
-          (nablaBasis R n κ j * detPow R n (schurDetExp n n' κ))
-      = ∑ k : WeylIndexFamily n' κ, schur κ g i k • ∑ j : WeylIndexFamily n κ, schur κ z k j •
-          (nablaBasis R n κ j * detPow R n (schurDetExp n n' κ)) := by
-        simpa only [Matrix.mul_apply, sum_smul, smul_sum, mul_smul] using sum_comm
-    _ = ∑ k : WeylIndexFamily n' κ, schur κ g i k • rowSubst z (nablaBasis R n' κ k) := by
-        simp only [sum_schur_smul_nablaBasis h_fits z]
-    _ = rowSubst z (rowSubst g (nablaBasis R n' κ i)) := by simp [h_expand_g]
-    _ = rowSubst (fun τ : Φ ↦ g τ * z τ) (nablaBasis R n' κ i) := rowSubst_rowSubst ..
+  rw [← rowSubst_rowSubst, ← sum_schur_smul_nablaBasis FitsRanks.refl g i]
+  simpa [schurDetExp_self, detPow_zero, ← sum_schur_smul_nablaBasis h_fits z,
+    Matrix.mul_apply, sum_smul, smul_sum, mul_smul] using sum_comm
 
 /-- Assume `FitsRanks n n' κ`: at every place τ, |n_τ| ≤ |n'_τ| and κ_τ(h) = 0 for
 |n_τ| < h < |n'_τ|. Let S_κ(z) = `schur κ z` be the matrix whose row i holds the coordinates of
