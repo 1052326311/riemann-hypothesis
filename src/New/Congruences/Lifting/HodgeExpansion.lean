@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
 public import Lib.General.LinearAlgebra.MatrixNormBounds
 public import New.Congruences.Lifting.ExponentLattices
-public import Mathlib.RingTheory.Finiteness.ModuleFinitePresentation
 
 /-!
 # Exponents of lattice elements in a Hodge basis and the length of one step on a line

@@ -1,9 +1,9 @@
 module
 
-public import Lib.DiscreteSeries.Bessel.Basic
-public import Lib.DiscreteSeries.FlenstedJensen.RightDerivatives
 public import Mathlib.Analysis.Complex.ExponentialBounds
 public import Mathlib.MeasureTheory.Measure.Haar.MulEquivHaarChar
+public import Lib.DiscreteSeries.Bessel.Basic
+public import Lib.DiscreteSeries.FlenstedJensen.RightDerivatives
 
 /-!
 # Haar measures on the Bessel unipotent groups 𝖴⁰ ⊆ 𝖴 and σ-finiteness on G₁

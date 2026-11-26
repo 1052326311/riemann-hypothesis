@@ -1,9 +1,9 @@
 module
 
-public import Lib.General.LinearAlgebra.MinorProducts
 public import Mathlib.Analysis.CStarAlgebra.Module.Constructions
 public import Mathlib.Analysis.InnerProductSpace.NormDet
 public import Mathlib.RingTheory.Henselian
+public import Lib.General.LinearAlgebra.MinorProducts
 
 /-!
 # Gram determinants

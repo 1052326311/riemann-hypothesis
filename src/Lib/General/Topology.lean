@@ -1,7 +1,6 @@
 module
 
 public import Aesop.Main
-public import Lib.Speed
 public import Mathlib.NumberTheory.Padics.ProperSpace
 public import Mathlib.RingTheory.RegularLocalRing.Defs
 public import Mathlib.RingTheory.WittVector.IsPoly
@@ -15,6 +14,7 @@ public import Mathlib.Topology.Connected.Separation
 public import Mathlib.Topology.MetricSpace.Ultra.TotallySeparated
 public import Mathlib.Topology.Separation.Connected
 public import Std.Internal.Order.Automation
+public import Lib.Speed
 
 /-!
 # Open subgroups, a tube lemma, and procyclic images of ℓ-adic characters

@@ -1,6 +1,5 @@
 module
 
-public import Lib.Cohomology.Etale.Basic
 public import Mathlib.Algebra.DualNumber
 public import Mathlib.Algebra.Module.StablyFree.Basic
 public import Mathlib.Data.Finset.Finsupp
@@ -17,6 +16,7 @@ public import Mathlib.RingTheory.RegularLocalRing.Defs
 public import Mathlib.RingTheory.TotallySplit
 public import Mathlib.RingTheory.Unramified.LocalStructure
 public import Mathlib.Tactic.Polynomial.Basic
+public import Lib.Cohomology.Etale.Basic
 
 /-!
 # Multivariate polynomials: cost of vanishing, homogenization, Nullstellensatz, Hensel

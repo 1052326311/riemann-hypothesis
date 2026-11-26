@@ -1,13 +1,13 @@
 module
 
+public import Mathlib.Algebra.GroupWithZero.Torsion
+public import Mathlib.Algebra.Order.Monoid.Unbundled.Units
 public import Lib.Analytic.EntireLFunction
 public import Lib.CM.ConjugateCurve
 public import Lib.CM.Integrality.IsogenyIntegrality
 public import Lib.CM.KroneckerLimit
 public import Lib.ClassField.HeckeL.EulerProduct
 public import Lib.ClassField.Places.ValuationSubrings
-public import Mathlib.Algebra.GroupWithZero.Torsion
-public import Mathlib.Algebra.Order.Monoid.Unbundled.Units
 
 /-!
 # Odd class number, ζ_K = ζ·L(s, χ), theta functions with CM and Chowla–Selberg

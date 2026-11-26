@@ -1,7 +1,6 @@
 module
 
 public import Aesop.Main
-public import Lib.Speed
 public import Mathlib.Algebra.Order.Star.Real
 public import Mathlib.Analysis.CStarAlgebra.Classes
 public import Mathlib.Analysis.Complex.HalfPlane
@@ -19,6 +18,7 @@ public import Mathlib.Tactic.ReduceModChar
 public import Mathlib.Topology.Separation.CompletelyRegular
 public import Std.Internal.Order.Automation
 public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.Speed
 
 /-!
 # Theta series of Dirichlet characters, Poisson summation, and `L(s, χ)` as a Mellin transform

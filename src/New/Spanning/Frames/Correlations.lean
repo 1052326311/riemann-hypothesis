@@ -1,7 +1,7 @@
 module
 
-public import New.Spanning.Frames.Levels
 public import Mathlib.MeasureTheory.Group.IntegralConvolution
+public import New.Spanning.Frames.Levels
 
 /-!
 # The scale, near points and partial correlations

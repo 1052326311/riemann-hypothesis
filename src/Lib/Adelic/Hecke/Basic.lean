@@ -1,6 +1,5 @@
 module
 
-public import Lib.Speed
 public import Mathlib.Algebra.FiniteSupport.Basic
 public import Mathlib.CategoryTheory.Shift.Basic
 public import Mathlib.GroupTheory.DoubleCoset
@@ -12,6 +11,7 @@ public import Mathlib.Tactic.Polynomial.Basic
 public import Mathlib.Tactic.ReduceModChar
 public import Std.Internal.Order.Automation
 public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.Speed
 
 /-!
 # Level spaces, Hecke operators, stabilisers and class sums

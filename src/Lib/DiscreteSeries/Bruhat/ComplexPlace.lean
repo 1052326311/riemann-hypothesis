@@ -1,8 +1,8 @@
 module
 
-public import Lib.DiscreteSeries.Bessel.UnipotentHaarMeasure
 public import Mathlib.Analysis.Matrix.MeasurableSpace
 public import Mathlib.MeasureTheory.Order.Group.Lattice
+public import Lib.DiscreteSeries.Bessel.UnipotentHaarMeasure
 
 /-!
 # The place ℂ: polar coordinates, Cartan decomposition and the measure of the hyperboloid

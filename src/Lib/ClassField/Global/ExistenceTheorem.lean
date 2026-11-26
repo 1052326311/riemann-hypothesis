@@ -1,8 +1,8 @@
 module
 
-public import Lib.ClassField.Global.NormTheorems
 public import Mathlib.Topology.Algebra.Group.OpenMapping
 public import Mathlib.Topology.Baire.LocallyCompactRegular
+public import Lib.ClassField.Global.NormTheorems
 
 /-!
 # Kummer characters, power indices and the existence theorem for totally complex fields

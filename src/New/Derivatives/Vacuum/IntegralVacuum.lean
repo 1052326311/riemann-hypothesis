@@ -1,9 +1,9 @@
 module
 
+public import Mathlib.Tactic.PNatToNat
 public import Lib.CM.FiniteLattices
 public import Lib.Weil.Construction.CanonicalTheta
 public import New.Derivatives.Vacuum.TightFrames
-public import Mathlib.Tactic.PNatToNat
 
 /-!
 # The integral vacuum θ°: integrality and bounds of its values, standard data at p

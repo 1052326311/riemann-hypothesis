@@ -1,6 +1,5 @@
 module
 
-public import Lib.General.Groups.CongruenceSubgroups
 import TauCeti.LinearAlgebra.Matrix.Charpoly.Roots
 public import Mathlib.Algebra.Lie.Weights.Linear
 public import Mathlib.LinearAlgebra.Matrix.FiniteDimensional
@@ -15,6 +14,7 @@ public import Mathlib.RingTheory.PiTensorProduct
 public import Mathlib.RingTheory.RegularLocalRing.Defs
 public import Mathlib.RingTheory.SimpleRing.Principal
 public import Mathlib.RingTheory.TotallySplit
+public import Lib.General.Groups.CongruenceSubgroups
 
 /-!
 # Eigenvalues: traces of powers, common eigenvectors, Amitsur's theorem, Sylvester's law

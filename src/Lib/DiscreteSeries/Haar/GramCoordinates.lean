@@ -1,7 +1,7 @@
 module
 
-public import Lib.DiscreteSeries.Haar.CayleyChart
 public import Mathlib.Data.Matrix.ColumnRowPartitioned
+public import Lib.DiscreteSeries.Haar.CayleyChart
 
 /-!
 # Coordinates for the Gram map

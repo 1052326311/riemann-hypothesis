@@ -1,6 +1,5 @@
 module
 
-public import Lib.General.Measure.IdempotentKernel
 public import Aesop.Frontend.Tactic
 public import Aesop.Main
 public import Mathlib.Dynamics.Ergodic.Action.Regular
@@ -11,6 +10,7 @@ public import Mathlib.Topology.Compactness.Paracompact
 public import Mathlib.Topology.Separation.CompletelyRegular
 public import Mathlib.Topology.Sheaves.Presheaf
 public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.General.Measure.IdempotentKernel
 
 /-!
 # Quotient measures via cutoffs: unfolding, covolume, unimodularity, periodic means

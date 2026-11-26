@@ -1,8 +1,8 @@
 module
 
+public import TauCeti.RepresentationTheory.AsAlgebraHom
 public import Lib.Adelic.TraceFormula.LevelAlgebra
 public import New.UpperBound.Objects.Rows
-public import TauCeti.RepresentationTheory.AsAlgebraHom
 
 /-!
 # Spherical Hecke operators away from the level, and eigensystems

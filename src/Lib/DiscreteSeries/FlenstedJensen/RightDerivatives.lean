@@ -1,9 +1,9 @@
 module
 
+public import Mathlib.Analysis.Calculus.VectorField
 public import Lib.DiscreteSeries.Haar.TotalMass
 public import Lib.DiscreteSeries.Rigidity.RepresentationsAndCasimirs
 public import Lib.General.Analysis.HolomorphicIntegrals
-public import Mathlib.Analysis.Calculus.VectorField
 
 /-!
 # Right derivatives and bump convolution for smooth functions on U(p,q)

@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.LinearAlgebra.PiTensorProduct.Dual
 public import New.UpperBound.ElementaryDivisors.Edges
 public import New.UpperBound.ElementaryDivisors.FrobeniusFactors
-public import Mathlib.LinearAlgebra.PiTensorProduct.Dual
 
 /-!
 # Averaging: removing the terms of large defect in all Levi translates at once

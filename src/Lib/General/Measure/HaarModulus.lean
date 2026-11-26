@@ -1,6 +1,5 @@
 module
 
-public import Lib.General.LinearAlgebra.IntegralLattices
 import TauCeti.MeasureTheory.Measure.Haar.DistribChar
 public import Mathlib.MeasureTheory.Measure.Haar.DistribChar
 public import Mathlib.RingTheory.Coalgebra.IsFrobenius
@@ -8,6 +7,7 @@ public import Mathlib.RingTheory.Henselian
 public import Mathlib.RingTheory.HopfAlgebra.Basic
 public import Mathlib.RingTheory.RegularLocalRing.Defs
 public import Mathlib.RingTheory.SimpleRing.Principal
+public import Lib.General.LinearAlgebra.IntegralLattices
 
 /-!
 # Pushforward of Haar measures, the modulus of GL_n and the generalised index

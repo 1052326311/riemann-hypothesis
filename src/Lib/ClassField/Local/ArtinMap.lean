@@ -1,9 +1,9 @@
 module
 
+public import Mathlib.Analysis.Calculus.InverseFunctionTheorem.Deriv
 public import Lib.Adelic.Adeles.IdeleModulus
 public import Lib.ClassField.LocalDuality.DualityInequality
 public import Lib.ClassField.Places.TameInertia
-public import Mathlib.Analysis.Calculus.InverseFunctionTheorem.Deriv
 
 /-!
 # Local and global Artin maps, algebraic Hecke characters and tame inertia

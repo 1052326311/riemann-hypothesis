@@ -1,6 +1,5 @@
 module
 
-public import Lib.General.Groups.BesselGroups
 public import Mathlib.Algebra.AffineMonoid.UniqueSums
 public import Mathlib.LinearAlgebra.Matrix.Swap
 public import Mathlib.RingTheory.Etale.Weakly
@@ -8,6 +7,7 @@ public import Mathlib.RingTheory.Henselian
 public import Mathlib.RingTheory.RegularLocalRing.Defs
 public import Mathlib.RingTheory.SimpleRing.Principal
 public import Mathlib.RingTheory.TotallySplit
+public import Lib.General.Groups.BesselGroups
 
 /-!
 # Lines and hyperplanes over a field

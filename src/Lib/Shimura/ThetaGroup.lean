@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.RingTheory.PiTensorProduct
 public import Lib.General.Geometry.ProjectiveSpace
 public import Lib.Shimura.AbelianScheme.Basic
-public import Mathlib.RingTheory.PiTensorProduct
 
 /-!
 # Lifts of morphisms to sections of line bundles, and theta structures on abelian schemes

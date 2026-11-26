@@ -1,9 +1,9 @@
 module
 
-public import Lib.Adelic.Reduction.FirstMinimumShortBases
-public import Lib.ClassField.Grunwald
 public import Mathlib.NumberTheory.LSeries.PrimesInAP
 public import Mathlib.NumberTheory.SumTwoSquares
+public import Lib.Adelic.Reduction.FirstMinimumShortBases
+public import Lib.ClassField.Grunwald
 
 /-!
 # Split places over ℚ(√−d) and quadratic steps with prescribed splitting

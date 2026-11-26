@@ -1,6 +1,5 @@
 module
 
-public import Lib.General.Groups.CongruenceSubgroups
 import TauCeti.Analysis.Matrix.LDL
 import TauCeti.Analysis.Matrix.PosSemidef.Determinant
 import TauCeti.LinearAlgebra.Matrix.Determinant.ComplementaryMinor
@@ -8,6 +7,7 @@ public import Aesop.BuiltinRules
 public import Mathlib.Algebra.Order.Archimedean.Real.Hom
 public import Mathlib.Analysis.CStarAlgebra.Hom
 public import Mathlib.RingTheory.SimpleRing.Principal
+public import Lib.General.Groups.CongruenceSubgroups
 
 /-!
 # Determinants of positive semidefinite matrices, principal minors and hermitian involutions

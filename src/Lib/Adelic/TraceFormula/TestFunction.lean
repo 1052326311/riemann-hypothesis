@@ -1,9 +1,9 @@
 module
 
+public import Mathlib.Topology.LocallyConstant.Algebra
 public import Lib.Adelic.Adeles.LocalFactors
 public import Lib.General.LinearAlgebra.IdempotentRadical
 public import Lib.Weil.Unramified.HeckeGL
-public import Mathlib.Topology.LocallyConstant.Algebra
 
 /-!
 # Test functions and the two local conditions of the comparison of traces

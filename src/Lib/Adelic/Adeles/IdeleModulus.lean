@@ -1,10 +1,10 @@
 module
 
-public import Lib.ClassField.Places.Ideles
-public import Lib.Weil.DualPair.Kronecker
 public import Mathlib.RingTheory.Coalgebra.CoassocSimps
 public import Mathlib.RingTheory.Complex
 public import Mathlib.RingTheory.TotallySplit
+public import Lib.ClassField.Places.Ideles
+public import Lib.Weil.DualPair.Kronecker
 
 /-!
 # The module of an idele, Haar measure scaling and the norm map on finite adeles

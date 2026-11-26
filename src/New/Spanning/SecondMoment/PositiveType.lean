@@ -1,7 +1,5 @@
 module
 
-public import Lib.General.Analysis.FiniteFourier
-public import Lib.General.LinearAlgebra.IntegralLattices
 public import Mathlib.Algebra.Order.Star.Rat
 public import Mathlib.Algebra.Order.Star.Real
 public import Mathlib.Algebra.Ring.IsFormallyReal
@@ -12,6 +10,8 @@ public import Mathlib.RingTheory.Etale.Weakly
 public import Mathlib.RingTheory.Henselian
 public import Mathlib.RingTheory.RegularLocalRing.Defs
 public import Mathlib.RingTheory.TotallySplit
+public import Lib.General.Analysis.FiniteFourier
+public import Lib.General.LinearAlgebra.IntegralLattices
 
 /-!
 # Functions of positive type and singular minors

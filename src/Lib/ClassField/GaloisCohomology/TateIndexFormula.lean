@@ -1,6 +1,5 @@
 module
 
-public import Lib.ClassField.Places.DecompositionCyclotomic
 public import Mathlib.Algebra.Module.StablyFree.Basic
 public import Mathlib.Algebra.Ring.IsFormallyReal
 public import Mathlib.GroupTheory.FiniteAbelian.Basic
@@ -14,6 +13,7 @@ public import Mathlib.RingTheory.Coalgebra.CoassocSimps
 public import Mathlib.RingTheory.Etale.Weakly
 public import Mathlib.RingTheory.TotallySplit
 public import Mathlib.Topology.Sheaves.Presheaf
+public import Lib.ClassField.Places.DecompositionCyclotomic
 
 /-!
 # Coker/ker indices and Tate's index formula for cyclic actions of prime order

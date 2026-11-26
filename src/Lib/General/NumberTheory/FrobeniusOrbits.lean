@@ -1,8 +1,8 @@
 module
 
-public import Lib.Adelic.Adeles.Basic
 public import Mathlib.Algebra.AffineMonoid.UniqueSums
 public import Mathlib.FieldTheory.Finite.Extension
+public import Lib.Adelic.Adeles.Basic
 
 /-!
 # Frobenius orbits of roots over finite fields and residue fields at self-conjugate places

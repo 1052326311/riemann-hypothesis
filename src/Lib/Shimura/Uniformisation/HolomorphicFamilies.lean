@@ -1,8 +1,5 @@
 module
 
-public import Lib.General.Geometry.ProjectiveSpace
-public import Lib.Shimura.AbelianScheme.TangentCoordinates
-public import Lib.Shimura.ComplexTheta.AppellHumbertData
 public import Mathlib.Algebra.Module.StablyFree.Basic
 public import Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected
 public import Mathlib.Analysis.Analytic.Polynomial
@@ -10,6 +7,9 @@ public import Mathlib.Analysis.Convex.Contractible
 public import Mathlib.RingTheory.Coalgebra.CoassocSimps
 public import Mathlib.RingTheory.Complex
 public import Mathlib.RingTheory.DualNumber
+public import Lib.General.Geometry.ProjectiveSpace
+public import Lib.Shimura.AbelianScheme.TangentCoordinates
+public import Lib.Shimura.ComplexTheta.AppellHumbertData
 
 /-!
 # Holomorphic families of complex points, jets, uniformisations and theta coordinates

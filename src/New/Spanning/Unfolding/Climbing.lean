@@ -1,8 +1,8 @@
 module
 
+public import Std.Tactic.BVDecide.Normalize.Bool
 public import Lib.Adelic.QuotientMeasure.UnfoldingInStages
 public import New.Spanning.Unfolding.AmplitudeSums
-public import Std.Tactic.BVDecide.Normalize.Bool
 
 /-!
 # Residue lifts, lattice charts and common flag vectors: which filling terms contribute

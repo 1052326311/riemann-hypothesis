@@ -1,9 +1,9 @@
 module
 
-public import Lib.Cohomology.Etale.FilteredLimits
 public import Aesop.BuiltinRules
 public import Mathlib.RingTheory.Localization.Pi
 public import Mathlib.RingTheory.RegularLocalRing.Defs
+public import Lib.Cohomology.Etale.FilteredLimits
 
 /-!
 # The space of places of residue fields and its properness over the base

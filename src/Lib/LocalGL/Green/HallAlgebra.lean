@@ -1,7 +1,5 @@
 module
 
-public import Lib.General.Groups.BesselGroups
-public import Lib.General.Groups.CharacterTheory
 public import Mathlib.Algebra.AffineMonoid.UniqueSums
 public import Mathlib.Algebra.Module.PID
 public import Mathlib.Algebra.Polynomial.Module.FiniteDimensional
@@ -9,6 +7,8 @@ public import Mathlib.RingTheory.Henselian
 public import Mathlib.RingTheory.PiTensorProduct
 public import Mathlib.RingTheory.RegularLocalRing.Defs
 public import Mathlib.Topology.Sheaves.Presheaf
+public import Lib.General.Groups.BesselGroups
+public import Lib.General.Groups.CharacterTheory
 
 /-!
 # Hall algebra of class functions: induction product, Mackey formula, Frobenius reciprocity

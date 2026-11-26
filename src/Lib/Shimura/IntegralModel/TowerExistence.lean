@@ -1,9 +1,9 @@
 module
 
+public import Mathlib.Combinatorics.Enumerative.IncidenceAlgebra
 public import Lib.General.Combinatorics
 public import Lib.Shimura.CongruenceRelation.HeckeNeighbours
 public import Lib.Shimura.IntegralModel.BallImmersion
-public import Mathlib.Combinatorics.Enumerative.IncidenceAlgebra
 
 /-!
 # Existence of the model: the tower of Kuga–Sato covers with its congruence relation

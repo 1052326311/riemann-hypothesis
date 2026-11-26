@@ -1,6 +1,5 @@
 module
 
-public import Lib.ClassField.Places.Ideles
 public import TauCeti.NumberTheory.RamificationInertia.Tower
 import TauCeti.NumberTheory.ArithmeticDirichletSeries.Convergence
 public import Mathlib.Analysis.Complex.CoveringMap
@@ -9,6 +8,7 @@ public import Mathlib.Analysis.SpecialFunctions.Complex.Analytic
 public import Mathlib.Analysis.SpecialFunctions.Log.Summable
 public import Mathlib.Data.Finset.Functor
 public import Mathlib.NumberTheory.NumberField.DedekindZeta
+public import Lib.ClassField.Places.Ideles
 
 /-!
 # Euler products over primes of a number field and densities at primes of degree one

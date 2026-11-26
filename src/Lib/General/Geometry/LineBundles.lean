@@ -3,7 +3,6 @@ module
 public import TauCeti.AlgebraicGeometry.Scheme.AffinePoints
 public import Aesop.Frontend.Tactic
 public import Aesop.Main
-public import Lib.Speed
 public import Mathlib.Algebra.Group.MinimalAxioms
 public import Mathlib.AlgebraicGeometry.Modules.Sheaf
 public import Mathlib.AlgebraicGeometry.Morphisms.SchemeTheoreticallyDominant
@@ -21,6 +20,7 @@ public import Mathlib.Tactic.Polynomial.Basic
 public import Mathlib.Tactic.ReduceModChar
 public import Std.Internal.Order.Automation
 public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.Speed
 
 /-!
 # Line bundles on schemes via ring-valued points: descent and the Picard group

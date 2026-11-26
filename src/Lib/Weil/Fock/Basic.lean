@@ -1,11 +1,11 @@
 module
 
+public import Mathlib.RingTheory.Coalgebra.CoassocSimps
+public import Mathlib.RingTheory.MvPolynomial.IrreducibleQuadratic
 public import Lib.General.LinearAlgebra.HermitianMatrices
 public import Lib.General.Measure.HaarModulus
 public import Lib.General.Measure.IntegralOperators
 public import Lib.Weil.Construction.WeilOperators
-public import Mathlib.RingTheory.Coalgebra.CoassocSimps
-public import Mathlib.RingTheory.MvPolynomial.IrreducibleQuadratic
 
 /-!
 # The Fock model of the Weil representation of U(ε) at a real place

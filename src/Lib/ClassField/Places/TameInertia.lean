@@ -1,9 +1,9 @@
 module
 
-public import Lib.ClassField.GaloisCohomology.KummerCyclicClasses
-public import Lib.PadicHodge.Crystalline.Basic
 public import Aesop.BuiltinRules
 public import Mathlib.GroupTheory.Nilpotent
+public import Lib.ClassField.GaloisCohomology.KummerCyclicClasses
+public import Lib.PadicHodge.Crystalline.Basic
 
 /-!
 # Tame inertia, Frobenius on roots of unity over ℚ_p, the cyclotomic character, Weil pairs

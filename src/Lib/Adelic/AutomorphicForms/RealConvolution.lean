@@ -1,10 +1,10 @@
 module
 
+public import Mathlib.MeasureTheory.Function.LpSpace.DomAct.Continuous
+public import Mathlib.MeasureTheory.Integral.CompactlySupported
 public import Lib.Adelic.AutomorphicForms.Basic
 public import Lib.Adelic.QuotientMeasure.IwasawaUnfolding
 public import Lib.DiscreteSeries.Rigidity.KernelFixes
-public import Mathlib.MeasureTheory.Function.LpSpace.DomAct.Continuous
-public import Mathlib.MeasureTheory.Integral.CompactlySupported
 
 /-!
 # Convolution over real points, cusp kernels, the Petersson product and Poincaré series

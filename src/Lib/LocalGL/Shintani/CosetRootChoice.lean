@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.GroupTheory.SemidirectProduct
 public import Lib.GaloisRep.Hilbert90.TameActions
 public import Lib.General.Groups.CharacterTheory
-public import Mathlib.GroupTheory.SemidirectProduct
 
 /-!
 # Root choices in a coset, induction, and extension of invariant characters

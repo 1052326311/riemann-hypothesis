@@ -1,10 +1,10 @@
 module
 
+public import Mathlib.Algebra.Regular.Pi
+public import Mathlib.Data.List.Intervals
 public import Lib.Cohomology.Etale.FilteredLimits
 public import Lib.General.Algebra.CohomologyBaseChange
 public import Lib.General.Geometry.EtaleCharts
-public import Mathlib.Algebra.Regular.Pi
-public import Mathlib.Data.List.Intervals
 
 /-!
 # p-adic tests: tilts, Fontaine's map, covers by tests and flat base change

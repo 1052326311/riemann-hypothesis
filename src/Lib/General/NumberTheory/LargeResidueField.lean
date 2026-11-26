@@ -1,7 +1,7 @@
 module
 
-public import Lib.General.NumberTheory.PadicLimitsValuation
 public import Mathlib.RingTheory.RootsOfUnity.CyclotomicUnits
+public import Lib.General.NumberTheory.PadicLimitsValuation
 
 /-!
 # Coefficient rings with a large residue field

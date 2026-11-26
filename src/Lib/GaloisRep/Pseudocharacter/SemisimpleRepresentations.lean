@@ -1,14 +1,14 @@
 module
 
+public import TauCeti.LinearAlgebra.Trace.Idempotent
+public import Mathlib.Algebra.Algebra.Subalgebra.Matrix
+public import Mathlib.RingTheory.SimpleModule.IsAlgClosed
+public import Mathlib.Topology.Baire.LocallyCompactRegular
 public import Lib.ClassField.Places.DecompositionCompletion
 public import Lib.General.LinearAlgebra.MatrixNormBounds
 public import Lib.General.NumberTheory.CoefficientRings
 public import Lib.PadicComparison.Descent.TestCategory
-public import TauCeti.LinearAlgebra.Trace.Idempotent
 public import Lib.General.LinearAlgebra.MatrixPolynomials
-public import Mathlib.Algebra.Algebra.Subalgebra.Matrix
-public import Mathlib.RingTheory.SimpleModule.IsAlgClosed
-public import Mathlib.Topology.Baire.LocallyCompactRegular
 
 /-!
 # Semisimple representations: conjugacy, continuity, cancellation and stable lattices

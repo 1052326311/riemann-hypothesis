@@ -1,9 +1,9 @@
 module
 
-public import Lib.Cohomology.Etale.Basic
-public import Lib.PadicHodge.PeriodRings.Ainf
 public import Mathlib.RingTheory.Etale.Weakly
 public import Mathlib.RingTheory.Regular.IsSMulRegular
+public import Lib.Cohomology.Etale.Basic
+public import Lib.PadicHodge.PeriodRings.Ainf
 
 /-!
 # Divided power ideal, p-adic test rings, tilt, Witt vectors and reduction modulo p

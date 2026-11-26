@@ -1,9 +1,9 @@
 module
 
-public import Lib.Shimura.GoodReduction.TorsionSizes
 public import Mathlib.GroupTheory.Schreier
 public import Mathlib.LinearAlgebra.Span.TensorProduct
 public import Mathlib.RingTheory.Valuation.Extension
+public import Lib.Shimura.GoodReduction.TorsionSizes
 
 /-!
 # Orthogonality of theta translates and balls of integral theta functions

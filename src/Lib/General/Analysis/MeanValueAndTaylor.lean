@@ -1,6 +1,5 @@
 module
 
-public import Lib.General.Measure.IdempotentKernel
 public import Mathlib.Analysis.Complex.MeanValue
 public import Mathlib.Analysis.Complex.TaylorSeries
 public import Mathlib.Analysis.SpecialFunctions.Complex.Circle
@@ -11,6 +10,7 @@ public import Mathlib.Order.CompletePartialOrder
 public import Mathlib.RingTheory.PowerSeries.Basic
 public import Mathlib.RingTheory.SimpleRing.Principal
 public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.General.Measure.IdempotentKernel
 
 /-!
 # Circle means, Taylor series at zero, a power bound, and smooth matrix operations

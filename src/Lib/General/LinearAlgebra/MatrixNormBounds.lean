@@ -1,7 +1,7 @@
 module
 
-public import Lib.GLn.SchurModule.GramMatrix
 public import Mathlib.LinearAlgebra.PiTensorProduct.Generators
+public import Lib.GLn.SchurModule.GramMatrix
 
 /-!
 # Auerbach's lemma, ultrametric matrix bounds and Gram norms

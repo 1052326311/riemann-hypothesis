@@ -1,8 +1,8 @@
 module
 
-public import Lib.Adelic.Adeles.IdeleModulus
 public import Mathlib.RingTheory.IsAdjoinRoot
 public import Mathlib.RingTheory.PicardGroup
+public import Lib.Adelic.Adeles.IdeleModulus
 
 /-!
 # Criteria for CM fields

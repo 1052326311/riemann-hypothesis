@@ -1,7 +1,5 @@
 module
 
-public import Lib.General.LinearAlgebra.HermitianMatrices
-public import Lib.General.Measure.HaarNormalisation
 public import Mathlib.Algebra.Module.StablyFree.Basic
 public import Mathlib.Algebra.Ring.IsFormallyReal
 public import Mathlib.Analysis.Calculus.FDeriv.Star
@@ -12,6 +10,8 @@ public import Mathlib.RingTheory.Coalgebra.CoassocSimps
 public import Mathlib.RingTheory.Complex
 public import Mathlib.RingTheory.TotallySplit
 public import Mathlib.Tactic.Linter.Style
+public import Lib.General.LinearAlgebra.HermitianMatrices
+public import Lib.General.Measure.HaarNormalisation
 
 /-!
 # Cayley chart and an explicit Haar measure on the unitary group U(J)

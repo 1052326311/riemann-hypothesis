@@ -1,9 +1,9 @@
 module
 
+public import Mathlib.Topology.MetricSpace.Ultra.Pi
 public import Lib.Adelic.AutomorphicForms.HeckeEigenforms
 public import Lib.General.LinearAlgebra.MatrixNormBounds
 public import Lib.PadicComparison.Descent.TestCategory
-public import Mathlib.Topology.MetricSpace.Ultra.Pi
 
 /-!
 # The p-adic gauge of algebraic forms, class sums, and integral forms of a level

@@ -1,6 +1,5 @@
 module
 
-public import Lib.Analytic.ZeroSymmetry
 public import Aesop.Frontend.Tactic
 public import Aesop.Main
 public import Mathlib.Algebra.Order.Star.Real
@@ -13,6 +12,7 @@ public import Mathlib.Tactic.Polynomial.Basic
 public import Mathlib.Tactic.ReduceModChar
 public import Std.Internal.Order.Automation
 public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.Analytic.ZeroSymmetry
 
 /-!
 # Gauss sums of primitive characters and the Pólya–Vinogradov bound

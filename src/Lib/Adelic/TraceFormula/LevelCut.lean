@@ -1,10 +1,10 @@
 module
 
+public import TauCeti.RepresentationTheory.AsAlgebraHom
 public import Lib.Adelic.TraceFormula.LevelAlgebra
 public import Lib.Adelic.TraceFormula.LineDeterminant
 public import Lib.Adelic.TraceFormula.LineStabiliser
 public import Lib.Adelic.TraceFormula.OffPlace
-public import TauCeti.RepresentationTheory.AsAlgebraHom
 
 /-!
 # Passage to the stabiliser of a line at an auxiliary place

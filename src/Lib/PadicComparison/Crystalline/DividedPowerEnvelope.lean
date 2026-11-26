@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.Analysis.SpecialFunctions.RegularizedHypergeometric
 public import Lib.PadicComparison.Completion
 public import Lib.PadicComparison.ToricTower
-public import Mathlib.Analysis.SpecialFunctions.RegularizedHypergeometric
 
 /-!
 # Divided power envelopes, lifts modulo divided powers, and one divided power variable

@@ -1,9 +1,9 @@
 module
 
-public import Lib.General.Geometry.PointsOfProperSchemes
 public import Mathlib.Data.Matrix.ColumnRowPartitioned
 public import Mathlib.RingTheory.PiTensorProduct
 public import Mathlib.RingTheory.Spectrum.Prime.Homeomorph
+public import Lib.General.Geometry.PointsOfProperSchemes
 
 /-!
 # Étale coordinates at zero, infinitesimal points and unramified torsion

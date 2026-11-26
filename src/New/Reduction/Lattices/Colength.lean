@@ -1,7 +1,7 @@
 module
 
-public import Lib.General.LinearAlgebra.HermiteForm
 public import Mathlib.LinearAlgebra.Matrix.Module
+public import Lib.General.LinearAlgebra.HermiteForm
 
 /-!
 # Colength of modules, and endomorphisms surjective up to a bounded colength

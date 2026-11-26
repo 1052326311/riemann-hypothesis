@@ -1,10 +1,10 @@
 module
 
+public import Mathlib.Algebra.BigOperators.Ring.Nat
+public import Mathlib.Analysis.Fourier.FiniteAbelian.PontryaginDuality
 public import Lib.ClassField.Global.ArtinMap
 public import Lib.ClassField.HeckeL.ContinuationAtOne
 public import Lib.General.NumberTheory.SUnitsAndClassNumber
-public import Mathlib.Algebra.BigOperators.Ring.Nat
-public import Mathlib.Analysis.Fourier.FiniteAbelian.PontryaginDuality
 
 /-!
 # Real place symbols, the second inequality and Albert–Brauer–Hasse–Noether

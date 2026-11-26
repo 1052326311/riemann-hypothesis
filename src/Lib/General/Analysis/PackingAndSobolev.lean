@@ -1,10 +1,10 @@
 module
 
-public import Lib.General.Measure.IntegralOperators
 public import Mathlib.Algebra.Ring.IsFormallyReal
 public import Mathlib.Analysis.InnerProductSpace.Calculus
 public import Mathlib.Analysis.LocallyConvex.AbsConvexOpen
 public import Mathlib.Order.CompletePartialOrder
+public import Lib.General.Measure.IntegralOperators
 
 /-!
 # Packing bounds for separated points and Sobolev trace inequalities

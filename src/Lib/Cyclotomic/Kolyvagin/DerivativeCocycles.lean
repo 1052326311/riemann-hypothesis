@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.Order.Interval.Finset.Box
 public import Lib.ClassField.GreenbergWiles.SelmerLevels
 public import Lib.Cyclotomic.Stickelberger
-public import Mathlib.Order.Interval.Finset.Box
 
 /-!
 # Kolyvagin's derivative cocycles from Gauss sums, for one set of primes

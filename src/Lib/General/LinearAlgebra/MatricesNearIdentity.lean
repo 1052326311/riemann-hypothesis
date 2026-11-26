@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.Analysis.CStarAlgebra.Module.Constructions
 public import Lib.DiscreteSeries.FlenstedJensen.Defs
 public import Lib.General.Analysis.GaussianIntegral
-public import Mathlib.Analysis.CStarAlgebra.Module.Constructions
 
 /-!
 # Matrices near the identity: Jacobi's formula and norm estimates

@@ -1,8 +1,8 @@
 module
 
+public import TauCeti.Analysis.Normed.Ring.CompactMonoid
 public import Lib.ClassField.Avatar.LocalGlobalCompatibility
 public import Lib.GaloisRep.Main.ThetaLift
-public import TauCeti.Analysis.Normed.Ring.CompactMonoid
 
 /-!
 # Isotypic spaces of eigenforms and attached Galois representations in every positive rank

@@ -1,8 +1,8 @@
 module
 
-public import Lib.Weil.DualPair.HolomorphicData
 public import Mathlib.Geometry.Manifold.VectorBundle.CovariantDerivative.LeviCivita
 public import Mathlib.NumberTheory.ModularForms.QExpansion
+public import Lib.Weil.DualPair.HolomorphicData
 
 /-!
 # The peaks of a bounded holomorphic form lie away from the cusps

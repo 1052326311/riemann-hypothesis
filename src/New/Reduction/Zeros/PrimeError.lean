@@ -1,11 +1,11 @@
 module
 
-public import Lib.Analytic.EntireLFunction
 public import Mathlib.Analysis.SpecialFunctions.Complex.Analytic
 public import Mathlib.MeasureTheory.Function.Floor
 public import Mathlib.NumberTheory.LSeries.Linearity
 public import Mathlib.NumberTheory.LSeries.PrimesInAP
 public import Mathlib.NumberTheory.LSeries.SumCoeff
+public import Lib.Analytic.EntireLFunction
 
 /-!
 # A weighted prime-counting error term and its poles at zeros of L-functions

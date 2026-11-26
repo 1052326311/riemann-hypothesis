@@ -1,7 +1,7 @@
 module
 
-public import Lib.SiegelWeil.Mass
 public import Mathlib.MeasureTheory.Integral.Layercake
+public import Lib.SiegelWeil.Mass
 
 /-!
 # Products of completions at finite sets of places and approximation of adeles by elements of E

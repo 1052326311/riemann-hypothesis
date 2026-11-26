@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.LinearAlgebra.SModEq.Pow
 public import Lib.ClassField.Places.DecompositionCyclotomic
 public import Lib.PadicHodge.PeriodRings.CrystallineRings
-public import Mathlib.LinearAlgebra.SModEq.Pow
 
 /-!
 # The cyclotomic action on μ, the period t, and the de Rham field B_dR

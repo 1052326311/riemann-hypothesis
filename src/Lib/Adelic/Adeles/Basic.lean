@@ -7,7 +7,6 @@ public import TauCeti.RingTheory.DedekindDomain.AdicValuation.ResidueField
 public import TauCeti.RingTheory.DedekindDomain.FiniteAdeleRing.BorelSpace
 public import Aesop.Frontend.Tactic
 public import Aesop.Main
-public import Lib.Speed
 public import Mathlib.Algebra.Star.Subsemiring
 public import Mathlib.NumberTheory.NumberField.CMField
 public import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
@@ -24,6 +23,7 @@ public import Mathlib.Topology.Algebra.Valued.LocallyCompact
 public import Mathlib.Topology.UniformSpace.Uniformizable
 public import Std.Internal.Order.Automation
 public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.Speed
 
 /-!
 # Finite adeles of number fields: topology, idempotents, functoriality and base change

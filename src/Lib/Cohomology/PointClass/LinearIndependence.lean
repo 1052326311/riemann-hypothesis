@@ -1,7 +1,7 @@
 module
 
-public import Lib.Cohomology.PointClass.ProjectiveNonvanishing
 public import Mathlib.RingTheory.Ideal.MinimalPrime.Colon
+public import Lib.Cohomology.PointClass.ProjectiveNonvanishing
 
 /-!
 # The Hodge–Tate map keeps classes of points on a projective variety linearly independent

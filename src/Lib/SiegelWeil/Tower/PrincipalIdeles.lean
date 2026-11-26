@@ -1,7 +1,7 @@
 module
 
-public import Lib.Adelic.Adeles.AdditiveCharacter
 public import Mathlib.MeasureTheory.Integral.Pi
+public import Lib.Adelic.Adeles.AdditiveCharacter
 
 /-!
 # Principal ideles and a majorant on the complex torus

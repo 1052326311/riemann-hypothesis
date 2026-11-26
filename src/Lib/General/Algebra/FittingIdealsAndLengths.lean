@@ -1,6 +1,5 @@
 module
 
-public import Lib.General.LinearAlgebra.HermiteForm
 public import Mathlib.LinearAlgebra.Matrix.Module
 public import Mathlib.NumberTheory.Padics.PadicIntegers
 public import Mathlib.Order.CompletePartialOrder
@@ -13,6 +12,7 @@ public import Mathlib.RingTheory.OrderOfVanishing.Noetherian
 public import Mathlib.RingTheory.RegularLocalRing.Defs
 public import Mathlib.RingTheory.SimpleRing.Principal
 public import Mathlib.RingTheory.TotallySplit
+public import Lib.General.LinearAlgebra.HermiteForm
 
 /-!
 # Relations, relative lengths and Fitting ideals for Selmer group estimates

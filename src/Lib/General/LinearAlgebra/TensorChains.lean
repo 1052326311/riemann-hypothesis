@@ -2,11 +2,11 @@ module
 
 import TauCeti.LinearAlgebra.Matrix.GeneralLinearGroup.NonzeroVectors
 import TauCeti.LinearAlgebra.TensorProduct.Separation
-public import Lib.Speed
 public import Mathlib.Algebra.Module.StablyFree.Basic
 public import Mathlib.LinearAlgebra.Matrix.Swap
 public import Mathlib.Tactic.Basify
 public import Std.Internal.Order.Automation
+public import Lib.Speed
 
 /-!
 # Chains of linear maps, tensor products of their data, and separation by forms

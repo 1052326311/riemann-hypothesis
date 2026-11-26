@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.RingTheory.Polynomial.IsIntegral
 public import Lib.GaloisRep.BaseChange.CommutingHeckeFamilies
 public import Lib.ClassField.Local.ArtinMap
-public import Mathlib.RingTheory.Polynomial.IsIntegral
 
 /-!
 # Matching unit pairs at congruence levels and at unramified places of a step

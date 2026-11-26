@@ -1,11 +1,11 @@
 module
 
-public import Lib.ClassField.GaloisCohomology.ContinuousCocycles
 public import Mathlib.FieldTheory.Galois.Profinite
 public import Mathlib.RingTheory.Henselian
 public import Mathlib.RingTheory.RegularLocalRing.Defs
 public import Mathlib.Topology.Connected.Separation
 public import Mathlib.Topology.Separation.CompletelyRegular
+public import Lib.ClassField.GaloisCohomology.ContinuousCocycles
 
 /-!
 # Profinite Galois groups: continuity, restriction maps and the Galois correspondence

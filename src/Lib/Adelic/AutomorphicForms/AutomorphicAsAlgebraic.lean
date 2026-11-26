@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.MeasureTheory.SpecificCodomains.Pi
 public import Lib.Adelic.AutomorphicForms.RealConvolution
 public import Lib.GLn.SchurModule.SchurNorm
-public import Mathlib.MeasureTheory.SpecificCodomains.Pi
 
 /-!
 # Automorphic forms on standard definite spaces as algebraic forms

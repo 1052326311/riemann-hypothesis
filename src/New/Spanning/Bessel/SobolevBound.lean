@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.Analysis.Calculus.Deriv.Pi
 public import Lib.DiscreteSeries.Bessel.SchurBound
 public import New.Spanning.Bessel.MeanValue
-public import Mathlib.Analysis.Calculus.Deriv.Pi
 
 /-!
 # Unfolding bounds over G₁ and the L² bound at the section γ_Z via Sobolev

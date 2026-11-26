@@ -1,8 +1,8 @@
 module
 
-public import Lib.Weil.Unramified.HeckeGL
 public import Mathlib.Algebra.GroupWithZero.Action.Regular
 public import Mathlib.GroupTheory.Transfer
+public import Lib.Weil.Unramified.HeckeGL
 
 /-!
 # Norms, logarithms and first-order deformations of the norm

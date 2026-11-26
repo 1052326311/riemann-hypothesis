@@ -1,12 +1,12 @@
 module
 
+public import Mathlib.Algebra.Order.Star.Int
+public import Mathlib.Algebra.Order.Star.Rat
+public import Mathlib.RingTheory.Coalgebra.CoassocSimps
 public import Lib.Adelic.Adeles.StrongApproximation
 public import Lib.Cohomology.Etale.Basic
 public import Lib.General.Measure.HaarModulus
 public import Lib.Shimura.ComplexTheta.AppellHumbertData
-public import Mathlib.Algebra.Order.Star.Int
-public import Mathlib.Algebra.Order.Star.Rat
-public import Mathlib.RingTheory.Coalgebra.CoassocSimps
 
 /-!
 # Adelic frames over a CM field, torsion classes, period lattices and period maps

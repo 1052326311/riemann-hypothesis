@@ -1,12 +1,12 @@
 module
 
-public import Lib.ClassField.Places.DecompositionCyclotomic
-public import Lib.ClassField.Places.ValuationSubrings
-public import Lib.General.Groups.ProfiniteCharacters
 public import Mathlib.Algebra.GroupWithZero.Submonoid.CancelMulZero
 public import Mathlib.Algebra.Module.StablyFree.Basic
 public import Mathlib.RingTheory.Etale.Weakly
 public import Mathlib.RingTheory.PicardGroup
+public import Lib.ClassField.Places.DecompositionCyclotomic
+public import Lib.ClassField.Places.ValuationSubrings
+public import Lib.General.Groups.ProfiniteCharacters
 
 /-!
 # Local fields: Frobenius, uniformisers, normalised valuation, extensions, unramified characters

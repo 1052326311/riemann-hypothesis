@@ -1,9 +1,9 @@
 module
 
+public import Std.Tactic.BVDecide.Normalize.BitVec
 public import New.Determinant.AuxiliaryForms.PathData
 public import New.Determinant.Chain.Moduli
 public import New.Determinant.Exchange.OneSquare
-public import Std.Tactic.BVDecide.Normalize.BitVec
 
 /-!
 # Turning path data, and turns off the diagonal

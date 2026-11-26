@@ -1,10 +1,10 @@
 module
 
-public import Lib.GLn.SchurModule.Basic
-public import Lib.General.Algebra.AdicCompletion
 public import TauCeti.RingTheory.MvPowerSeries.Derivative
 public import Mathlib.Analysis.SpecialFunctions.RegularizedHypergeometric
 public import Mathlib.RingTheory.PowerSeries.Exp
+public import Lib.GLn.SchurModule.Basic
+public import Lib.General.Algebra.AdicCompletion
 
 /-!
 # Integral power series over ℂ_p: jets, the chain rule and the exponential

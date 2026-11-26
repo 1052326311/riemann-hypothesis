@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.RingTheory.Frobenius
 public import Lib.GaloisRep.BaseChange.PrimeDegreeTransfer
 public import Lib.LocalGL.Shintani.LiftingGreenCharacters
-public import Mathlib.RingTheory.Frobenius
 
 /-!
 # Base change at an inert place carries a label to its Shintani lift

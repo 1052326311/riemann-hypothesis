@@ -1,7 +1,7 @@
 module
 
-public import Lib.DiscreteSeries.Haar.GramCoordinates
 public import Mathlib.Analysis.Calculus.InverseFunctionTheorem.ContDiff
+public import Lib.DiscreteSeries.Haar.GramCoordinates
 
 /-!
 # The polar formula for the Gram map on bases

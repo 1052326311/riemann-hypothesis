@@ -1,11 +1,11 @@
 module
 
+public import Mathlib.Analysis.InnerProductSpace.Semisimple
 public import New.Congruences.FirstOrder.AuxiliaryPrimeTie
 public import New.Congruences.FirstOrder.HeckeStrings
 public import New.Congruences.FirstOrder.RibetElement
 public import New.Congruences.FirstOrder.TrianglePrimes
 public import New.Congruences.GaloisRepresentations.BaseLevelOfLabel
-public import Mathlib.Analysis.InnerProductSpace.Semisimple
 
 /-!
 # The bound for denominators

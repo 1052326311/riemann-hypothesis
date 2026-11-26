@@ -1,6 +1,5 @@
 module
 
-public import Lib.Adelic.QuotientMeasure.Basic
 public import Mathlib.Algebra.Order.Archimedean.Real.Hom
 public import Mathlib.Algebra.Order.Star.Real
 public import Mathlib.Analysis.CStarAlgebra.ContinuousMap
@@ -10,6 +9,7 @@ public import Mathlib.Order.CompletePartialOrder
 public import Mathlib.RingTheory.PiTensorProduct
 public import Mathlib.RingTheory.SimpleRing.Principal
 public import Mathlib.Topology.UniformSpace.Uniformizable
+public import Lib.Adelic.QuotientMeasure.Basic
 
 /-!
 # Fourier inversion for periodic functions and decay of Fourier transforms

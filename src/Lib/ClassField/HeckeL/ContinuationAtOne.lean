@@ -1,9 +1,9 @@
 module
 
+public import Mathlib.Analysis.Complex.HalfPlane
 public import Lib.ClassField.HeckeL.EulerProduct
 public import Lib.ClassField.HeckeL.IdelicThetaSum
 public import Lib.General.Analysis.HolomorphicIntegrals
-public import Mathlib.Analysis.Complex.HalfPlane
 
 /-!
 # Analyticity at 1 of L-functions of nontrivial Hecke characters

@@ -1,11 +1,11 @@
 module
 
-public import Lib.Adelic.Hecke.Basic
 public import Aesop.Main
 public import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
 public import Mathlib.MeasureTheory.Integral.Pi
 public import Mathlib.RingTheory.PiTensorProduct
 public import Mathlib.RingTheory.SimpleRing.Principal
+public import Lib.Adelic.Hecke.Basic
 
 /-!
 # Uniqueness of Haar measure, integrals over subgroups and Gaussian normalisation of volumes

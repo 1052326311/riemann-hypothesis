@@ -1,11 +1,11 @@
 module
 
+public import Mathlib.Analysis.SpecialFunctions.Stirling
 public import New.Reduction.PrimeSums
 public import New.Spanning.Unfolding.FillingAdmissible
 public import New.UpperBound.Divisibility.ChainDatumExpansion
 public import New.UpperBound.Objects.RowChain
 public import New.UpperBound.Size.Estimates
-public import Mathlib.Analysis.SpecialFunctions.Stirling
 
 /-!
 # Archimedean size of the composite lift, and passage to target forms by the good projection

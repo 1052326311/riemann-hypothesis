@@ -1,7 +1,7 @@
 module
 
-public import Lib.Cohomology.Etale.Basic
 public import Mathlib.Algebra.Homology.DerivedCategory.Ext.EnoughProjectives
+public import Lib.Cohomology.Etale.Basic
 
 /-!
 # Long exact sequences, four and five lemmas, and Ext with disjoint unions and products

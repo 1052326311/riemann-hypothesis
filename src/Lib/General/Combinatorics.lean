@@ -1,7 +1,6 @@
 module
 
 import TauCeti.LinearAlgebra.Submodule.CardFinrank
-public import Lib.Speed
 public import Mathlib.Algebra.AffineMonoid.UniqueSums
 public import Mathlib.LinearAlgebra.Lagrange
 public import Mathlib.NumberTheory.NumberField.CanonicalEmbedding.Basic
@@ -18,6 +17,7 @@ public import Mathlib.Tactic.Polynomial.Basic
 public import Mathlib.Tactic.ReduceModChar
 public import Std.Internal.Order.Automation
 public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.Speed
 
 /-!
 # The q-binomial theorem, fibre sums, and Schur polynomials in the coefficients

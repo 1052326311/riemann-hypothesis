@@ -1,9 +1,9 @@
 module
 
+public import Mathlib.RingTheory.ZMod.Torsion
 public import Lib.ClassField.Global.Chebotarev
 public import Lib.Cyclotomic.Kolyvagin.DerivativeCocycles
 public import Lib.PadicComparison.Descent.TestCategory
-public import Mathlib.RingTheory.ZMod.Torsion
 
 /-!
 # Reciprocity laws and Stickelberger and Kolyvagin bounds for odd-part cocycles

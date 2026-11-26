@@ -1,7 +1,7 @@
 module
 
-public import Lib.ClassField.Global.CMSplittingCharacters
 public import Mathlib.Algebra.QuadraticAlgebra.NormDeterminant
+public import Lib.ClassField.Global.CMSplittingCharacters
 
 /-!
 # Sums of two squares, Landherr's theorem and the Hasse principle for unitary cocycles

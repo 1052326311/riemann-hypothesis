@@ -1,9 +1,9 @@
 module
 
-public import Lib.DiscreteSeries.Character.WeylCharacterFormula
-public import Lib.DiscreteSeries.Rigidity.KernelFixes
 public import Mathlib.Topology.ContinuousMap.SecondCountableSpace
 public import Mathlib.Topology.Metrizable.ContinuousMap
+public import Lib.DiscreteSeries.Character.WeylCharacterFormula
+public import Lib.DiscreteSeries.Rigidity.KernelFixes
 
 /-!
 # K-type multiplicities of the discrete series and orbital integrals as Laurent polynomials

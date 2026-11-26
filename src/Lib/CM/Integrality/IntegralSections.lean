@@ -1,7 +1,7 @@
 module
 
-public import Lib.General.Algebra.SeriesBounds
 public import Mathlib.Algebra.AffineMonoid.UniqueSums
+public import Lib.General.Algebra.SeriesBounds
 
 /-!
 # The integrality principle in one variable

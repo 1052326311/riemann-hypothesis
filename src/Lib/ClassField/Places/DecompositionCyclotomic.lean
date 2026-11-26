@@ -1,11 +1,11 @@
 module
 
-public import Lib.ClassField.Places.ProfiniteGalois
-public import Lib.General.Topology
 public import Mathlib.NumberTheory.Multiplicity
 public import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 public import Mathlib.RingTheory.RootsOfUnity.AlgebraicallyClosed
 public import Mathlib.Tactic.ENatToNat
+public import Lib.ClassField.Places.ProfiniteGalois
+public import Lib.General.Topology
 
 /-!
 # Decomposition and inertia groups, and cyclotomic characters at Frobenii and inertia

@@ -1,9 +1,9 @@
 module
 
-public import Lib.General.Analysis.MeanValueAndTaylor
-public import Lib.General.LinearAlgebra.PolarDecomposition
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 public import Mathlib.MeasureTheory.Integral.CurveIntegral.Basic
+public import Lib.General.Analysis.MeanValueAndTaylor
+public import Lib.General.LinearAlgebra.PolarDecomposition
 
 /-!
 # Exponentials in U(diag ε) and holomorphic extension of coefficients of highest vectors

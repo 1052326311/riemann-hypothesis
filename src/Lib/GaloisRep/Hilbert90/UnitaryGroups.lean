@@ -1,7 +1,7 @@
 module
 
-public import Lib.GaloisRep.Hilbert90.TameActions
 public import Mathlib.Algebra.Ring.Divisibility.Lemmas
+public import Lib.GaloisRep.Hilbert90.TameActions
 
 /-!
 # Hilbert 90 for unitary groups over profinite rings and for finite ideles

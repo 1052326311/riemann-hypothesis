@@ -5,7 +5,6 @@ public import TauCeti.NumberTheory.Bernoulli.Basic
 public import TauCeti.NumberTheory.DirichletCharacter.LFunction.TrivialZeros
 public import TauCeti.NumberTheory.MulChar.Orthogonality
 import TauCeti.NumberTheory.ZetaValues
-public import Lib.Speed
 public import Mathlib.Algebra.Order.Star.Rat
 public import Mathlib.Analysis.CStarAlgebra.Classes
 public import Mathlib.Analysis.SpecialFunctions.RegularizedHypergeometric
@@ -21,6 +20,7 @@ public import Mathlib.Tactic.Polynomial.Basic
 public import Mathlib.Tactic.ReduceModChar
 public import Std.Internal.Order.Automation
 public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.Speed
 
 /-!
 # A small nonzero integer in all Stickelberger ideals via Voronoi's congruence

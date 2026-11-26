@@ -1,8 +1,9 @@
 module
 
-public import Lib.Shimura.ComplexTheta.DimensionFormula
 public import Mathlib.Algebra.GroupWithZero.Torsion
 public import Mathlib.GroupTheory.FiniteAbelian.Basic
+import Mathlib.Tactic.Linarith.NNRealPreprocessor -- shake: keep (`nlinarith` over `ℝ≥0`)
+public import Lib.Shimura.ComplexTheta.DimensionFormula
 
 /-!
 # Sizes of theta functions at torsion points: products, bounds and shift bounds

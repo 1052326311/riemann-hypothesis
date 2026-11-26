@@ -1,6 +1,5 @@
 module
 
-public import Lib.Base
 import TauCeti.Analysis.Matrix.L2OpNorm
 public import Mathlib.Algebra.Algebra.Field
 public import Mathlib.Algebra.Module.StablyFree.Basic
@@ -21,6 +20,7 @@ public import Mathlib.Tactic.ReduceModChar
 public import Mathlib.Topology.Separation.CompletelyRegular
 public import Std.Internal.Order.Automation
 public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.Base
 
 /-!
 # Matrix norm estimates, the Ostrowski–Taussky inequality, and the complex Gaussian integral

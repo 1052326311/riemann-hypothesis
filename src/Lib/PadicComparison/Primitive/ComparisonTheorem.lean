@@ -1,7 +1,7 @@
 module
 
-public import Lib.Cohomology.SmoothBaseChange
 public import Mathlib.AlgebraicGeometry.PointsPi
+public import Lib.Cohomology.SmoothBaseChange
 
 /-!
 # The primitive comparison theorem and finiteness of p-adic cohomology

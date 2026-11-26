@@ -1,7 +1,7 @@
 module
 
-public import Lib.Weil.Construction.ThetaDictionary
 public import Mathlib.GroupTheory.IndexNSmul
+public import Lib.Weil.Construction.ThetaDictionary
 
 /-!
 # Fourier inversion for theta functions

@@ -1,8 +1,8 @@
 module
 
+public import Mathlib.Analysis.Matrix.Order
 public import Lib.General.Groups.BesselGroups
 public import Lib.General.Measure.IntegralOperators
-public import Mathlib.Analysis.Matrix.Order
 
 /-!
 # Sieve systems over places: products, positivity and lower semicontinuity

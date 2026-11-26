@@ -1,8 +1,8 @@
 module
 
-public import Lib.Cohomology.TorsionTheories
 public import Mathlib.Algebra.Order.Ring.Opposite
 public import Mathlib.Tactic.Linter.Style
+public import Lib.Cohomology.TorsionTheories
 
 /-!
 # Tate module, Kummer sequence and the first Chern class of O(1) on the projective line

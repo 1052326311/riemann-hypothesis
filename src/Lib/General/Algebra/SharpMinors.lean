@@ -1,7 +1,7 @@
 module
 
-public import Lib.General.Algebra.FittingIdealsAndLengths
 public import Mathlib.Algebra.Module.PID
+public import Lib.General.Algebra.FittingIdealsAndLengths
 
 /-!
 # Maximal minors and lengths

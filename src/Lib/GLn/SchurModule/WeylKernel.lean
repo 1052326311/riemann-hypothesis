@@ -1,9 +1,9 @@
 module
 
-public import Lib.GLn.SchurModule.TensorModel
-public import Lib.Shimura.ComplexTheta.AppellHumbertData
 public import Mathlib.Analysis.CStarAlgebra.Exponential
 public import Mathlib.RingTheory.Etale.Weakly
+public import Lib.GLn.SchurModule.TensorModel
+public import Lib.Shimura.ComplexTheta.AppellHumbertData
 
 /-!
 # The Weyl kernel and its Gram matrix: the hook number bound, positivity, Schur's lemma

@@ -1,8 +1,8 @@
 module
 
+public import TauCeti.RingTheory.MvPolynomial.IntegrallyClosed
 public import Lib.General.Analysis.HolomorphicIntegrals
 public import Lib.Shimura.Uniformisation.HolomorphicFamilies
-public import TauCeti.RingTheory.MvPolynomial.IntegrallyClosed
 public import Lib.PadicComparison.Descent.TestCategory
 
 /-!

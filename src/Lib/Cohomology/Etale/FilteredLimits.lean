@@ -1,6 +1,5 @@
 module
 
-public import Lib.Cohomology.Etale.DenseSubfunctors
 public import Mathlib.CategoryTheory.Abelian.GrothendieckAxioms.Colim
 public import Mathlib.CategoryTheory.Limits.Constructions.Over.Connected
 public import Mathlib.CategoryTheory.Limits.FunctorCategory.Shapes.Images
@@ -11,6 +10,7 @@ public import Mathlib.CategoryTheory.Subfunctor.Subobject
 public import Mathlib.CategoryTheory.WithTerminal.Lemmas
 public import Mathlib.Tactic.Linter.HaveILetI
 public import Mathlib.Tactic.Polynomial.Basic
+public import Lib.Cohomology.Etale.DenseSubfunctors
 
 /-!
 # Continuity of cohomology along filtered limits, via test rings and relatively affine maps

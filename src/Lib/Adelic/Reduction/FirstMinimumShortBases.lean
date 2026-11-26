@@ -1,9 +1,9 @@
 module
 
-public import Lib.Adelic.Unitary.RationalPoints
-public import Lib.General.NumberTheory.SUnitsAndClassNumber
 public import Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected
 public import Mathlib.MeasureTheory.Group.GeometryOfNumbers
+public import Lib.Adelic.Unitary.RationalPoints
+public import Lib.General.NumberTheory.SUnitsAndClassNumber
 
 /-!
 # Transference, first minima and short bases of lattices of hermitian spaces

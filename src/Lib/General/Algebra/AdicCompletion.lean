@@ -4,7 +4,6 @@ public import TauCeti.NumberTheory.Padics.Complex.Basic
 import TauCeti.RingTheory.AdicCompletion.Pi
 public import Aesop.Frontend.Tactic
 public import Aesop.Main
-public import Lib.Speed
 public import Mathlib.RingTheory.AdicCompletion.LocalRing
 public import Mathlib.RingTheory.Coalgebra.IsFrobenius
 public import Mathlib.RingTheory.Henselian
@@ -22,6 +21,7 @@ public import Mathlib.Tactic.ReduceModChar
 public import Mathlib.Topology.Sheaves.Presheaf
 public import Std.Internal.Order.Automation
 public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.Speed
 
 /-!
 # Adic completeness: p-adic tools, extension by continuity, topological bases

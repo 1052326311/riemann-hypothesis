@@ -6,7 +6,6 @@ import TauCeti.RepresentationTheory.CharacterTable.Values
 public import Aesop.BuiltinRules
 public import Aesop.Frontend.Tactic
 public import Aesop.Main
-public import Lib.Speed
 public import Mathlib.Algebra.Category.ModuleCat.Projective
 public import Mathlib.Algebra.Module.StablyFree.Basic
 public import Mathlib.Algebra.Order.PUnit
@@ -26,6 +25,7 @@ public import Mathlib.Tactic.Polynomial.Basic
 public import Mathlib.Tactic.ReduceModChar
 public import Std.Internal.Order.Automation
 public import Std.Tactic.BVDecide.Normalize.Prop
+public import Lib.Speed
 
 /-!
 # Characters of finite groups: averages, virtual characters and central projections

@@ -1,10 +1,10 @@
 module
 
-public import Lib.DiscreteSeries.Holomorphic.HighestVectorExtension
-public import Lib.General.LinearAlgebra.Eigenvalues
 public import Mathlib.Analysis.Calculus.Deriv.Star
 public import Mathlib.Data.Set.Finite.List
 public import Mathlib.RingTheory.Finiteness.Lattice
+public import Lib.DiscreteSeries.Holomorphic.HighestVectorExtension
+public import Lib.General.LinearAlgebra.Eigenvalues
 
 /-!
 # K-highest vectors, norm bounds, Casimir growth on the filtration, and analytic vectors

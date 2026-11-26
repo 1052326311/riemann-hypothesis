@@ -1,8 +1,8 @@
 module
 
-public import Lib.GLn.SchurModule.GramMatrix
 public import Mathlib.Algebra.AffineMonoid.Basic
 public import Mathlib.Algebra.AffineMonoid.UniqueSums
+public import Lib.GLn.SchurModule.GramMatrix
 
 /-!
 # Branching from GL(n+1) to GL(n) × GL(1): the branching vector and the norm bound

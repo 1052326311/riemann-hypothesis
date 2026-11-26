@@ -1,9 +1,9 @@
 module
 
+public import Mathlib.Order.Interval.Finset.Box
 public import Lib.ClassField.Avatar.HeckeBaseChange
 public import Lib.ClassField.HeckeCharacter.TameModulus
 public import Lib.SiegelWeil.Tower.RealConeIntegral
-public import Mathlib.Order.Interval.Finset.Box
 
 /-!
 # Products of `L`-values and Tate's integral at the finite places

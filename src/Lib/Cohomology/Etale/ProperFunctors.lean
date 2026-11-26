@@ -1,10 +1,10 @@
 module
 
+public import Mathlib.CategoryTheory.Sites.LocalSite
 public import Lib.Cohomology.Etale.EllAdicCohomology
 public import Lib.Cohomology.Etale.RelativeChains
 public import Lib.General.Geometry.GeometricPoints
 public import Lib.General.Geometry.PointsOfProperSchemes
-public import Mathlib.CategoryTheory.Sites.LocalSite
 
 /-!
 # Local-to-global principle, density criteria and proper functors for cohomology on test rings

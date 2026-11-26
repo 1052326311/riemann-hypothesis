@@ -1,9 +1,9 @@
 module
 
+public import Std.Tactic.BVDecide.Normalize.BitVec
 public import Lib.Adelic.AutomorphicForms.BlockPeriods
 public import New.Determinant.AuxiliaryForms.GridFirstColumns
 public import New.Determinant.AuxiliaryForms.RegularParameters
-public import Std.Tactic.BVDecide.Normalize.BitVec
 
 /-!
 # The branching pairing and the periods on the last path

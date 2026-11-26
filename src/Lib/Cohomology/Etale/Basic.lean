@@ -1,6 +1,5 @@
 module
 
-public import Lib.General.Algebra.AbsIntegrallyClosed
 public import Aesop.Frontend.Tactic
 public import Aesop.Main
 public import Mathlib.Algebra.Category.FGModuleCat.Basic
@@ -29,6 +28,7 @@ public import Mathlib.RingTheory.SimpleRing.Principal
 public import Mathlib.RingTheory.Valuation.LocalSubring
 public import Mathlib.Tactic.ENatToNat
 public import Mathlib.Topology.LocallyConstant.Algebra
+public import Lib.General.Algebra.AbsIntegrallyClosed
 
 /-!
 # Cohomology of functors as Ext: test rings, points, functoriality, coefficients

@@ -1,9 +1,9 @@
 module
 
-public import Lib.Adelic.Unitary.CongruenceLevels
-public import Lib.LocalGL.Iwahori.ParahoricStructure
 public import Mathlib.LinearAlgebra.Matrix.Module
 public import Mathlib.LinearAlgebra.Projectivization.Cardinality
+public import Lib.Adelic.Unitary.CongruenceLevels
+public import Lib.LocalGL.Iwahori.ParahoricStructure
 
 /-!
 # Hecke operators of GL_n at a finite place and local criteria for principal level

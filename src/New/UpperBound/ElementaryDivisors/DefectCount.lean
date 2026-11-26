@@ -1,12 +1,12 @@
 module
 
+public import Mathlib.Algebra.Order.Antidiag.FinsuppEquiv
+public import Mathlib.Analysis.Convex.Measure
+public import Std.Tactic.BVDecide.Normalize.Bool
 public import Lib.General.Measure.IntegralOperators
 public import Lib.LocalGL.Green.CuspidalFunctions
 public import New.UpperBound.ElementaryDivisors.PieriCone
 public import New.UpperBound.ElementaryDivisors.RootLemma
-public import Mathlib.Algebra.Order.Antidiag.FinsuppEquiv
-public import Mathlib.Analysis.Convex.Measure
-public import Std.Tactic.BVDecide.Normalize.Bool
 
 /-!
 # The dimension of the forms of bounded defect

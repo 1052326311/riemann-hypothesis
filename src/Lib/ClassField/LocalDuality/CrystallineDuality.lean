@@ -1,11 +1,11 @@
 module
 
+public import Mathlib.LinearAlgebra.PerfectPairing.Basic
 public import Lib.PadicComparison.Descent.TestCategory
 public import Lib.PadicHodge.BlochKato
 public import Lib.PadicHodge.Crystalline.Regularity
 public import Lib.ClassField.LocalDuality.DualityInequality
 public import Lib.Weil.DualPair.Kronecker
-public import Mathlib.LinearAlgebra.PerfectPairing.Basic
 
 /-!
 # Classes of Galois lattices, pairings and local duality for crystalline cocycles

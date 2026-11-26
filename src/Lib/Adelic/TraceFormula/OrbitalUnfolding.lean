@@ -1,9 +1,9 @@
 module
 
+public import Mathlib.Analysis.InnerProductSpace.Trace
 public import Lib.Adelic.TraceFormula.ChangingSigns
 public import Lib.Adelic.TraceFormula.ReduciblePolynomials
 public import Lib.Weil.Periods.Grading
-public import Mathlib.Analysis.InnerProductSpace.Trace
 
 /-!
 # Kernels of levels as forms, and unfolding of orbital integrals

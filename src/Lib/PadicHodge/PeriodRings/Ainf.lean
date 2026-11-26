@@ -1,6 +1,5 @@
 module
 
-public import Lib.PadicHodge.PeriodRings.AxTheorem
 public import TauCeti.RingTheory.Perfectoid.Cyclotomic
 public import TauCeti.RingTheory.Perfectoid.Padic
 public import Mathlib.Algebra.CharP.Pi
@@ -11,6 +10,7 @@ public import Mathlib.RingTheory.PiTensorProduct
 public import Mathlib.RingTheory.PicardGroup
 public import Mathlib.RingTheory.WittVector.Compare
 public import Mathlib.Topology.Algebra.Module.Cardinality
+public import Lib.PadicHodge.PeriodRings.AxTheorem
 
 /-!
 # The ring A_inf, the elements ε, μ, τ, ξ, the kernel of θ and adic completeness
