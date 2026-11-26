@@ -295,6 +295,7 @@ lemma Lift.one : Lift (k := k) (k' := k') Z 1 1 := rankPart_of_hasCommonLift (li
 
 variable [Finite k] [Finite k']
 
+omit [Finite k] in
 /-- If `F` lifts to `G` with coefficients in `Z` (`New.Lift`, here with both functions over
 `k`, so along the trivial extension `k/k`), then the restriction of `F` to `GL_n(k)` is a
 `Z`-combination of characters of `GL_n(k)`. -/
