@@ -89,7 +89,7 @@ lemma IsNearPairOverAgreeingBlock.pairDiscriminant_sq_le {E : Type} [Field E] [C
 -- Absorb the congruence gain into the discriminant before comparing the two gauges.
 private lemma IsNearPairOverAgreeingBlock.scaled_pairDiscriminant_sq_le
     {E : Type} [Field E] [CMType E] {𝔰 : Shape} {S : Filling E 𝔰} [HasPrimitiveRoot5040 E]
-    [S.IsAdmissible] {c c' : S.Classes} {γ γ' : S.G E}
+    {c c' : S.Classes} {γ γ' : S.G E}
     (hq : S.IsNearPairOverAgreeingBlock c c' (γ, γ')) :
     (S.pairDiscriminant c c' γ γ' * ((S.M : ℝ) / 2) ^ (S.linkCorank γ γ' * numInfPlaces E)) ^ 2 ≤
       S.levelGauge (S.cellRank γ) c c' γ * S.levelGauge (S.cellRank γ') c c' γ' := by
