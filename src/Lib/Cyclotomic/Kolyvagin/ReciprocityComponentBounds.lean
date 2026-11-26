@@ -1097,7 +1097,8 @@ lemma exists_detecting_points_component (h_bound : IsStickelbergerBound N e X)
   by_contra! h_blind
   set m : ℕ := X.factorization l + 1
   have h_two : IsUnit (2 : O) := by
-    exact_mod_cast isUnit_natCast_of_not_dvd (O := O) (not_dvd_of_pos_of_lt two_pos (by lia : 2 < l))
+    exact_mod_cast isUnit_natCast_of_not_dvd (O := O)
+      (not_dvd_of_pos_of_lt two_pos (by lia : 2 < l))
   have h_totient : IsUnit (φ (N * l) : O) := isUnit_totient_mul (by lia)
   obtain ⟨a, ha, hla, h_pow, h_pow_succ⟩ :=
     exists_modEq_one_coprime_isUnit_pow_sub_one (O := O) he_ne_zero hl
