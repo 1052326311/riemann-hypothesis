@@ -608,13 +608,19 @@ def IdealFamily.whisker (φ : C' ⥤ C) : IdealFamily (φ ⋙ ι) where
 non-empty exactly at the objects c with I_c = 0. -/
 def IdealFamily.botLocus : Subfunctor (onePointFunctor C) where
   obj c := {_x : (onePointFunctor C).obj c | I.ideal c = ⊥}
-  map f := by simp_all [← I.map_eq f]
+  map f := by
+    intro x hx
+    change I.ideal _ = ⊥ at hx ⊢
+    rw [← I.map_eq f, hx, Ideal.map_bot]
 
 /-- For a compatible family of ideals I, the subfunctor of the one-point functor that is
 non-empty exactly at the objects c where I_c is the unit ideal. -/
 def IdealFamily.topLocus : Subfunctor (onePointFunctor C) where
   obj c := {_x : (onePointFunctor C).obj c | I.ideal c = ⊤}
-  map f := by grind [I.map_eq f, Ideal.map_top]
+  map f := by
+    intro x hx
+    change I.ideal _ = ⊤ at hx ⊢
+    rw [← I.map_eq f, hx, Ideal.map_top]
 
 /-- Let `I` be a compatible family of ideals of the rings `ι c`, for `ι` a functor on the category
 `C`. Off the closed locus of `I c` the family becomes the unit ideal: if `m` does not contain
