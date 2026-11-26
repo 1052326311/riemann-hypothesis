@@ -105,9 +105,7 @@ lemma PadicTest.bijective_generic_points {Y : Over (Spec R)} [IsProper Y.hom] (c
   let j (i : c.Index) : CommRingCat.of (c.Cell i) ⟶ CommRingCat.of (FractionRing (c.Cell i)) :=
     CommRingCat.ofHom (algebraMap _ _)
   have hp (i : c.Index) : IsUnit ((π i ≫ j i).hom p) := by
-    simp only [π, j, CommRingCat.hom_comp, ConcreteCategory.hom_ofHom, RingHom.coe_comp,
-      Function.comp_apply, Pi.evalRingHom_apply, Pi.natCast_apply, isUnit_iff_ne_zero, ne_eq,
-      FaithfulSMul.algebraMap_eq_zero_iff, IsCell.p_ne_zero, not_false_eq_true]
+    simp [π, j, -map_natCast, IsCell.p_ne_zero]
   let φ (i : c.Index) : c.GenericRing →+* FractionRing (c.Cell i) :=
     IsLocalization.Away.lift (p : c.ProdRing) (hp i)
   have sq (i : c.Index) : CommSq (Spec.map (ofHom (φ i))) (Spec.map (j i))
