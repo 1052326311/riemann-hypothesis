@@ -135,7 +135,7 @@ lemma measurable_volumeRatio : Measurable (volumeRatio γ) := by fun_prop [volum
 /-- For `γ ∈ G₁`, the form `J₁` is negative semidefinite on the span of the frame `γ f`, where
 `f = (e₁, …, e_ϱ, z)` is given by the columns of `frameCols`: for any matrix `a` of coefficients,
 minus the Gram matrix for `J₁` of the columns of `γ f a` is positive semidefinite. -/
-lemma RealPlace.posSemidef_neg_gram_mul_frameCols (γ : 𝔰.G₁) {m : Type} [Fintype m]
+lemma RealPlace.posSemidef_neg_gram_mul_frameCols (γ : 𝔰.G₁) {m : Type}
     (a : Matrix (Fin 𝔰.n) m ℂ) :
     (-((γ.val.val * (𝔰.frameCols * a))ᴴ * 𝔰.J₁ *
       (γ.val.val * (𝔰.frameCols * a)))).PosSemidef := by
@@ -185,10 +185,6 @@ lemma RealPlace.frameCols_J₁_gram :
     simp [inclMatrix, splitGram, middleGram, Matrix.mul_apply, Matrix.one_apply, diagonal_apply,
       (castSucc_lt_last _).ne']
 
-lemma RealPlace.realFrameGram_eq :
-    realFrameGram γ = 𝔰.frameColsᴴ * 𝔰.J₁ * (γ.val.val * 𝔰.frameCols) := by
-  simp [← Matrix.ext_iff, inclMatrix, frameGram, Matrix.mul_apply, Matrix.one_apply]
-
 /-- If the vector `frameCols x = γ frameCols x'` lies in the span of the frame `f` and in the span
 of `γ f`, then its products with the frame `γ f` are `(0, …, 0, -x' top)`. That is,
 `(realFrameGram γ)ᴴ x = Pi.single top (-x' top)`. Here `realFrameGram γ` is the matrix of the
@@ -204,7 +200,7 @@ lemma RealPlace.conjTranspose_realFrameGram_mulVec {γ : 𝔰.G₁} {x x' : Fin 
     cases a using lastCases <;> simp
   constructor
   · rw [← h_diagonal, ← U.gram_invariant γ, ← mulVec_mulVec, ← mulVec_mulVec x', h_shared,
-      realFrameGram_eq, mulVec_mulVec]
+      realFrameGram_eq_conjTranspose_mul, mulVec_mulVec]
     simp [Matrix.mul_assoc, isHermitian.eq]
   · have h_form : star (γ.val.val *ᵥ 𝔰.frameCols *ᵥ x') ⬝ᵥ
         𝔰.J₁ *ᵥ γ.val.val *ᵥ 𝔰.frameCols *ᵥ x' =
@@ -449,7 +445,7 @@ lemma RealPlace.inclMatrix_mul_dualProducts (hδ : (subframeBlock hi Z).det ≠ 
 image under `γ` of the subframe `e₁, …, e_i, z` are the columns of `Z` at its indices. -/
 lemma RealPlace.frameCols_mul_mul_subframeCols (hZ : realFrameGram γ = Z) :
     𝔰.frameColsᴴ * 𝔰.J₁ * (γ.val.val * subframeCols hi) = Z * inclMatrix ℂ (subframeIndex hi) := by
-  rw [← Matrix.mul_assoc γ.val.val, ← Matrix.mul_assoc, ← hZ, realFrameGram_eq]
+  rw [← Matrix.mul_assoc γ.val.val, ← Matrix.mul_assoc, ← hZ, realFrameGram_eq_conjTranspose_mul]
 
 /-- The columns of `ω` are a basis with Gram matrix `-1` of a subspace of the negative space at `y`.
 Their products with the subframe `e₁, …, e_i, z` form the lower triangular matrix `L`, and those
@@ -746,8 +742,8 @@ lemma RealPlace.exists_common_vector_of_normOnePairOccursFrom (hi_le : i ≤ �
       simp_all [inclMatrix, mulVec, dotProduct, eq_comm]
   have h_block_mulVec : subframeBlock hi_le Z *ᵥ c = Pi.single (last i) (-x 𝔰.top) := by
     have hZx' : Z *ᵥ x' = Pi.single 𝔰.top (-x 𝔰.top) := by
-      rw [← hZ, realFrameGram_eq, ← mulVec_mulVec, ← mulVec_mulVec x', h_frames, mulVec_mulVec,
-        frameCols_J₁_gram]
+      rw [← hZ, realFrameGram_eq_conjTranspose_mul, ← mulVec_mulVec, ← mulVec_mulVec x', h_frames,
+        mulVec_mulVec, frameCols_J₁_gram]
       ext a
       rw [mulVec_diagonal]
       cases a using lastCases <;> simp

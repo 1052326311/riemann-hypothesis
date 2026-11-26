@@ -42,8 +42,8 @@ almost span the target forms. Rank one is classical, and Bessel kernels are stud
 GSp(4).
 
 Related work: Petersson, Über die Entwicklungskoeffizienten der automorphen Formen, 1932; NIST DLMF
-§10.22; Baruch, Bessel distributions on the open cell, 2001–2004; Comtat et al., Effective Kuznetsov
-trace formula for GSp(4), 2025.
+§10.22; Baruch, On Bessel distributions for quasi-split groups, 2001, and Bessel distributions for
+GL(3) over the p-adics, 2004; Comtat et al., Effective Kuznetsov trace formula for GSp(4), 2025.
 -/
 
 @[expose] public section
@@ -510,7 +510,6 @@ noncomputable def filling : Filling D.E D.shape where
              rify [finrank_eq_two_mul_card_infinitePlace, pow_mul']
              exact D.le_of_hasLogBound
   pow_le_k := D.nat_le_of_hasLogBound.trans D.card_X₀.ge
-  thousand_mul_le_k := D.nat_le_of_hasLogBound.trans D.card_X₀.ge
   k_le_f := D.card_X₀.trans_le D.nat_le_of_hasLogBound
   mul_rootDiscr_pow_le := by
                  rify [Shape.k, card_X₀]
@@ -524,8 +523,6 @@ noncomputable def filling : Filling D.E D.shape where
   M_le_b_pow := D.le_of_hasLogBound
   le_M := D.le_of_hasLogBound
   five_le_N := D.le_of_hasLogBound
-  pow_chain := ⟨D.nat_le_of_hasLogBound, D.nat_le_of_hasLogBound,
-    D.nat_le_of_hasLogBound.trans D.card_X₀.ge⟩
 
 /-- The Bessel system of `D.filling` at the infinite place `v` has type
 `(D.paramW v, D.columnCount v)`: its full function is the Bessel function of the discrete series of

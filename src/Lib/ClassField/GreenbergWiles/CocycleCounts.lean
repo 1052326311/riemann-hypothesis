@@ -166,7 +166,7 @@ action of `G ⧸ U` on `V`. -/
 private noncomputable def symbolIntertwiningMap {G K R : Type} [Group G] [TopologicalSpace G]
     [Field K] [EmbeddedNumberField K] [MulSemiringAction G Ω] [IsProGalois G K Ω] [CommRing R]
     {l N : ℕ} [Fact l.Prime] {V : DiscreteModule R G} {U : OpenNormalSubgroup G}
-    [Module (ZMod l) V] [NeZero N] {ι : Type} [Fintype ι]
+    [Module (ZMod l) V] {ι : Type} [Fintype ι]
     (W : Representation ℤ (G ⧸ U.toOpenSubgroup.toSubgroup) V) (hW : ∀ g : G, ⇑(V.ρ g) = W g)
     (b : fixedSUnits N U →+ ι → ZMod l) :
     (ι → V) × (coboundaryMap V.ρ).toAddMonoidHom.ker →+
@@ -194,7 +194,7 @@ private noncomputable def symbolIntertwiningMap {G K R : Type} [Group G] [Topolo
 private lemma mem_range_symbolIntertwiningMap {G K R : Type} [Group G] [TopologicalSpace G]
     [Field K] [EmbeddedNumberField K] [MulSemiringAction G Ω] [IsProGalois G K Ω] [CommRing R]
     {l N : ℕ} [Fact l.Prime] {V : DiscreteModule R G} {U : OpenNormalSubgroup G}
-    [Module (ZMod l) V] [NeZero N] {ι : Type} [Fintype ι]
+    [Module (ZMod l) V] {ι : Type} [Fintype ι]
     (W : Representation ℤ (G ⧸ U.toOpenSubgroup.toSubgroup) V) (hW : ∀ g : G, ⇑(V.ρ g) = W g)
     (h_tors : ∀ a : V, l • a = 0) {z : G} {n : ℕ} (h_inj_sub : Function.Injective ⇑(V.ρ z - n))
     (τ : V →+ V) (hτ : ∀ a : V, ∑ δ : G ⧸ (U.toOpenSubgroup : Subgroup G), W δ (τ (W δ⁻¹ a)) = a)
@@ -275,7 +275,7 @@ value `a i` at each `γ i`. -/
 private lemma exists_mem_trivialisedCocycles_of_mem_ker {G K R : Type} [Group G]
     [TopologicalSpace G] [Field K] [EmbeddedNumberField K] [MulSemiringAction G Ω]
     [IsProGalois G K Ω] [CommRing R] {l N : ℕ} [Fact l.Prime] {V : DiscreteModule R G}
-    {U : OpenNormalSubgroup G} [Module (ZMod l) V] [NeZero N] [Finite V] {ι : Type}
+    {U : OpenNormalSubgroup G} [Module (ZMod l) V] [Finite V] {ι : Type}
     [Fintype ι] {I : Set G}
     (W : Representation ℤ (G ⧸ U.toOpenSubgroup.toSubgroup) V) (hW : ∀ g : G, ⇑(V.ρ g) = W g)
     (τ : V →+ V) (hτ : ∀ a : V, ∑ δ : G ⧸ (U.toOpenSubgroup : Subgroup G), W δ (τ (W δ⁻¹ a)) = a)
@@ -454,20 +454,6 @@ lemma New.IsLargeLevel.SplitPlaces.card_trivialised_of_isHigmanProjective {G K R
       (h_conv (isTotallyComplex_of_algebra K _)) h_ker
     exact ⟨⟨P, hP⟩, Subtype.ext (Prod.ext (funext hPγ) rfl)⟩
   rw [h_range_r, card_top, Nat.card_congr (.subtypeUnivEquiv h_torsion)]
-
-/-- Under the hypotheses of `card_trivialised_of_isHigmanProjective`, there are between one and
-`#V ^ (#ι + 1)` trivialised cocycles. -/
-lemma New.IsLargeLevel.SplitPlaces.hasFewCocycles_of_isHigmanProjective {G K R ι : Type} [Group G]
-    [TopologicalSpace G] [Field K] [EmbeddedNumberField K] [MulSemiringAction G Ω]
-    [IsProGalois G K Ω] [CommRing R] {l N : ℕ} [Fact l.Prime] [NeZero N] {V : DiscreteModule R G}
-    {I : Set G} {U : OpenNormalSubgroup G} (s : SplitPlaces l N I U ι) [Fintype ι] {z : G} {n : ℕ}
-    (hV_fin : V.FiniteKilledFixedInj l U z n)
-    (hV_proj : V.IsHigmanProjective U.toOpenSubgroup.toSubgroup)
-    (h_fix : ∀ r : DiscreteUnits Ω, l • r ∈ fixedSUnits N U →
-      (∀ i : ι, unitsRep (s.φ i) r = r) →
-      unitsRep z r - n • r ∈ (unitsModule U.toOpenSubgroup.toSubgroup).H0) :
-    V.HasFewCocycles (PlaceAboveLevel N) I (Fintype.card ι + 1) :=
-  (s.card_trivialised_of_isHigmanProjective hV_fin hV_proj h_fix).left
 
 /-- Under the hypotheses of `card_trivialised_of_isHigmanProjective`, if `K` is totally complex and
 `z` raises the `l`-th roots of unity to the power `n`, there are exactly `#V ^ (#ι + 1)`
@@ -762,7 +748,7 @@ theorem New.IsLargeLevel.SplitPlaces.hasFewCocycles_of_central {K R ι : Type} [
       (hW.isHigmanProjective_of_coprime hcopP)).1
     -- A power `g ^ l ^ i` lies in `U`, and `t ^ l ^ i = t` in `ZMod l`.
     obtain ⟨i, hi⟩ : ∃ i : ℕ, (g : Gal(Ω/K)) ^ l ^ i ∈ U := hP g hg
-    show cyclotomicCharMod Ω l (g : Gal(Ω/K)) = 1
+    change cyclotomicCharMod Ω l (g : Gal(Ω/K)) = 1
     simpa [← Units.val_eq_one] using S.cyclotomicCharMod_eq_one _ hi
   -- Modules that are projective over `B/U` attain the bound.
   have hproj (F : DiscreteModule R B.1) (hF : F.FiniteKilledFixedInj l U' z' 1)

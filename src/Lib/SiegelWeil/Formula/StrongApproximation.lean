@@ -1,6 +1,5 @@
 module
 
-public import Lib.SiegelWeil.Formula.LagrangianZeroTerms
 public import Lib.SiegelWeil.SingularForms.UnimodularCoefficients
 
 /-!
@@ -47,7 +46,7 @@ of the parabolic subgroup fixing the isotropic line, then the values of `D` on t
 
 Source: M. Kneser, Starke Approximation in algebraischen Gruppen I, J. reine angew. Math. 218
 (1965); G. Shimura, Arithmetic of unitary groups, Ann. of Math. 79 (1964); survey A. Rapinchuk, MSRI
-Publ. 61 (2013).
+Publ. 61 (2014).
 -/
 
 @[expose] public section
@@ -142,7 +141,7 @@ lemma New.Exchange.exists_torus_mul_rational_fixes {D : G E s → ℂ}
   obtain ⟨γ', hγ'Γ, hγ⟩ :=
     witt_of_quasiReflection_mem exists_isUnit_sub_star W₀.conjTranspose_J (by simp)
       (X := (1 : Matrix m m E)) (Y := γ.val.val) ⟨1, one_mul 1⟩ ⟨γ.val.inv, γ.val.inv_val⟩
-      (by simp [mem_U.1]) Γ hΓ
+      (by simp [show γ.val.valᴴ * _ * _ = _ from mem_unitaryGroupOf_iff.1 γ.2]) Γ hΓ
   obtain rfl : γ = γ' := Subtype.ext (Units.ext (by simp [← hγ]))
   exact (mem_Γ γ).1 hγ'Γ
 
