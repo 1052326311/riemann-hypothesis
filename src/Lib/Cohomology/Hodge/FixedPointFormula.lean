@@ -1039,7 +1039,7 @@ lemma New.Variety.IsPointSum.cup_pointClass {k : Type} [Field k] [CharZero k] {d
     HodgeH.map (relFreeAb.prod ..) (cup exteriorAlg.mulPairing x y (add_comm 1 d) :)
   have η_eq : η = ξ.map (relFreeAb.map (𝟙 _) hU) := by
     -- A point off the product chart is off `a` or off `b`, so it has a neighbourhood in `U`.
-    have near (K) (hK : IsField K.1) (q) (hq : q ∉ (a.prod b).locus.obj K) :
+    have near (K) (hK : IsField K.carrier) (q) (hq : q ∉ (a.prod b).locus.obj K) :
         ∃ O, IsOpenSubfunctor O ∧ q ∈ O.obj K ∧ O ≤ U := by
       obtain hq | hq := not_and_or.1 fun h ↦ hq ((range_pointMap_prod a b).ge K h)
       · obtain ⟨O, hO_open, hqO, hO_le⟩ := exists_isOpenSubfunctor_le_offPoints ha hK hq
