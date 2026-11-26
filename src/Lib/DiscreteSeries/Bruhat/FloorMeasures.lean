@@ -168,8 +168,6 @@ lemma heisenbergElem_mul :
   -- apply both sides to a vector; the vectors `v`, `v'` and `e_a` have coordinate `0` at `e*_a`
   have hv_coord : v (eStar a) = 0 := by simp [v, inclMatrix_val_mulVec]
   have hv'_coord : v' (eStar a) = 0 := by simp [v', inclMatrix_val_mulVec]
-  have h_orth : star v ⬝ᵥ T.splitGram *ᵥ Pi.single (inl a) 1 = 0 := by
-    simp [v, inclMatrix_val_mulVec]
   have h_star : star (star v' ⬝ᵥ T.splitGram *ᵥ v) = star v ⬝ᵥ T.splitGram *ᵥ v' :=
     star_dotProduct_mulVec_comm IsHermitianUnit.conjTranspose_eq v' v
   refine Subtype.ext (Units.ext ?_)
@@ -977,7 +975,7 @@ lemma Place.lintegral_damped_fourier_le (ξ : A) {G : A → ℝ} (hG : Continuou
     _ = (∫⁻ a : A, ‖∫ v : A, G v * P.ψ (star v * ξ * a)‖ₑ) ^ card ι *
           ∫⁻ w : ι → A, ‖f w‖ₑ ^ 2 := by
       rw [lintegral_mul_const _ (by fun_prop), card, ← Finset.prod_const (lintegral ..),
-        ← lintegral_pi_prod _ (by fun_prop), volume_pi]
+        ← TauCeti.lintegral_fintype_prod_eq_prod _ (by fun_prop), volume_pi]
 /-- Plancherel's inequality at a place A: for a unit η and f measurable and integrable on A^ι,
 ∫ |∫ ψ(η v*w) f(w) dw|² dv ≤ (c/md η)^{|ι|} ∫ |f|². Here v*w is `star v ⬝ᵥ w`, ψ is the additive
 character of the place, and md is its `modulus`. The constant c = `kernelBound` is part of the data

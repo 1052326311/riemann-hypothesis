@@ -223,7 +223,7 @@ map `φ` (written `specMap φ`) followed by the canonical map to `X`, and this r
 countable. -/
 lemma exists_countable_residue_point {X : Scheme} {R : CommRingCat} (s : X ⟶ Spec R) [Countable R]
     [LocallyOfFiniteType s] {K : Type} [Field K] (t : Spec (CommRingCat.of K) ⟶ X) :
-    ∃ᵉ (z : X) (φ : X.residueField z →+* K),
+    ∃ z : X, ∃ φ : X.residueField z →+* K,
       specMap φ ≫ X.fromSpecResidueField z = t ∧ Countable (X.residueField z) := by
   let z : X := t (closedPoint K)
   refine ⟨z, (X.SpecToEquivOfField K t).2.hom, (X.SpecToEquivOfField K).left_inv t, ?_⟩
@@ -483,7 +483,7 @@ surjective and invariant under an action `s` of a finite group `Δ` on `W` that 
 on the fibres of `c` on complex points (`specOver R ℂ` is `Spec ℂ` over `Spec R`). Then `c` is a
 Galois covering with group `Δ` in the sense of `New.Variety.IsGaloisCovering`: simple transitivity
 holds for points with values in any field of characteristic 0. -/
-lemma isGaloisCovering_of_complex_points {R : CommRingCat} [IsDomain R] {W Z : Over (Spec R)}
+lemma isGaloisCovering_of_complex_points {R : CommRingCat} {W Z : Over (Spec R)}
     [IsProper W.hom] [IsSeparated Z.hom] {c : W ⟶ Z} {Δ : FiniteGrp}
     {s : Δ →* CategoryTheory.End W} [Countable R] [Algebra R ℂ]
     (hR : ∀ (k : Type) [Field k] [CharZero k] (f : R →+* k), Function.Injective f)
@@ -637,7 +637,7 @@ end ProductOfFields
 
 /-- If `A` is a smooth algebra over a normal domain `P`, then `A` is integrally closed in
 `A ⊗[P] Frac P`. -/
-lemma exists_algebraMap_eq_of_isIntegral_of_smooth {P A : Type} [CommRing P] [IsDomain P]
+lemma exists_algebraMap_eq_of_isIntegral_of_smooth {P A : Type} [CommRing P]
     [IsIntegrallyClosed P] [CommRing A] [Algebra P A] [Algebra.Smooth P A]
     {v : A ⊗[P] FractionRing P} (hv : IsIntegral A v) :
     ∃ x : A, algebraMap A (A ⊗[P] FractionRing P) x = v := by
@@ -751,15 +751,6 @@ lemma IsGaloisCovering.etale_of_isPullback {R : CommRingCat} {W Z : Over (Spec R
     rw [map_sub, AlgHom.commutes, hz, mem_ker, map_sub, hχ, hv, sub_self]
   have h_bot : (RingHom.ker χ).comap (algebraMap A B) = ⊥ := comap_bot_of_injective _ hA_inj
   exact ⟨x, sub_eq_zero.mp (hG.isNilpotent_of_forall_mem h_char hp hσ h_bot h_ker).eq_zero⟩
-
-/-- The base change of a reduced scheme along a flat preimmersion is reduced: its stalks are those
-of the scheme. -/
-lemma isReduced_pullback_of_flat {X Y T : Scheme} (f : X ⟶ T) (g : Y ⟶ T)
-    [IsReduced X] [Flat g] [IsPreimmersion g] : IsReduced (pullback f g) := by
-  have (x : ↥(pullback f g)) : IsReduced ((pullback f g).presheaf.stalk x) := ⟨fun a ha ↦ by
-    obtain ⟨b, rfl⟩ := (fst f g).stalkMap_surjective x a
-    simp [((IsNilpotent.map_iff (stalkMap_injective_of_flat _ _)).1 ha).eq_zero]⟩
-  exact isReduced_of_isReduced_stalk _
 
 /-- If the base change of `c : W ⟶ Z` to the fibre product `Z ×_T E` is smooth of relative dimension
 `0` and `Z ×_T E ⟶ E` of relative dimension `d`, then the base change of `c ≫ f : W ⟶ T` along any

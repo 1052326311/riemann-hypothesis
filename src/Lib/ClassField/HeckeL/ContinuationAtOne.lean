@@ -338,7 +338,7 @@ lemma integral_mul_finIdeleAbs_rpow_eq_eulerProd_mul (hψ : IsHeckeOfType ψ n)
       obtain ⟨x, rfl⟩ := mul_left_surjective (locIdele w (uniformizer w)) y
       have h_coeff : χ (w.asIdeal * J) * ((w.asIdeal * J).absNorm : ℂ) ^ (-s : ℂ) =
           χ w.asIdeal * (w.asIdeal.absNorm : ℂ) ^ (-s : ℂ) * (χ J * J.absNorm ^ (-s : ℂ)) := by
-        rw [map_mul, map_mul, Nat.cast_mul, natCast_mul_natCast_cpow, mul_mul_mul_comm]
+        rw [map_mul, map_mul, Nat.cast_mul, natCast_mul_cpow, mul_mul_mul_comm]
       -- With `u = locIdele w (uniformizer w)`, the divisor of `u * x` is `w` times that of `x`, and
       -- `(t / u) * (u * x) = t * x`; so `ht` gives the part of divisor `J` on the right, and
       -- `h_unif` compares the two sides.
@@ -938,7 +938,7 @@ lemma eulerProd_ne_zero (h : IsHeckeOfType ψ n) (hS : S.Finite) (hψ_sq : ψ ^ 
     have h_sum_re : (∑ i : Fin 2, ![4, 1] i * a i v).re = 4 * z.re + (z.re ^ 2 - z.im ^ 2) := by
       simp [a, sq, heckeCoeff, hv, z]
     rw [h_sum_re, show (-3 : ℂ).re = -3 by norm_num]
-    nlinarith [sq_nonneg (z.re + 1)]
+    linarith [sq_nonneg (z.re + 1)]
   -- An inequality at almost all primes passes to the means.
   have h_mean_re : (-3 : ℂ).re ≤ (∑ i : Fin 2, ![4, 1] i * ![-(m₁ : ℂ), -(m₂ : ℂ)] i).re :=
     (hasPrimeDensity_const (-3)).re_le_re (.sum ![4, 1] h_dens)

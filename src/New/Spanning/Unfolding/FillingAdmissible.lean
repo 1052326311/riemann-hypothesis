@@ -344,7 +344,8 @@ lemma relIndex_latticeStabilizer :
         algebraMap (RingOfIntegers D.E) (Ô D.E) D.piN ∣ r j := by
       by_cases hj : j = D.shape.k₀ <;>
         simp [hj, Ne.symm, r, Submodule.mem_span_singleton, dvd_def, Subtype.ext_iff,
-          Subring.smul_def, piNIdele, mul_comm, eq_comm]
+          Subring.smul_def, piNIdele] <;>
+        exact exists_congr fun _ ↦ and_congr_right' (by rw [mul_comm, eq_comm])
     have h_fix (w : D.piNPlaces) : stdLevel.reduceFamily Subtype.val ⟨x, hx⟩ w ∈ H w ↔
         ∀ j : D.shape.κ, reduceAt w.1 (r j) = 0 := by
       -- The inverse transpose fixes the unit vector iff row `k₀` of the reduction is that vector.
@@ -528,7 +529,7 @@ lemma scaledSiegelConst_le : D.filling.scaledSiegelConst ≤
     have h_order : ((D.filling.M : ℝ) ^ (2 * (D.ϱ * (D.ϱ + D.k)) + D.ϱ)) ^ D.f =
         D.filling.unipotentOrder := by
       rw [← pow_mul, unipotentOrder, Shape.k, card_X₀, Nat.cast_pow]
-      ring_nf
+      ring
     -- The factor `frameScaleProd` cancels from the definition of the covolume.
     rw [Filling.unipotentCovolume, div_mul_cancel₀ _ D.filling.frameScaleProd_pos.ne', Shape.k,
       card_X₀, h_rank, div_pow]
@@ -546,8 +547,7 @@ lemma scaledSiegelConst_le : D.filling.scaledSiegelConst ≤
       rw [prod_frameMass_mul_div_eq, scaledSiegelConst, card_reducedImage_besselS, h_siegel]
       simp only [scale, h_covolume, Shape.n]
       push_cast
-      field_simp
-      ring
+      field
     _ ≤ (1 + D.b⁻¹ ^ 9) * D.filling.mainSecondMoment * scale :=
       mul_le_mul_of_nonneg_right D.card_mul_card_classes_mul_prod_le (by positivity)
     _ = _ := by ring

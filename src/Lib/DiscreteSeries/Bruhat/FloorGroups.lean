@@ -144,17 +144,11 @@ def weylOn (P : ℕ → Prop) (p : ℕ → A) : T.G :=
         if swapped then (if level j < 𝔰.ϱ then p (floorOf j) else (star (p (floorOf j)))⁻¹ʳ) else 1
       else
         0
-  { val :=
-      { val := M p
-        inv := M (star p)
-        val_inv := by
-          ext
-          simp [M, Matrix.mul_apply, Matrix.one_apply]
-          grind [oppositeIndex_involutive_and_floorOf_level, inverse_mul_cancel]
-        inv_val := by
-          ext
-          simp [M, Matrix.mul_apply, Matrix.one_apply]
-          grind [oppositeIndex_involutive_and_floorOf_level, inverse_mul_cancel] }
+  have hM (q : ℕ → A) : M q * M (star q) = 1 := by
+    ext
+    simp [M, Matrix.mul_apply, Matrix.one_apply]
+    grind [oppositeIndex_involutive_and_floorOf_level, inverse_mul_cancel]
+  { val := ⟨M p, M (star p), hM p, by simpa only [star_star] using hM (star p)⟩
     property := by
       rw [mem_unitaryGroupOf_iff]
       ext
@@ -577,7 +571,7 @@ lemma commute_weylOn {p : ℕ → A} (hP : ∀ a : ℕ, P a → a < l) (hs : s �
     sum_eq_single k' (by grind only)
   rw [h_left, h_right]
   -- On an exchanged floor, which is below `l`, the rows and columns of `s` are those of `1`.
-  grind (splits := 20) only [oppositeIndex_involutive_and_floorOf_level]
+  grind only [oppositeIndex_involutive_and_floorOf_level]
 
 @[simp]
 lemma weylElem_zero : (weylElem 0 p : T.G) = 1 := by
