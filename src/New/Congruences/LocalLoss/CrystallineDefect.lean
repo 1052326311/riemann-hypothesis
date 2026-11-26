@@ -515,7 +515,7 @@ lemma New.Selmer.normLength_dualDefect_le_defectBound_of_isTameType {P : Paramet
     (by grw [show 8 * (D.halfGap ^ 2 + 1) + 2 * (4 * D.t) ≤
         150 * (D.halfGap ^ 2 + 1 + 4 * D.t + 1) by omega, two_mul_tame_exponent_le_defectBound D n hx_pos hx_le])
     (hasCupExponent_of_isTameType (Γ := ⟨Γ⟩) h_group.1
-      (mem_range_of_modEq_one h_group (D.levelPrime_modEq_one n)) hL h_tame hU hU' h_large)
+      (mem_range_of_modEq_one h_group (D.levelPrime_modEq_one n)) hL h_tame hU hU' (by omega))
 
 /-- The defect bound at one place above `ℓ`. Let `𝒥.toGp : Γ → G_ℓ` be an open embedding onto the
 elements of `G_ℓ = Gal(ℚ̄_ℓ / ℚ_ℓ)` that fix `e E`, where `E = D.E`; each `g` in `G_ℓ` gives a
