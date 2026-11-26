@@ -412,6 +412,7 @@ lemma exists_isNearRepresentative_of_besselKernel_ne_zero [HasPrimitiveRoot5040 
     ⟨h_near.mul_of_mem_besselU0 ha.2 hb_fix, by simp [← out_eq]⟩, ?_⟩
   exact ((DoubleCoset.eq ..).2 ⟨a, ha, u⁻¹ * b, mul_mem (inv_mem hu) hb_unip, by group⟩).symm
 
+omit [S.IsAdmissible] in
 /-- The element `𝗀(γ) = |D_{ϱ+1}|² - N² |D_ϱ|²` (`termDisc γ`), formed from the last two leading
 minors of the matrix of frame products, is an algebraic integer for a rational `γ` in
 `S.termsOver c s c'`. -/
