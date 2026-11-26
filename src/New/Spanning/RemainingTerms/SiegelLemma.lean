@@ -208,7 +208,7 @@ lemma exists_finAdeleMatrix_mul_eq_sublatticeBasis_mul (hLH : L * H = 1) {V : Su
     exists_sublatticeBasis_eq_finAdeleMatrix_mul hLH V
   -- The columns of `x` lie in `V`, the span of those of `y`.
   obtain ⟨B, rfl⟩ : ∃ B : Matrix (Fin (finrank E V)) (Fin (finrank E V)) E, y * B = x :=
-    exists_mul_eq_of_col_mem_range fun i ↦ hy.ge (hx ⟨Pi.single i 1, x.mulVec_single_one i⟩)
+    exists_mul_eq_of_range_le fun i ↦ hy.ge (hx ⟨Pi.single i 1, x.mulVec_single_one i⟩)
   have h_gram : (y * B)ᴴ * (y * B) = Bᴴ * (yᴴ * y) * B := by simp [Matrix.mul_assoc]
   have hB_det : B.det ≠ 0 := fun h_zero ↦ hx_det (by rw [h_gram, det_mul, h_zero, mul_zero])
   obtain ⟨b, hb⟩ : IsUnit (finAdeleMatrix B) :=

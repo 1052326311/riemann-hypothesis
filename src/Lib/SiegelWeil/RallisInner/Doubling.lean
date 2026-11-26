@@ -351,7 +351,7 @@ lemma graphSplitting_lagrangian_injective :
   -- Equal graphs have frames `(δ'⁻¹, -1) = (δ⁻¹, -1) * c`; the lower block forces `c = 1`.
   intro δ δ' h_eq
   have h_frames : ∃ c : Matrix n n E, (graphSplitting S δ⁻¹).k * c = (graphSplitting S δ'⁻¹).k :=
-    Filling.exists_mul_eq_of_col_mem_range fun i ↦ h_eq.ge ⟨_, mulVec_single_one _ i⟩
+    exists_mul_eq_of_range_le fun i ↦ h_eq.ge ⟨_, mulVec_single_one _ i⟩
   -- `-coe_units_inv` keeps the inverse of a unit from turning into a matrix inverse.
   simpa [fromRows_ext_iff, ← Units.ext_iff, -coe_units_inv] using h_frames
 

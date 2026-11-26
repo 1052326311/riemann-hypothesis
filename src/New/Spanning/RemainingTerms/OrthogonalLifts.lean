@@ -154,7 +154,7 @@ lemma exists_orthogonal_lift [Fintype τ] [DecidableEq τ] (hj : S.HasCellRank j
   obtain ⟨u, hu⟩ : ∃ u : Matrix 𝔰.BesselIndex (IndexNotBelow j ⊕ τ) E,
       ((mᴴ * S.ratGram).fromRows (linkMatrix γ)).fromRows (sᴴ * S.ratGram) * u =
         (fromRows 0 (fromCols 0 v)).fromRows (fromCols (diagonal 1) 0) :=
-    exists_mul_eq_of_col_mem_range hcol
+    exists_mul_eq_of_range_le hcol
   obtain ⟨⟨h_orth, h_link⟩, h_dual⟩ :
       (mᴴ * S.ratGram * u = 0 ∧ linkMatrix γ * u = fromCols 0 v) ∧
         sᴴ * S.ratGram * u = fromCols (diagonal 1) 0 := by
