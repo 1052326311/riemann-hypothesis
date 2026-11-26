@@ -541,13 +541,12 @@ lemma HasAmplitudeBlocks.hilbertSchmidtNorm_adjoint_comp_sq_le [HasPrimitiveRoot
     simpa [hilbertSchmidtNorm] using norm_add_le (hilbertSchmidtVector (P.adjoint ∘ₗ P - one))
       (hilbertSchmidtVector one)
   have h_near : hilbertSchmidtNorm (P.adjoint ∘ₗ P - one) ≤ hilbertSchmidtNorm one / 3 := by
-    have h_sq : hilbertSchmidtNorm (P.adjoint ∘ₗ P - one) ^ 2 ≤ (hilbertSchmidtNorm one / 3) ^
-      2 := by
-      grw [hP.hilbertSchmidtNorm_sub_one_sq_le, div_pow, hilbertSchmidtNorm_one_sq_eq_sourceDim,
-        ← hb]
-      gcongr
-      norm_num
-    exact (abs_le_of_sq_le_sq' h_sq (div_nonneg (hilbertSchmidtNorm_nonneg _) zero_le_three)).2
+    refine le_of_pow_le_pow_left₀ (n := 2) (by decide)
+      (div_nonneg (hilbertSchmidtNorm_nonneg _) zero_le_three) ?_
+    grw [hP.hilbertSchmidtNorm_sub_one_sq_le, div_pow, hilbertSchmidtNorm_one_sq_eq_sourceDim,
+      ← hb]
+    gcongr
+    norm_num
   rw [← hilbertSchmidtNorm_one_sq_eq_sourceDim]
   nlinarith [hilbertSchmidtNorm_nonneg (P.adjoint ∘ₗ P), hilbertSchmidtNorm_nonneg one]
 
@@ -1151,10 +1150,7 @@ lemma HasAmplitudeBlocks.hilbertSchmidtNorm_asAlgebraHom_comp_sq_le [WeilData E]
       rw [inner_hilbertSchmidtVector, End.one_eq_id, LinearMap.adjoint_id, LinearMap.id_comp]
     rw [h_inner]
     refine (re_le_norm _).trans ((norm_inner_le_norm _ _).trans ?_)
-    suffices h_sq : (‖hilbertSchmidtVector
-      (1 : End ℂ (EuclideanSpace ℂ (S.Classes × S.BesselCoord)))‖ *
-        ‖hilbertSchmidtVector P'‖) ^ 2 ≤ ((S.b ^ 4)⁻¹ * S.sourceDim) ^ 2 from
-      (abs_le_of_sq_le_sq' h_sq (by positivity)).2
+    refine le_of_pow_le_pow_left₀ (n := 2) (by decide) (by positivity) ?_
     calc
       _ = S.sourceDim * hilbertSchmidtNorm P' ^ 2 := by
         rw [mul_pow, ← hilbertSchmidtNorm_one_sq_eq_sourceDim, hilbertSchmidtNorm,
