@@ -563,7 +563,7 @@ lemma integral_besselGroup_unfold (hW : Y.IsEquivariant W) {y : G E ε' → ℂ}
     rw [← Quotient.mk_smul_out, k_eq]
     simp [k, mul_assoc, hy.rat_mul _ δ.property]
   have k_one : k (1 : V'.Γ) = fun h : G E ε' ↦ Y.unfoldStep Y' α Φ W h * y h :=
-    funext fun h ↦ by simpa using k_eq 1 h
+    funext fun h ↦ by rw [k_eq, OneMemClass.coe_one, inv_one, one_mul]
   have stab_eq : (stabilizer V'.Γ ((1 : V'.Γ) : V'.Γ ⧸ Y'.ratBessel.subgroupOf V'.Γ)).map
       V'.Γ.subtype = Y'.ratBessel := by
     rw [stabilizer_quotient, subgroupOf_map_subtype, inf_of_le_left inf_le_left]
