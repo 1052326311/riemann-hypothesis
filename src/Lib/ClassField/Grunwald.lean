@@ -823,7 +823,6 @@ private lemma New.GaloisRep.exists_isGrunwaldChar {E : Type} [Field E] [Embedded
   -- Grunwald's theorem for the character `ψ : b ↦ χ ((star b) w)` and the places `w`, `star w` and
   -- those above `p` gives `ν`. As `ψ` only sees the place `star w`, `ν` is trivial at `w`, and at
   -- the places `u = star u` (whose norm is not prime) and above `p` it kills the local units.
-  have h_fact : Fact p.Prime := ⟨hp⟩
   have h_neZero : NeZero p := ⟨hp.ne_zero⟩
   let ψ : (𝔸f E)ˣ →* Multiplicative QZ := .mk' (fun b ↦ χ (ideleAt w (star b))) (by simp)
   have hχ_open : χ.ker.IsOpen :=
