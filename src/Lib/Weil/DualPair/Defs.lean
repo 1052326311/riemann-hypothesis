@@ -153,9 +153,7 @@ where υ is restricted to the norm-one ideles (`upsilonU1`). -/
 def rankTwist (n : Type*) [Fintype n] : AutChar E := a * upsilonU1 ^ (Fintype.card n / 2)
 
 /-- The standard character of a space with signs s: the character υ^{n₋} of [U(1)], where υ is
-restricted to the norm-one ideles (`upsilonU1`) and n₋ is the number of signs −1. Its Hecke
-character `spaceChar` at the rank n₊ + n₋ of the space is υ^{−(n₊ − n₋)}, the power of υ by minus
-the signature (`New.AutChar.spaceChar_stdChar`). -/
+restricted to the norm-one ideles (`upsilonU1`) and n₋ is the number of signs −1. -/
 def stdChar {n : Type*} [Fintype n] (s : n → ℤˣ) : AutChar E := upsilonU1 ^ Exchange.negCount s
 
 /-- The standard character of a sum of spaces is the product of their standard characters. -/
