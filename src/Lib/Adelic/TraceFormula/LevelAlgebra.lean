@@ -1,6 +1,7 @@
 module
 
 public import Lib.Adelic.Hecke.Basic
+public import TauCeti.RepresentationTheory.AsAlgebraHom
 
 /-!
 # The elements of a group algebra that keep a level
@@ -38,15 +39,6 @@ lemma asAlgebraHom_mapDomain {H : Type*} [Group H] (f : H →* G) (a : ℂ[H]) :
   | zero => simp
   | add a b ha hb => simp [mapDomain_add, ha, hb]
   | single h c => simp
-
-variable {ρ} in
-/-- An operator that commutes with the group commutes with the group algebra. -/
-lemma commute_asAlgebraHom {T : Module.End ℂ M} (hT : ∀ g : G, Commute T (ρ g)) (a : ℂ[G]) :
-    Commute T (ρ.asAlgebraHom a) := by
-  induction a using induction_linear with
-  | zero => simp
-  | add a b ha hb => simpa using ha.add_right hb
-  | single g c => simpa using (hT g).smul_right c
 
 /-- The elements of the group algebra that map `K`-fixed vectors of `ρ` to `K`-fixed vectors. -/
 def levelAlgebra : Subalgebra ℂ ℂ[G] where
