@@ -388,7 +388,6 @@ by a power of the splitting character fixed by the rank, is unramified. -/
 lemma IsMarked.charUnramifiedAt_rankTwist (hQ : p.Coprime ϑ.normQ)
     {Λ : Finset (FinPlace D.E)} (hΛ : D.IsMarked Λ) {l : FinPlace D.E} (hl : l ∈ Λ) (j k : ℕ) :
     CharUnramifiedAt (rankTwist (D.chainChar ϑ j) (D.X k)).baseChange.finPart l := by
-  have hl_split : star l ≠ l := hΛ.isSplit hl
   obtain ⟨h_level, h_piM, h_piMBar, h_N⟩ := hΛ.notMem_asIdeal hQ hl
   have h_notMem_Q : l ∉ ϑ.Q ∧ star l ∉ ϑ.Q :=
     not_or.1 fun h_mem ↦ h_level (D.normQ_mem_and_notMem_of_mem_Q ϑ h_mem).left
@@ -405,7 +404,6 @@ lemma IsWeakChainDatum.projOn_translateDatum_eq_self (H : IsWeakChainDatum ϑ Ψ
     (hΛ : D.IsMarked Λ) {l : FinPlace D.E} (hl : l ∈ Λ)
     {x : D.Translations} (hx : x ∈ Ψ.support) (j : ℕ) :
     Space.projOn (homX j) {l} (D.translateDatum x j).val = (D.translateDatum x j).val := by
-  have hl_split : star l ≠ l := hΛ.isSplit hl
   obtain ⟨h_level, h_piM, h_piMBar, h_N⟩ := hΛ.notMem_asIdeal hQ hl
   -- It suffices that `l` and `star l` avoid the level, and that neither is a chosen place.
   refine D.projOn_translateDatum (D.mem_integralAfter_of_mem_admissibleTranslations
