@@ -1,7 +1,7 @@
 module
 
 public import Lib.PadicHodge.PeriodRings.AxTheorem
-public import TauCeti.RingTheory.Perfectoid.Cyclotomic
+public import TauCeti.RingTheory.Perfectoid.Cyclotomic.Basic
 public import TauCeti.RingTheory.Perfectoid.Padic
 
 /-!
