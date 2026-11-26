@@ -98,6 +98,7 @@ lemma Form.hasLevel_levelTrace {J : Subgroup (Gf E n)} (K : Subgroup (Gf E n))
     HasLevel (z.levelTrace J K) K := by
   intro k hk x
   rw [levelTrace_apply, levelTrace_apply]
+  -- Left multiplication by `k` permutes the cosets of `J ∩ K` in `K` (`sum_mul_out`).
   let i : K →* G E s := (MonoidHom.inr (GInf E s) (Gf E n)).comp K.subtype
   have h_inv (a j : K) (hj : j ∈ J.subgroupOf K) : z (x * i (a * j)) = z (x * i a) := by
     rw [map_mul, ← mul_assoc]
