@@ -1137,8 +1137,9 @@ lemma New.Variety.hodgeTateMap_pointClass_eq_zero_of_ne {p : ℕ} {k : Type} [Fi
     refine fun A _ ↦ ⟨.scalar _ t, rfl, fun _ _ γ _ _ hγ ↦ ?_⟩
     rw [A.eq_comp_of_map_point_eq _ (h_coincidence.1 _ hγ.symm)]
     simp
-    -- The tangent vector `γ` of the constant map is zero; it is seen as `0` only up to unfolding.
-    repeat erw [sub_zero]
+    -- The tangent vector of the constant map is zero.
+    change _ - (0 : Fin d → k) = t • (_ - (0 : Fin d → k))
+    simp only [sub_zero]
   let x : HodgeH (freeAb.obj X) d := HodgeH.map (freeAb.map (lift (𝟙 X) (constMap z))) δ.baseChange
   have h_scale_eq (t : k) : HodgeH.scale t x = t ^ d • pointClass d z :=
     by
