@@ -102,7 +102,7 @@ structure New.Variety.Model {E : Type} [Field E] [CMBase E] (n : Type)
     deckGroup i →* CategoryTheory.End (cover i)
   /-- For each δ ∈ Δ_i there is κ ∈ K(𝔑) with p_q ∘ δ = p_{κq} for all q ∈ s_i. -/
   deck_comp_leg (i : Finset (nonZeroDivisors (𝓞 E) × GUPlus E n)) (δ : (deckGroup i).toGrp) :
-    ∃ κ : levelGU n 𝔑, ∀ q ∈ legIndices i, (deck i δ).asHom ≫ leg i q = leg i (κ.1 * q)
+    ∃ κ : levelGU n 𝔑, ∀ q ∈ legIndices i, (deck i δ).asHom ≫ leg i q = leg i (κ.val * q)
   /-- The maps m_α : Z → Z, one for each family `α` of `ν` integers of `E`. -/
   mulMap (α : Fin ν → 𝓞 E) : base ⟶ base
   /-- The complex point [a]_i of W_i attached to `a`. -/
@@ -117,7 +117,7 @@ structure New.Variety.Model {E : Type} [Field E] [CMBase E] (n : Type)
   /-- For `g` in `GUPlus E n` with g ∈ s_i, m_α p_g [a]_i = π[a·(g, α)]_i. -/
   point_leg {i : Finset (nonZeroDivisors (𝓞 E) × GUPlus E n)} g (α : Fin ν → 𝓞 E)
     (a : ModuliPoint E n ν) : ↑g ∈ legIndices i →
-    point i a ≫ leg i g.1 ≫ mulMap α = point i (a.act g α) ≫ leg i ⟦1⟧
+    point i a ≫ leg i g.val ≫ mulMap α = point i (a.act g α) ≫ leg i ⟦1⟧
   /-- The relative dimension of Z over `Spec R`. -/
   dimension : ℕ
   /-- Z is smooth over `Spec R` of relative dimension `dimension`. -/
@@ -137,22 +137,22 @@ structure New.Variety.Model {E : Type} [Field E] [CMBase E] (n : Type)
   of `IsTangentPoly`. -/
   tangent (i : Finset (nonZeroDivisors (𝓞 E) × GUPlus E n)) (g : GUPlus E n) (α : Fin ν → 𝓞 E)
     (a : ModuliPoint E n ν) (z : GL n E) (μ : n) :
-    g.1 ∈ legIndices i → z.val.charpoly.Separable → a.reflection = markedReflection z μ →
+    g.val ∈ legIndices i → z.val.charpoly.Separable → a.reflection = markedReflection z μ →
       (a.act g α).IsLevelIso (levelGU n 𝔑) z a →
       IsTangentPoly dimension ((algPoints (ℂ) (CommRingCat.of R)).map (leg i ⟦1⟧))
-        ((algPoints (ℂ) (CommRingCat.of R)).map (leg i g.1 ≫ mulMap α))
+        ((algPoints (ℂ) (CommRingCat.of R)).map (leg i g.val ≫ mulMap α))
         ⟨point i a⟩ (localTerm α z.val.charpoly μ)
   /-- The congruence relation at a split place `w` satisfying `IsSafe`, with residue field k_w of
   order q = p^f: if `𝔭` contains the image of `w` and all g_A = `invHeckeIsogeny w A` lie in s_i, A
   a subspace of k_wⁿ of dimension r, then ∑_A (-1)^r q^{r(r-1)/2} [Frob_p^{(n-r)f} p_{g_A}(x)] = 0
   in the sense of `CongruenceRelation`. -/
-  congruence (w : SplitFinPlace E) : IsSafe 𝔑 w.1 →
-    ∀ i (𝔭 : Set R), (∀ c ∈ w.1.1, algebraMap (𝓞 E) R c ∈ 𝔭) →
+  congruence (w : SplitFinPlace E) : IsSafe 𝔑 w.val →
+    ∀ i (𝔭 : Set R), (∀ c ∈ w.val.asIdeal, algebraMap (𝓞 E) R c ∈ 𝔭) →
       (∀ A, invHeckeIsogeny w A ∈ legIndices i) →
       let r (A : Submodule (ResField (w : FinPlace E)) (n → ResField (w : FinPlace E))) :=
-        finrank (ResField w.1) A
-      ∀ ⦃p f : ℕ⦄ [Fact p.Prime], w.1.q = p ^ f →
-        CongruenceRelation (fun A ↦ (-1) ^ r A * w.1.q ^ (r A).choose 2) 𝔭 p
+        finrank (ResField w.val) A
+      ∀ ⦃p f : ℕ⦄ [Fact p.Prime], w.val.q = p ^ f →
+        CongruenceRelation (fun A ↦ (-1) ^ r A * w.val.q ^ (r A).choose 2) 𝔭 p
           (fun A ↦ (card n - r A) * f)
           (leg i <| invHeckeIsogeny w ·)
 
@@ -179,7 +179,7 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E]
   {n : Type} [Fintype n] [DecidableEq n]
   {𝔑 : 𝓞 E} {d₀ : ℕ} [HasQuadSubfield d₀ E]
   {k W : Type} [CommRing k] [AddCommGroup W] [Module k W]
-  {π : Representation k (GL n (𝔸f E)) W} {w : SplitFinPlace E} (g : GL n (LocField w.1))
+  {π : Representation k (GL n (𝔸f E)) W} {w : SplitFinPlace E} (g : GL n (LocField w.val))
   (s s' : SafePlace 𝔑 × ℕ) {x : W}
 
 /-- The endomorphism of the unitary group {g : gᴴg = 1} of matrices over R indexed by `n` that
@@ -189,13 +189,13 @@ def entryConj {R : Type*} [CommRing R] [StarRing R] :
   (invTransposeGL.toMonoidHom.comp (U 1).subtype).codRestrict (U (1 : Matrix n n R)) fun g ↦
     -- transpose the equation that makes `g⁻¹` unitary
     mem_unitaryGroupOf_iff.2 <| mul_eq_one_comm.1 (by
-      change g⁻¹.1.1ᵀ * (g⁻¹.1.1ᵀᴴ * 1) = 1
+      change g⁻¹.val.valᵀ * (g⁻¹.val.valᵀᴴ * 1) = 1
       simpa [star_eq_conjTranspose, -coe_units_inv, conjTranspose, transpose_map] using
-        congrArg Matrix.transpose (mem_unitaryGroupOf_iff.1 g⁻¹.2))
+        congrArg Matrix.transpose (mem_unitaryGroupOf_iff.1 g⁻¹.property))
 
 @[simp]
-lemma conjAtSplit_unitary : (conjAtSplit w g).1ᴴ * conjAtSplit w g = 1 := by
-  have h := mem_unitaryGroupOf_iff.1 (entryConj (ofSplitPlace w.2 g)).property
+lemma conjAtSplit_unitary : (conjAtSplit w g).valᴴ * conjAtSplit w g = 1 := by
+  have h := mem_unitaryGroupOf_iff.1 (entryConj (ofSplitPlace w.property g)).property
   rw [Matrix.mul_one, star_eq_conjTranspose] at h
   exact h
 
@@ -204,14 +204,14 @@ lemma conjAtSplit_unitary : (conjAtSplit w g).1ᴴ * conjAtSplit w g = 1 := by
 lemma conjAtSplit_mem_GU : conjAtSplit w g ∈ GU E n := ⟨1, rfl, 1, by simp⟩
 
 @[simp]
-lemma evalAt_conjAtSplit : (conjAtSplit w g).map (evalAt w.1) = invTransposeGL g := by
-  change invTransposeGL ((ofSplitPlace w.2 g).atPlace w.1) = invTransposeGL g
+lemma evalAt_conjAtSplit : (conjAtSplit w g).map (evalAt w.val) = invTransposeGL g := by
+  change invTransposeGL ((ofSplitPlace w.property g).atPlace w.val) = invTransposeGL g
   rw [atPlace_ofSplitPlace]
 
 /-- At a place `u` other than `w` and its conjugate, the component of `conjAtSplit w g` is `1`. -/
 lemma evalAt_conjAtSplit_of_ne {u : FinPlace E} (hu : u ≠ w.val) (hu' : star u ≠ w) :
     (conjAtSplit w g).map (evalAt u) = 1 :=
-  invTransposeGL.map_eq_one_iff.mpr (atPlace_ofSplitPlace_of_ne w.2 _ hu hu')
+  invTransposeGL.map_eq_one_iff.mpr (atPlace_ofSplitPlace_of_ne w.property _ hu hu')
 
 @[simp]
 lemma dualComponent_conjAtSplit : dualComponent w (conjAtSplit w g) = g := by simp [dualComponent]
@@ -222,9 +222,9 @@ lemma conj_conjAtSplit {g : GL n (𝔸f E)} (hg : g ∈ GU E n) (m : GL n (LocFi
     g * conjAtSplit w m * g⁻¹ = conjAtSplit w (dualComponent w g * m * (dualComponent w g)⁻¹) := by
   obtain ⟨c, hc, ε, hframe⟩ := hg
   -- `gᴴ * g` is a scalar matrix, so every unitary matrix preserves this form too.
-  have h_scalar : g.1ᴴ * g.1 = (c⁻¹ : E) • finAdeleIncl ℚ E ε • 1 := by
+  have h_scalar : g.valᴴ * g.val = (c⁻¹ : E) • finAdeleIncl ℚ E ε • 1 := by
     simpa [hc.ne', map_smul'] using congrArg (fun M : Matrix n n (𝔸f E) ↦ (c⁻¹ : E) • M) hframe
-  have h_mem : conjAtSplit w m ∈ U (g.1ᴴ * 1 * g.1) := by
+  have h_mem : conjAtSplit w m ∈ U (g.valᴴ * 1 * g.val) := by
     simp [mem_unitaryGroupOf_iff, star_eq_conjTranspose, h_scalar]
   -- Hence both sides are unitary. They are trivial off `w` and its conjugate, and they have the
   -- same component at `w`.
@@ -234,14 +234,14 @@ lemma conj_conjAtSplit {g : GL n (𝔸f E)} (hg : g ∈ GU E n) (m : GL n (LocFi
     exact conjAtSplit_unitary (w := w) (dualComponent w g * m * (dualComponent w g)⁻¹)
   have h_conj_eq : U.conj g rfl ⟨conjAtSplit w m, h_mem⟩ =
       ⟨conjAtSplit w (dualComponent w g * m * (dualComponent w g)⁻¹), h_mem'⟩ := by
-    refine Gf.eq_of_supportedOn (S := {w.1}) ?_ ?_ ?_ <;>
+    refine Gf.eq_of_supportedOn (S := {w.val}) ?_ ?_ ?_ <;>
       simp_all [Gf.atPlace, dualComponent, evalAt_conjAtSplit_of_ne]
   exact congrArg Subtype.val h_conj_eq
 
 /-- A unitary similitude whose component `dualComponent w g` is `1` commutes with the image of
 `conjAtSplit w`. -/
 lemma commute_conjAtSplit {g : GL n (𝔸f E)} (hg : g ∈ GU E n ⊓ (dualComponent w).ker)
-    (m : GL n (LocField w.1)) : Commute g (conjAtSplit w m) := by
+    (m : GL n (LocField w.val)) : Commute g (conjAtSplit w m) := by
   obtain ⟨hg_GU, hg_ker⟩ := hg
   have h_one : dualComponent w g = 1 := MonoidHom.mem_ker.mp hg_ker
   have h_conj : g * conjAtSplit w m * g⁻¹ = conjAtSplit w m := by
@@ -251,10 +251,10 @@ lemma commute_conjAtSplit {g : GL n (𝔸f E)} (hg : g ∈ GU E n ⊓ (dualCompo
 /-- `conjAtSplit w g` is an integral matrix exactly when `g` lies in the maximal compact subgroup
 `localIntGL n w` of `GL_n(E_w)`. -/
 lemma conjAtSplit_mem_intGL_iff {g : GL n (LocField (w : FinPlace E))} :
-    conjAtSplit w g ∈ intGL n (Ô E) ↔ g ∈ localIntGL n w.1 := by
-  change invTransposeGL (ofSplitPlace w.2 g).val ∈ intGL n (Ô E) ↔ g ∈ localIntGL n w.1
+    conjAtSplit w g ∈ intGL n (Ô E) ↔ g ∈ localIntGL n w.val := by
+  change invTransposeGL (ofSplitPlace w.property g).val ∈ intGL n (Ô E) ↔ g ∈ localIntGL n w.val
   rw [invTransposeGL_mem_intGL]
-  exact ofSplitPlace_mem_stdLevel w.2 g
+  exact ofSplitPlace_mem_stdLevel w.property g
 
 /-! ### The level, place by place -/
 
@@ -266,11 +266,11 @@ lemma mem_levelGU_of_map_evalAt_eq {g : GL n (𝔸f E)} (hGU : g ∈ GU E n) (hi
     g ∈ levelGU n 𝔑 := by
   -- Divisibility of an entry of `g - 1` by `𝔑` is read at the places `u` that divide `𝔑`, and
   -- there `g` agrees with an element `κ` of the level.
-  have h_entry (i j : n) : (g.1 - 1) i j ∈ Ô E ∙ algebraMap (𝓞 E) (𝔸f E) 𝔑 := by
+  have h_entry (i j : n) : (g.val - 1) i j ∈ Ô E ∙ algebraMap (𝓞 E) (𝔸f E) 𝔑 := by
     refine mem_span_iff_valuation_le.mpr ⟨?_, fun u hu ↦ ?_⟩
     · aesop (add simp [mem_intGL, Matrix.one_apply])
     obtain ⟨κ, hκ, h_loc⟩ := h_places u hu
-    have hκ_entries : ∀ i j : n, (κ.1 - 1) i j ∈ Ô E ∙ algebraMap (𝓞 E) (𝔸f E) 𝔑 :=
+    have hκ_entries : ∀ i j : n, (κ.val - 1) i j ∈ Ô E ∙ algebraMap (𝓞 E) (𝔸f E) 𝔑 :=
       (Subgroup.mem_inf.mp hκ).right.right
     obtain ⟨-, hκ_le⟩ := mem_span_iff_valuation_le.mp (hκ_entries i j)
     have h_entry_u : g.1 i j u = κ.1 i j u := congrArg (fun M : GL n (LocField u) ↦ M.1 i j) h_loc
@@ -282,7 +282,7 @@ lemma mem_levelGU_of_map_evalAt_eq {g : GL n (𝔸f E)} (hGU : g ∈ GU E n) (hi
 lemma isOpen_comap_conjAtSplit (h𝔑 : 𝔑 ≠ 0) :
     IsOpen ((levelGU n 𝔑).comap (conjAtSplit w)).carrier := by
   have h_cont : Continuous (conjAtSplit (n := n) w) := .of_coeHom_comp
-    (Units.continuous_coe_inv.comp (continuous_ofSplitPlace w.2).subtypeVal).matrix_transpose
+    (Units.continuous_coe_inv.comp (continuous_ofSplitPlace w.property).subtypeVal).matrix_transpose
   exact .and (by simp) ((isOpen_congruenceGL_span h𝔑).preimage h_cont)
 
 /-- Let w be split with 𝔑 ∉ w̄, and let κ ∈ K(𝔑). Then `conjAtSplit w (dualComponent w κ)`, the
@@ -305,7 +305,7 @@ lemma conjAtSplit_dualComponent_mem_levelGU (h_notMem : 𝔑 ∉ (star w.val).as
 /-- Let κ be a unitary similitude and c = `conjAtSplit w (dualComponent w κ)`. Then c⁻¹κ commutes
 with every element `conjAtSplit w m` of the image of `conjAtSplit w`. -/
 lemma commute_inv_conjAtSplit_dualComponent_mul {κ : GL n (𝔸f E)} (hκ_GU : κ ∈ GU E n)
-    (m : GL n (LocField w.1)) :
+    (m : GL n (LocField w.val)) :
     Commute ((conjAtSplit w (dualComponent w κ))⁻¹ * κ) (conjAtSplit w m) := by
   -- The element `(conjAtSplit w (dualComponent w κ))⁻¹ * κ` is trivial at `w`.
   have h_GU : (conjAtSplit w (dualComponent w κ))⁻¹ * κ ∈ GU E n :=
@@ -341,18 +341,18 @@ lemma mem_heckeAlgebra_of_mem_fixedToEigen (h_notMem : 𝔑 ∉ (star w.val).asI
   refine ⟨Submodule.span_mono (Set.image_mono hD_GUPlus) hb, fun W' _ _ π y hy κ ↦ ?_⟩
   -- Write `κ = c * (c⁻¹ * κ)` with `c = conjAtSplit w (dualComponent w κ)`: the second factor
   -- commutes with `b` and fixes `y`, and `c` fixes `b y` by `h_fixed`.
-  have hκ_GU : κ.1 ∈ GU E n := (Subgroup.mem_inf.mp κ.prop).left
-  set c : GL n (𝔸f E) := conjAtSplit w (dualComponent w κ.1)
+  have hκ_GU : κ.val ∈ GU E n := (Subgroup.mem_inf.mp κ.prop).left
+  set c : GL n (𝔸f E) := conjAtSplit w (dualComponent w κ.val)
   have hc : c ∈ levelGU n 𝔑 := conjAtSplit_dualComponent_mem_levelGU h_notMem κ.prop
-  have hb_comm : Commute (MonoidAlgebra.of k _ (c⁻¹ * κ.1)) b := by
+  have hb_comm : Commute (MonoidAlgebra.of k _ (c⁻¹ * κ.val)) b := by
     refine .span_right ?_ _ hb
     rintro _ ⟨g, hg, rfl⟩
     obtain ⟨-, hg_comm⟩ := hD_GUPlus_comm g hg
     exact (hg_comm _ (commute_inv_conjAtSplit_dualComponent_mul hκ_GU)).map _
-  have h_comm_y : π c (π.asAlgebraHom (MonoidAlgebra.of k _ (c⁻¹ * κ.1) * b) y) =
-      π c (π.asAlgebraHom (b * MonoidAlgebra.of k _ (c⁻¹ * κ.1)) y) := by
+  have h_comm_y : π c (π.asAlgebraHom (MonoidAlgebra.of k _ (c⁻¹ * κ.val) * b) y) =
+      π c (π.asAlgebraHom (b * MonoidAlgebra.of k _ (c⁻¹ * κ.val)) y) := by
     rw [hb_comm.eq]
-  calc π κ.1 (π.asAlgebraHom b y) = π c (π.asAlgebraHom b y) := by
+  calc π κ.val (π.asAlgebraHom b y) = π c (π.asAlgebraHom b y) := by
         simpa [hy κ, hy ⟨c⁻¹, inv_mem hc⟩] using h_comm_y
     _ = (1 : k) • π.asAlgebraHom b y := h_fixed hy ⟨dualComponent w κ, hc⟩
 
@@ -435,14 +435,14 @@ lemma invHeckeIsogeny_mem_GUPlus (w : SplitFinPlace E)
   -- is the transpose of the product of `singleGL w D` and the conjugate transpose of
   -- `q ^ dim U • singleGL w D⁻¹`; both are integral.
   obtain ⟨h_int, -, h_det⟩ := basicCosetRep_mem_basicDoubleCoset U
-  have h_mul_locGL_mem (g : GL n (LocField w.1)) (a : 𝔸f E) (ha : a ∈ Ô E)
+  have h_mul_locGL_mem (g : GL n (LocField w.val)) (a : 𝔸f E) (ha : a ∈ Ô E)
       (hg : ∀ i j : n, v (a w * g i j) ≤ 1) (i j : n) :
       a * singleGL _ g i j ∈ Ô E := by
-    rw [mem_Ô, ← and_forall_ne w.1]
+    rw [mem_Ô, ← and_forall_ne w.val]
     by_cases h_ij : i = j <;> simp_all [singleGL, mem_Ô]
   -- `q` is integral, and its image in the adeles of `E` is not a unit at `w`.
-  have h_loc_mem : ((locIdele w.1 (uniformizer w.1) : (𝔸f E)ˣ) : 𝔸f E) ∈ Ô E := by
-    simp +decide +contextual [mem_Ô, ← and_forall_ne w.1]
+  have h_loc_mem : ((locIdele w.val (uniformizer w.val) : (𝔸f E)ˣ) : 𝔸f E) ∈ Ô E := by
+    simp +decide +contextual [mem_Ô, ← and_forall_ne w.val]
   have hq_int : (uniformizerNorm w).val ∈ Ô (QuadField d₀) := adeleNorm_mem_Ô h_loc_mem
   have hq_lt : v (finAdeleIncl (QuadField d₀) E (uniformizerNorm w).val w) < 1 := by
     -- `norm_localNorm` meets `uniformizerNorm w` at the place below `w` only by unfolding
@@ -453,10 +453,10 @@ lemma invHeckeIsogeny_mem_GUPlus (w : SplitFinPlace E)
     simp +decide
   -- `D⁻¹ = (det D)⁻¹ • adjugate D`, and `q ^ dim U` absorbs `det D`, of order `dim U` at `w`.
   have h_inv (i j : n) :
-      v (finAdeleIncl (QuadField d₀) E ((uniformizerNorm w).1 ^ finrank (ResField w.1) U) w *
+      v (finAdeleIncl (QuadField d₀) E ((uniformizerNorm w).val ^ finrank (ResField w.val) U) w *
         (transposeGL (basicCosetRep U))⁻¹ i j) ≤ 1 := by
-    have h_adj : v ((basicCosetRep U).1ᵀ.adjugate i j) ≤ 1 :=
-      (IsIntMatrix.transpose (R := (LocInt _).1) h_int).adjugate i j
+    have h_adj : v ((basicCosetRep U).valᵀ.adjugate i j) ≤ 1 :=
+      (IsIntMatrix.transpose (R := (LocInt _).toSubring) h_int).adjugate i j
     have h_pow := pow_le_one' (v_uniformizer_inv_mul_le_one_iff.2 hq_lt) (finrank (ResField w.1) U)
     simpa [mul_comm (exp _), inv_def, h_det, mul_pow, mul_assoc] using mul_le_one' h_pow h_adj
   refine ⟨mul_mem (mem_GU_centralScalar _) (conjAtSplit_mem_GU _), ?_⟩
@@ -860,7 +860,7 @@ lemma exists_level_conj_mem (h𝔑 : 𝔑 ≠ 0) (s : Finset ((𝓞 E)⁰ × GUP
   refine ⟨⟨M, by simpa⟩, (Finset.forall_mem_insert ..).mpr ⟨fun k hk ↦ ?_, fun x hx k hk ↦ ?_⟩⟩
   · exact ⟨⟨by simpa using hk.1, by simpa using (hL k (by simpa using hk.2) 1 (by simp)).1⟩,
       by simpa using hk⟩
-  · exact and_and_left.mp ⟨(GU E n).mul_mem (mul_mem (inv_mem x.2.2.1) hk.1) x.2.2.1,
+  · exact and_and_left.mp ⟨(GU E n).mul_mem (mul_mem (inv_mem x.2.property.1) hk.1) x.2.property.1,
       hL k (by simpa using hk.2) x hx⟩
 
 /-- For a non-zero element 𝔪 of O_E, the set of non-zero elements of (𝔸_f / Ô)ⁿ ≅ (E / O_E)ⁿ
@@ -868,7 +868,7 @@ killed by 𝔪. -/
 abbrev NonzeroTorsion (n : Type) : Type := {s : torsionBy (𝓞 E) (AdelicTorsion E n) 𝔪.val // s ≠ 0}
 
 /-- For a non-zero element 𝔪 of O_E, the 𝔪-torsion of (𝔸_f / Ô)ⁿ is finite. -/
-instance finite_torsionBy : Finite (torsionBy (𝓞 E) (AdelicTorsion E n) 𝔪.1) := by
+instance finite_torsionBy : Finite (torsionBy (𝓞 E) (AdelicTorsion E n) 𝔪.val) := by
   apply Nat.finite_of_card_ne_zero
   rw [← torsionBySet_span_singleton_eq, card_torsionBySet_adelicTorsion (by simp)]
   simp

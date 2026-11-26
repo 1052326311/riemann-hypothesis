@@ -74,7 +74,7 @@ variable {V R : Type} [FinComplexSpace V] [CommRing R] [StarRing R] [IsDomain R]
 /-- The action of `a` on the points of `V` of finite order modulo `L`: `x ↦ F a x`, again of finite
 order because `F a` preserves `L`. -/
 abbrev torsionAction (a : R) (x : torsionPoints L) : torsionPoints L :=
-  ⟨F a x, x.2.imp (by grind [IsHermitianAction])⟩
+  ⟨F a x, x.property.imp (by grind [IsHermitianAction])⟩
 
 include h
 
