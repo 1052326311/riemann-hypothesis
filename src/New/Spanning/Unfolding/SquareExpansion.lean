@@ -306,7 +306,7 @@ lemma isStable_compl_besselS :
 /-- Let `E` contain a primitive `5040`-th root of unity and let the filling `S` be admissible
 (`IsAdmissible`). An integral `ζ ∈ E` with `ζ ζ̄ = 1` that is `1` modulo every place of
 `chosenPlaces i`, the finite places of norm `p_i = levelPrime i` chosen in `S`, is `1`. -/
-lemma eq_one_of_reduceAt_scalar_eq_one [HasPrimitiveRoot5040 E] [S.IsAdmissible] {ζ : E}
+lemma eq_one_of_reduceAt_scalar_eq_one [HasPrimitiveRoot5040 E] {ζ : E}
     (hζ : ζ * star ζ = 1) (h_int : (ζ : 𝔸f E) ∈ Ô E) (i : Fin 2)
     (h_residue : ∀ w : S.chosenPlaces i, New.reduceAt (w : FinPlace E) ⟨ζ, h_int⟩ = 1) : ζ = 1 := by
   -- View `ζ` as an isometry `z` of the standard lattice of rank one and apply freeness to it.
