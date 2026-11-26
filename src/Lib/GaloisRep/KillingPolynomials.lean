@@ -191,7 +191,7 @@ lemma HasNoSmallRelations.inv_scalar_on_blocks {c : N → Fin n} (he : HasNoSmal
   have h_total : ((optionEquivLeft k (Fin n)).symm y.charpoly).totalDegree ≤ card N := by
     simp [charpoly, det_apply, y, charmatrix, diagonal_apply, apply_ite]
     -- In the Leibniz formula each of the `card N` factors has total degree at most one.
-    show MvPolynomial.totalDegree (∑ σ : Equiv.Perm N, Equiv.Perm.sign σ • ∏ i : N,
+    change MvPolynomial.totalDegree (∑ σ : Equiv.Perm N, Equiv.Perm.sign σ • ∏ i : N,
         ((if σ i = i then MvPolynomial.X none else 0) -
           MvPolynomial.X (some (c (σ i))) * MvPolynomial.C ((x : Matrix N N k) (σ i) i))) ≤ card N
     grw (transparency := .default) [totalDegree_finsetSum, totalDegree_smul_le,
