@@ -391,8 +391,7 @@ abbrev weylGramOver {κ : Φ → ℕ → ℕ} : Matrix (WeylIndexFamily n κ) (W
   (weylGram n κ).map (Int.cast : ℤ → R)
 
 /-- The polynomial of a vector ξ of the Weyl module: Σ_i (Gξ)_i b_i, with G the Gram matrix and b_i
-the basis minor products. It is the pairing of the tensor of ξ with the tensor of the variables
-(`toPoly_eq_sum_fillingPoly`). -/
+the basis minor products. -/
 def toPoly : (WeylIndexFamily n κ → R) →ₗ[R] MatrixPoly ((τ : Φ) × n τ) R :=
   GL.nablaCombination κ ∘ₗ ((weylGram n κ).map (Int.cast : ℤ → R)).mulVecLin
 
