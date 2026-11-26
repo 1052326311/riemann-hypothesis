@@ -1,4 +1,6 @@
-import Lib.Analytic.PolyaVinogradov
+module
+
+public import Lib.Analytic.PolyaVinogradov
 
 /-!
 # Theta series of Dirichlet characters, Poisson summation, and `L(s, χ)` as a Mellin transform
@@ -17,6 +19,8 @@ character. Sources: Davenport, Multiplicative Number Theory; Montgomery–Vaugha
 Number Theory I, ch. 10. Form here: the transformation is proved in absolute value only, so no root
 number appears.
 -/
+
+@[expose] public section
 
 noncomputable section
 

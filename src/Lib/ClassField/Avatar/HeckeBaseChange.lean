@@ -1,7 +1,9 @@
-import Lib.ClassField.HeckeCharacter.AlgebraicValues
-import Lib.ClassField.HeckeCharacter.SplitTameCharacters
-import Lib.PadicHodge.Characters
-import Lib.PadicHodge.Limit.CrystallineLimit
+module
+
+public import Lib.ClassField.HeckeCharacter.AlgebraicValues
+public import Lib.ClassField.HeckeCharacter.SplitTameCharacters
+public import Lib.PadicHodge.Characters
+public import Lib.PadicHodge.Limit.CrystallineLimit
 
 /-!
 # Base change of U(1) and Hecke characters, their L-functions and parallel twists
@@ -42,6 +44,8 @@ Known; see `Lib.ClassField.HeckeL.ContinuationAtOne`,
 `Lib.ClassField.Avatar.LocalGlobalCompatibility` and `Lib.ClassField.Global.CMSplittingCharacters`
 for sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 

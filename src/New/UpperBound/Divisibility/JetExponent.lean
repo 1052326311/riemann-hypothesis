@@ -1,5 +1,7 @@
-import New.Derivatives.Divisibility.Count
-import New.Derivatives.Sharpness.NearPairs
+module
+
+public import New.Derivatives.Divisibility.Count
+public import New.Derivatives.Sharpness.NearPairs
 
 /-!
 # A lower bound for the divisibility bound by the gain
@@ -27,6 +29,8 @@ Notions from other files:
 * `New.Data.placeOfInt`: The infinite place of E named by the class of the integer ν modulo q₁ if ν
   is prime to q₁, and the identity place otherwise.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -229,15 +233,6 @@ lemma lowBoxes_le (hj : j < D.m) (σ : D.Φ) :
         grw [D.liftWeight_le_weight_add D.nat_le_of_hasLogBound, Nat.div_le_self, sub_le, mul_add,
           add_assoc]
         exact add_le_add le_rfl D.le_of_hasLogBound
-
-/-- For `j < m` and an infinite place `σ` of weight `w = D.weight σ` (that is `a / x` at a `b`-place
-and `a / x₁` at any other): the number of boxes in the low columns lies between `k w` and
-`k w + x ^ 60`, and the number of low columns is at most `w + x ^ 60`. -/
-lemma lowColumns_lowBoxes_bounds (hj : j < D.m) (σ : D.Φ) :
-    D.k * (D.weight σ : ℝ) ≤ D.lowBoxes j σ ∧
-    D.lowColumns j σ ≤ (D.weight σ : ℝ) + D.x ^ 60 ∧
-    D.lowBoxes j σ ≤ D.k * (D.weight σ : ℝ) + D.x ^ 60 :=
-  ⟨mul_weight_le_lowBoxes j σ, lowColumns_le hj σ, lowBoxes_le hj σ⟩
 
 /-- For `j < D.m`, the number `boxes D.columnCount (D.n (j + 1))` of boxes in the columns of height
 below `D.n (j + 1)` equals `D.a` times the number of a-places `D.aPlaces`, plus the sum over `σ` of

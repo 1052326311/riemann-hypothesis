@@ -1,5 +1,7 @@
-import Lib.General.Analysis.HolomorphicIntegrals
-import New.Spanning.Bessel.Basic
+module
+
+public import Lib.General.Analysis.HolomorphicIntegrals
+public import New.Spanning.Bessel.Basic
 
 /-!
 # The Gram section γ_Z of the frame Gram matrix map on the unitary group G₁
@@ -34,6 +36,8 @@ Notions from other files:
   basis vectors `(e₁, …, e_ϱ, z)` and `(e*₁, …, e*_ϱ, x_{k₀})`.
 * `New.Shape.FrameMatrix`: the complex `(ϱ+1) × (ϱ+1)` matrices; `New.Shape.top` is the last index.
 -/
+
+@[expose] public section
 
 noncomputable section
 

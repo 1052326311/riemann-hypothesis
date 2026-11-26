@@ -1,4 +1,6 @@
-import New.Spanning.Unfolding.Climbing
+module
+
+public import New.Spanning.Unfolding.Climbing
 
 /-!
 # The structure of a term
@@ -34,6 +36,8 @@ Notions from other files:
 
 See `New.Spanning.Unfolding.Climbing` for related work.
 -/
+
+@[expose] public section
 
 noncomputable section
 
