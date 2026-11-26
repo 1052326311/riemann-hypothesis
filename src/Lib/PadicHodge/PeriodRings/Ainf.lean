@@ -900,12 +900,10 @@ lemma tau_dvd_of_theta_frobEnd (h_theta : ∀ j : ℕ, theta (frobEnd^[j + 1] a)
 /-! ### Primes and adic completeness of `A_inf` -/
 
 /-- `p` is a prime element of `A_inf`, because `A_inf / p = O^♭` is a domain. -/
-lemma Ainf.prime_p : Prime (p : Ainf) := by
+lemma Ainf.prime_p : Prime (p : Ainf) :=
   -- `p ∣ x` means that the constant coefficient of `x` in the domain `O^♭` is zero
-  refine ⟨p_ne_zero p OFlat, fun h_unit ↦ ?_,
-    fun x y h_dvd ↦ by simpa [p_dvd_iff, -constantCoeff_apply] using h_dvd⟩
-  -- `p` does not divide `1`, whose constant coefficient is not zero
-  simpa [p_dvd_iff] using isUnit_iff_dvd_one.mp h_unit
+  (span_singleton_prime (p_ne_zero p OFlat)).mp
+    (ker_constantCoeff (k := OFlat) ▸ ker_isPrime constantCoeff)
 
 /-- If `p` does not divide `δ`, every non-unit of `A_inf` lies in the radical of `(p, δ)`. -/
 lemma Ainf.mem_radical_of_not_isUnit (h : ¬IsUnit a) (hδ : ¬↑p ∣ δ) :
