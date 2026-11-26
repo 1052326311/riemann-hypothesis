@@ -236,7 +236,7 @@ def matchOf (χ : MulChar R ℂ) (e : b ⊕ a ≃ n) (Ψ : Matrix n b R → ℂ)
 
 variable {χ : MulChar R ℂ} {e : b ⊕ a ≃ n} {Φ Φ' : Matrix a n R → ℂ} {Ψ : Matrix n b R → ℂ}
 
-omit [Fintype R] in
+omit [Fintype R] [DecidableEq a] in
 /-- If the rows `a` of `γ⁻¹` and `γ'⁻¹` agree, then the columns `b` of `γ'` are those of `γ`
 multiplied on the right by an invertible `h` with `det γ' = det γ * det h`. -/
 lemma exists_firstCols_eq_mul_of_invLastRows_eq {γ γ' : GL n R}
@@ -350,7 +350,7 @@ lemma hasLeftInv_toCols_of_hasLeftInv_toRows (e : b ⊕ a ≃ N ⊕ n) (k : GL (
     have h_zero : (fromCols (0 : Matrix b N R) L).submatrix id Sum.inl = 0 := toCols₁_fromCols 0 L
     exact hasLeftInv_submatrix_invLastRows k h_ext Sum.inl_injective h_zero
 
-omit [Fintype R] in
+omit [Fintype R] [DecidableEq a] in
 /-- Let any two elements `r`, `s` of `R` be multiples of `(1 - ε) r + ε s` for some idempotent `ε`
 (the hypothesis `hR`), and let `e` split the index set `N ⊕ n` into `b` and `a`. If the rows `N` or
 the rows `n` of an `(N ⊕ n) × b` matrix `y` have a left inverse, then `y` is the block
