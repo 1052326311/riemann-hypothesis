@@ -560,7 +560,7 @@ private lemma mul_sq_add_add_le_mul_sq_add_sq {x κ : ℝ} (hδ : 0 ≤ δ) (hκ
   calc δ * κ ^ 2 + 18 * δ * κ * ζ + 10 ^ 4 * δ * ζ ^ 2
       ≤ δ * κ ^ 2 + 18 * δ * κ * (x + κ) + 10 ^ 4 * δ * (x + κ) ^ 2 := by gcongr
     _ ≤ 10 ^ 5 * δ * (x ^ 2 + κ ^ 2) := by
-        nlinarith [mul_nonneg hδ (sq_nonneg (x - κ)), mul_nonneg hδ (sq_nonneg x),
+        linarith [mul_nonneg hδ (sq_nonneg (x - κ)), mul_nonneg hδ (sq_nonneg x),
           mul_nonneg hδ (sq_nonneg κ)]
 
 -- Keeps definitional checks from unfolding the finite sums.

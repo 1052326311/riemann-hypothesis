@@ -622,7 +622,7 @@ lemma New.OddPart.length_shaOdd_le_of_sq_lt {N : ℕ} [NeZero N] {E : Type} [Fie
     simp only [Fintype.card_prod, ZMod.card_units_eq_totient, Fintype.card_fin]
     grw [card_eq_nat_card, card_eq_totient_of_hasEnoughRootsOfUnity, h_tot_le, h_val,
       add_one_le_of_lt h_pow]
-    nlinarith
+    linarith
   · -- The odd components of `z` vanish, so `z` is killed by `4 * φ N`, which is prime to `l`.
     obtain ⟨hz_comp, h_kill_of_odd⟩ := h_split z hz
     have h_van' (u : (ZMod N)ˣ) (ψ : DirichletCharacter O N) (i : Fin (X.factorization l + 1)) :

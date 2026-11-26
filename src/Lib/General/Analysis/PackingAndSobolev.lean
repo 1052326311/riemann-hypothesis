@@ -142,7 +142,7 @@ lemma New.sobolev_trace {E : Type*} [NormedAddCommGroup E] [InnerProductSpace �
             (abs_add_le ..).trans (by simp [abs_mul])
         _ ≤ 2 * (‖g t‖ * ‖g' t‖) * 1 + ‖g t‖ ^ 2 := by
           grw [abs_real_inner_le_norm, show |t - ε| ≤ 1 by grind]
-        _ ≤ (‖g t‖ + ‖g' t‖) ^ 2 := by nlinarith [sq_nonneg ‖g' t‖]
+        _ ≤ (‖g t‖ + ‖g' t‖) ^ 2 := by linarith [sq_nonneg ‖g' t‖]
     calc |φ' t| = |2 * inner ℝ (g t) (g' t) * (t - ε) + ‖g t‖ ^ 2| / ε := by
           simp [φ', abs_mul, abs_of_pos hε, div_eq_mul_inv]
       _ ≤ 2 * (‖g t‖ ^ 2 + b t ^ 2) / ε := by grw [numerator_le, add_sq_le, norm_g'_le t ht]
