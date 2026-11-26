@@ -1,5 +1,7 @@
-import Lib.Adelic.Witt.WittTheorem
-import New.Appendix.DiscreteSeries.SteepParameters
+module
+
+public import Lib.Adelic.Witt.WittTheorem
+public import New.Appendix.DiscreteSeries.SteepParameters
 
 /-!
 # Positions of a smaller unitary group, and the two traces
@@ -18,6 +20,8 @@ Notions from other files:
 * `l.phase k (Y, Y')` is `tr μ Y - tr μ' Y'` for the weights `μ`, `μ'` of the lowest `K`-types of
   `l` and `k`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
