@@ -1011,7 +1011,7 @@ The matrix `pairingMap u b Q' * Q` pairs the columns of `Q` with those of `Q'`, 
 at the edge `e` and by `b` on forms. Then `p ^ (2 N c₀) O ^ (V × exponents)` lies in the span of its
 image and of at most `θ |V × exponents|` further vectors. -/
 lemma IsEdgeCondition.exists_finset_smul_top_le_range_sup_span {N k n : ℕ} {W O : Type} [NeZero N]
-    [CommRing W] [IsLocalRing W] [CommRing O] [IsDomain O] [ValuationRing O] [CharZero O]
+    [CommRing W] [IsLocalRing W] [CommRing O] [IsDomain O] [ValuationRing O]
     {T : FrobeniusCycle N W O} (hp : ¬IsUnit (T.p : O)) {r : ℕ} {θ : ℝ}
     (hk : 2 ≤ k) {b b' : Exponents N k n → O} {C : Submodule O (Exponents N k n → O)}
     {S : Submodule (ResidueField O) (Exponents N k n → ResidueField O)}
