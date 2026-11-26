@@ -532,6 +532,9 @@ private lemma IsRootChoice.conjCount_root (R : IsRootChoice π σ j r) [Fintype 
   · -- `↓`: `eq_inv_smul_iff` must act before the action is unfolded to `v⁻¹ * γ * v`
     simp [R.apply_emb_eq_one, ← R.map_conj, ↓eq_inv_smul_iff, h_r_inj.eq_iff]
 
+private lemma conj_classInner {X : Type*} [Finite X] (u v : X → ℂ) :
+    conj (classInner u v) = classInner v u := by
+  simp [classInner, ← finMean_conj, mul_comm]
 /-- Descent commutes with induction. Let `ρ₀ : G' → G` be compatible with `ρ : E' →* E`, with
 choices of roots on both sides. If the class function `h` descends to `f`, and the class function
 `F` is induced from `f` along `ρ₀` in the sense of Frobenius reciprocity (`hF`), then
@@ -588,9 +591,6 @@ lemma DescendsOnCoset.induce [Finite Γ]
   have h_count_class : IsClassFunction (conjCount π s ∘ r) := fun γ v ↦ by
     change conjCount π s (r (v * γ * v⁻¹)) = conjCount π s (r γ)
     rw [R.map_conj, h_conj_snd _ _ (R.apply_emb_eq_one v)]
-  -- the count is real, so swapping the two sides of a pairing with it conjugates the pairing
-  have h_count_real (t : E) : conj (conjCount π s t) = conjCount π s t := by
-    simp [conjCount]
   -- `F` is a class function, so the mean over `δ` of the count at `r δ` times `F δ` is `F γ`
   have h_mean_count : classInner (conjCount π s ∘ r) F = F γ := by
     -- each `v` contributes `F (v⁻¹ * γ * v) = F γ`
@@ -602,11 +602,9 @@ lemma DescendsOnCoset.induce [Finite Γ]
     simp [classInner, finMean_eq, h_sum, ← Nat.card_eq_fintype_card, Nat.card_pos.ne']
   calc induceClassFn π ρ h s
       = classInner ((conjCount π s ∘ r) ∘ ρ₀) f := h_induce
-    _ = conj (classInner f ((conjCount π s ∘ r) ∘ ρ₀)) := by
-        simp [classInner, ← finMean_conj, h_count_real, mul_comm]
+    _ = conj (classInner f ((conjCount π s ∘ r) ∘ ρ₀)) := (conj_classInner _ _).symm
     _ = conj (classInner F (conjCount π s ∘ r)) := by rw [hF _ h_count_class]
-    _ = classInner (conjCount π s ∘ r) F := by
-        simp [classInner, ← finMean_conj, h_count_real, mul_comm]
+    _ = classInner (conjCount π s ∘ r) F := conj_classInner _ _
     _ = F γ := h_mean_count
 
 end CosetRoots
