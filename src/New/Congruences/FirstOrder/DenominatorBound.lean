@@ -460,7 +460,7 @@ lemma exists_dvd_prime_pow_succ {ℓ : ℕ} [ThePrime ℓ] {b : EllAdicIntegers}
 generator of a place `A` over `w ∤ ℓ`. -/
 lemma normalizingAvatar_tameGenerator {P : Parameters} {D : Data P} {ℓ : ℕ} [ThePrime ℓ]
     [PadicIso ℓ]
-    {r n : Type} [Fintype r] [DecidableEq r] [Fintype n] [DecidableEq n] (O : DescentPair D.E r n)
+    {r n : Type} [Fintype r] [DecidableEq r] [Fintype n] (O : DescentPair D.E r n)
     {w : FinPlace D.E} {A : ClosurePlace} (hA : IsPlaceOver A w) (hw : ↑ℓ ∉ w.asIdeal) :
     (normalizingAvatar O hA.tameGenerator : PadicAlgCl ℓ) = 1 := by
   rw [normalizingAvatar_eq_of_isFrob_inv hA hw 0 (inv_mem hA.tameGenerator.prop), pow_zero]
