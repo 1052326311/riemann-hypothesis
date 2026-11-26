@@ -647,7 +647,7 @@ tests killing `I` are those whose tilt factors, uniquely, through the perfect al
 Then restriction of cohomology to these maps is onto as soon as `R♭ ⊗ M → (R♭ ⧸ J) ⊗ M` is, and a
 section that dies along these maps has image zero in `(R♭ ⧸ J) ⊗ M`. It is a separate lemma so that
 `tiltTheory` stays small for the kernel. -/
-private lemma tiltTheory_supp {p : ℕ} (Ω : Type) [CommRing Ω] [InvertsPrime Ω p]
+lemma tiltTheory_supp {p : ℕ} (Ω : Type) [CommRing Ω] [InvertsPrime Ω p]
     [Algebra Ω ℂ_[p]] (M : ModuleCat OFlat)
     (ac : IsAcyclicOnPerfect (moduleCoeff (tensorCoeff M))) (c : PadicTest)
     (I : Ideal c.GenericRing) :
