@@ -800,7 +800,7 @@ lemma exists_inv_mul_mul_map_eq_diagGL_mul [CompactSpace 𝒪[F]]
     have h_cont :
         Continuous fun k : proIwahori ↦ (MulAut.conj (diagGL t) ^ j) (twistedConj t g σ k) := by
       -- `simp` writes the conjugation by `diagGL t ^ j` as a product, which `fun_prop` handles
-      simp [← map_zpow]
+      simp only [← map_zpow, MulAut.conj_apply]
       fun_prop
     have h_closed : IsClosed (twistedConj t g σ ⁻¹' conjProIwahori t j) :=
       (proIwahori.isClosed_of_isOpen isOpen_proIwahori).preimage h_cont
