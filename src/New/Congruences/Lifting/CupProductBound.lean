@@ -1068,7 +1068,7 @@ lemma p_pow_mul_z_pow_div_mem_liftIdeal {S : PairingSide O} {r c n ω : ℕ} {j 
       k.z.val ^ (n + ω) ∈ S.liftIdeal r 1 (k.letterFrob j) :=
     mem_liftIdeal_of_mul_E_pow h_one le_rfl le_rfl
   exact mem_liftIdeal_zero_of_mem_liftIdeal_one_letterFrob _ _ (Nat.mul_div_le (n + ω) p)
-    (by simpa using h_traded)
+    (h_traded)
     (by simp only [Nat.padicValNat_def, multiplicity_mul_div_factorial, le_refl])
 
 /-- Let `k` be a Kummer chart with coordinate `z = k.z`, an element of `Ainf`, the ring A_inf. Let

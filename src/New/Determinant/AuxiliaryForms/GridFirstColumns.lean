@@ -334,7 +334,7 @@ lemma formRep_formMap_column_tupleAction {D : Data P} {ϑ : D.MFoldTwist} {g : N
       -- The Weil representation moves the translations from the matrix to the two forms.
       refine ((D.isEdgeFamily_grid_succ_right (z := z) id zero_le hb).isArrow_modDatum.2
         |>.formRep_formLift_of_eq_smul (pairWeil_modDatum_single k u) _).trans ?_
-      simp [gridChar_det, edgeCharProd, edgeChar, hk, hu, div_eq_mul_inv]
+      simp [gridChar_det, edgeCharProd, hk, hu, div_eq_mul_inv]
       rfl -- Both sides are the transposed lift that defines `transposedMove`.
     have he : columnEdge z 0 b ∉ (GridPath.column hb).edges z := by
       intro h_mem

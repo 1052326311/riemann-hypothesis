@@ -636,14 +636,14 @@ lemma exists_isLeftPair (h_lt : i + n < D.m) :
   refine ⟨_, isEdgeFamily_of_paramsCorrespond _ true (fun _ ↦ inferInstance)
     (fun _ ↦ inferInstance) ?_⟩
   rw [zero_add]
-  exact (D.paramsCorrespond_leftPair z h_lt).1
+  exact D.paramsCorrespond_neg_gridParam_insert_first h_lt
 
 lemma exists_isReversedPair (h_lt : i + n < D.m) :
     ∃ Φ : D.EdgePoly z (n + 1) n, D.IsReversedPair z i n Φ := by
   refine ⟨_, isEdgeFamily_of_paramsCorrespond _ true (fun _ ↦ inferInstance)
     (fun _ ↦ inferInstance) ?_⟩
   rw [zero_add]
-  exact (D.paramsCorrespond_leftPair z h_lt).2
+  exact (D.paramsCorrespond_neg_gridParam_insert_first h_lt).symm
 
 end Data
 

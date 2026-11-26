@@ -279,7 +279,7 @@ lemma isLocalMatching_shintani {S : GalSemidirect (ResField w) (ResField u) n �
     constructor <;>
       exact ⟨(finite_quotient_image_of_isCompact isOpen_localCongruence
         (isCompact_localIntGL _)).subset
-        fun q hq ↦ ⟨_, by by_contra h; exact hq (dif_neg h), q.out_eq⟩,
+        fun q hq ↦ ⟨_, by by_contra h; exact hq (dite_eq_right h), q.out_eq⟩,
         by simp +contextual [mem_localCongruence_zero, inflateConj,
           mul_mem_cancel_right, ← MulMemClass.mk_mul_mk, mul_mem_cancel_left]⟩
   · -- The principal level at `u` is stable under `σ`,

@@ -928,24 +928,22 @@ lemma sum_formMap_eq_of_squareLaw {z : Bool} {ϑ : D.MFoldTwist} {w : Finset (Gr
   simp only [GridPath.formMap_append, GridPath.formMap, LinearMap.comp_apply]
   exact h_square
 
-/-- Fix the data `D`, with `m = D.m`, let `a < b < m` and let `z` say which of the two halves of a
-path is changed. A turn off the diagonal, at the corner `(a, b)` of that half, transfers periods
-with bound `1` and nonzero numbers `c ϑ`, one for each `m`-fold twist `ϑ`, whose absolute value is,
-up to a constant and a power of the norm of the modulus of `ϑ`, the ratio of Hecke values
-`turnRatio` of the square (at `(b, a)` if `z`): the old half is `q`, the two sides through `(a, b)`,
-then `r`, and the new half passes through `(a + 1, b + 1)` instead. -/
+/-- Fix an off-diagonal corner `a < b < D.m` in half `z`. Every turn there transfers periods
+with bound `1` and the same nonzero factor `c ϑ` for each twist `ϑ`. Up to a constant and a power
+of the norm of its modulus, the absolute value of this factor is the Hecke ratio `turnRatio` at
+`(a, b)` for the ordinary half and at `(b, a)` for the reflected half. -/
 lemma exists_transfersPeriods_off_diagonal (z : Bool) (hab : a < b) (hb : b < D.m) :
     ∃ c : D.MFoldTwist → ℂˣ,
       D.HasAbsUpToNormPower (fun ϑ : D.MFoldTwist ↦ c ϑ)
         (if z then D.turnRatio b a else D.turnRatio a b) ∧
-      ∀ (Γ' : TwoGridPath D.m) (q : GridPath 0 D.m a (b + 1))
-        (r : GridPath (a + 1) b Γ'.diagonalIndex Γ'.diagonalIndex),
-        Γ'.half z = q.down.right.append r →
-        TransfersPeriods Γ' ⟨Γ'.diagonalIndex, update Γ'.half z (q.right.down.append r)⟩ 1 c := by
+      ∀ Γ' Γ : TwoGridPath D.m, Γ'.Turn (bif z then (b, a) else (a, b)) Γ →
+        TransfersPeriods Γ' Γ 1 c := by
   -- The exchange on the square, applied to the form that arrives at it along `q`, shows that the
   -- period of `Ψ'` is `κ / c` times that of the turned datum `Ψ`, with a constant `κ`.
   obtain ⟨κ, σ, c, hc, h_law⟩ := exists_squareLaw_grid_hasAbsUpToNormPower z (hab.trans hb) hb
-  refine ⟨c, hc, fun Γ' q r hΓ' N Ψ' hΨ' ↦ ?_⟩
+  refine ⟨c, hc, fun Γ' Γ h_step ↦ ?_⟩
+  obtain ⟨q, r, hΓ', rfl⟩ := h_step.exists_corner (z := z) hab
+  intro N Ψ' hΨ'
   let Γ : TwoGridPath D.m := ⟨Γ'.diagonalIndex, update Γ'.half z (q.right.down.append r)⟩
   let w : Finset (GridNode × GridNode) := q.edges z ∪ r.edges z ∪ (Γ'.half !z).edges !z
   let K : D.Corner (D.GridIndex z (a + 1) b) Empty := D.innerCorner z a b
