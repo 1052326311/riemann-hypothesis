@@ -323,13 +323,10 @@ exchanged. -/
 theorem sum_columns_eq_quarticOp :
     ∑ c : C, ∑ c' : C, ∑ a : R, ∑ b : R,
       T.raise a c * T.raise b c' * T.lower a c' * T.lower b c = T.quarticOp := by
-  calc
-    _ = ∑ p : C × C, ∑ q : R × R,
-          T.raise q.1 p.1 * T.raise q.2 p.2 * T.lower q.2 p.1 * T.lower q.1 p.2 := by
-      simp only [Fintype.sum_prod_type, mul_assoc, T.lower_mul_lower]
-    _ = ∑ q : R × R, ∑ p : C × C,
-          T.raise q.1 p.1 * T.raise q.2 p.2 * T.lower q.2 p.1 * T.lower q.1 p.2 := sum_comm
-    _ = T.quarticOp := by simp only [quarticOp, Fintype.sum_prod_type]
+  rw [quarticOp]
+  refine sum_comm_cycle.trans (sum_congr rfl fun a _ ↦ sum_comm_cycle.trans
+    (sum_congr rfl fun b _ ↦ sum_congr rfl fun c _ ↦ sum_congr rfl fun c' _ ↦ ?_))
+  rw [mul_assoc, T.lower_mul_lower, ← mul_assoc]
 
 /-- For signs `δ` and a sign `s` (read in `ℂ`), the factor that is `1` if `δ a = δ b` and `s`
 otherwise, times the same factor for `(b, a)`, is `1`. So these factors drop out of a Casimir
