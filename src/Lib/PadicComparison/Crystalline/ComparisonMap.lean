@@ -325,7 +325,7 @@ lemma hasCrysComparison_of_witt (b : FullSubcategory IsPerfectTorsionFree)
       ((algBaseChangeAdj.homEquiv _ _).bijective.comp
         (bij_cpl.comp InducedCategory.homEquiv.bijective))))
     -- `p = 0` in `E / 𝔡`, so the `p`-adic topology there is discrete.
-    show IsAdicComplete (span {(p : E.obj ⧸ pdIdeal E.obj)}) (E.obj ⧸ pdIdeal E.obj)
+    change IsAdicComplete (span {(p : E.obj ⧸ pdIdeal E.obj)}) (E.obj ⧸ pdIdeal E.obj)
     rw [E.p_eq_zero_mod_pdIdeal, span_singleton_zero]
     infer_instance
   · -- `Hom(b, S^♭) = Hom(OC ⊗ W b, S) = Hom(W b, S) = Hom(T, S)`.
