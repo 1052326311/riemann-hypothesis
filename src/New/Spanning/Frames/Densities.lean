@@ -560,9 +560,11 @@ lemma PlaceData.integrable_and_integral_succ_eq_mul_floorForm {W : T.G → Eucli
     rw [lintegral_map hf h_succ_meas, lintegral_map hf h_form_meas]
     -- Write both sides as iterated integrals over `x`, `g`, `σ` and the remaining variables.
     dsimp only [μ_succ, μ_form, ν]
-    rw [lintegral_prod _ (by fun_prop), lintegral_prod _ (by fun_prop),
-      lintegral_prod _ (by fun_prop), lintegral_prod _ (by fun_prop),
-      lintegral_prod _ (by fun_prop)]
+    have hs : Measurable fun z ↦ f (succTerm z) := hf.comp h_succ_meas
+    have hF : Measurable fun z ↦ f (formTerm z) := hf.comp h_form_meas
+    rw [lintegral_prod _ hs.aemeasurable, lintegral_prod _ hs.lintegral_prod_right'.aemeasurable,
+      lintegral_prod _ hF.aemeasurable, lintegral_prod _ hF.lintegral_prod_right'.aemeasurable,
+      lintegral_prod _ hF.lintegral_prod_right'.lintegral_prod_right'.aemeasurable]
     refine lintegral_congr fun x ↦ ?_
     rw [lintegral_mconv_symm (by fun_prop)]
     refine lintegral_congr fun g ↦ ?_
@@ -575,8 +577,9 @@ lemma PlaceData.integrable_and_integral_succ_eq_mul_floorForm {W : T.G → Eucli
       rw [← ofReal_norm]
       exact ofReal_le_one.2 (hφ_le _)
     dsimp only [μ_form]
-    rw [lintegral_prod _ (by fun_prop), lintegral_prod _ (by fun_prop),
-      lintegral_prod _ (by fun_prop)]
+    have hF := h_form_meas.eNorm
+    rw [lintegral_prod _ hF.aemeasurable, lintegral_prod _ hF.lintegral_prod_right'.aemeasurable,
+      lintegral_prod _ hF.lintegral_prod_right'.lintegral_prod_right'.aemeasurable]
     refine lintegral_mono fun x ↦ lintegral_mono fun g ↦ ?_
     simp only [formTerm, eNorm_mul]
     grw [hχ_le]
