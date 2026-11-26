@@ -186,7 +186,7 @@ lemma entireTheta_eq_integral (hs : s = 1) (h_projReal : V.projReal f = f)
     simp [hs, beta_mul_realVac, holomorphicCoord_eq, dotProduct]
   have h_ne : realVac y ≠ 0 := exp_ne_zero _
   simp_rw [entireTheta, h_value, h_translate, ← integral_div]
-  refine integral_congr_ae (.of_forall fun w ↦ ?_)
+  congr with w
   field_simp
 
 /-- Suppose all signs `s` are +1 and `f` is fixed by the real vacuum projection
@@ -390,11 +390,7 @@ lemma IsAdapted.omega_projReal_of_isMixedLaw (hT : D.IsMixedLaw T) {g : G E s}
   have h_frame : MeasurePreserving (realMatrix (D.frameAt g t) *ᵥ ·) (normalizedVolume _)
       (normalizedVolume _) :=
     measurePreserving_equiv (realHeisenberg 1) (realHeisenberg 1)
-      (φ := {toLin'OfInv h_orth h_orth' with
-        continuous_toFun := LinearMap.continuous_of_finiteDimensional
-          (toLin'OfInv h_orth h_orth').toLinearMap
-        continuous_invFun := LinearMap.continuous_of_finiteDimensional
-          (toLin'OfInv h_orth h_orth').symm.toLinearMap}) h_vac
+      (φ := (toLin'OfInv h_orth h_orth').toContinuousLinearEquiv.toContinuousAddEquiv) h_vac
   -- Splitting the coordinates as ((c, b), w), and then as (c, b), preserves the measure too.
   let outer : (realHeisenberg (realSigns E ((1 : p ⊕ p → ℤˣ) ⊕ᵥ s₀))).OrthogonalSum
       (realHeisenberg (realSigns E (1 : p ⊕ p → ℤˣ))) (realHeisenberg (realSigns E s₀)) realVac :=

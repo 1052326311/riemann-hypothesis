@@ -336,10 +336,8 @@ private lemma frobValue_div_mul_heckeCoeff_eq_one {b : AutChar E} {c : InfiniteP
     (hb : b.HasWeight c 1) (s : ℕ) (w : FinPlace E) :
     w.q ^ s * frobValue 1 n w / b.frobValue (Fin (card n + s)) w *
       heckeCoeff (hb.toAlgebraic s s).val.fst ∅ w = 1 := by
-  have hq : ((√(w.q : ℝ) : ℝ) : ℂ) ≠ 0 :=
-    Complex.ofReal_ne_zero.2 (Real.sqrt_ne_zero'.2 (Nat.cast_pos.2 (zero_lt_one.trans w.one_lt_q)))
-  simp [HasWeight.toAlgebraic, frobValue, w.coe_q_eq_sq_sqrt, HeckeChar.atUniformizer, heckeCoeff,
-    AutChar.spaceChar, zpow_sub₀, zpow_mul (_ : ℂ), field, hq]
+  simp [HasWeight.toAlgebraic, frobValue, w.coe_q_eq_sq_sqrt, w.ne_bot, HeckeChar.atUniformizer,
+    heckeCoeff, AutChar.spaceChar, zpow_sub₀, zpow_mul (_ : ℂ), field]
   -- What is left is a rearrangement of powers of `√q_w` and of `υ` at a uniformiser.
   ring
 
@@ -351,10 +349,8 @@ private lemma heckeCoeff_toAlgebraic_eq {b : AutChar E} {c : InfinitePlace E →
     (hb : b.HasWeight c 1) {s : ℕ} (w : FinPlace E) (l : Fin s) :
     heckeCoeff (hb.toAlgebraic (card n + s) (s - l)).val.fst ∅ w =
       w.q ^ (l : ℕ) * frobValue 1 n w * heckeCoeff (hb.toAlgebraic s s).val.fst ∅ w := by
-  have hq : ((√(w.q : ℝ) : ℝ) : ℂ) ≠ 0 :=
-    Complex.ofReal_ne_zero.2 (Real.sqrt_ne_zero'.2 (Nat.cast_pos.2 (zero_lt_one.trans w.one_lt_q)))
-  simp [HasWeight.toAlgebraic, frobValue, w.coe_q_eq_sq_sqrt, HeckeChar.atUniformizer, heckeCoeff,
-    AutChar.spaceChar, zpow_add₀, zpow_sub₀, zpow_mul (_ : ℂ), field, hq]
+  simp [HasWeight.toAlgebraic, frobValue, w.coe_q_eq_sq_sqrt, w.ne_bot, HeckeChar.atUniformizer,
+    heckeCoeff, AutChar.spaceChar, zpow_add₀, zpow_sub₀, zpow_mul (_ : ℂ), field]
 
 /-- Rallis' inner product formula makes the theta lift injective on forms of level `J`. Let `b` be
 a character of `U(1)` of weight `c`, `v` an edge from type `l` to type `l'` (`IsEdge`), `Ψ` sharp

@@ -746,7 +746,7 @@ lemma IsFillingData.exists_massIntegral_pi_eq (h : S.IsFillingData T F)
       _ = ∫⁻ x : (S.latticeMiddle (LocProd T)).G,
           ‖t.toReal‖ₑ ^ 2 * ∏ i : ι, f i (S.toFibers T blk x i) ∂F.groupMeasure := by
         simp only [PlaceData.massIntegral, h_inner, f, mul_pow, prod_pow, eNorm_eq_nnNorm,
-          nnnorm_smul, nnnorm_prod, ENNReal.coe_mul, ofNNReal_finsetProd]
+          nnNorm_smul, nnNorm_prod, ENNReal.coe_mul, ofNNReal_finsetProd]
       _ = ‖t.toReal‖ₑ ^ 2 * ∫⁻ z, ∏ i : ι, f i (z i) ∂F.groupMeasure.map (S.toFibers T blk) := by
         rw [lintegral_const_mul' _ _ (by simp), h_emb.lintegral_map]
       _ = ‖t.toReal‖ₑ ^ 2 * t * ∏ i : ι, (F' i).massIntegral (Y i) := by

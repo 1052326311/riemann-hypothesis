@@ -286,11 +286,9 @@ theorem exists_hasGramDensity :
         pow_succ', mul_div_mul_comm]
     have h_open : IsOpen {p : Matrix n' n' ℝ × (n' → ℂ) × ℝ |
         0 < p.2.2 ∧ p.1 - p.2.2⁻¹ • outerCoords p.2.1 ∈ W} := by
-      refine ContinuousOn.isOpen_inter_preimage (s := {p | 0 < p.2.2})
-        (f := fun p : Matrix n' n' ℝ × (n' → ℂ) × ℝ ↦ p.1 - p.2.2⁻¹ • outerCoords p.2.1)
-        (fun p hp ↦ ContinuousAt.continuousWithinAt ?_)
-        (isOpen_lt continuous_const (by fun_prop)) hW_open
-      fun_prop (disch := exact ne_of_gt (Set.mem_setOf.1 hp))
+      refine ContinuousOn.isOpen_inter_preimage (fun p hp ↦ ContinuousAt.continuousWithinAt ?_)
+        (isOpen_Ioi.preimage continuous_snd.snd) hW_open
+      fun_prop (disch := exact ne_of_gt hp)
     have h_one : φ (gramCoords 1 (1 : Matrix n n ℂ)) =
         (gramCoords 1 (1 : Matrix n' n' ℂ), 0, 1) := by
       rw [φ_apply, hermOfReal_gramCoords isHermitian_one]

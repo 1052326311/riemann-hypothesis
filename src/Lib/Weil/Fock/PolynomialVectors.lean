@@ -105,10 +105,7 @@ private lemma fockMatrixCoeff_heisenbergDeriv_single (u : USign ε) (P Q : MvPol
     simp [weilRep_heisenbergOp, mulVec_smul, Heisenberg.Rep.mul, Heisenberg.self_eq_one]
   -- Differentiate both sides at `t = 0`: `hasDerivAt_realHeisenbergOp` turns `realHeisenbergOp`
   -- into `heisenbergDeriv`.
-  have h := (hasDerivAt_realHeisenbergOp (ε := ε) (Pi.single j c) P).map_clm
-    (fockInner Q ∘L realWeil u)
-  rw [ContinuousLinearMap.comp_apply] at h
-  refine h.unique ?_
+  refine ((hasDerivAt_realHeisenbergOp ..).map_clm (fockInner Q ∘L realWeil u)).unique ?_
   simpa only [ContinuousLinearMap.comp_apply, h_move] using
     ((hasDerivAt_realHeisenbergOp ..).map_clm (fockInner (realWeil u P))).star
 

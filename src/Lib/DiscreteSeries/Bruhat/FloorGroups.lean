@@ -564,8 +564,11 @@ lemma commute_weylOn {p : ℕ → A} (hP : ∀ a : ℕ, P a → a < l) (hs : s �
   let k' : 𝔰.BesselIndex :=
     if P (floorOf k) ∧ floorOf k < 𝔰.ϱ ∧ IsUnit (p (floorOf k)) then oppositeIndex k else k
   have h_left : (weylOn P p * s).val i k = (weylOn P p : T.G).val i i' * s.val i' k :=
-    sum_eq_single i' fun j ↦ by grind (branches := 16384) only
-                                  [oppositeIndex_involutive_and_floorOf_level j]
+    sum_eq_single i' fun j _ ↦ by
+      dsimp only
+      rw [h_weyl i j]
+      clear h_entry h_weyl
+      grind only [oppositeIndex_involutive_and_floorOf_level j]
   have h_right : (s * weylOn P p).val i k = s.val i k' * (weylOn P p : T.G).val k' k :=
     sum_eq_single k' (by grind only)
   rw [h_left, h_right]

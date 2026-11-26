@@ -153,11 +153,8 @@ theorem isCuspKernel_typeKernel [Nonempty n] {l : NumberField.InfinitePlace E �
       ‖typeKernel l s x‖ * (∏ w, ‖(x w).val.val‖) ^ (B + 1) := by
     have h_loc : Integrable fun x : GInf E s ↦
         ∏ w, e w (x w) * (‖(x w).val.val‖ : ℂ) ^ (B + 1) :=
-      .fintype_prod (f := fun w g ↦ e w g * (‖g.val.val‖ : ℂ) ^ (B + 1)) fun w ↦ by
-        simpa [e] using (h w).integrable_dsKernel_mul_norm_pow (B + 1) le_rfl
-    refine h_loc.norm.congr (.of_forall fun x ↦ ?_)
-    simp only [h_prod, norm_prod, norm_mul, norm_pow, Complex.norm_real, norm_norm,
-      prod_mul_distrib, prod_pow]
+      .fintype_prod fun w ↦ (h w).integrable_dsKernel_mul_norm_pow (B + 1) le_rfl
+    simpa [h_prod, prod_mul_distrib, prod_pow] using h_loc.norm
   have h_bump (w : NumberField.InfinitePlace E) : ∃ α : DiscreteSeries.Bumps s,
       ∀ g : USign s, ∫ x : USign s, α.val.val x⁻¹ * e w (x⁻¹ * g) = e w g :=
     (h w).exists_bump_conv_dsKernel

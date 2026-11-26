@@ -551,9 +551,7 @@ lemma New.Variety.exists_map_separating_class {p : ℕ} {k : Type} [Field k] [Em
   -- `Γ` is the graph of the projection; its first projection `π` is injective.
   let Γ : Subfunctor (algPointsOf k R Y ⊗ projSpace k n) :=
     ⟨fun _ ↦ {x | ∃ v h, IsCoordsWithUnit L x.1 v ∧ x.2 = projSpace.mk (evalForms Λ v) h},
-      fun φ _ ⟨v, _, hv, e⟩ ↦ by
-        rw [Set.mem_setOf_eq]
-        exact ⟨φ ∘ v, evalForms_map Λ φ.hom' _ ▸ ⟨_, hv.comp φ, congrArg _ e⟩⟩⟩
+      fun φ _ ⟨v, _, hv, e⟩ ↦ ⟨φ ∘ v, evalForms_map Λ φ.hom' _ ▸ ⟨_, hv.comp φ, congrArg _ e⟩⟩⟩
   let π : Γ.toFunctor ⟶ algPointsOf k R Y := Γ.ι ≫ fst (algPointsOf k R Y) (projSpace k n)
   have h_mono : Mono π := mono_of_app_injective <| by
     rintro A ⟨⟨⟩, v, _, hv, ⟨⟩⟩ ⟨⟨⟩, v', _, hv', ⟨⟩⟩ ⟨⟩

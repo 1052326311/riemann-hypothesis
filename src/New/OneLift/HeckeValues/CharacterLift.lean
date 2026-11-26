@@ -420,13 +420,10 @@ lemma kernelForm_of_rowLength_eq_zero (X : LValueData E n) (g : Gf E Unit) (h : 
   -- In degree zero all basis polynomials are `1`, so `sum_schur_smul_nablaBasis` says that the
   -- row sums to `1`.
   apply C_injective ((Σ _ : InfinitePlace E, Unit) × ℕ)
-  have h_eval {σ : Type} (p : MvPolynomial σ ℂ) :
-      eval₂ (C.comp C) (fun i ↦ C (MvPolynomial.X i)) p =
-        (C p : MvPolynomial ((Σ _ : InfinitePlace E, Unit) × ℕ) (MvPolynomial σ ℂ)) := by
-    rw [show (fun i ↦ C (MvPolynomial.X i)) = C ∘ MvPolynomial.X from rfl, ← eval₂_comp_left,
-      eval₂_eta]
   simpa [nablaBasis_eq_one, schurDetExp, h_rowLength, smul_eq_C_mul, columnCount, mixedWeight,
-    detPow, h_eval] using sum_schur_smul_nablaBasis X.isLiftWeight.1 _ i
+    detPow, aeval_X_left_apply] using
+    sum_schur_smul_nablaBasis (R := MvPolynomial (InfinitePlace E × n × Unit) ℂ) X.isLiftWeight.1 _
+      i
 
 /-- The form `X.kernelForm g` is the kernel `New.DescentPair.vectorKernelForm` of the pair
 `X.descentPair` at the point `(x, g)` of `U(1)`, for every real component `x`. -/

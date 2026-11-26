@@ -256,8 +256,7 @@ lemma hasLevel_transposedLiftY (ϑ : D.TameChar) {j : ℕ} (hj : j < D.m) (z : D
     HasLevel (transposedLiftY ϑ j z) (levelY ϑ j) := by
   intro u hu g
   rw [transposedLiftY_apply ϑ hj, transposedLiftY_apply ϑ hj]
-  refine congrArg (_ * ·)
-    (congrArg (fun F ↦ ∫ h, F h ∂(D.spaceY (j + 1)).quotMeasure) (funext fun h ↦ ?_))
+  congr with h
   conv_rhs => rw [← twistedPairWeil_datumY_of_mem_levelY ϑ hu, ← mul_apply_eq_comp,
     ← map_mul, Prod.mk_mul_mk, mul_one]
 
@@ -481,8 +480,7 @@ lemma exists_integral_mul_lowerChainUpTo_eq_cutSum
       have h_next := h_period (update ξ (k + 1) x.1) (update y (k + 1) x.2)
         (by rwa [update_of_ne (by omega)]) (by rwa [update_of_ne (by omega)])
       rw [← mk_update, ← h_next, ← integral_unfoldStageOn_mul_transposedLiftY]
-      refine integral_congr_ae (.of_forall fun r ↦ ?_)
-      beta_reduce
+      congr with r
       rw [unfoldStageOn_succ, unfoldStage_update (hkl := k.lt_succ_self), update_self, update_self]
       rfl
     exact integral_eq ξ (fun q ↦ S (update (fun i : ℕ ↦ ↑(y i)) (k + 1) q))

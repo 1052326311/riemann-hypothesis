@@ -81,7 +81,7 @@ lemma enorm_besselKernel (y : InfinitePlace E → 𝔰.G₁) :
   simp only [eNorm_eq_nnNorm]
   norm_cast
   rw [← sq_eq_sq₀ zero_le zero_le]
-  simp [EuclideanSpace.nnnorm_eq, besselKernel, besselFn, mul_pow, ← Finset.prod_pow, sum_prod_type,
+  simp [EuclideanSpace.nnNorm_eq, besselKernel, besselFn, mul_pow, ← Finset.prod_pow, sum_prod_type,
     prod_sum, sum_mul_sum]
 
 /-- The norm of the amplitude `∫ β_c(y) β_c'(γ⁻¹ y) W(y) ⊗ W(γ⁻¹ y)^* dy` is at most the integral of

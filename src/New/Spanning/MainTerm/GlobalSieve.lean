@@ -285,8 +285,7 @@ lemma mem_ratIntegralOff_of_transform_ne_zero {G : 𝔸 E → ℂ}
       New.stdAddChar E (toAdele (y / S.deltaE) * -a') *
         ∫ z, New.stdAddChar E (toAdele (y / S.deltaE) * -z) * G z := by
     rw [← integral_const_mul, ← integral_add_left_eq_self _ a']
-    refine integral_congr_ae (.of_forall fun z ↦ ?_)
-    dsimp only
+    congr with z
     rw [hG a ha, neg_add, mul_add, AddChar.map_add_eq_mul, Circle.coe_mul, mul_assoc]
   -- The factor is a value of the finite character: removing the components at `T` is
   -- multiplication by an idempotent, which can be moved from `a` to `y`.

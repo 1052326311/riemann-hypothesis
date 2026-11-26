@@ -134,8 +134,7 @@ lemma gramDiscReal_div_two_le_and_isBoundedInCell {𝔰 : Shape} {M P : ℝ} {Z 
 
 theorem euclidean_enorm_sq_eq_sum {I : Type*} [Fintype I] (u : EuclideanSpace ℂ I) :
     ‖u‖ₑ ^ 2 = ∑ i : I, ‖u i‖ₑ ^ 2 := by
-  simp only [← ofReal_norm, ← ENNReal.ofReal_pow (norm_nonneg _)]
-  rw [EuclideanSpace.norm_sq_eq, ENNReal.ofReal_sum_of_nonneg fun _ _ ↦ by positivity]
+  simp [eNorm_eq_nnNorm, u.nnNorm_eq, ← ENNReal.coe_pow]
 
 end New.RealPlace
 

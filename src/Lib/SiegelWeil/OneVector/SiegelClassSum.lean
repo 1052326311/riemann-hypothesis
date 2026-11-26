@@ -428,7 +428,7 @@ lemma New.SiegelWeil.siegel_weil_fourierCoeff {E κ : Type} [Field E] [CMType E]
       P (s β +ᵥ z) = (lagrangian (shearSplitting β)).zeroTerm (stdSpace E κ) (twist z) := by
     have h_shift : realAdele (s β +ᵥ z) = toAdele (β : E) + realAdele z := realAdele_add β z
     rw [hP, zeroTerm_shearSplitting (h_twist z), h_shift]
-    refine integral_congr_ae (.of_forall fun x ↦ ?_)
+    congr with x
     simp [mul_sub, ← map_mul, ← mul_assoc, div_eq_inv_mul, add_mul, mul_add, map_sub_eq_div,
       map_add_eq_mul]
     ring
