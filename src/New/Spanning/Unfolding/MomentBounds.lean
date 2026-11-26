@@ -147,12 +147,11 @@ lemma levelPrime_pow_le_meetNorm_of_mem_fixer [S.IsAdmissible]
   simp [φ, S.card_chosenPlaces]
 
 open scoped Classical in
-/-- Let `E` contain a primitive `5040`-th root of unity and let the filling data `S` be admissible
-(`IsAdmissible`). For `s` in `ResidueGL`, write `‖P_s‖²` for the `secondMoment` at `s` of the
-amplitude sums of all terms. If `‖P_s‖² ≤ 2 D_X` for all `s`, with `D_X = sourceDim`, then the sum
+/-- For `s` in `ResidueGL`, write `‖P_s‖²` for the `secondMoment` at `s` of the amplitude sums
+of all terms. If `‖P_s‖² ≤ 2 D_X` for all `s`, with `D_X = sourceDim`, then the sum
 of `‖P_s‖²` over the cosets of the reduction `R̄₀` of the Bessel subgroup by integral scalars
 (`InScalarCoset`) is at most `2 M ^ f 𝒟_id`. -/
-lemma sum_secondMoment_inScalarCoset_le [HasPrimitiveRoot5040 E] [S.IsAdmissible]
+lemma sum_secondMoment_inScalarCoset_le
     (h_le : ∀ s : S.ResidueGL, secondMoment (S.amplitudeSum .full Set.univ) {s} ≤ 2 * S.sourceDim) :
     ∑ s : S.ResidueGL with ∃ ζ : Ô E, S.InScalarCoset ζ s,
         secondMoment (S.amplitudeSum .full Set.univ) {s} ≤
