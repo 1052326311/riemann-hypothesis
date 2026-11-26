@@ -340,11 +340,11 @@ lemma neighbourCoeff_apply_of_notMem {w : FinPlace E} (hw : w ∉ P) (hw_star : 
     simp only [neighbourCoeff, Sum.elim_inl, Sum.elim_inr, Pi.zero_apply, map_zero, map_mul,
       neighbourScale_apply_of_notMem hw hw_star, zero_mul]
 
-/-- Let `P` and its conjugates be the places above the prime `N` (`IsSplitLevel`). Let `δ` be the
+/-- Let `P` and its conjugates be the places above `N` (`IsSplitLevel`). Let `δ` be the
 scaling adele of `IsScalingAtM`, which is `1` above `N`. Then multiplying by `δ` does not change the
 coefficient `neighbourCoeff X X'' P π m` of the isotropic vector that goes with column `m` of
 `neighbourMatrix`. -/
-lemma mul_neighbourCoeff [Fact N.Prime] (hP : IsSplitLevel P N) (hκ : IsScalingAtM N β δ κ)
+lemma mul_neighbourCoeff (hP : IsSplitLevel P N) (hκ : IsScalingAtM N β δ κ)
     (m : PairIndex X X'') :
     δ * neighbourCoeff X X'' P π m = neighbourCoeff X X'' P π m := by
   have h_scale : δ * neighbourScale P π = neighbourScale P π := by
