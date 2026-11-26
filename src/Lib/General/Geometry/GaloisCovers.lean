@@ -223,7 +223,7 @@ map `φ` (written `specMap φ`) followed by the canonical map to `X`, and this r
 countable. -/
 lemma exists_countable_residue_point {X : Scheme} {R : CommRingCat} (s : X ⟶ Spec R) [Countable R]
     [LocallyOfFiniteType s] {K : Type} [Field K] (t : Spec (CommRingCat.of K) ⟶ X) :
-    ∃ᵉ (z : X) (φ : X.residueField z →+* K),
+    ∃ z : X, ∃ φ : X.residueField z →+* K,
       specMap φ ≫ X.fromSpecResidueField z = t ∧ Countable (X.residueField z) := by
   let z : X := t (closedPoint K)
   refine ⟨z, (X.SpecToEquivOfField K t).2.hom, (X.SpecToEquivOfField K).left_inv t, ?_⟩
