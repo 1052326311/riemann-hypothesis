@@ -352,7 +352,7 @@ def map (f : R →+* S) (hf : ∀ x : R, f (star x) = star (f x) := by simp) {J 
   ((GeneralLinearGroup.map f).comp (U J).subtype).codRestrict (U J') fun g ↦ by
     -- Apply `f` to `gᴴ * J * g = J`.
     rw [mem_unitaryGroupOf_iff]
-    show star ((g : Matrix n n R).map f) * J' * (g : Matrix n n R).map f = J'
+    change star ((g : Matrix n n R).map f) * J' * (g : Matrix n n R).map f = J'
     rw [star_eq_conjTranspose, ← h, ← map_conjTranspose_mul_mul f hf, ← star_eq_conjTranspose,
       mem_unitaryGroupOf_iff.mp g.prop]
 

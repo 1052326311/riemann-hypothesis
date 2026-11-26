@@ -106,7 +106,7 @@ theorem of_coordinates [OpensMeasurableSpace X] [OpensMeasurableSpace B] [FirstC
       _ ≤ liminf (fun t ↦ w t p * K (ψ t p)) (𝓝 b) := ENNReal.le_liminf_mul
   rw [lintegral_map hK_meas hψ.of_uncurry_left,
     lintegral_withDensity_eq_lintegral_mul _ hw.of_uncurry_left (by fun_prop)]
-  show A b ≤ C
+  change A b ≤ C
   refine le_of_setLIntegral_le (ν := ν) hA ?_
   filter_upwards [hC, eventually_smallSets_subset.2 hV] with S hS hS_sub hS_open
   have hπS : MeasurableSet (π ⁻¹' S) := hπ hS_open.measurableSet

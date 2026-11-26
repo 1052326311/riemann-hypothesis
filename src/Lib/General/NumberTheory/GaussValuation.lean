@@ -461,7 +461,7 @@ lemma ellVal_pow_sub_one_of_isPrimitiveRoot {h j : ℕ} {ζ : intQpBar ℓ}
   obtain ⟨t, j', hj', rfl⟩ := Nat.exists_eq_pow_mul_and_not_dvd hj ℓ hℓ.ne_one
   have ht : padicValNat ℓ (ℓ ^ t * j') = t := by
     simp [Nat.padicValNat_def, Nat.multiplicity_mul, hℓ.ne_zero, right_ne_zero_of_mul hj,
-      Nat.multiplicity_prime_pow, multiplicity_eq_zero_of_not_dvd hj']
+      multiplicity_eq_zero_of_not_dvd hj']
   rw [ht] at hjh ⊢
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hjh
   have h_order : IsPrimitiveRoot ((ζ ^ ℓ ^ t) ^ j') (ℓ ^ (k + 1)) :=
