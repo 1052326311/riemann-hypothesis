@@ -674,7 +674,8 @@ private lemma projSpace.exists_map_eq_map_of_isTodaCancellation
           let b₁ := a c u₁.snd
           have h_mul : b₁.down 0 * b₀.down 0 = 1 := by
             change proj c ((A c u₁.snd).down 0) * proj c ((A c u₀.snd).down 0) = 1
-            erw [← _root_.map_mul (proj c).hom, hA_inv c t.down, map_one]
+            exact ((_root_.map_mul (proj c).hom _ _).symm.trans
+              (congrArg (proj c).hom (hA_inv c t.down))).trans (map_one _)
           let v₀ : Fin 2 → MvPolynomial (Fin 1) k :=
             Fin.insertNth (α := fun _ ↦ MvPolynomial (Fin 1) k) 1 1 X
           let v₁ : Fin 2 → MvPolynomial (Fin 1) k :=
@@ -687,7 +688,10 @@ private lemma projSpace.exists_map_eq_map_of_isTodaCancellation
           fin_cases i <;> fin_cases j <;>
             simp [hv₀, v₁, Fin.insertNth_zero', aeval_X, mul_comm, h_mul, v₀]
         change (F.app c).hom ((gluing.app c).hom (.of u)) = 0
-        erw [gluing_apply_torus c t, _root_.map_sub, hF, hF, h_eq, sub_self]
+        refine (congrArg (F.app c).hom (gluing_apply_torus c t)).trans ?_
+        refine (_root_.map_sub (F.app c).hom _ _).trans ?_
+        refine (congrArg₂ (· - ·) (hF c u₀) (hF c u₁)).trans ?_
+        rw [h_eq, sub_self]
     · -- `φ` is invariant under the twist, by `ha_twist`.
       let t' : twoDiscs.obj c := ⟨t.fst, ⟨discTwist epsPow t.fst ≫ t.snd.down⟩⟩
       have h_twist : ((oneSub (discTwist epsPow)).app c).hom (.of t) =
@@ -696,7 +700,10 @@ private lemma projSpace.exists_map_eq_map_of_isTodaCancellation
         exact congrArg ((T ≫ pointMap (stdChart k 1 (cond t.fst.down 0 1)).point)
           (genericOver.obj c)) (ha_twist c t.fst t.snd).symm
       change (F.app c).hom (((oneSub (discTwist epsPow)).app c).hom (.of t)) = 0
-      erw [h_twist, _root_.map_sub, hF, hF, h_eq, sub_self]
+      refine (congrArg (F.app c).hom h_twist).trans ?_
+      refine (_root_.map_sub (F.app c).hom _ _).trans ?_
+      refine (congrArg₂ (· - ·) (hF c t) (hF c t')).trans ?_
+      rw [h_eq, sub_self]
     · -- Modulo the complement of the point, `∞` and the whole disc `false` vanish.
       intro c u
       let Z : Subfunctor (projSpace k 1) := offPoints {affinePoint 0 0}
@@ -708,7 +715,7 @@ private lemma projSpace.exists_map_eq_map_of_isTodaCancellation
       change P.hom ((F.app c).hom (.of u)) =
         (r.app C).hom ((s.app C).hom (J.hom (((freeAb.map a).app c).hom
           (((projFirst (B := fun _ ↦ monoidAlg ℚ≥0)).app c).hom (.of u)))))
-      erw [hF, _root_.map_sub]
+      refine (congrArg P.hom (hF c u)).trans ((_root_.map_sub P.hom _ _).trans ?_)
       change relFreeAb.mk Z (φ c u) - relFreeAb.mk Z (φ c z) = _
       rw [hz, sub_zero]
       obtain ⟨⟨_ | _⟩, t⟩ := u
