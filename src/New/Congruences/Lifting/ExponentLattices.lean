@@ -1,7 +1,14 @@
 module
 
-public import Mathlib.LinearAlgebra.Span.TensorProduct
-public import Lib.PadicHodge.Kisin.FrameTheorem
+import Mathlib.Algebra.GroupWithZero.Submonoid.CancelMulZero
+import Mathlib.Algebra.Pointwise.Stabilizer
+import Mathlib.Algebra.Ring.IsFormallyReal
+import Mathlib.LinearAlgebra.Span.TensorProduct
+public import Lib.PadicHodge.Kisin.Modules
+import Lib.PadicComparison.Descent.TestCategory
+import Lib.PadicHodge.Kisin.FrameTheorem
+import Lib.PadicHodge.Kisin.PeriodMatrixBasis
+import Lib.PadicHodge.RadiusLemma
 
 /-!
 # Lattices with prescribed orders, depth steps and the depth lemma
@@ -860,8 +867,6 @@ open Period Submodule DistribSMul algebraMap
 variable {p : ℕ} [ThePrime p] [Γ : GroupOverGp p]
   {k : KummerChart Γ} {O : Coeffs} {L : JumpLattice O} {a : ℕ} {i : Letter} {n : ℤ} {x : L.Ambient}
   (Q : Submodule Ainf L.Ambient)
-
-instance : Module ℤ_[p] L.kisinLoc := inferInstance
 
 /-- For an A_inf-submodule Q of W(C^♭)⊗L, the Z_p-submodule of
 `New.Lift.KummerChart.JumpLattice.kisinLoc` of the elements that lie in Q. -/
