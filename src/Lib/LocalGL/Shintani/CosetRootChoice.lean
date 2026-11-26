@@ -267,9 +267,6 @@ variable [Finite Γ] in
 /-- A semidirect product of finite groups is finite. -/
 instance : Finite (G ⋊[α] Γ) := .of_equiv _ equivProd.symm
 
-omit [Finite G] in
-private lemma equivProd_symm_mk_one (g : G) : (equivProd.symm (g, 1) : G ⋊[α] Γ) = inl g := rfl
-
 open scoped Classical in
 /-- On a semidirect product `G ⋊ Γ`, take the function equal to `u` on `G` and to `w` off `G`. Its
 mean is the mean of `w` plus the difference of the means of `u` and `w` over `G`, divided by
@@ -282,7 +279,8 @@ lemma finMean_ite [Finite Γ] (u w : G ⋊[α] Γ → ℂ) :
   -- The difference of the two sums is carried by the copy of G, and |G ⋊ Γ| = |G| |Γ|. The mean
   -- over `G ⋊ Γ` is moved to `G × Γ` (`↓`) before `finMean` is unfolded.
   simp [↓finMean_equiv equivProd.symm, finMean, ite_sub, ← sub_eq_iff_eq_add', ← sum_sub_distrib,
-    field, finsum_eq_sum_of_fintype, Fintype.sum_prod_type, equivProd_symm_mk_one]
+    field, finsum_eq_sum_of_fintype, Fintype.sum_prod_type]
+  rfl
 
 open scoped Classical in
 /-- Let Y be a Γ-invariant irreducible character of G, Φ a virtual character of G⋊Γ with
