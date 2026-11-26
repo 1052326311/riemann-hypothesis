@@ -6,7 +6,6 @@ import Mathlib.RingTheory.Coalgebra.IsFrobenius
 import Mathlib.RingTheory.Etale.Weakly
 import Mathlib.RingTheory.HopfAlgebra.Basic
 import Mathlib.RingTheory.TotallySplit
-public import Mathlib.RingTheory.PicardGroup
 public import Lib.General.Algebra.FittingIdealsAndLengths
 
 /-!
