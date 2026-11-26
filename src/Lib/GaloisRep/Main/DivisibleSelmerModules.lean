@@ -1,5 +1,7 @@
-import Lib.GaloisRep.Main.SelmerModules
-import Lib.General.Algebra.BlockFittingBound
+module
+
+public import Lib.GaloisRep.Main.SelmerModules
+public import Lib.General.Algebra.BlockFittingBound
 
 /-!
 # Selmer modules with divisible coefficients
@@ -31,6 +33,8 @@ Notions from other files:
 Known. The comparison of Selmer groups with coefficients in `O / a` and in `Frac(O) / O` is
 standard; here it is immediate, because cocycles are counted and not classes.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -81,11 +85,8 @@ lemma selmerModuleMapOfInjective_apply {f : B →ₗ[O] B'} (hf : Function.Injec
 
 /-- An injective map of coefficient modules induces an injective map of Selmer modules. -/
 lemma selmerModuleMapOfInjective_injective {f : B →ₗ[O] B'} (hf : Function.Injective f) :
-    Function.Injective (selmerModuleMapOfInjective ρ S L hf) := by
-  intro z w h_eq
-  ext g i
-  apply hf
-  rw [← selmerModuleMapOfInjective_apply ρ S L hf z, h_eq, selmerModuleMapOfInjective_apply]
+    Function.Injective (selmerModuleMapOfInjective ρ S L hf) :=
+  fun _ _ h ↦ Subtype.ext (hf.comp_left.comp_left (congrArg Subtype.val h))
 
 /-- If `f` identifies `O / a` (that is, `QuotSpan a`) with the `a`-torsion of `B`, then composition
 with `f` maps the Selmer module (cocycles for `ρ` unramified outside `S` that obey the relations

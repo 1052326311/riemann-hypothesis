@@ -1,6 +1,8 @@
-import Lib.Adelic.AutomorphicForms.HeckeEigenforms
-import Lib.General.LinearAlgebra.BlockEmbeddings
-import Lib.LocalGL.Shintani.LiftingGreenCharacters
+module
+
+public import Lib.Adelic.AutomorphicForms.HeckeEigenforms
+public import Lib.General.LinearAlgebra.BlockEmbeddings
+public import Lib.LocalGL.Shintani.LiftingGreenCharacters
 
 /-!
 # Local GL_N(E_w)-action on forms, parahoric types and labels at a split place
@@ -35,6 +37,8 @@ Notions from other files:
 
 Known; see `Lib.GaloisRep.LocalGlobal.LabelCompatibility` for sources.
 -/
+
+@[expose] public section
 
 namespace New
 
@@ -169,7 +173,7 @@ lemma IsEigenform.of_mem_cyclicSpan {y : localFormRep V κ hw} {P : FinPlace E �
     have h_swap :
         V.formTranslation κ k (V.formTranslation κ (embedAtSplit hw g) x) =
           V.formTranslation κ (embedAtSplit hw g) (V.formTranslation κ k x) := by
-      rw [← Module.End.mul_apply, ← map_mul, h_comm.eq, map_mul, Module.End.mul_apply]
+      rw [← mul_apply_eq_comp, ← map_mul, h_comm.eq, map_mul, mul_apply_eq_comp]
     simpa [mem_levelSpace.mp h_fixed k] using h_swap
   · -- the Hecke operators at `u` commute with the translations at `w`, so each translate of `x`
     -- is an eigenvector with eigenvalue `t j`

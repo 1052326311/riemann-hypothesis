@@ -1,4 +1,6 @@
-import Lib.ClassField.Global.NormTheorems
+module
+
+public import Lib.ClassField.Global.NormTheorems
 
 /-!
 # Kummer characters, power indices and the existence theorem for totally complex fields
@@ -33,6 +35,8 @@ Notions from other files:
 
 Known; see `Lib.ClassField.Global.AlbertBrauerHasseNoether` for sources.
 -/
+
+@[expose] public section
 
 namespace New
 
@@ -769,7 +773,7 @@ private lemma QZChar.topologicalClosure_commutator_le_map_ker (χ : QZChar Γ) [
     exact ⟨_, h_mem, division_def _ _⟩
   have h_ker_closed : IsClosed ((ker χ : Subgroup Γ) : Set Γ) := inferInstance
   exact closure_minimal h_comm
-    (h_ker_closed.isClosedMap_subtype_val _ (isClosed_singleton.preimage hμ_cont))
+    (h_ker_closed.isClosedMap_subtypeVal _ (isClosed_singleton.preimage hμ_cont))
 
 /-- Let `Γ` be the Galois group of `Ω/K` for the algebraic closure `Ω` of `ℚ`. Let `χ` be a
 continuous character of `Γ` with values in `ℚ/ℤ` such that `Γ ⧸ ker χ` is finite, let `L` be the

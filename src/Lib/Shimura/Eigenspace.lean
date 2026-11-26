@@ -1,8 +1,10 @@
-import Lib.Cohomology.WoodsHole
-import Lib.PadicComparison.CrystallineFrobenius
-import Lib.PadicHodge.Limit.CrystallineLimit
-import Lib.Shimura.CongruenceRelation.EichlerShimura
-import Lib.Shimura.Transfer.Lefschetz
+module
+
+public import Lib.Cohomology.WoodsHole
+public import Lib.PadicComparison.CrystallineFrobenius
+public import Lib.PadicHodge.Limit.CrystallineLimit
+public import Lib.Shimura.CongruenceRelation.EichlerShimura
+public import Lib.Shimura.Transfer.Lefschetz
 
 /-!
 # Eigenquotients for Hecke eigensystems and the Galois representations they cut out
@@ -101,6 +103,8 @@ et représentations l-adiques, Sém. Bourbaki 355 (1969), Thm 4.9; Harris and Ta
 cohomology of some simple Shimura varieties (2001), ch. VII; Wedhorn, Congruence relations on some
 Shimura varieties, J. reine angew. Math. 524 (2000).
 -/
+
+@[expose] public section
 
 /-!
 ## The largest quotient on which Hecke operators act by an eigensystem
@@ -300,10 +304,7 @@ lemma IsEigenQuotient.exists_sum_baseChange_eq_zero_of_jump_eq_zero [Fintype ι]
   let Φ (v : ℤ) (L : List σ) :
       End (PadicAlgCl ℓ) (∀ i, hodgeTateMaps (ρ i) (toAlgHom ..) v) :=
     piMap fun i ↦ hodgeTateMaps.pull (L.map (T i)).prod
-      (.of_forall fun g x ↦ by
-        rw [← mul_apply_eq_comp, ← mul_apply_eq_comp, (Commute.list_prod_left _ _ fun t ht ↦ by
-          obtain ⟨s, -, rfl⟩ := List.mem_map.1 ht
-          exact hTρ i s g).eq])
+      (by simp [← mul_apply_eq_comp, -FunLike.coe_mul_eq_comp, (Commute.list_prod_left ..).eq, *])
   have h_alg : Algebra.IsAlgebraic ℤ_[ℓ] ℚ_[ℓ] := IsLocalization.isAlgebraic ℚ_[ℓ] ℤ_[ℓ]⁰
   have h_no_eigen (f : ∀ i : ι, hodgeTateMaps (ρ i) (toAlgHom ℤ_[ℓ] ℚ_[ℓ] ℂ_[ℓ]) u)
       (hf : ∀ s : σ, Φ u [s] f = (a ∘ θ) s • f) : f = 0 := by
@@ -360,6 +361,8 @@ lemma IsEigenQuotient.exists_sum_baseChange_eq_zero_of_jump_eq_zero [Fintype ι]
     have h_pair : Λ (tensorAction ℂ_[ℓ] (toGp g) (ρ i g) (∑ k, e k ⊗ₜ[ℤ_[ℓ]] x k)) z =
         Λ ((cyclotomicGp (toGp g) ^ (-u)).val • ∑ k, e k ⊗ₜ[ℤ_[ℓ]] x k) z :=
       congrArg (fun y' ↦ Λ y' z) (hy g)
+    -- Only the underlying form and its transformation law matter in this calculation.
+    generalize (z.val) = form at hg h_pair ⊢
     simpa [Λ, hg, Finset.smul_sum, tensorAction] using h_pair
   -- Every linear form on `ℂ_ℓ ⊗ V i` is the pairing with some form.
   refine (forall_dual_apply_eq_zero_iff ℂ_[ℓ] _).1 fun φ ↦ ?_
@@ -395,7 +398,7 @@ open scoped NumberField
 
 /-- If `R` is the localization of `𝓞 E` at a set `M` of denominators prime to `w`, then `R` is
 integral at every place `A` of `Ω` above `w`. -/
-lemma New.Variety.algebraMap_mem_of_isLocalization {E : Type} [Field E] [NumberField E]
+lemma New.Variety.algebraMap_mem_of_isLocalization {E : Type} [Field E]
     [Algebra E Ω] {R : Subalgebra (𝓞 E) E} {M : Submonoid (𝓞 E)} [IsLocalization M R]
     {w : FinPlace E} (hM : M ≤ w.asIdeal.primeCompl) {A : ClosurePlace} (hA : IsPlaceOver A w)
     (x : R) :
@@ -542,7 +545,7 @@ the model `X` act through the legs of the levels `l w` (`hT_pull`), whose pull-b
 the Hecke polynomial of `θ` at `w` kills `r s` for every geometric Frobenius `s` at `A`. -/
 lemma New.Variety.Model.aeval_heckePoly_eq_zero_of_isEigenQuotient {E : Type} [Field E] [CMBase E]
     {a d₀ : ℕ} [HasQuadSubfield d₀ E] {𝔑 : 𝓞 E} {ν : ℕ} {R : Subalgebra (𝓞 E) E}
-    (X : Model (Fin a) d₀ 𝔑 ν R) {ℓ : ℕ} [NeZero a] [ThePrime ℓ] [Algebra E Ω]
+    (X : Model (Fin a) d₀ 𝔑 ν R) {ℓ : ℕ} [ThePrime ℓ] [Algebra E Ω]
     (M : Submonoid (𝓞 E)) [IsLocalization M R] [PadicIso ℓ] (θ : SafePlace 𝔑 → ℕ → ℂ)
     {w : SafePlace 𝔑} {A : ClosurePlace} (hA : IsPlaceOver A w.val.val)
     (hR : ∀ x : CommRingCat.of R, algebraMap (CommRingCat.of R) Ω x ∈ A)

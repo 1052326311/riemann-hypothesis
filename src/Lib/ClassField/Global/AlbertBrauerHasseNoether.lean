@@ -1,6 +1,8 @@
-import Lib.ClassField.Global.ArtinMap
-import Lib.ClassField.HeckeL.ContinuationAtOne
-import Lib.General.NumberTheory.SUnitsAndClassNumber
+module
+
+public import Lib.ClassField.Global.ArtinMap
+public import Lib.ClassField.HeckeL.ContinuationAtOne
+public import Lib.General.NumberTheory.SUnitsAndClassNumber
 
 /-!
 # Real place symbols, the second inequality and Albert–Brauer–Hasse–Noether
@@ -48,6 +50,8 @@ Algebrenklassengruppe, Math. Ann. 107 (1933) (reciprocity from the sum formula).
 
 See also `Lib.ClassField.Places.LocalFields` and `Lib.ClassField.HeckeL.ContinuationAtOne`.
 -/
+
+@[expose] public section
 
 /-!
 ## Symbols of totally positive elements at the real places
@@ -709,7 +713,7 @@ lemma albert_brauer_hasse_noether (α : (unitsModule Γ).H2)
       ⟨U.normalCore, isOpen_of_isClosed_of_finiteIndex _ (normalCore_isClosed _ U.isClosed)⟩
     -- Restriction to `W` factors through restriction to `U`.
     have h_factor : (unitsModule Γ).resH2 W α =
-        (pairMapH2 (.mk (inclusion U.normalCore_le) (continuous_subtype_val.subtype_mk _)) .id)
+        (pairMapH2 (.mk (inclusion U.normalCore_le) (continuous_subtypeVal.subtype_mk _)) .id)
           ((unitsModule Γ).resH2 U α) := by
       induction α using QuotientAddGroup.induction_on
       rfl

@@ -1,5 +1,7 @@
-import Lib.Analytic.DirichletTheta
-import Lib.Analytic.EntireLFunction
+module
+
+public import Lib.Analytic.DirichletTheta
+public import Lib.Analytic.EntireLFunction
 
 /-!
 # A prime `d` in a class whose quadratic twists have no zero in a box
@@ -44,6 +46,8 @@ Heath-Brown, A mean value estimate for real character sums, Acta Arith. 72 (1995
 density bound for the twists of the characters of a fixed modulus, by a smoothed mean square of
 Jacobi symbol sums.
 -/
+
+@[expose] public section
 
 open ArithmeticFunction DirichletCharacter Complex Moebius Finset Real ZMod vonMangoldt LSeries
   Filter jacobiSym legendreSym MeasureTheory Nat NumberTheorySymbols
@@ -241,7 +245,6 @@ theorem three_lines_bound_of_LFunction_eq_zero :
       measurable_gaussianTheta).2
   have h_pos {x : ℝ} (hx : x ∈ Set.Icc 2⁻¹ 2) : 0 < x := lt_of_lt_of_le (by norm_num) hx.1
   have h_diff : DifferentiableOn ℂ Ψ (closure (verticalStrip 2⁻¹ 2)) := by
-    have hL_diff : Differentiable ℂ χ.LFunction := differentiable_LFunction hχ_ne
     have hΨ : DifferentiableOn ℂ Ψ {z : ℂ | 0 < z.re} := by fun_prop
     rw [verticalStrip, closure_preimage_re, closure_Ioo (by norm_num)]
     exact hΨ.mono fun z hz ↦ h_pos hz
@@ -824,7 +827,7 @@ lemma exists_entireL_quadTwist_ne_zero {N : ℕ} [NeZero N] {β : ℝ} (H : ℝ)
     (h_conv.abscissaOfAbsConv_le.trans_lt (mod_cast by simpa))
   -- The terms `Λ(p) / p` of the divergent series are those of this one, as `Λ(p) = log p`.
   refine not_summable_residueClass_prime_div ha (h_log.norm.of_norm_bounded fun n ↦ ?_)
-  show ‖(if n.Prime then residueClass a n else 0) / n‖ ≤ ‖term (logMul f) 1 n‖
+  change ‖(if n.Prime then residueClass a n else 0) / n‖ ≤ ‖term (logMul f) 1 n‖
   simp +contextual [f, Set.indicator, term, apply_ite, ite_and, ← natCast_log,
     vonMangoldt_apply_prime]
 

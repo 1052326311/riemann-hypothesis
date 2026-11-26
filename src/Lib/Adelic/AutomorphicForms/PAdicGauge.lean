@@ -1,6 +1,8 @@
-import Lib.Adelic.AutomorphicForms.HeckeEigenforms
-import Lib.General.LinearAlgebra.MatrixNormBounds
-import Lib.PadicComparison.Descent.TestCategory
+module
+
+public import Lib.Adelic.AutomorphicForms.HeckeEigenforms
+public import Lib.General.LinearAlgebra.MatrixNormBounds
+public import Lib.PadicComparison.Descent.TestCategory
 
 /-!
 # The p-adic gauge of algebraic forms, class sums, and integral forms of a level
@@ -44,6 +46,8 @@ Notions from other files:
 Known; see `Lib.Adelic.AutomorphicForms.SmoothAlgebraicForms` and `Lib.Adelic.Hecke.ClassSums` for
 sources.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -615,7 +619,7 @@ variable {E : Type} [Field E] [NumberField E] [IsCMField E] {S : LevelPlaces E}
 instance : Fact (χ.comp (levelOf.reduction S.placeAt H) =ᶠ[nhds 1] 1) := by
   -- The character is trivial on the open level of the trivial subgroup.
   refine ⟨.mono (((isOpen_levelOf (w := S.placeAt) (H := ⊥)).preimage
-    continuous_subtype_val).mem_nhds (by simp)) fun k hk ↦ ?_⟩
+    continuous_subtypeVal).mem_nhds (by simp)) fun k hk ↦ ?_⟩
   simp [show levelOf.reduction S.placeAt H k = 1 from Subtype.ext (mem_levelOf.mp hk).2]
 
 /-- Let φ, ψ be forms of the level cut out by H, σ ∈ Aut ℂ, p a permutation of the infinite places

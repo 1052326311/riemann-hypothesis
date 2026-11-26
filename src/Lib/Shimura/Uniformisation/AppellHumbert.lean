@@ -1,6 +1,7 @@
-import Lib.General.Analysis.HolomorphicIntegrals
-import Lib.Shimura.AbelianScheme.Pairings
-import Lib.Shimura.Uniformisation.HolomorphicFamilies
+module
+
+public import Lib.General.Analysis.HolomorphicIntegrals
+public import Lib.Shimura.Uniformisation.HolomorphicFamilies
 
 /-!
 # Existence in Appell–Humbert: projective embeddings are given by theta functions
@@ -46,6 +47,8 @@ Math. 78 (1963); A. Borel, Some finiteness properties of adele groups over numbe
 16 (1963); D. Mumford, Abelian Varieties §§1–2; L. Breen, Fonctions thêta et théorème du cube, LNM
 980 (1983).
 -/
+
+@[expose] public section
 
 open CategoryTheory CartesianMonoidalCategory Complex Over New LineBundle PointFn NormedAddGroup
 
@@ -155,7 +158,7 @@ private lemma New.exists_analyticAt_mul_double_eq {V : Type*} [NormedAddCommGrou
     obtain ⟨h_ne, -, h_double⟩ := h_small hz
     obtain ⟨h_ne₂, -⟩ := h_small hz₂
     rw [h_double]
-    simp [f, exp_log, h_ne, h_ne₂, c_ne, exp_add, ← exp_nat_mul, fieldEq]
+    simp [f, exp_log, h_ne, h_ne₂, c_ne, exp_add, ← exp_natCast_mul, fieldEq]
   suffices σ_spec : ∀ z : V, σ z ≠ 0 ∧ AnalyticAt ℂ (σ * Φ z) z from
     ⟨σ, q, fun z ↦ (σ_spec z).1, fun z ↦ (σ_spec z).2, σ_double⟩
   refine induction_on_double hr (fun z hz ↦ ?_) fun x ⟨h_ne, h_an⟩ ↦ ?_
@@ -302,7 +305,7 @@ private lemma New.isAppellHumbert_of_double_eq {V : Type*} [FinComplexSpace V] {
 /-- If theta functions of type (B, χ) are homogeneous coordinates of a projective embedding of a
 uniformised group, then the Riemann form of B is positive. -/
 private lemma New.Uniformisation.isPosRiemann_of_hasThetaCoords
-    {A : Over (AlgebraicGeometry.Spec (CommRingCat.of ℂ))} [AddObj A] {ι V : Type} [Finite ι]
+    {A : Over (AlgebraicGeometry.Spec (CommRingCat.of ℂ))} [AddObj A] {ι V : Type}
     [FinComplexSpace V] (u : Uniformisation (O := ℂ) A V) {N : LineBundle A.left ι}
     (hN : IsProjEmbedding (ι := ι) N A.hom) {B : ThetaTori.LatticeForm u.lattice} {χ : V → ℂ}
     {θ : V → ι → ℂ} (h_theta : HasThetaCoords u.lattice (atGeneric u.expMap) N B χ θ) :

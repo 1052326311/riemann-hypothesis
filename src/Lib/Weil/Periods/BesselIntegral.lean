@@ -1,5 +1,7 @@
-import Lib.Adelic.QuotientMeasure.UnfoldingInStages
-import Lib.Weil.DualPair.WeilAction
+module
+
+public import Lib.Adelic.QuotientMeasure.UnfoldingInStages
+public import Lib.Weil.DualPair.WeilAction
 
 /-!
 # Integrals over the Bessel subgroup and the orbits surviving unipotent twists
@@ -35,6 +37,8 @@ Notions from other files:
 
 Known; see `Lib.Weil.Periods.Unfolding` and `Lib.Adelic.Reduction.FiniteVolume` for sources.
 -/
+
+@[expose] public section
 
 /-!
 ## The Bessel subgroup, Eichler maps and integrals over [B]
@@ -345,10 +349,7 @@ private lemma exists_continuous_unipotent_besselRow_mul {q : Type*} [Fintype q]
     Pi.single_eq_of_ne (by omega : Y.gradeOf p ≠ 1) 1
   have y_supp (b : q × X → 𝔸 E) (l : ι) (hl : Y.gradeOf l ≠ -0) : y b l = 0 := by
     refine Finset.sum_eq_zero fun k _ ↦ ?_
-    have l_ne : l ≠ Y.indexEquiv (.inl k.snd) := by
-      rintro rfl
-      exact hl (Y.gradeOf_inl k.snd)
-    rw [ite_eq_right l_ne, zero_mul]
+    rw [ite_eq_right (ne_of_apply_ne Y.gradeOf (by rwa [gradeOf_inl])), zero_mul]
   have exists_u (b : q × X → 𝔸 E) : ∃ u ∈ Y.unipotent,
       V.ratCoordMatrix u = eichlerMap J x (y b) (toAdele 2⁻¹ * star (y b) ⬝ᵥ J *ᵥ y b) :=
     Y.exists_ratCoordMatrix_eq_eichlerMap x (y b) 0 x_supp (y_supp b)
@@ -450,7 +451,7 @@ lemma integral_besselMeasure_eq_of_mean {q : Type*} [Fintype q]
     .trans ?_ (push M M_cont.measurable M_inv)⟩
   have M_comp_pr_inv : (Y.ratBessel.subgroupOf Y.besselGroup).FixesLeft (fun r ↦ M (pr r)) := by
     intro γ hγ r
-    show M (pr (γ * r)) = M (pr r)
+    change M (pr (γ * r)) = M (pr r)
     rw [map_mul, M_inv _ (pr_rat γ hγ)]
   rw [← sub_eq_zero, ← integral_sub (integrable_of_isCocompact Y.isCocompact_ratBessel φ_cont φ_inv)
     (integrable_of_isCocompact Y.isCocompact_ratBessel (by fun_prop) M_comp_pr_inv)]
@@ -465,7 +466,7 @@ lemma integral_besselMeasure_eq_of_mean {q : Type*} [Fintype q]
       (mem_unip _).mp (unip_part r)
     simp only [j₀, map_mul, map_inv, pr_u, pr_unip, inv_one, mul_one]
   have j_mem (r : Y.besselGroup) (b : q × X → 𝔸 E) : j₀ r b ∈ S := by
-    show pr (j₀ r b) ∈ (stdSpace E X).Γ
+    change pr (j₀ r b) ∈ (stdSpace E X).Γ
     rw [pr_j₀ r b]
     exact one_mem _
   let j (r : Y.besselGroup) (b : q × X → 𝔸 E) : S := ⟨j₀ r b, j_mem r b⟩
@@ -560,11 +561,8 @@ lemma formAdjoint_mul_self_mulVec_apply_eq_of_survives {w : Matrix ι' ι (𝔸 
   let x : ι → 𝔸 E :=
     Pi.single (Y.stringReversal k) (star (↑(j⁻¹ * V.J⁻¹ k (Y.stringReversal k)) * t))
   have v_supp (p : ι) (hp : Y.gradeOf p ≤ 0 ⊔ Y.gradeOf k) : v p = 0 := hv p (by omega)
-  have x_supp (q : ι) (hq : Y.gradeOf q ≠ -Y.gradeOf k) : x q = 0 := by
-    have q_ne : q ≠ Y.stringReversal k := by
-      rintro rfl
-      exact hq (Y.gradeOf_stringReversal k)
-    exact Pi.single_eq_of_ne q_ne _
+  have x_supp (q : ι) (hq : Y.gradeOf q ≠ -Y.gradeOf k) : x q = 0 :=
+    Pi.single_eq_of_ne (ne_of_apply_ne Y.gradeOf (by rwa [gradeOf_stringReversal])) _
   obtain ⟨u, u_mem, u_mat⟩ : ∃ u ∈ Y.unipotent, V.ratCoordMatrix u =
       eichlerMap (V.J.map toAdele) v x (toAdele 2⁻¹ * star x ⬝ᵥ V.J.map toAdele *ᵥ x) :=
     Y.exists_ratCoordMatrix_eq_eichlerMap v x (Y.gradeOf k) v_supp x_supp
@@ -665,7 +663,7 @@ lemma agreesWithStringMap_mul_iff {w : Matrix ι' ι (𝔸 E)} {γ : G E ε} (h�
   -- The entry `(b, a)` of `(δ - 1) * (w * γ)` is this entry times a unit (`col`, using `ih`), and
   -- it vanishes because `δ * (w * γ)` and `w * γ` both agree with `stringMap` there.
   rw [← unit.mul_left_eq_zero, ← col agrees _ h_row, ← Matrix.mul_apply', Matrix.sub_mul]
-  show (V'.ratCoordMatrix δ * (w * V.ratCoordMatrix γ) -
+  change (V'.ratCoordMatrix δ * (w * V.ratCoordMatrix γ) -
       (1 : Matrix ι' ι' (𝔸 E)) * (w * V.ratCoordMatrix γ)) b a = 0
   simp (disch := grind) [hδ b a, agrees b a]
 
@@ -727,7 +725,7 @@ private lemma hasLeftInv_submatrix_of_survives {x : Matrix ι' ι E}
   refine .of_ker_le_bot fun u hu ↦ funext (int_weight_induction (fun a : A ↦ Y.gradeOf a) ?_)
   -- Indices of positive weight lie on the string; let `a` be the last one there with `u a ≠ 0`.
   simp [A, reindex_equiv Y.indexEquiv]
-  show ∀ (b : Fin s) (hb : 2 * ((b : ℕ) : ℤ) < (s : ℤ) - 1),
+  change ∀ (b : Fin s) (hb : 2 * ((b : ℕ) : ℤ) < (s : ℤ) - 1),
     (∀ (b' : Fin s) (hb' : 2 * ((b' : ℕ) : ℤ) < (s : ℤ) - 1), b < b' →
       u ⟨Y.indexEquiv (.inr b'), _⟩ = 0) → u ⟨Y.indexEquiv (.inr b), _⟩ = 0
   by_contra! ⟨a, a_pos, ih, u_ne⟩
