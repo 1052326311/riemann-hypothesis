@@ -3,6 +3,7 @@ module
 public import Lib.DiscreteSeries.Bruhat.FloorGroups
 public import Lib.General.Measure.IntegralOperators
 public import Lib.General.Measure.QuadricDisintegration
+import TauCeti.Algebra.Group.AddChar.Basic
 
 /-!
 # Heisenberg elements, measures of the floors, hyperbolic bases and Plancherel at a place
@@ -940,10 +941,9 @@ lemma Place.lintegral_damped_fourier_le (ξ : A) {G : A → ℝ} (hG : Continuou
   -- The transform of the damping factor is a product of transforms of `G`.
   have h_factor (z : ι → A) : ‖∫ v : ι → A, P.ψ (ξ * star v ⬝ᵥ z) * ∏ i : ι, (G (v i) : ℂ)‖ₑ ≤
       ∏ i : ι, ‖∫ v : A, G v * P.ψ (star v * ξ * z i)‖ₑ := by
-    have ψ_sum (s : Finset ι) (x : ι → A) : P.ψ (∑ i ∈ s, x i) = ∏ i ∈ s, P.ψ (x i) := by
-      induction s using Finset.cons_induction <;> simp [*, AddChar.map_add_eq_mul]
     simp [eNorm, ← ofNNReal_finsetProd, ← nnNorm_prod, ← integral_fintype_prod_volume_eq_prod,
-      dotProduct, Finset.mul_sum, Finset.prod_mul_distrib, mul_comm, mul_left_comm, ψ_sum]
+      dotProduct, Finset.mul_sum, Finset.prod_mul_distrib, mul_comm, mul_left_comm,
+      AddChar.map_sum_eq_prod]
   -- For a fixed difference `z = w' - w`, Cauchy–Schwarz bounds `∫ |f w| |f (w + z)|`.
   have h_cauchy (z : ι → A) :
       ∫⁻ w : ι → A, ‖f w‖ₑ * ‖f (w + z)‖ₑ ≤ ∫⁻ w : ι → A, ‖f w‖ₑ ^ 2 := by
