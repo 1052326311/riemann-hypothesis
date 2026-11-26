@@ -948,7 +948,7 @@ lemma thetaKernelPairing_adjoint_glue_eq_zero {w : FinPlace D.E} {hw : star w �
     by_cases hi : i' = i
     · simp only [η, ite_eq_left hi]
       exact sum_slice_eq_zero_of_mem_falseLiftsAt j ϑ hΞ (glueLattice j ϑ i') h _ _ _ g
-    · simp [η, hi]
+    · simp only [η, hi, ↓reduceIte, map_zero]
       exact Finset.sum_eq_zero fun _ _ ↦ rfl
   refine star_eq_zero.1 ?_
   calc star (thetaKernelPairing j (fun c ↦ (glue j ϑ).adjoint Ξ (i, c)) g)
