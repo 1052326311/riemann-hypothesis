@@ -1,5 +1,7 @@
 module
 
+public import Mathlib.Analysis.CStarAlgebra.Exponential
+public import Mathlib.RingTheory.Etale.Weakly
 public import Lib.GLn.SchurModule.TensorModel
 public import Lib.Shimura.ComplexTheta.AppellHumbertData
 
@@ -243,7 +245,7 @@ lemma weylKernel_symm :
 
 end
 
-omit [∀ τ : Φ, DecidableEq (n τ)] in
+omit [DecidableEq Φ] [∀ τ : Φ, DecidableEq (n τ)] in
 /-- Multiplying `y` on the right by the upper triangular part of `b` scales the kernel `K(·, y)`
 by `∏ b(τ, i, i) ^ λ(τ, i)`, with `λ = New.diagramWeight (rankAt n) κ`. -/
 lemma weylKernel_borelMul (b : Φ × ℕ × ℕ → R) :

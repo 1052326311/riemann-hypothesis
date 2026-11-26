@@ -804,20 +804,23 @@ lemma keepsLineMod_lineElement : KeepsLineMod i (lineElement w i) where
       simp [toSquareBlockProp_def, diagonal_apply, Matrix.one_apply, ha, h_one]
     simp [h_block]
 
+private lemma KeepsLineMod.mul_residue_eq_zero {g h : GL n (LocField w)}
+    (hg : KeepsLineMod i g) (hh : KeepsLineMod i h)
+    (h_zero : residueOrZero (g i i) = 0 ∨ residueOrZero (h i i) = 0) :
+    KeepsLineMod i (g * h) ∧ residueOrZero ((g * h) i i) = 0 :=
+  ⟨hg.mul hh, by rw [hg.residue_mul_apply_self hh, mul_eq_zero]; exact h_zero⟩
+
 /-- An element `g` of the double coset of `diag (ϖ, 1, …, 1)` by the stabiliser of the line of
 `e_i` is integral, and modulo `w` it has the shape `(0 ∗; 0 g')` with `g'` invertible. -/
 lemma keepsLineMod_of_mem_doubleCoset
     (hg : g ∈ doubleCoset (lineElement w i) (lineStabilizer w i) (lineStabilizer w i)) :
     KeepsLineMod i g ∧ residueOrZero (g i i) = 0 := by
   obtain ⟨j, hj, j', hj', rfl⟩ := mem_doubleCoset.1 hg
-  have h_left : KeepsLineMod i (j * lineElement w i) :=
-    (keepsLineMod_of_mem hj).mul keepsLineMod_lineElement
   have h_corner : residueOrZero (lineElement w i i i) = 0 := by
     simp [coe_lineElement, residueOrZero_eq_zero]
-  refine ⟨h_left.mul (keepsLineMod_of_mem hj'), ?_⟩
-  rw [h_left.residue_mul_apply_self (keepsLineMod_of_mem hj'),
-    (keepsLineMod_of_mem hj).residue_mul_apply_self keepsLineMod_lineElement, h_corner, mul_zero,
-    zero_mul]
+  obtain ⟨h_left, h_zero⟩ := (keepsLineMod_of_mem hj).mul_residue_eq_zero
+    keepsLineMod_lineElement (.inr h_corner)
+  exact h_left.mul_residue_eq_zero (keepsLineMod_of_mem hj') (.inl h_zero)
 
 lemma spanOn_mono {G : Type} [Group G] {D D' : Set G} (h_sub : D ⊆ D') :
     spanOn ℂ D ≤ spanOn ℂ D' :=
@@ -837,7 +840,7 @@ theorem lineHecke_pow_mem_spanOn {m : ℕ} (hm : 0 < m) : lineHecke w i ^ m ∈
       (doubleCosetSum_mem_spanOn (isHeckeFunction_indicator_doubleCoset w i _).1)
   have h_mul : ∀ g ∈ D, ∀ h : GL n (LocField w), KeepsLineMod i h → g * h ∈ D :=
     fun g ⟨hg, hg_zero⟩ h hh ↦
-      ⟨hg.mul hh, by rw [hg.residue_mul_apply_self hh, hg_zero, zero_mul]⟩
+      hg.mul_residue_eq_zero hh (.inl hg_zero)
   have h_pow : lineHecke w i ^ m ∈ spanOn ℂ D := by
     induction hm with
     | refl => rwa [pow_one]

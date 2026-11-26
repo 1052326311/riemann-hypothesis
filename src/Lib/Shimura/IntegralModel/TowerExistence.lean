@@ -1,5 +1,6 @@
 module
 
+public import Mathlib.Combinatorics.Enumerative.IncidenceAlgebra
 public import Lib.General.Combinatorics
 public import Lib.Shimura.CongruenceRelation.HeckeNeighbours
 public import Lib.Shimura.IntegralModel.BallImmersion
@@ -363,7 +364,7 @@ variable {E : Type} [Field E] [CMBase E] {R : Subalgebra (𝓞 E) E}
   {D : PEL E} {U : UniversalFamily D R} {ν : ℕ}
 
 private lemma ModuliPoint.act_eq_self {n : Type} [Fintype n] [DecidableEq n]
-    (a : ModuliPoint E n ν) {g : GUPlus E n} (hg : g.1 = 1) : a.act g = a := by
+    (a : ModuliPoint E n ν) {g : GUPlus E n} (hg : g.val = 1) : a.act g = a := by
   cases a
   simp only [act, hg, mul_one, Pi.one_apply, map_one, one_smul]
 
@@ -385,7 +386,7 @@ private noncomputable abbrev towerPairs (D : PEL E) (M : nonZeroDivisors (𝓞 E
     (i : Finset (nonZeroDivisors (𝓞 E) × GUPlus E D.Index))
     (j : TowerQuot D M × ↥(insert (M, 1) (insert 1 i))) :
     nonZeroDivisors (𝓞 E) × GUPlus E D.Index :=
-  (j.2.1.1, ⟨_, mem_GUPlus_of_mem_levelGU j.1.out.2⟩ * j.2.1.2)
+  (j.2.val.1, ⟨_, mem_GUPlus_of_mem_levelGU j.1.out.property⟩ * j.2.val.2)
 
 open scoped Classical in
 /-- On the cover `C` of level `i` with pairs `New.Variety.towerPairs D M i`, the factor `(⟦κ⟧, x)`
@@ -398,9 +399,9 @@ private lemma UniversalFamily.GraphClosure.point_comp_proj_towerPairs
     (C : U.GraphClosure (towerPairs D M i) ν) {a : ModuliPoint E D.Index ν}
     (x : ↥(insert (M, 1) (insert 1 i))) (κ : levelGU D.Index D.level) :
     C.point a ≫ C.proj (⟦κ⟧, x) =
-      U.datumPoint x.1.1 (a.act (⟨κ, mem_GUPlus_of_mem_levelGU κ.2⟩ * x.1.2)) := by
+      U.datumPoint x.val.1 (a.act (⟨κ, mem_GUPlus_of_mem_levelGU κ.property⟩ * x.val.2)) := by
   -- `κ⁻¹` times the chosen representative of `⟦κ⟧` has level `M`
-  have h_deep : (κ.1⁻¹ * (κ : TowerQuot D M).out) ∈ levelGU D.Index (M : 𝓞 E) := by
+  have h_deep : (κ.val⁻¹ * (κ : TowerQuot D M).out) ∈ levelGU D.Index (M : 𝓞 E) := by
     have h := Subgroup.normalCore_le _ (QuotientGroup.eq.1 (κ : TowerQuot D M).out_eq.symm)
     rw [Subgroup.mem_subgroupOf, Subgroup.coe_mul, Subgroup.coe_inv] at h
     exact h
@@ -413,11 +414,11 @@ private lemma UniversalFamily.GraphClosure.point_comp_proj_towerPairs
   have hframe :
       (a.act (⟨κ, mem_GUPlus_of_mem_levelGU κ.2⟩ * x.1.2)).frame⁻¹ * toFinGL (1 : GL D.Index E) *
         (a.act (towerPairs D M i (⟦κ⟧, x)).2).frame =
-      (x.1.2 : GL D.Index (𝔸f E))⁻¹ * (κ.1⁻¹ * (κ : TowerQuot D M).out.1) * x.1.2 := by
+      (x.val.2 : GL D.Index (𝔸f E))⁻¹ * (κ.val⁻¹ * (κ : TowerQuot D M).out.val) * x.val.2 := by
     simp only [act, Submonoid.coe_mul, map_one, mul_one, mul_inv_rev, mul_assoc,
       inv_mul_cancel_left]
   rw [hframe]
-  exact hM _ x.2 _ h_deep
+  exact hM _ x.property _ h_deep
 
 open scoped Classical in
 /-- The element `κ` of `levelGU D.Index D.level` acts on the cover `C` of level `i` by a map `p`
@@ -431,10 +432,10 @@ private lemma UniversalFamily.GraphClosure.exists_deck_towerPairs
       (∀ j : TowerQuot D M × ↥(insert (M, 1) (insert 1 i)),
         p ≫ C.proj j = C.proj (κ⁻¹ * j.1, j.2)) ∧
         ∀ a : ModuliPoint E D.Index ν,
-          C.point a ≫ p = C.point (a.act ⟨↑κ⁻¹, mem_GUPlus_of_mem_levelGU κ⁻¹.2⟩) :=
+          C.point a ≫ p = C.point (a.act ⟨↑κ⁻¹, mem_GUPlus_of_mem_levelGU κ⁻¹.property⟩) :=
   C.exists_lift _ _ fun a j ↦ by
     rw [← j.1.out_eq, ← QuotientGroup.mk_mul, C.point_comp_proj_towerPairs hM]
-    refine congrArg (U.datumPoint j.2.1.1) ?_
+    refine congrArg (U.datumPoint j.2.val.1) ?_
     rw [act_mul, ← mul_assoc]
     rfl
 
@@ -450,7 +451,7 @@ private lemma UniversalFamily.GraphClosure.eq_of_point_comp_deck_eq
       (x.2 : GL D.Index (𝔸f E))⁻¹ * k * x.2 ∈ levelGU D.Index D.level ⊓ levelGU D.Index x.1)
     (C : U.GraphClosure (towerPairs D M i) ν) {p : levelGU D.Index D.level → (C.scheme ⟶ C.scheme)}
     (hp : ∀ (κ : levelGU D.Index D.level) (a : ModuliPoint E D.Index ν),
-      C.point a ≫ p κ = C.point (a.act ⟨↑κ⁻¹, mem_GUPlus_of_mem_levelGU κ⁻¹.2⟩))
+      C.point a ≫ p κ = C.point (a.act ⟨↑κ⁻¹, mem_GUPlus_of_mem_levelGU κ⁻¹.property⟩))
     {x : ModuliPoint E D.Index ν} {κ κ' : levelGU D.Index D.level}
     (h_eq : C.point x ≫ p κ = C.point x ≫ p κ') :
     (κ : TowerQuot D M) = κ' := by
@@ -463,12 +464,12 @@ private lemma UniversalFamily.GraphClosure.eq_of_point_comp_deck_eq
   simp only [act, mul_one, Subgroup.coe_mul, Subgroup.coe_inv, mul_inv_rev, inv_inv, mul_assoc,
     inv_mul_cancel_left] at h_level_𝔑 h_level_M
   have h_aut : x.frame⁻¹ * toFinGL z * x.frame ∈ levelGU D.Index D.level := by
-    have h1 : q.1 * (κ.1⁻¹ * (κ'.1 * (x.frame⁻¹ * (toFinGL z * x.frame)))) ∈
+    have h1 : q.val * (κ.val⁻¹ * (κ'.val * (x.frame⁻¹ * (toFinGL z * x.frame)))) ∈
         levelGU D.Index D.level := by
-      simpa only [mul_assoc, inv_mul_cancel, mul_one] using mul_mem h_level_𝔑 q.2
-    have h2 := (mul_mem_cancel_left q.2).mp h1
-    have h3 := (mul_mem_cancel_left (inv_mem κ.2)).mp h2
-    have h4 := (mul_mem_cancel_left κ'.2).mp h3
+      simpa only [mul_assoc, inv_mul_cancel, mul_one] using mul_mem h_level_𝔑 q.property
+    have h2 := (mul_mem_cancel_left q.property).mp h1
+    have h3 := (mul_mem_cancel_left (inv_mem κ.property)).mp h2
+    have h4 := (mul_mem_cancel_left κ'.property).mp h3
     rwa [mul_assoc]
   obtain rfl : z = 1 := hN.eq_one_of_mem_levelGU x.isSignedFrame h_aut hz.reflection_eq
   simp only [map_one, one_mul, inv_mul_cancel_left] at h_level_M
@@ -537,8 +538,8 @@ lemma New.Variety.exists_model {E : Type} [Field E] [CMBase E]
         exact congrArg (C i).point (act_eq_self a (by simp only [inv_one, Subgroup.coe_one]))⟩,
       fun κ₁ κ₂ ↦
         have hg : (⟨↑(κ₁ * κ₂)⁻¹, mem_GUPlus_of_mem_levelGU (κ₁ * κ₂)⁻¹.2⟩ : GUPlus E D.Index) =
-            ⟨↑κ₂⁻¹, mem_GUPlus_of_mem_levelGU κ₂⁻¹.2⟩ *
-              ⟨↑κ₁⁻¹, mem_GUPlus_of_mem_levelGU κ₁⁻¹.2⟩ :=
+            ⟨↑κ₂⁻¹, mem_GUPlus_of_mem_levelGU κ₂⁻¹.property⟩ *
+              ⟨↑κ₁⁻¹, mem_GUPlus_of_mem_levelGU κ₁⁻¹.property⟩ :=
           Subtype.ext (by simp only [Submonoid.coe_mul, Subgroup.coe_inv, Subgroup.coe_mul,
             mul_inv_rev])
         End.ext <| (C i).isSeparatingFamily.hom_ext fun a ↦ by
@@ -581,7 +582,7 @@ lemma New.Variety.exists_model {E : Type} [Field E] [CMBase E]
                (Quot.ind fun κ ↦ ?_) ?_ ?_
              · -- `u i ⟦1⟧` is invariant under the deck group
                exact (comp_u (pt_p κ) 1 (one_mem_s i)).trans (congrArg (u i) (QuotientGroup.eq.mpr
-                 (by rw [mul_one, mul_one, Subgroup.coe_inv, inv_inv]; exact κ.2)))
+                 (by rw [mul_one, mul_one, Subgroup.coe_inv, inv_inv]; exact κ.property)))
              · -- its image is closed and contains the dense points `U.datumPoint 1 a`
                exact dense.surjective _ _ fun a ↦ congr($(pt_u_one a).1)
              · -- simply transitive on fibres; every complex point is some `(C i).point x`

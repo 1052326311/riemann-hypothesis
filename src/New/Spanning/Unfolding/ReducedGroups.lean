@@ -57,8 +57,8 @@ def unitriangularEquiv (R : Type*) [CommRing R] : unitriangular lev R ≃ (FreeE
   left_inv u := by
     ext i j
     change (if lev i < lev j then (u : GL n R) i j else (1 : Matrix n n R) i j) = (u : GL n R) i j
-    exact ite_eq_left_iff.2 fun hij ↦ (u.2 i j (not_lt.1 hij)).symm
-  right_inv a := funext fun p ↦ dite_eq_left p.2
+    exact ite_eq_left_iff.2 fun hij ↦ (u.property i j (not_lt.1 hij)).symm
+  right_inv a := funext fun p ↦ dite_eq_left p.property
 
 /-- The block unitriangular matrix with the free entries `a` has the entry `a (i, j)` at a pair
 `(i, j)` with `lev i < lev j`. -/
@@ -82,11 +82,11 @@ lemma exists_unitriangular_map_eq {ι : Type*} {F : ι → Type*} [∀ p : ι, C
   -- Lift the free entries; the others are those of the identity matrix.
   choose lift h_lift using fun e : FreeEntry lev ↦ hf fun p ↦ s p e.val.1 e.val.2
   let u : unitriangular lev R := (unitriangularEquiv lev R).symm lift
-  refine ⟨u, u.2, fun p ↦ GeneralLinearGroup.ext fun i j ↦ ?_⟩
+  refine ⟨u, u.property, fun p ↦ GeneralLinearGroup.ext fun i j ↦ ?_⟩
   change f p ((u : GL n R) i j) = s p i j
   obtain h_free | h_fixed := lt_or_ge (lev i) (lev j)
   · rw [unitriangularEquiv_symm_apply_of_lt lev lift h_free, h_lift]
-  · rw [u.2 i j h_fixed, hs p i j h_fixed, map_matrix_one_apply]
+  · rw [u.property i j h_fixed, hs p i j h_fixed, map_matrix_one_apply]
 
 /-- The level function `BesselIndex.level` has the block sizes `1, …, 1, m, 1, …, 1`, with `ϱ` ones
 on each side and `m` the cardinality of `μ`. It has `(2ϱ choose 2) + 2ϱ m` free entries. -/
@@ -316,8 +316,8 @@ theorem card_reducedImage_besselU : Nat.card (S.reducedImage besselU) = S.unipot
   let d : ℕ := 𝔰.ϱ * (2 * 𝔰.k + 2 * 𝔰.ϱ + 1)
   let equivPi : S.reducedImage besselU ≃ ∀ (i : Fin 2) (w : S.chosenPlaces i),
       unitriangular (BesselIndex.level : 𝔰.BesselIndex → ℕ) (ResField (w : FinPlace E)) :=
-    { toFun s i w := ⟨(s : S.ResidueGL) i w, S.mem_reducedImage_besselU.1 s.2 i w⟩
-      invFun t := ⟨fun i w ↦ t i w, S.mem_reducedImage_besselU.2 fun i w ↦ (t i w).2⟩ }
+    { toFun s i w := ⟨(s : S.ResidueGL) i w, S.mem_reducedImage_besselU.1 s.property i w⟩
+      invFun t := ⟨fun i w ↦ t i w, S.mem_reducedImage_besselU.2 fun i w ↦ (t i w).property⟩ }
   calc Nat.card (S.reducedImage besselU)
       = ∏ i : Fin 2, ∏ w : S.chosenPlaces i, Nat.card
           (unitriangular (BesselIndex.level : 𝔰.BesselIndex → ℕ) (ResField (w : FinPlace E))) := by
@@ -350,10 +350,10 @@ theorem relIndex_comap_principalLevel :
   -- The subgroup is the kernel of the reduction, whose image is `H̄`.
   let reduce := S.reduction.comp (S.inclHFin.subgroupComap S.latticeStabilizer)
   refine (congrArg Subgroup.index (a₂ := reduce.ker) (Subgroup.ext fun k ↦
-    S.coe_mem_principalLevel_iff_reduction_eq_one (k := ⟨S.inclHFin k, k.2⟩))).trans ?_
+    S.coe_mem_principalLevel_iff_reduction_eq_one (k := ⟨S.inclHFin k, k.property⟩))).trans ?_
   suffices reduce.range = S.reducedImage besselH by rw [Subgroup.index_ker, this]
   ext s
-  refine ⟨fun ⟨k, hk⟩ ↦ hk ▸ S.reduction_inclHFin_mem_reducedImage_besselH k.2, ?_⟩
+  refine ⟨fun ⟨k, hk⟩ ↦ hk ▸ S.reduction_inclHFin_mem_reducedImage_besselH k.property, ?_⟩
   rintro ⟨⟨x, hx⟩, hx_mem, rfl⟩
   obtain ⟨k, rfl⟩ : x ∈ S.inclHFin.range := range_inclHFin.ge hx_mem
   exact ⟨⟨k, hx⟩, rfl⟩

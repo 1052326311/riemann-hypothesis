@@ -1,5 +1,6 @@
 module
 
+public import Mathlib.Algebra.Order.Star.Int
 public import Lib.GLn.SchurModule.Basic
 public import Lib.General.Groups.BesselGroups
 
@@ -128,7 +129,7 @@ def map : FrobeniusCycle N W R' :=
 even, ι_s of the inverse transpose if s is odd. -/
 @[simps -isSimp]
 def letterMatrix : GL (Fin k) W →* Matrix (Fin k) (Fin k) R where
-  toFun g := (if T.isEven s then ↑g else g⁻¹.1ᵀ).map (T.embedding s)
+  toFun g := (if T.isEven s then ↑g else g⁻¹.valᵀ).map (T.embedding s)
   map_one' := by simp
   map_mul' g h := by cases T.isEven s <;> simp [Matrix.map_mul]
 

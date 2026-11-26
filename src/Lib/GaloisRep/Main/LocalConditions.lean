@@ -1,6 +1,6 @@
 module
 
-public import Lib.GaloisRep.Main.Defs
+public import Lib.General.LinearAlgebra.MatrixPolynomials
 public import Lib.PadicHodge.Crystalline.HodgeTateJumps
 public import Lib.PadicHodge.Crystalline.Regularity
 

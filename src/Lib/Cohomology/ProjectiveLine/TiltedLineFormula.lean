@@ -1,5 +1,6 @@
 module
 
+public import Mathlib.CategoryTheory.Limits.Shapes.Pullback.IsPullback.Kernels
 public import Lib.Cohomology.ProjectiveLine.PerfectLine
 public import Lib.Cohomology.ProperBaseChange.Theorem
 
@@ -605,12 +606,14 @@ lemma TorsionCoeff.sliceEquiv_mulClass (v : TotalH S M.functor) :
       M.onElements.mulClass (S := π ⋙ S) η (TotalH.map (restrictAlong π) v) := by
     have h_natural := M.mulClass_naturality π M.onElements (homClass (𝟙 (π ⋙ M.functor)))
       (etaClass g).toTotalH v
-    erw [h_id, h_id, map_restrictAlong_etaClass] at h_natural
+    refine (h_id _).symm.trans (.trans ?_
+      (congrArg (M.onElements.mulClass (S := π ⋙ S) η) (h_id v)))
+    simp only [map_restrictAlong_etaClass] at h_natural
     exact h_natural
   -- Restricting and then evaluating at the tautological point is the definition of `sliceEquiv`.
   change pullbackAlong (tensorPoint (freeAb.map tautologicalSection) (π ⋙ S))
     (TotalH.map (restrictAlong π) (M.mulClass (etaClass g).toTotalH v)) = _
-  erw [h_res]
+  refine (congrArg (pullbackAlong (tensorPoint (freeAb.map tautologicalSection) (π ⋙ S))) h_res).trans ?_
   exact M.onElements.mulClass_eq_comp_etaAt (S := π ⋙ S) η _ rfl _
 
 

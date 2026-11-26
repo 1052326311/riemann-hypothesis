@@ -1,5 +1,10 @@
 module
 
+public import Mathlib.Analysis.SpecialFunctions.Complex.Circle
+public import Mathlib.Dynamics.FixedPoints.Topology
+public import Mathlib.Order.CompletePartialOrder
+public import Mathlib.RingTheory.PiTensorProduct
+public import Mathlib.Tactic.Linter.Style
 public import Lib.Adelic.Adeles.Basic
 public import Lib.Adelic.QuotientMeasure.Basic
 public import Lib.General.Groups.CongruenceSubgroups
@@ -451,7 +456,8 @@ lemma finite_preimage_of_discreteTopology_range {B I : Type*} [AddCommGroup B] [
   -- `f` tends to infinity along the cofinite filter
   simpa using f.tendsto_coe_cofinite_of_isDiscrete hf_inj ⟨h_disc⟩ hC.compl_mem_cocompact
 
-omit [SecondCountableTopology B] [LocallyCompactSpace B] [(volume (α := B)).IsAddHaarMeasure] in
+omit [SecondCountableTopology B] [LocallyCompactSpace B] [(volume (α := B)).IsAddHaarMeasure]
+    [T2Space B] in
 /-- Let `f : I →+ B` be an injective additive map whose image is a lattice of covolume one in `B`
 (discrete, with compact quotient of measure one). Then for every compact set `C`, only finitely many
 `a` in `I` have `f a ∈ C`. -/

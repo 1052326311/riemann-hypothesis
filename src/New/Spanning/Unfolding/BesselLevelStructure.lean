@@ -323,7 +323,7 @@ lemma besselFn_adelicToInf_mul_eq_prod_wave_smul {x : S.G (𝔸 E)} {side : Full
   have h_loc (v : InfinitePlace E) (g : 𝔰.G₁) :
     (S.besselSystem v).besselFn side (S.adelicToInf x v * g) =
       wave (simpleRootSum (S.adelicToInf x v)) • (S.besselSystem v).besselFn side g :=
-    ((S.besselSystem v).isCutPair.isBesselFunction side).2 _ (h_inf v) g
+    ((S.besselSystem v).isCutPair.isBesselFunction side).map_unipotent_mul _ (h_inf v) g
   funext i
   simp [besselFn, h_loc, prod_mul_distrib]
 
@@ -360,7 +360,7 @@ factor by which multiplication by `D` scales Haar measure. It is `0` unless all 
 products lie in the ring of integers `SemilocalField.O`. -/
 noncomputable def finHeadWeight {A : Type*} [SemilocalField A] (K i : ℕ) (p : ℕ → Aˣ) : ℝ :=
   ∏ l ∈ Finset.range i,
-    let D : A := ∏ a ∈ Finset.range (l + 1), (p a).1
+    let D : A := ∏ a ∈ Finset.range (l + 1), (p a).val
     if D ∈ SemilocalField.O then √(genIndex D) ^ K else 0
 
 open Matrix Fin Sum Floors Finset
@@ -562,7 +562,7 @@ lemma intGL_map_reduceAboveM (k : S.latticeStabilizer) (i : Fin 2) (w : S.chosen
       rw [U.form_mul_inv_eq]
     simpa only [transpose_mul, Matrix.map_mul, transpose_splitGram, map_splitGram_latticeMiddle]
       using h_form
-  have h_conj : (intGL.map (S.reduceAboveM (⟨i, w⟩, true)) ⟨k, k.2⟩).val =
+  have h_conj : (intGL.map (S.reduceAboveM (⟨i, w⟩, true)) ⟨k, k.property⟩).val =
       Aᴴᵀ.map (reduceAt p) := rfl
   have h_inv : (invTransposeGL (S.reduction k i w)).val = A_invᵀ.map (reduceAt p) := rfl
   rw [idOrInvAdjoint_true, invAdjoint, MulAut.mul_apply, MulAut.conj_apply, inv_inv, mul_assoc,
@@ -621,7 +621,7 @@ to `1` modulo the level `M = S.ideleM`, that is, `M⁻¹ (k - 1)` has integral e
 lemma reduction_eq_one_iff (k : S.latticeStabilizer) :
     S.reduction k = 1 ↔ IsIntMatrix (Ô E)
       (S.ideleM⁻¹ • (((k : S.GFin) : Matrix 𝔰.BesselIndex 𝔰.BesselIndex (𝔸f E)) - 1)) := by
-  let k' : intGL 𝔰.BesselIndex (Ô E) := ⟨k, k.2⟩
+  let k' : intGL 𝔰.BesselIndex (Ô E) := ⟨k, k.property⟩
   calc
     -- At a conjugate place the reduction is the inverse adjoint of the one at the place itself.
     _ ↔ ∀ (i : Fin 2) (w : S.chosenPlaces i) (b : Bool),
@@ -909,7 +909,7 @@ lemma eq_one_of_reduceAt_eq_one {n : Type}
       _ < 𝔰.k ^ 10 := Nat.pow_lt_pow_right (by grind [S.thousand_mul_le_k]) (by norm_num)
       _ ≤ S.levelPrime i := by
         exact_mod_cast (pow_le_pow_left₀ 𝔰.k.cast_nonneg S.k_le_b 10).trans (S.le_levelPrime i)
-  have h_prod : (2 * card n) ^ Module.finrank ℚ E < ∏ w : S.chosenPlaces i, w.1.q := by
+  have h_prod : (2 * card n) ^ Module.finrank ℚ E < ∏ w : S.chosenPlaces i, w.val.q := by
     simp only [S.chosenPlaces_q i _ (Subtype.prop _), Finset.prod_const, Finset.card_univ,
       S.card_chosenPlaces, finrank_eq_two_mul_card_infinitePlace, pow_mul]
     gcongr

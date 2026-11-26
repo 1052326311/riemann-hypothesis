@@ -7,6 +7,7 @@ public import New.UpperBound.Seesaw.Frequency
 public import New.UpperBound.Seesaw.GluedLevel
 public import New.UpperBound.Seesaw.LevelIdeles
 public import New.UpperBound.Seesaw.Sandwich
+public import Lib.General.Algebra.MultivariatePolynomials
 
 /-!
 # Unfolding the chain of lifts: double lifts and the functions of the unfolding
@@ -73,6 +74,51 @@ variable {E ι ι' ι'' X X' X'' X₀ q : Type} [Field E] [CMType E] [WeilData E
   {s s' s'' : ℕ} {V : Space E ι ε} {V' : Space E ι' ε'} {V'' : Space E ι'' ε''}
   {Y : Grading V N X s} {Y' : Grading V' N X' s'} {Y'' : Grading V'' N X₀ s''}
 
+omit [WeilData E] in
+private lemma continuous_pairChar (a b : AutChar E) :
+    Continuous (pairChar (E := E) (s := ε) (s' := ε') a b) :=
+  continuous_subtypeVal.comp
+    (((b⁻¹.1.continuous.comp G.continuous_det).comp continuous_fst).mul
+      ((a.1.continuous.comp G.continuous_det).comp continuous_snd))
+
+private lemma continuous_theta_tripleWeil (a b : AutChar E)
+    (f : 𝒮 (V'.hom (flipSum V V''))) :
+    Continuous fun p : G E ε × G E ε' × G E ε'' ↦
+      θ (V'.hom (flipSum V V'')) (tripleWeil (V := V) (V' := V') (V'' := V'') a b p f) := by
+  have h_sum : Continuous (G.sum : G E (-ε) × G E ε'' → G E (-ε ⊕ᵥ ε'')) := by
+    rw [G.continuous_iff]
+    simp only [G.adeleMatrix_sum]
+    refine continuous_pi fun i ↦ continuous_pi fun j ↦ ?_
+    rcases i with i | i <;> rcases j with j | j
+    · exact ((continuous_apply j).comp ((continuous_apply i).comp
+        G.continuous_adeleMatrix)).comp continuous_fst
+    · exact continuous_const
+    · exact continuous_const
+    · exact ((continuous_apply j).comp ((continuous_apply i).comp
+        G.continuous_adeleMatrix)).comp continuous_snd
+  have h_c1 : Continuous fun p : G E ε × G E ε' × G E ε'' ↦
+      pairChar (rankTwist a ι) (rankTwist a ι') (p.1, p.2.1) :=
+    (continuous_pairChar _ _).comp (continuous_fst.prodMk (continuous_fst.comp continuous_snd))
+  have h_c2 : Continuous fun p : G E ε × G E ε' × G E ε'' ↦
+      pairChar (rankTwist b ι') (rankTwist b ι'') p.2 :=
+    (continuous_pairChar _ _).comp continuous_snd
+  have h_c3 : Continuous fun p : G E ε × G E ε' × G E ε'' ↦
+      pairChar (WeilData.upsilonU1 ^ card ι') (WeilData.upsilonU1 ^ card ι) (p.2.1, p.1) :=
+    (continuous_pairChar _ _).comp ((continuous_fst.comp continuous_snd).prodMk continuous_fst)
+  have h_onHom : Continuous fun p : G E ε × G E ε' × G E ε'' ↦
+      G.onHom (p.2.1, G.sum (p.1.neg, p.2.2)) :=
+    G.continuous_onHom.comp ((continuous_fst.comp continuous_snd).prodMk
+      (h_sum.comp ((G.continuous_neg.comp continuous_fst).prodMk
+        (continuous_snd.comp continuous_snd))))
+  have h_ω : Continuous fun p : G E ε × G E ε' × G E ε'' ↦
+      θ (V'.hom (flipSum V V''))
+        ((V'.hom (flipSum V V'')).ω (G.onHom (p.2.1, G.sum (p.1.neg, p.2.2))) f) :=
+    (θ _).continuous.comp
+      ((Space.continuous_omega (V := V'.hom (flipSum V V''))).comp
+        (h_onHom.prodMk continuous_const))
+  simpa only [tripleWeil, _root_.smul_apply, map_smul, smul_eq_mul, Pi.mul_def, Pi.mul_apply] using
+    ((h_c1.mul h_c2).mul h_c3).mul h_ω
+
 /-- A coefficient of an algebraic form times the theta function of a triple Weil translate is
 integrable over the compact quotients of the two definite unitary groups. -/
 lemma integrable_algFormCoeff_mul_theta_tripleWeil {κ : NumberField.InfinitePlace E → ℕ → ℕ}
@@ -87,8 +133,9 @@ lemma integrable_algFormCoeff_mul_theta_tripleWeil {κ : NumberField.InfinitePla
   refine integrable_of_isCocompact (isCocompact_prod (stdSpace E X).isCocompact_Gamma
     (stdSpace E X').isCocompact_Gamma) ?_ ?_
   · -- the coefficient is continuous and the Weil action is continuous in the group points
-    simp [tripleWeil, pairChar, mul_assoc, -circleChar_inv_apply]
-    fun_prop
+    exact (h_cont.comp continuous_fst).mul
+      ((continuous_theta_tripleWeil a b f).comp
+        (continuous_fst.prodMk (continuous_snd.prodMk continuous_const)))
   · -- both factors are invariant under rational points
     rintro ⟨γ, δ⟩ ⟨hγ, hδ⟩ ⟨x, r⟩
     simp only [Prod.mk_mul_mk, h_rat γ hγ x, theta_tripleWeil_rat_mul a b f hγ hδ x r g]
@@ -171,8 +218,8 @@ lemma integral_theta_tripleWeil_eq_lift_comp {κ : NumberField.InfinitePlace E �
         tripleWeil (V'' := stdSpace E X'') (a o) (b o) (x.1, x.2, g)
   have hF {o : O} {φ : AlgForm X κ e} {g : G E (1 : X'' → ℤˣ)}
       (f : 𝒮 ((stdSpace E X').hom (flipSum (stdSpace E X) (stdSpace E X'')))) :
-      Integrable (F o φ g · f) ((stdSpace E X).quotMeasure.prod (stdSpace E X').quotMeasure) := by
-    simpa [F] using integrable_algFormCoeff_mul_theta_tripleWeil (a o) (b o) t φ g f
+      Integrable (F o φ g · f) ((stdSpace E X).quotMeasure.prod (stdSpace E X').quotMeasure) :=
+    integrable_algFormCoeff_mul_theta_tripleWeil (a o) (b o) t φ g f
   let J (u : Heisenberg.IsVacuum.Model (realHeisenberg (realSigns E
         (homSigns (1 : X' → ℤˣ) (-(1 : X → ℤˣ) ⊕ᵥ (1 : X'' → ℤˣ)))))) (o : O)
       (y : TensorProduct ℂ ↥((stdSpace E X).hom (stdSpace E X')).finitePart
@@ -206,7 +253,10 @@ lemma integral_theta_tripleWeil_eq_lift_comp {κ : NumberField.InfinitePlace E �
   let inr : NumberField.InfinitePlace E × X'' × X' → NumberField.InfinitePlace E × (X ⊕ X'') × X' :=
     fun (v, i, j) ↦ (v, Sum.inr i, j)
   have hR : R ∈ (rename inl).range.toSubmodule * (rename (R := ℂ) inr).range.toSubmodule :=
-    mem_rename_range_mul inl inr (by simp [inl, inr]) R
+    mem_rename_range_mul inl inr (by
+      rintro ⟨v, i | i, j⟩
+      · exact Or.inl ⟨(v, j, i), rfl⟩
+      · exact Or.inr ⟨(v, i, j), rfl⟩) R
   -- the polynomials that satisfy the claim are closed under addition, so products suffice
   have h_add (u₁ u₂) : J (u₁ + u₂) = J u₁ + J u₂ := by
     ext
@@ -297,7 +347,26 @@ lemma DoubleLiftData.constTerm_mul_constTerm_eq_inv_mul_zeroTerm (D : DoubleLift
 lemma formAdjoint_fromRows (A : Matrix ι ι' (𝔸 E)) (B : Matrix ι'' ι' (𝔸 E)) :
     V'.formAdjoint (flipSum V V'') (A.fromRows B) =
       (-V'.formAdjoint V A).fromCols (V'.formAdjoint V'' B) := by
-  simp [formAdjoint, flipSpace, ← Matrix.ext_iff, Matrix.mul_apply]
+  have hJ : (flipSum V V'').J.map toAdele =
+      (-(V.J.map toAdele)).fromBlocks 0 0 (V''.J.map toAdele) := by
+    refine Matrix.ext fun a b ↦ ?_
+    rcases a with a | a <;> rcases b with b | b <;>
+      simp [flipSum, flipSpace, Space.sum]
+  have hM : V'.J⁻¹.map toAdele * (A.fromRows B)ᴴ =
+      (V'.J⁻¹.map toAdele * Aᴴ).fromCols (V'.J⁻¹.map toAdele * Bᴴ) := by
+    refine Matrix.ext fun i j ↦ ?_
+    rcases j with j | j <;> simp [Matrix.mul_apply]
+  rw [formAdjoint, formAdjoint, formAdjoint, hJ, hM]
+  refine Matrix.ext fun i j ↦ ?_
+  rcases j with j | j
+  · rw [fromCols_apply_inl, Matrix.neg_apply, Matrix.mul_apply, Matrix.mul_apply,
+      Fintype.sum_sum_type]
+    simp only [fromCols_apply_inl, fromBlocks_apply₁₁, fromBlocks_apply₂₁, Matrix.zero_apply,
+      mul_zero, Finset.sum_const_zero, add_zero, Matrix.neg_apply, mul_neg,
+      Finset.sum_neg_distrib]
+  · rw [fromCols_apply_inr, Matrix.mul_apply, Matrix.mul_apply, Fintype.sum_sum_type]
+    simp only [fromCols_apply_inr, fromBlocks_apply₁₂, fromBlocks_apply₂₂, Matrix.zero_apply,
+      mul_zero, Finset.sum_const_zero, zero_add]
 
 /-- Let `D` be data for the two consecutive lifts `Y → Y' → Y''`, and let `n` be a unipotent element
 of U(V'), with matrix `V'.ratCoordMatrix n` in rational coordinates. Let
@@ -502,7 +571,8 @@ lemma DoubleLiftData.exists_integral_constTermAtStringMap_mul_eq
   have ι₀_cont : Continuous ι₀ := Y.continuous_inclX.subtype_mk _
   have h_fix_levi (r : Y'.besselGroup) :
       (stdSpace E X).Γ.FixesLeft fun x ↦ F (ι₀ x) r := fun γ hγ x ↦ by
-    simpa only [map_mul] using h_fix_left r (ι₀ γ) (Y.inclX_mem_ratBessel hγ) (ι₀ x)
+    have h := h_fix_left r (ι₀ γ) (Y.inclX_mem_ratBessel hγ) (ι₀ x)
+    rwa [← map_mul] at h
   -- for odd `s` the characters of `W` and of the kernel cancel on unipotent elements
   have h_unip (r : Y'.besselGroup) (n : G E ε) (hn : n ∈ Y.unipotent) (x : G E 1) :
       F (⟨n, Y.unipotent_le_besselGroup hn⟩ * ι₀ x) r = F (ι₀ x) r := by
@@ -545,8 +615,9 @@ lemma DoubleLiftData.exists_integral_constTermAtStringMap_mul_eq
       ← smul_eq_mul, ← map_smul, splitting, zeroTerm_comp]
     rfl
   · -- the mean is continuous in the point of U(X')
-    simp [tripleWeil, -circleChar_inv_apply, pairChar, mul_assoc]
-    fun_prop
+    exact continuous_const.mul (continuous_const.mul
+      ((continuous_theta_tripleWeil a b _).comp
+        (continuous_const.prodMk (continuous_id.prodMk continuous_const))))
   · -- and invariant under its rational points
     congr 2
     simpa only [one_mul] using theta_tripleWeil_rat_mul a b _ (γ := 1) (one_mem _) hγ x g _
@@ -793,7 +864,9 @@ lemma exists_unfoldStage_eq_algFormCoeff_of_sourceFn (ξ : ∀ k : ℕ, GInf D.E
   have lift (j : ℕ) : IsThetaLift D.columnCount (D.lastEntry j) (D.lastEntry (j + 1))
       (fun ϑ : D.TameChar ↦ rankTwist (D.chainChar ϑ (j + 1)))
       fun ϑ : D.TameChar ↦ (D.liftKernel ϑ j).lift :=
-    isThetaLift_thetaKernel (by simp)
+    isThetaLift_thetaKernel
+      (mul_ne_zero (star_ne_zero.mpr fun h0 ↦ D.piMBar_ne_zero (Subtype.ext (Subtype.ext h0)))
+        Parameters.jetScale_ne_zero)
   choose l'' hl'' using
     integral_theta_tripleWeil_eq_lift_comp (lift (2 * i)) (lift (2 * i + 1)) (z • v) l
   refine ⟨l'', fun ϑ t φ y ψ hψ g ↦ ?_⟩
@@ -803,7 +876,7 @@ lemma exists_unfoldStage_eq_algFormCoeff_of_sourceFn (ξ : ∀ k : ℕ, GInf D.E
   simp only [unfoldStage, unfoldStageOn_succ, unfoldStep, constTermAtStringMap_movedDatum,
     ← integral_mul_const]
   refine (h_mean _ _ _ _ _ _ (isEquivariant_unfoldStageOn ϑ t φ ξ y (2 * i) hi.le)).trans ?_
-  simp [hψ, hv, sourceFn_inclX, integral_const_mul]
+  simp only [hψ, hv, sourceFn_inclX, map_smul, _root_.smul_apply, smul_eq_mul, integral_const_mul]
 
 -- Without this, comparing the index types of neighbouring stages unfolds `Finset.univ`.
 seal Finset.univ in
@@ -965,9 +1038,11 @@ lemma valued_twistIdele (w : FinPlace D.E) :
         normalizedFactors_prod_of_prime (by simp [prime])]
       -- the places of `ϑ.Q` are distinct, so `w` occurs in their product at most once
       simp [count_map_eq_count', asIdeal_injective, count_eq_of_nodup ϑ.Q.nodup]
-    erw [multiplicity_mul w.prime (.of_prime_left w.prime 𝔪.ne_bot), ← span_piM,
-      ϑ.Q.prod_coe_sort]
-    simp [h_Q]
+    have h_ideal : 𝔪.ideal = Ideal.span {D.piM} * ∏ v ∈ ϑ.Q, v.asIdeal := by
+      change ((∏ i : (k : Fin 2) × D.ChosenPlace k, (D.chosenPlace i).asIdeal) ^ 1) *
+        ∏ v : ϑ.Q, v.1.asIdeal = _
+      rw [pow_one, ← span_piM, ϑ.Q.prod_coe_sort]
+    rw [h_ideal, multiplicity_mul w.prime (.of_prime_left w.prime (h_ideal ▸ 𝔪.ne_bot)), h_Q]
   have h_mul : (twistIdele ϑ).val * D.chosenIdele.val = 𝔪.generator.val := by
     rw [← Units.val_mul, twistIdele, div_mul_cancel]
   have h_val : Valued.v ((twistIdele ϑ).val w) * Valued.v (D.chosenIdele.val w) =

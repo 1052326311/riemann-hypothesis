@@ -1,5 +1,6 @@
 module
 
+public import Mathlib.RingTheory.LocalRing.Pullback
 public import Lib.PadicComparison.Primitive.PeriodCoefficients
 
 /-!
@@ -219,13 +220,13 @@ def pairAlg : HodgeTatePair ⥤ CommAlg k where
   map {X Y} f := CommAlgCat.ofHom <| AlgHom.codRestrict
     (AlgHom.prod
       { toFun (x : X.PairRing) :=
-          thickeningOver.map f.1 x.1.1 + thickeningOver.mulMu Y.test (f.2 x.1.2.snd).fst
+          thickeningOver.map f.1 x.val.1 + thickeningOver.mulMu Y.test (f.2 x.val.2.snd).fst
         map_one' := by simp
         map_mul' := map_base_add_mulMu_mul f
         map_zero' := by simp
         map_add' := map_fst_add_mulMu_add f
         commutes' r := by simp [algebraMap_eq_inl'] }
-      (((toHodgeTest ⋙ HodgeTest.sqZeroExt).map f).1.comp (AlgHom.pullbackSnd ..)))
+      (((toHodgeTest ⋙ HodgeTest.sqZeroExt).map f).hom'.comp (AlgHom.pullbackSnd ..)))
     Y.PairRing
     fun x ↦ (map_add ..).trans ((add_eq_left.2 (proj_mulMu ..)).trans (proj_map_fst f x))
   map_id X := by ext : 4 <;> simp <;> rfl
@@ -276,7 +277,7 @@ def contractionCocycle : Cocycle formCoeff formCoeff where
         exteriorMapSnd (f ≫ g).2 x = exteriorMapSnd g.2 (exteriorMapSnd f.2 x) := by
       induction x using left_induction <;> simp_all [Algebra.algebraMap_eq_smul_one,
         mul_add] <;> module
-    exact ext fun x ↦ congrArg ULift.up (h_chain x.1).1
+    exact ext fun x ↦ congrArg ULift.up (h_chain x.down).1
 
 /-- For h : ℕ, the class in total Ext(Λ, F) given by the h-th Yoneda power of the class of
 `contractionCocycle` in Ext¹(Λ, Λ), followed by the projection of ⋀M onto its degree-zero part T.
@@ -871,8 +872,8 @@ lemma IsChartCovered.pairRestrictBijective {n : ℕ} {X : CommAlg k ⥤ Type 1}
     have h_exists_mulMu_eq (r : a.coordRing) :
         ∃ t, mulMu D.test t = (ψ r).val.fst - thickeningOver.map f (s r).val.fst := by
       refine (h_exact _).1 ?_
-      erw [map_sub, proj.naturality_apply, (s _).2, (ψ _).2, ConcreteCategory.congr_hom hψ r,
-        sub_self]
+      erw [map_sub, proj.naturality_apply, (s _).property, (ψ _).property,
+        ConcreteCategory.congr_hom hψ r, sub_self]
     choose t ht using h_exists_mulMu_eq
     -- `g` must send `e_i` to `(t (a.coordinate i), M'-part of ψ (a.coordinate i))`, and coordinates
     -- determine lifts.

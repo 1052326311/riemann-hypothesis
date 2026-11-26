@@ -1,7 +1,11 @@
 module
 
+public import Mathlib.Data.Finsupp.Pointwise
+public import Mathlib.LinearAlgebra.LinearIndependent.BaseChange
+public import Mathlib.RingTheory.Coalgebra.CoassocSimps
 public import Lib.General.Measure.HaarModulus
 public import Lib.PadicHodge.Crystalline.HodgeTateForms
+public import Lib.Adelic.Hecke.ClassSums
 
 /-!
 # Hodge frames and Hodge–Tate jumps under operations on representations
@@ -415,16 +419,10 @@ lemma IsPotentiallyCrystalline.exists_isHodgeTateFrame (h : IsPotentiallyCrystal
       ∃ b : Basis ι ℂ_[p] (T →ₛₗ[(γ : R →+* ℂ_[p])] ℂ_[p]),
         (∀ i : ι, b i ∈ hodgeTateMaps ρ γ (k i)) ∧ ∀ i l : ι, b i (e l) = P⁻¹ i l := by
   -- Lift `γ` to `δ` with algebraic values, and take a basis `U` of invariant vectors over `BdR`.
-  obtain ⟨δ, hδ⟩ : ∃ δ : R →ₐ[ℤ_[p]] PadicAlgCl p, ∀ r, γ r = δ r := exists_algHom_lift γ
-  obtain ⟨U, hU⟩ : ∃ U : GL ι BdR, ∀ i : ι, ∀ᶠ g : Γ in nearOne Γ,
-      (((ρ g).toMatrix e e).map δ).map (algebraMap (PadicAlgCl p) BdR) *ᵥ
-        toGp g • (U : Matrix ι ι BdR).col i = (U : Matrix ι ι BdR).col i :=
-    exists_GL_col_mem_of_span _ (h.top_le_span_fixed e δ)
+  obtain ⟨δ, hδ⟩ := exists_algHom_lift γ
+  obtain ⟨U, hU⟩ := exists_GL_col_mem_of_span _ (h.top_le_span_fixed e δ)
   -- The Hodge frame `hodgeMatrix W k` is still invariant, with `W` invertible over `BdRPlus`.
-  obtain ⟨Y, W, k, h_hodge⟩ : ∃ (Y : SpecialLinearGroup ι (PadicAlgCl p))
-      (W : Matrix ι ι BdRPlus) (k : ι → ℤ),
-      IsHodgeFrame (nearOne Γ) (fun g : Γ ↦ ((ρ g).toMatrix e e).map δ) (U : Matrix ι ι BdR)
-        Y W k :=
+  obtain ⟨Y, W, k, h_hodge⟩ :=
     exists_isHodgeFrame Γ le_rfl U.isUnit ((eventually_all.2 hU).mono fun _ ↦ ext_col)
   -- The image of `W` under `thetaBdR` is the required matrix.
   let P : GL ι ℂ_[p] := .map thetaBdR h_hodge.isUnit.unit

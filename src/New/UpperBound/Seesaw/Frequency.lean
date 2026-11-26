@@ -332,8 +332,6 @@ lemma smul_map_stringMapFin_latticePlus_le [Finite X] [Finite X']
     {r' : Gf E ι'} (hr' : r' ∈ Y'.besselFin) (h_graded' : Y'.IsGraded (V'.lattice (r' * x'.2))) :
     (star b / α).val • (Y.latticePlus (r * x.2)).map ((Y.stringMapFin Y').restrictScalars (Ô E)) ≤
       Y'.latticeMinus (r' * x'.2) := by
-  have := Fintype.ofFinite X
-  have := Fintype.ofFinite X'
   set c : 𝔸f E := (star b / α).val
   obtain ⟨W, hW_mem, hW_deg⟩ : ∃ W : Matrix ι' ι (𝔸f E),
       (∀ y ∈ V.lattice x.2, W *ᵥ y ∈ V'.lattice x'.2) ∧

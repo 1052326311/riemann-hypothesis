@@ -1,5 +1,6 @@
 module
 
+public import Mathlib.Algebra.Order.Antidiag.FinsuppEquiv
 public import Lib.General.Groups.IndexOfProduct
 public import New.Spanning.Unfolding.FrameMass
 public import New.Spanning.Unfolding.PoincareSeries
@@ -64,20 +65,20 @@ lemma filling_fits :
       (scalarFin D.shape.κ (D.latticeScale 0))⁻¹ := by
   -- The finite frame of `Y₀` is `gradedLatticeBasis` times an integral `γ` that is `≡ 1` at the
   -- chosen places, by the choice of `D.spaceY`.
-  obtain ⟨γ, hγ_red, (hγ : (D.spaceY 0).xFin.1 =
+  obtain ⟨γ, hγ_red, (hγ : (D.spaceY 0).xFin.val =
       gradedLatticeBasis D.shape.besselIndexEquiv D.ideleA D.piNIdele (D.latticeScale 0) *
-        γ.1.1)⟩ :=
+        γ.val.val)⟩ :=
     D.exists_spaceY_xFin_eq 0 D.nat_le_of_hasLogBound
   -- `gradedLatticeBasis` scales only the string by `u = D.latticeScale 0`. So it is the lattice
   -- basis of the filling data scaled by `u` on the whole space and then by `u⁻¹` on `X₀`.
   have h_lat :
       gradedLatticeBasis D.shape.besselIndexEquiv D.ideleA D.piNIdele (D.latticeScale 0) =
         (Unitary.toUnits (D.latticeScale 0) •
-            (toBesselH D.shape (D.N : 𝔸f D.E) (scalarFin D.shape.κ (D.latticeScale 0))⁻¹).1 *
-          D.filling.latticeBasis).1 := by
-    have h_embed (a : Gf D.E D.shape.κ) : (toBesselH D.shape (D.N : 𝔸f D.E) a).1.1 =
-        fromBlocks 1 0 0 (fromBlocks (fromBlocks a.1.1 0 0 1) 0 0 1) := rfl
-    have h_unit (c : 𝔸f D.E) : (D.latticeScale 0).1 * (star (D.latticeScale 0).1 * c) = c := by
+            (toBesselH D.shape (D.N : 𝔸f D.E) (scalarFin D.shape.κ (D.latticeScale 0))⁻¹).val *
+          D.filling.latticeBasis).val := by
+    have h_embed (a : Gf D.E D.shape.κ) : (toBesselH D.shape (D.N : 𝔸f D.E) a).val.val =
+        fromBlocks 1 0 0 (fromBlocks (fromBlocks a.val.val 0 0 1) 0 0 1) := rfl
+    have h_unit (c : 𝔸f D.E) : (D.latticeScale 0).val * (star (D.latticeScale 0).val * c) = c := by
       simp [← mul_assoc]
     rw [Units.val_mul, Units.val_smul, smul_mul_assoc, h_embed, ← map_inv]
     -- Compare the entries: equal indices give the scalars, by `h_unit`. Otherwise both are 0, as
@@ -90,7 +91,7 @@ lemma filling_fits :
   exact
     { isDiscreteSeriesBessel := D.isDiscreteSeriesBessel_filling_besselSystem
       index_eq := rfl
-      isIdempotentKernel := D.isCuspKernel_typeKernel_paramW.1
+      isIdempotentKernel := D.isCuspKernel_typeKernel_paramW.toIsIdempotentKernel
       exists_point_eq := ⟨γ, fun i w ↦ hγ_red ⟨i, w⟩, toUnits (D.latticeScale 0), ext hγ⟩
       central a := (Seesaw.commute_scalarFin a).inv_left }
 
@@ -305,38 +306,38 @@ lemma relIndex_latticeStabilizer :
   -- An integral x lies in this preimage iff its row `k₀` is the unit vector modulo every place
   -- of `D.piNPlaces`; each such stabiliser has index N ^ k - 1, and there are f places.
   -- `H w` fixes the unit vector under the inverse transpose: row `k₀` is the unit vector.
-  let H (w : D.piNPlaces) : Subgroup (GL (D.X 0) (ResField w.1)) :=
+  let H (w : D.piNPlaces) : Subgroup (GL (D.X 0) (ResField w.val)) :=
     (stabilizer _ (Pi.single D.shape.k₀ 1 : D.X 0 → ResField w.1)).comap invTransposeGL.toMonoidHom
   have h_level :
       D.filling.latticeStabilizer.comap D.filling.inclHFin = levelOf Subtype.val (pi ⊤ H) := by
     ext x
     rw [Subgroup.mem_comap, mem_levelOf, D.filling.inclHFin_mem_latticeStabilizer_iff]
     -- Both sides say that `x` is integral, with a condition on its row `k₀`.
-    change (x.1 ∈ intGL D.shape.κ (Ô D.E) ∧ ∀ (_ : Unit) (j : D.shape.κ),
-      (x.1.1 - 1) D.shape.k₀ j ∈ Ô D.E ∙ D.piNIdele.val) ↔ _
-    refine exists_prop.symm.trans (exists_congr fun hx : x.1 ∈ intGL D.shape.κ (Ô D.E) ↦ ?_)
+    change (x.val ∈ intGL D.shape.κ (Ô D.E) ∧ ∀ (_ : Unit) (j : D.shape.κ),
+      (x.val.val - 1) D.shape.k₀ j ∈ Ô D.E ∙ D.piNIdele.val) ↔ _
+    refine exists_prop.symm.trans (exists_congr fun hx : x.val ∈ intGL D.shape.κ (Ô D.E) ↦ ?_)
     -- π divides an integral adele iff it reduces to zero at every place of `D.piNPlaces`, and `H w`
     -- says that the entries `r j` of row `k₀` of `x - 1` reduce to zero at `w`.
     let r (j : D.shape.κ) : Ô D.E :=
-      ⟨x.1.1 D.shape.k₀ j, hx.isIntMatrix D.shape.k₀ j⟩ - if j = D.shape.k₀ then 1 else 0
-    have h_mem (j : D.shape.κ) : (x.1.1 - 1) D.shape.k₀ j ∈ Ô D.E ∙ D.piNIdele.val ↔
+      ⟨x.val.val D.shape.k₀ j, hx.isIntMatrix D.shape.k₀ j⟩ - if j = D.shape.k₀ then 1 else 0
+    have h_mem (j : D.shape.κ) : (x.val.val - 1) D.shape.k₀ j ∈ Ô D.E ∙ D.piNIdele.val ↔
         algebraMap (RingOfIntegers D.E) (Ô D.E) D.piN ∣ r j := by
       by_cases hj : j = D.shape.k₀ <;>
         simp [hj, Ne.symm, r, Submodule.mem_span_singleton, dvd_def, Subtype.ext_iff,
           Subring.smul_def, piNIdele] <;>
         exact exists_congr fun _ ↦ and_congr_right' (by rw [mul_comm, eq_comm])
     have h_fix (w : D.piNPlaces) : stdLevel.reduceFamily Subtype.val ⟨x, hx⟩ w ∈ H w ↔
-        ∀ j : D.shape.κ, reduceAt w.1 (r j) = 0 := by
+        ∀ j : D.shape.κ, reduceAt w.val (r j) = 0 := by
       -- The inverse transpose fixes the unit vector iff row `k₀` of the reduction is that vector.
-      have h_mem_H (M : GL (D.X 0) (ResField w.1)) : M ∈ H w ↔
-          (transposeGL M)⁻¹ ∈ stabilizer _ (Pi.single D.shape.k₀ 1 : D.X 0 → ResField w.1) := .rfl
+      have h_mem_H (M : GL (D.X 0) (ResField w.val)) : M ∈ H w ↔
+          (transposeGL M)⁻¹ ∈ stabilizer _ (Pi.single D.shape.k₀ 1 : D.X 0 → ResField w.val) := .rfl
       rw [h_mem_H]
       have h_entry (j : D.shape.κ) : (stdLevel.reduceFamily Subtype.val ⟨x, hx⟩ w).1 D.shape.k₀ j =
-          reduceAt w.1 ⟨x.1.1 D.shape.k₀ j, hx.isIntMatrix D.shape.k₀ j⟩ := rfl
+          reduceAt w.val ⟨x.val.val D.shape.k₀ j, hx.isIntMatrix D.shape.k₀ j⟩ := rfl
       simp [r, h_entry, funext_iff, Units.smul_def, -reduceAt_eq_zero, sub_eq_zero]
     simp only [Subgroup.mem_pi, h_mem, dvd_iff_reduceAt_eq_zero D.intValuation_piN, h_fix,
       forall_const, ← mem_piNPlaces]
-    exact ⟨fun h w _ j ↦ h j w.1 w.2, fun h j w hw ↦ h ⟨w, hw⟩ trivial j⟩
+    exact ⟨fun h w _ j ↦ h j w.val w.property, fun h j w hw ↦ h ⟨w, hw⟩ trivial j⟩
   -- The index of a preimage under reduction is the product of the indices of the stabilisers.
   rw [h_level, relIndex_levelOf (h := ⟨by simp, by simp [D.isSplitLevel_piNPlaces.star_notMem]⟩)]
   simp [Seesaw.index_pi_univ, H, index_comap, index_stabilizer_GL_vector, card_ResField,
@@ -531,9 +532,9 @@ lemma filling_reduction_surjective : Function.Surjective D.filling.reduction := 
   intro x
   -- A preimage is the lift of the residues of `x`, written in the lattice basis of the filling.
   let lift : stdLevel D.E D.shape.BesselIndex := liftResidue (w := D.chosenPlace) (Sigma.uncurry x)
-  obtain ⟨h_mem, h_reduction⟩ := (D.filling_fits.reduction_finiteEquiv_iff lift.1 x).mpr
-    ⟨lift.2, reduceFamily_liftResidue (w := D.chosenPlace) (Sigma.uncurry x)⟩
-  exact ⟨⟨D.filling_fits.finiteEquiv lift.1, h_mem⟩, h_reduction⟩
+  obtain ⟨h_mem, h_reduction⟩ := (D.filling_fits.reduction_finiteEquiv_iff lift.val x).mpr
+    ⟨lift.property, reduceFamily_liftResidue (w := D.chosenPlace) (Sigma.uncurry x)⟩
+  exact ⟨⟨D.filling_fits.finiteEquiv lift.val, h_mem⟩, h_reduction⟩
 
 /-- The main second moment of the filling data, divided by their identity second moment, is
 `d (N ^ k - 1) ^ f mass_k / (deg mass_r |Ū|)`. Here `d` and `deg` are the number of coordinates and

@@ -1,7 +1,6 @@
 module
 
 public import Lib.General.Algebra.LevelModulus
-public import Lib.SiegelWeil.RallisInner.Doubling
 public import Lib.SiegelWeil.RallisInner.DualDatum
 public import Lib.SiegelWeil.UnramifiedSeries.RallisSeries
 
@@ -197,26 +196,6 @@ lemma IsSharp.isUnramifiedOn (hF : IsSharp b S₀ F J c) [b.HasWeight γ' ψ] :
   simpa [vacuumCoeff, finMultiplier_eq_one_of_mem hk.1, Prod.mk_one_one, ← Circle.coe_inj,
     finMultiplier_eq_one_of_mem (one_mem (stdLevel E n))] using h_coeff
 
-/-- Cutting an integral over a group into cosets. Let `μ` be left invariant on `H`, let `L` be a
-measurable subgroup with countably many cosets, represented by the points `r q`. The integral of an
-integrable `Φ` is the sum over the cosets `q` of the integrals of `g ↦ Φ (r q * g)` over `L`. -/
-lemma _root_.New.hasSum_setIntegral_mul_coset {H : Type*} [Group H] [MeasurableSpace H]
-    [MeasurableMul H] {μ : Measure H} [μ.IsMulLeftInvariant] {L : Subgroup H} [Countable (H ⧸ L)]
-    (hL : MeasurableSet (L : Set H)) {r : H ⧸ L → H} (hr : ∀ q : H ⧸ L, (r q : H ⧸ L) = q)
-    {Φ : H → ℂ} (hΦ : Integrable Φ μ) :
-    HasSum (fun q : H ⧸ L ↦ ∫ g in (L : Set H), Φ (r q * g) ∂μ) (∫ g, Φ g ∂μ) := by
-  let coset (q : H ⧸ L) : Set H := (fun g ↦ (r q)⁻¹ * g) ⁻¹' L
-  have mem_coset (q : H ⧸ L) (g : H) : g ∈ coset q ↔ q = (g : H ⧸ L) := by
-    rw [Set.mem_preimage, SetLike.mem_coe, ← QuotientGroup.eq, hr]
-  have h_disjoint : Pairwise (Function.onFun Disjoint coset) := by
-    grind [Pairwise]
-  have h_cover : ⋃ q, coset q = Set.univ := by simp [Set.eq_univ_iff_forall, mem_coset]
-  have h_coset (q : H ⧸ L) : ∫ g in coset q, Φ g ∂μ = ∫ g in (L : Set H), Φ (r q * g) ∂μ := by
-    simpa using (measurePreserving_mul_left μ (r q)⁻¹).setIntegral_preimage_emb
-      (measurableEmbedding_mulLeft _) (fun g ↦ Φ (r q * g)) L
-  simpa only [h_coset, h_cover, Measure.restrict_univ] using
-    hasSum_integral_iUnion (s := coset) (fun q ↦ measurable_const_mul _ hL) h_disjoint hΦ.restrict
-
 /-- Let `F` be sharp for `J` off `S₀`, of mass `c`, let `v` be a vector of the Fock space,
 `φ = v ⊗ F` and `x` a real point, and let `P` be a right `J`-invariant function on the finite
 points. If `g ↦ ⟨φ, ω(x g) φ⟩ P(g)` is integrable, its integral is the sum, over the cosets `q` of
@@ -250,8 +229,10 @@ lemma IsSharp.hasSum_integral_weilMatrixCoeff_mul (hF : IsSharp b S₀ F J c) [b
     · simp +contextual only [φ, Set.indicator_apply_eq_zero, SetLike.mem_coe, ite_eq_right h_level,
         hF.weilMatrixCoeff_integrated_mul γ v x hu, mul_zero, zero_mul, implies_true]
   have : Countable (Gf E n ⧸ localLevel n S₀ᶜ) := countable_quotient_localLevel S₀ᶜ
-  exact (hasSum_setIntegral_mul_coset h_meas mk_cosetRep h_int).congr_fun
-    fun q ↦ (h_coset _ (cosetRep q).property).symm
+  exact (hasSum_setIntegral_mul_of_existsUnique h_meas
+    (r := fun q : Gf E n ⧸ localLevel n S₀ᶜ ↦ (cosetRep q).val)
+    (fun g ↦ by simp [← QuotientGroup.eq, mk_cosetRep]) h_int).congr_fun
+      fun q ↦ (h_coset _ (cosetRep q).property).symm
 
 /-- Inner product formula. Let `2 * card n < card m`, let `F` be sharp for `J` off `S₀` with mass
 `c` (see `IsSharp`), let `v` be a Fock-space vector, and let `Θ` be the lift by `v ⊗ F` for the

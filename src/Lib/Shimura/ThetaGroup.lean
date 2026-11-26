@@ -1,6 +1,8 @@
 module
 
-public import Lib.Shimura.AbelianScheme.Pairings
+public import Mathlib.RingTheory.PiTensorProduct
+public import Lib.General.Geometry.ProjectiveSpace
+public import Lib.Shimura.AbelianScheme.Basic
 
 /-!
 # Lifts of morphisms to sections of line bundles, and theta structures on abelian schemes
@@ -134,9 +136,9 @@ of global sections H⁰(L) → H⁰(M). -/
 @[simps! apply_coe]
 noncomputable def pullSections : L.H0 R →ₛₗ[φ] M.H0 R' where
   toFun s :=
-    ⟨fun i ↦ PointFn.pull f (s.1 i), by
+    ⟨fun i ↦ PointFn.pull f (s.val i), by
       subst e
-      exact ⟨s.2.1.pull f, fun i A t ht ↦ s.2.2 i A (t ≫ f) ht⟩⟩
+      exact ⟨s.property.1.pull f, fun i A t ht ↦ s.property.2 i A (t ≫ f) ht⟩⟩
   map_add' s s' := by
     ext
     simp

@@ -1,5 +1,7 @@
 module
 
+public import Mathlib.GroupTheory.CosetCover
+public import Mathlib.RingTheory.Invariant.Galois
 public import Lib.General.Algebra.MultivariatePolynomials
 public import Lib.General.Geometry.PointsOfProperSchemes
 public import Lib.General.Geometry.ProjectiveSpace
@@ -661,14 +663,20 @@ lemma IsCoordsWithUnit.exists_descend_of_injective (hξ : IsCoordsWithUnit L ξ 
   obtain ⟨j, _, hj, rfl⟩ := hL.out.exists_isClosedImmersion
   obtain ⟨t, ht_over, ht⟩ := exists_isHomogeneousCoords (Opposite.unop ((specAlg k R).obj A)).hom hv
   -- `ξ` and the image of `t` both have coordinates `g` and lie over the same point of `Spec R`.
-  -- (The two sides lie over `Spec R` only after unfolding the structure maps, hence `erw`.)
   have h_image : ξ.down.left ≫ j = Spec.map (CommRingCat.ofHom φ.hom.toRingHom) ≫ t := by
     have h_coords_image : LineBundle.IsHomogeneousCoords ((hyperplaneBundle ι).pull Limits.prod.fst)
         (Spec.map (CommRingCat.ofHom φ.hom.toRingHom) ≫ t) g :=
       h_coord ▸ (ht.map (isLinearSystem_hyperplaneBundle.pull _) hv _).smul hgi_unit
     refine isProjEmbedding_projSpace.eq_of_isHomogeneousCoords ?_ hξ.left h_coords_image
       (LineBundle.exists_landsIn _ _)
-    erw [assoc, hj, assoc, ht_over, w, w ((specAlg ..).map φ).1]
+    let u := ((specAlg k R).map φ).unop
+    change (ξ.down.left ≫ j) ≫ Limits.prod.snd = (u.left ≫ t) ≫ Limits.prod.snd
+    calc
+      _ = ξ.down.left ≫ Y.hom :=
+        (assoc ..).trans (congrArg (ξ.down.left ≫ ·) hj)
+      _ = u.left ≫ (t ≫ Limits.prod.snd) :=
+        ξ.down.w.trans (u.w.symm.trans (congrArg (u.left ≫ ·) ht_over).symm)
+      _ = _ := (assoc ..).symm
   -- The ideal `J` cutting out the locus where `t` lies in `Y` is killed by `φ`, hence is zero.
   obtain ⟨J, -, hJ⟩ := exists_ideal_le_ker_iff_factors j t
   have h_ker_le : RingHom.ker φ.hom.toRingHom ≤ RingHom.ker (RingHom.id A) :=

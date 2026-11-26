@@ -1,8 +1,16 @@
 module
 
-public import Lib.PadicHodge.PeriodRings.AxTheorem
 public import TauCeti.RingTheory.Perfectoid.Cyclotomic.Basic
 public import TauCeti.RingTheory.Perfectoid.Padic
+public import Mathlib.Algebra.CharP.Pi
+public import Mathlib.Algebra.Order.Star.Rat
+public import Mathlib.FieldTheory.IsAlgClosed.Classification
+public import Mathlib.RingTheory.Algebraic.Cardinality
+public import Mathlib.RingTheory.PiTensorProduct
+public import Mathlib.RingTheory.PicardGroup
+public import Mathlib.RingTheory.WittVector.Compare
+public import Mathlib.Topology.Algebra.Module.Cardinality
+public import Lib.PadicHodge.PeriodRings.AxTheorem
 
 /-!
 # The ring A_inf, the elements ε, μ, τ, ξ, the kernel of θ and adic completeness
@@ -256,12 +264,6 @@ private def OFlat.iterateSeq (a : ℕ → OFlat → OFlat) : ℕ → OFlat
 private lemma OFlat.coeff_add_pow_pow (x : OFlat) (m n : ℕ) :
     x.coeff (m + n) ^ p ^ n = x.coeff m := coeffMonoidHom_pow_p_pow' x m n
 
-/-- For a polynomial `f` over `O^♭`, the `n`-th coordinate of `f (x)` depends only on the `n`-th
-coordinate of `x`. -/
-private lemma OFlat.coeff_eval_eq_of_coeff_eq {f : OFlat[X]} {x y : OFlat} {n : ℕ}
-    (h_coeff : x.coeff n = y.coeff n) : (f.eval x).coeff n = (f.eval y).coeff n := by
-  rw [← eval₂_hom, h_coeff, eval₂_hom]
-
 /-- The tilt O^♭ is absolutely integrally closed: every monic polynomial of positive degree over
 it has a root. The root is built coordinate by coordinate from roots modulo `p`. -/
 lemma OFlat.isAbsIntegrallyClosed : IsAbsIntegrallyClosed OFlat := by
@@ -297,7 +299,7 @@ lemma OFlat.isAbsIntegrallyClosed : IsAbsIntegrallyClosed OFlat := by
   -- the `n`-th coordinate of the root is that of `s (n + d + 1)`, and the `n`-th coordinate of
   -- `f (s (n + d + 1))` is a power of the `(n + d)`-th one, which is `0`
   calc (f.eval root).coeff n
-    _ = (f.eval (s (n + d + 1))).coeff n := coeff_eval_eq_of_coeff_eq rfl
+    _ = (f.eval (s (n + d + 1))).coeff n := by simp only [← eval₂_hom]; rfl
     _ = (f.eval (s (n + d + 1))).coeff (n + d) ^ p ^ d := (coeff_add_pow_pow _ n d).symm
     _ = (0 : OFlat).coeff n := by simp [h_root_s, NeZero.ne p]
 

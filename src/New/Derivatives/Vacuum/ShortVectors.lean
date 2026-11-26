@@ -1,6 +1,6 @@
 module
 
-public import New.Derivatives.Field.ChosenPlaces
+public import New.Reduction.Data.Magnitudes
 
 /-!
 # Tight frames in `𝔞₀`
@@ -226,9 +226,6 @@ private lemma exists_quad_congr_mod_q₁ :
     ∃ z < P.q₁ s, ∃ e : ℕ, ((P.d + 1) / 4) * z ^ 2 + z + 1 = P.q₁ s * e := by
   set N : ℕ := P.q₁ s
   set n : ℕ := (P.d + 1) / 4
-  have hn_nilp : IsNilpotent (n : ZMod N) := ⟨N, by
-    rw [← Nat.cast_pow, ZMod.natCast_eq_zero_iff]
-    exact q₁_dvd_pow_q₁⟩
   -- The map `y ↦ n * y ^ 2 + y` on `ZMod N` is injective because `1 + n * (a + b)` is a unit.
   have h_inj : Function.Injective fun y : ZMod N ↦ (n : ZMod N) * y ^ 2 + y := by
     intro a b hab

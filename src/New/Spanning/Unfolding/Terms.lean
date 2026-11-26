@@ -1,5 +1,6 @@
 module
 
+public import Mathlib.LinearAlgebra.Matrix.AbsoluteValue
 public import New.Spanning.RemainingTerms.Box
 public import New.Spanning.RemainingTerms.SiegelLemma
 public import New.Spanning.Unfolding.BesselLevelStructure
@@ -392,7 +393,7 @@ lemma termsOver.isIntMatrix_translateByClassReps :
     γ ∈ S.termsOver c r c' → IsIntMatrix (Ô E) (S.translateByClassReps c c' γ).val.val := by
   rintro ⟨g, -, hg⟩
   rw [← hg]
-  exact g.2.isIntMatrix
+  exact g.property.isIntMatrix
 
 /-- For a class c, the matrix classCoord c, which takes rational coordinates to coordinates in the
 basis of the lattice h_cΛ₀, carries the form in rational coordinates to the form in lattice

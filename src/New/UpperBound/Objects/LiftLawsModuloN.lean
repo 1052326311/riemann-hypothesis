@@ -59,7 +59,7 @@ class IsSplitLevel (P : Finset (FinPlace E)) (N : outParam ℕ) : Prop where
   /-- `N` is a uniformiser at each place in `P`. -/
   protected v_natCast : ∀ w ∈ P, v (N : LocField w) = exp (-1)
   /-- The places above `N` are those in `P` and their conjugates. -/
-  natCast_mem_iff (w : FinPlace E) : ↑N ∈ w.1 ↔ w ∈ P ∨ star w ∈ P
+  natCast_mem_iff (w : FinPlace E) : ↑N ∈ w.asIdeal ↔ w ∈ P ∨ star w ∈ P
 
 /-- The finite adele that is `y w / N` at `w ∈ P`, with `y w` read in `[0, N)`, and `0`
 elsewhere. -/
@@ -92,9 +92,9 @@ variable [Λ : IsSplitLevel P N] (π : Rep ℂ (GL (n ⊕ Unit) (LocProd P)))
   (π' : Rep ℂ (GL (n' ⊕ Unit) (LocProd P)))
 
 /-- The residue field at a place of `P` is `ℤ / N`. -/
-def residueEquiv (w : P) : ResField w.1 ≃+* ZMod N :=
-  letI : Fintype (ResField w.1) := Fintype.ofFinite (ResField w.1)
-  (ZMod.ringEquivOfPrime (ResField w.1) Fact.out (by simp [← card_ResField, ← Λ.q_eq w])).symm
+def residueEquiv (w : P) : ResField w.val ≃+* ZMod N :=
+  letI : Fintype (ResField w.val) := Fintype.ofFinite (ResField w.val)
+  (ZMod.ringEquivOfPrime (ResField w.val) Fact.out (by simp [← card_ResField, ← Λ.q_eq w])).symm
 
 /-- Reduction modulo `N` of the integers at `P`. -/
 def reduction : O (F := LocProd P) →+* (P → ZMod N) :=
@@ -125,7 +125,7 @@ instance : IsLocalHom Λ.reduction := ⟨by simp [reduction, Pi.isUnit_iff]⟩
 
 lemma reduction_surjective : Surjective Λ.reduction := by
   intro y
-  have h_int : (fun w : P ↦ ((y w).val : LocField w.1)) ∈ O (F := LocProd P) :=
+  have h_int : (fun w : P ↦ ((y w).val : LocField w.val)) ∈ O (F := LocProd P) :=
     mem_O_locProd.2 fun w ↦ (v.mem_integer_iff _).1 (natCast_mem v.integer (y w).val)
   exact ⟨⟨_, h_int⟩, by simp [reduction_eq_iff]⟩
 
@@ -399,20 +399,21 @@ lemma lastRowDatum_conj_diagNInv (T : Matrix (n' ⊕ Unit) (n ⊕ Unit) (LocProd
     ext w : 1
     simp only [hC, diagNInv, diagN, ← map_inv, inv_inv, coe_diagGL, Pi.inv_apply,
       Units.val_inv_eq_inv_val, mul_diagonal, diagonal_mul, Sum.isLeft_inr, Bool.false_eq_true,
-      Pi.mul_apply, MulEquiv.val_piUnits_symm_apply, Units.val_mk0, ← div_eq_mul_inv, w.2,
-      ↓reduceIte, mul_div_cancel_left₀ _ (NeZero.out : (N : LocField w.1) ≠ 0)]
+      Pi.mul_apply, MulEquiv.val_piUnits_symm_apply, Units.val_mk0, ← div_eq_mul_inv, w.property,
+      ↓reduceIte, mul_div_cancel_left₀ _ (NeZero.out : (N : LocField w.val) ≠ 0)]
   have h_row (j : n) (w : P) :
       v (C (.inr ()) (.inl j) w) = v (T (.inr ()) (.inl j) w) * exp (-1) := by
     simp only [hC, diagNInv, diagN, ← map_inv, inv_inv, coe_diagGL, Pi.inv_apply,
       Units.val_inv_eq_inv_val, mul_diagonal, diagonal_mul, Sum.isLeft_inr, Bool.false_eq_true,
       Sum.isLeft_inl, Units.val_one, inv_one, Pi.mul_apply, MulEquiv.val_piUnits_symm_apply,
-      Units.val_mk0, Pi.one_apply, mul_one, map_mul, Λ.v_natCast, w.2, ↓reduceIte, mul_comm]
+      Units.val_mk0, Pi.one_apply, mul_one, map_mul, Λ.v_natCast, w.property, ↓reduceIte, mul_comm]
   have h_col (i : n') (w : P) :
       v (C (.inl i) (.inr ()) w) ≤ 1 ↔ v (T (.inl i) (.inr ()) w) ≤ exp (-1) := by
     simp only [hC, diagNInv, diagN, ← map_inv, inv_inv, coe_diagGL, Pi.inv_apply,
       Units.val_inv_eq_inv_val, mul_diagonal, diagonal_mul, Sum.isLeft_inl, Units.val_one, one_mul,
       Sum.isLeft_inr, Bool.false_eq_true, Pi.mul_apply, MulEquiv.val_piUnits_symm_apply,
-      Units.val_mk0, ← div_eq_mul_inv, map_div₀, Λ.v_natCast, w.2, ↓reduceIte, exp_pos, div_le_one₀]
+      Units.val_mk0, ← div_eq_mul_inv, map_div₀, Λ.v_natCast, w.property, ↓reduceIte, exp_pos,
+      div_le_one₀]
   have hN : exp (-1 : ℤ) ≤ 1 := exp_le_exp.2 (by norm_num)
   simp only [lastRowDatum_apply, directDatum_apply, Sum.forall, Unique.forall_iff,
     PUnit.default_eq_unit, h_block, h_corner, h_row, h_col, exp_pos, mul_le_iff_le_one_left]

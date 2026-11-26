@@ -1,5 +1,10 @@
 module
 
+public import Mathlib.Algebra.CharP.Subring
+public import Mathlib.RingTheory.Polynomial.DegreeLT
+public import Mathlib.RingTheory.PowerSeries.Expand
+public import Mathlib.RingTheory.PowerSeries.Ideal
+public import Mathlib.RingTheory.PowerSeries.WeierstrassPreparation
 public import Lib.PadicHodge.PeriodRings.DeRhamPeriods
 
 /-!
@@ -500,7 +505,7 @@ lemma frobEnd_mem (s : c.S) : frobEnd s.val ∈ c.S := by
   exact ⟨expand p out G, hG⟩
 
 /-- For a chart, the ring endomorphism of S obtained by restricting the Frobenius φ of A_inf. -/
-def φ : c.S →+* c.S := (frobEnd.comp c.S.val.1).codRestrict c.S c.frobEnd_mem
+def φ : c.S →+* c.S := (frobEnd.comp c.S.val.toRingHom).codRestrict c.S c.frobEnd_mem
 
 /-- For a chart and n ≥ 0, the element φ^n(E) of its ring S, where E = `c.E` is the image of
 X^e A + p and φ = `c.φ` is the Frobenius of S. -/

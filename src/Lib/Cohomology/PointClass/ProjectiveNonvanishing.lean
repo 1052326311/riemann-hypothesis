@@ -1,5 +1,6 @@
 module
 
+public import Mathlib.RingTheory.DualNumber
 public import Lib.Cohomology.Hodge.FixedPointFormula
 public import Lib.Cohomology.PointClass.ProjectiveSpace
 public import Lib.Cohomology.ProjectiveLine.TiltedLineFormula
@@ -98,12 +99,16 @@ def thickeningOver.oneSubMu :
           let y : genericOver.obj c := t.toAdd
           change 1 - mulMu c (x + y) = (1 - mulMu c x) * (1 - mulMu c y)
           have h_zero : mulMu c x * mulMu c y = 0 := by
-            erw [← mulMu_proj_mul, proj_mulMu, zero_mul, map_zero]
+            exact (mulMu_proj_mul c (mulMu c x) y).symm.trans
+              (by rw [proj_mulMu, zero_mul, map_zero])
           rw [map_add, mul_sub, sub_mul, sub_mul, mul_one, one_mul, h_zero, sub_zero, sub_sub, mul_one] }
   naturality c d f := by
     refine ext fun t ↦ Gm.ext.2 (.symm ?_)
     change thickeningOver.map f (1 - mulMu c t.down) = 1 - mulMu d (genericOver.map f t.down)
-    erw [map_sub, map_one, map_mulMu]
+    calc
+      _ = thickeningOver.map f 1 - thickeningOver.map f (mulMu c t.down) :=
+        map_sub _ _ _
+      _ = _ := congrArg₂ (· - ·) (map_one _) (map_mulMu c d f t.down)
 
 /-- On `p`-adic tests the sequence `0 → T → Bˣ → Tˣ → 0` is short exact: its first map is
 `t ↦ 1 - μ t` (`New.Variety.thickeningOver.oneSubMu`), its second is induced on units by the
@@ -119,8 +124,7 @@ lemma thickeningOver.shortExact_oneSubMu :
     have h_app (x : (asModules PadicTest.genericAlg).obj c) :
         (show (thickeningOver.obj c)ˣ from ((oneSubMu.app c).hom ⟨x⟩).down).val =
           1 - mulMu c x := rfl
-    have h_val := Gm.ext.mp h_eq
-    erw [h_app, h_app] at h_val
+    have h_val := (h_app s).symm.trans ((Gm.ext.mp h_eq).trans (h_app t))
     exact congrArg ULift.up (h_inj c (sub_right_injective h_val))
   · -- Exactness applied to `1 - u`: the units with image `1` are those of the form `1 - mulMu t`.
     have hproj : proj c (1 - u.val) = 1 - proj c u.val :=

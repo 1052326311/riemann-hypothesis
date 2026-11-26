@@ -1,9 +1,9 @@
 module
 
+public import TauCeti.LinearAlgebra.Matrix.Determinant.ComplementaryMinor
 public import Lib.GLn.SchurModule.SchurNorm
 public import Lib.General.LinearAlgebra.BlockEmbeddings
 public import Lib.General.LinearAlgebra.MatrixNormBounds
-public import TauCeti.LinearAlgebra.Matrix.Determinant.ComplementaryMinor
 
 /-!
 # Duality of integral GL(n) representations, mixed weights and the Cartan product
@@ -825,7 +825,8 @@ lemma mixedCartan_mulVec_cartanProduct {Φ n N m : Type} [Fintype Φ] [Decidable
       inv_fromBlocks_zero₂₁_of_isUnit_iff, Matrix.one_apply, vecMulVec_apply, kronecker_mulVec_vec,
       mul_vecMulVec, vecMulVec_mul, vecMul_transpose, weylEvalAt]
     unfold weylEval nablaBasis tableauPoly minor
-    simp [RingHom.map_det, Matrix.map]
+    simp only [Function.comp_apply, map_prod, RingHom.map_det, RingHom.mapMatrix_apply, Matrix.map,
+      of_apply, MvPolynomial.eval_X]
     -- Each side is the product of the minors of the `N`-block and of the `m`-block, in the two
     -- orders; `congr!` matches them entry by entry, and each entry is closed by the case split on
     -- the block of `ε.symm`.

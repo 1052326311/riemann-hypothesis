@@ -1,5 +1,7 @@
 module
 
+public import Mathlib.Algebra.MvPolynomial.NoZeroDivisors
+public import Mathlib.FieldTheory.PurelyInseparable.Exponent
 public import Lib.GaloisRep.Main.Defs
 
 /-!
@@ -442,8 +444,13 @@ lemma card_eq_and_charpoly_eq [NeZero n] {E : Type} [Field E] [NumberField E] [A
           comp_def] using congrFun hg a
     simp only [M, map_powMinor, AlgHom.mapMatrix_apply, Matrix.map_mul, Matrix.map_map, comp_def,
       MvPolynomial.aeval_C] at h_poly
-    erw [mvPolynomialX_map_eval₂ (algebraMap k k[T;T⁻¹])] at h_poly
-    simpa [mul_assoc, ← Matrix.map_mul, LaurentPolynomial.algebraMap_apply, comp_def] using h_poly
+    let B := diagonal (T ∘ κ) * (Q : Matrix N N k).map LaurentPolynomial.C
+    have h_eval : (mvPolynomialX N N k).map (MvPolynomial.aeval B.uncurry) = B :=
+      mvPolynomialX_map_eval₂ (algebraMap k k[T;T⁻¹]) B
+    let C := ((Q⁻¹ * ρ x : GL N k) : Matrix N N k).map LaurentPolynomial.C
+    have h_minor : powMinor (B * C) m a = 0 :=
+      (congrArg (fun X ↦ powMinor (X * C) m a) h_eval).symm.trans h_poly
+    simpa [B, C, mul_assoc, ← Matrix.map_mul] using h_minor
   -- The minors of order `n + 1` vanish at most Frobenius elements, hence everywhere.
   have h_all (g : Gal(Ω/E)) : powMinor (φ (r g)) (n + 1) = 0 := by
     refine (h_closed (n + 1)).closure_subset (dense_of_mostFrobenii (hP.mono ?_) g)
