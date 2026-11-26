@@ -699,8 +699,8 @@ lemma TestOver.exists_quotient (B : TestOver A) (I : Ideal ((ringOf (𝟭 (TestO
   let D : TestOver A :=
     ⟨CommAlgCat.of A (B.obj ⧸ radical J), B.property.quotient J.radical_isRadical⟩
   let π : B ⟶ D := ⟨ofHom (Quotient.mkₐ ..)⟩
-  refine ⟨D, π, mk_ker (I := J.radical), Ideal.Quotient.mk_surjective (I := J.radical), fun E f hf ↦ ?_,
-    map_mk_eq_bot_of_le (I := J) (J := J.radical) le_radical⟩
+  refine ⟨D, π, mk_ker (I := J.radical), Ideal.Quotient.mk_surjective (I := J.radical),
+    fun E f hf ↦ ?_, map_mk_eq_bot_of_le (I := J) (J := J.radical) le_radical⟩
   -- a map to a reduced ring that kills `I` kills its radical, so it factors through `π`
   have h_kill : I.map ((ringOf (𝟭 (TestOver A))).map f).hom = ⊥ := hf
   have h_reduced : (⊥ : Ideal ((ringOf (𝟭 (TestOver A))).obj E)).IsRadical :=
@@ -1069,7 +1069,8 @@ lemma TorsionCoeff.pullbackAlong_oneLocConst_surjective :
   let q := relFreeAb.π (I.whisker g).topLocus
   let r := abCoker.π (ℓ • 𝟙 (relFreeAb (I.whisker g).topLocus))
   let s := g.whiskerLeft I.constToZeros
-  refine (pullbackAlong_pullbackAlong (f := oneLocConst) (g.whiskerLeft (I.toZerosCoeff _)) y).trans ?_
+  refine (pullbackAlong_pullbackAlong (f := oneLocConst)
+      (g.whiskerLeft (I.toZerosCoeff _)) y).trans ?_
   exact ((pullbackAlong_pullbackAlong (f := q) r (pullbackAlong s y)).trans
     (pullbackAlong_pullbackAlong (f := q ≫ r) s y)).symm
 
