@@ -65,8 +65,8 @@ of `G`, `K(g) = F.congruenceSubgroup` its principal congruence subgroup and `vol
 the Haar measure. Then `F.massIntegral K = ∫_G |∫_K χ(y x y⁻¹) dy| ^ 2 dx`, with
 `χ = phase F.levelUnit` the generic character of the unipotent group `U` extended to `U K(g)` and by
 zero, is at most `vol(K) vol(K(g)) (1 + b⁻¹ ^ 6)`, where `b = S.b` is the size parameter of `S`. -/
-lemma IsFillingData.massIntegral_full_le {E : Type} {𝔰 : Shape} [Field E] [CMType E] [WeilData E]
-    {S : Filling E 𝔰} [S.IsAdmissible] {T : Finset (FinPlace E)} [T.StarStable]
+lemma IsFillingData.massIntegral_full_le {E : Type} {𝔰 : Shape} [Field E] [CMType E]
+    {S : Filling E 𝔰} {T : Finset (FinPlace E)} [T.StarStable]
     {P : IntegralPlace (LocProd T)}
     {F : PlaceData (Fin (𝔰.k - (6 * 𝔰.ϱ + 13))) (S.latticeMiddle (LocProd T)) (𝔰.ϱ + 1 + 2 * 𝔰.ϱ +
       5)}
