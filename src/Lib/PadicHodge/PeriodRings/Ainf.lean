@@ -598,7 +598,7 @@ lemma exists_algebraMap_eq_of_frobenius_eq {k : Type*} [CommRing k] [IsDomain k]
   -- coordinate comes from `ZMod p`.
   have h_coeff_mem (n : ℕ) : ∃ z : ZMod p, castHom dvd_rfl k z = a.coeff n := by
     have h_root : a.coeff n ^ p = a.coeff n := by rw [← coeff_frobenius_charP, h_frobenius]
-    exact (GaloisField.splits_zmod_X_pow_sub_X p).mem_range_of_isRoot
+    exact (Polynomial.splits_X_pow_char_sub_X (ZMod p) p).mem_range_of_isRoot
       (Polynomial.X_pow_sub_X_ne_zero (Fact.out : p.Prime).one_lt)
       (by simpa [sub_eq_zero] using h_root)
   choose z hz using h_coeff_mem
