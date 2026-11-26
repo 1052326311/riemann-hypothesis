@@ -106,7 +106,7 @@ lemma eventually_coeff_smul_eq (x : OFlat) (g : Gp p) (n : ℕ) :
     (congrArg _ (smul_oFlat_eq_tiltMap σ x)).trans (coeff_tiltMap _ (x.mk_untiltRoot n)).symm
   have h_near : ∀ᶠ h : Gp p in nhds g,
       dist (h • (x.untiltRoot n).val) (g • (x.untiltRoot n).val) < ‖(p : ℂ_[p])‖ :=
-    tendsto_nhds.mp (continuousAt_id.smul_const _) _ (by simp [NeZero.ne])
+    tendsto_nhds.mp (continuousAt_id.smul_const _) _ (by simp [Nat.pos_of_neZero])
   filter_upwards [h_near] with h h_dist
   -- The two classes agree as the distance is at most `‖p‖`.
   rw [h_coeff_smul, h_coeff_smul, Ideal.Quotient.eq]

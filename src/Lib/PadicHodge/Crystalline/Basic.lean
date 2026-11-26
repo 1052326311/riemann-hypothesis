@@ -207,7 +207,7 @@ def hodgeTateMaps : Submodule (PadicAlgCl p) (T →ₛₗ[toRingHom γ] ℂ_[p])
   smul_mem' c f hf x := by
     -- the algebraic scalar `c` is fixed by `toGp g` for `g` near 1
     filter_upwards [hf x, eventually_nearOne_apply_eq Γ c] with g hg h_fix
-    simp [hg, h_fix, Algebra.smul_def c, ← PadicComplex.coe_eq, smul_coe_Cp]
+    simp [hg, h_fix, Algebra.smul_def c, ← PadicComplex.coe_eq]
 
 /-- The multiplicity of the Hodge–Tate jump `u` at `γ`: the dimension over Q̄_p (zero if infinite)
 of the space `New.Period.hodgeTateMaps ρ γ u`. -/

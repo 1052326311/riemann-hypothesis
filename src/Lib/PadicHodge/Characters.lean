@@ -971,8 +971,7 @@ lemma JumpsRelAt.congr {r : GalRep ℓ E m} {R : ℕ → ℕ → Prop} {J J' : (
   let τ : E →+* ℂ := .comp ιℓ.symm (.comp ↑g⁻¹ (L.e.comp (algebraMap E Ω)) : E →+* PadicAlgCl ℓ)
   have hτ : inducedPrime τ = w := by
     ext x
-    simpa [τ, hw] using congrArg (· < 1)
-      (norm_smul_Cp g⁻¹ (L.e (algebraMap E Ω (algebraMap (𝓞 E) E x)) : ℂ_[ℓ]))
+    simp [τ, hw]
   rw [← hJ τ hτ]
   exact h hg
 
