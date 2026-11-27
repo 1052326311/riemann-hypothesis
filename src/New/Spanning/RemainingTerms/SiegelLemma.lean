@@ -143,9 +143,11 @@ lemma exists_isKernelExtension {A : Matrix σ P k} {x : Matrix P σ k} (h_det : 
 
 /-! ### The discriminant of the integral points of a subspace -/
 
-variable [HasPrimitiveRoot5040 E] {L : Matrix σ P (𝔸f E)} {H : Matrix P σ (𝔸f E)}
+variable {L : Matrix σ P (𝔸f E)} {H : Matrix P σ (𝔸f E)}
 
-omit [IsCMField E] [HasPrimitiveRoot5040 E] in
+section
+
+omit [IsCMField E]
 /-- Let `E` be a number field and let the finite adelic matrix `H` have a left inverse `L`.
 A subspace `V` of `E^σ` of dimension `s` has a basis `y` (the
 columns of a left invertible matrix over `E`) and an `a ∈ GL_s(𝔸_f)` such that `H y a` is
@@ -168,9 +170,7 @@ open scoped Classical in
 basis of `V` over `E`, `a` invertible over `𝔸_f` and `H m` primitive over `Ô` (integral, with an
 integral left inverse); it exists by `exists_isPrimitiveMatrix_mul_finAdeleMatrix`. -/
 @[irreducible]
-def sublatticeBasis {E P σ : Type} [Field E] [NumberField E] [IsCMField E] [Fintype P]
-    [Fintype σ] [DecidableEq σ] [HasPrimitiveRoot5040 E] {L : Matrix σ P (𝔸f E)}
-    {H : Matrix P σ (𝔸f E)} (hLH : L * H = 1) (V : Submodule E (σ → E)) :
+def sublatticeBasis (hLH : L * H = 1) (V : Submodule E (σ → E)) :
     {m : Matrix σ (Fin (finrank E V)) (𝔸f E) //
       IsPrimitiveMatrix (Ô E) (H * m) ∧
       ∃ y : Matrix σ (Fin (finrank E V)) E, ∃ a : GL (Fin (finrank E V)) (𝔸f E),
@@ -190,6 +190,8 @@ lemma exists_sublatticeBasis_eq_finAdeleMatrix_mul (hLH : L * H = 1) (V : Submod
       HasLeftInv y ∧ colSpan y = V ∧ (sublatticeBasis hLH V).val = finAdeleMatrix y * a.val :=
   (sublatticeBasis hLH V).property.right
 
+end
+
 /-- The discriminant `√[det mᴴ m]` of the lattice of adelic points of `V` that `H` makes integral,
 for its basis `m = New.Filling.sublatticeBasis hLH V`. Here `[·]` is the generalised index
 `New.genIndex`, which is `|N(z)|` at a nonzero `z ∈ E` for the norm `N` from `E` to `ℚ`. So for a
@@ -204,7 +206,7 @@ abbrev sublatticeIndex (hLH : L * H = 1) (V : Submodule E (σ → E)) (Y : Matri
     (K : Submodule (Ô E) (τ → 𝔸f E)) : ℕ :=
   submoduleIndex K (colLattice (Ô E) (Y * (H * (sublatticeBasis hLH V).val)))
 
-/-- Let `E` be a CM field containing a primitive `5040`-th root of unity, and let the finite adelic
+/-- Let `E` be a CM field, and let the finite adelic
 matrix `H` have a left inverse `L`. The columns of `m = sublatticeBasis hLH V` are an `Ô`-basis of
 the adelic points of the subspace `V` that `H` makes integral. Let the matrix `x` over `E` have
 `dim V` columns, all in `V`, with `det xᴴ x ≠ 0`. Then for every invertible finite adelic `w` there
@@ -227,6 +229,8 @@ lemma exists_finAdeleMatrix_mul_eq_sublatticeBasis_mul (hLH : L * H = 1) {V : Su
   obtain ⟨b, hb⟩ : IsUnit (finAdeleMatrix B) :=
     ((isUnit_iff_isUnit_det B).2 hB_det.isUnit).map (algebraMap E (𝔸f E)).mapMatrix
   exact ⟨a⁻¹ * b * w, by simp [hm, hb, Matrix.mul_assoc]⟩
+
+variable [HasPrimitiveRoot5040 E]
 
 /-- Let `E` be a CM field containing a primitive `5040`-th root of unity, and let the finite adelic
 matrix `H` have a left inverse `L`. Let `m = sublatticeBasis hLH V` be the chosen `Ô`-basis of the
