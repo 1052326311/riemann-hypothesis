@@ -57,6 +57,8 @@ This needs Python 3.11 or newer and curl 7.71 or newer. (No credentials are nece
 
 If `lake exe cache get` exits with status 3 after a source change has been committed, the project has no matching cache for that commit. Continue with `lake build`, or [restore a baseline](CACHE.md#baseline) first to reuse build outputs from `main`.
 
+See [`CACHE.md`](CACHE.md) for details.
+
 ## Layout
 
 *For now, this section is copied from https://github.com/lsernau/grh-lean. It may be out of date and is subject to change.*
