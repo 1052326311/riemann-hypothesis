@@ -3,7 +3,8 @@
 
 Lists everyone with a merged pull request into `main` (both editions: the earlier edition's
 pull requests also targeted `main`, and its history is preserved on the `alpoge` branch) or into
-`alpoge`, with a link to their merged pull requests. Bots and the batch pull requests
+`alpoge`, with a link to their merged pull requests. Pull requests from an account in `ALIASES`
+are credited to its owner. Bots and the batch pull requests
 (`chore: batch ...`), which have no individual author, are left out. Sorted by the number of
 merged pull requests, then by login.
 
@@ -17,6 +18,9 @@ import subprocess
 import sys
 
 REPO = "leanprover-community/riemann-hypothesis"
+# Accounts that act for a person ("Bot of @x" on their profile): their pull requests are credited
+# to that person.
+ALIASES = {"s-celles-bot": "s-celles"}
 OWNER, NAME = REPO.split("/")
 QUERY = """
 query($owner: String!, $name: String!, $base: String!, $after: String) {
@@ -53,11 +57,12 @@ def counts(pull_requests):
     tally = Counter()
     for pr in pull_requests:
         author = pr["author"]
-        if author is None or author["__typename"] == "Bot" or author["login"].endswith(("[bot]", "-bot")):
+        if author is None or author["__typename"] == "Bot":
             continue
-        if pr["title"].startswith("chore: batch "):
+        login = ALIASES.get(author["login"], author["login"])
+        if login.endswith("[bot]") or pr["title"].startswith("chore: batch "):
             continue
-        tally[author["login"]] += 1
+        tally[login] += 1
     return tally
 
 
